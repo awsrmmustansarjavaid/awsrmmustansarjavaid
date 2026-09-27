@@ -7,9 +7,8 @@ and cloud platforms that scale. Currently focused on Kubernetes and Infrastructu
 </p>
 
 <p align="center">
-  <a href="https://linkedin.com/in/yourhandle"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white"/></a>
-  <a href="mailto:you@example.com"><img src="https://img.shields.io/badge/Email-D14836?style=flat&logo=gmail&logoColor=white"/></a>
-  <a href="https://yourblog.com"><img src="https://img.shields.io/badge/Blog-000000?style=flat&logo=hashnode&logoColor=white"/></a>
+  <a href="https://www.linkedin.com/in/rajamuhammadmustansarjavaid/"><img src="https://img.shields.io/badge/LinkedIn-Professional-0A66C2?style=flat&logo=linkedin&logoColor=white"/></a>
+  <a href="https://www.linkedin.com/in/raja-muhammad-mustansar-javaid-769b19395/"><img src="https://img.shields.io/badge/LinkedIn-DevOps_Journey-0A66C2?style=flat&logo=linkedin&logoColor=white"/></a>
 </p>
 
 ---
@@ -41,17 +40,17 @@ and cloud platforms that scale. Currently focused on Kubernetes and Infrastructu
 
 | Repo | What it does |
 |---|---|
-| [project-one](#) | One-line description of what it solves |
-| [project-two](#) | One-line description of what it solves |
-| [project-three](#) | One-line description of what it solves |
+| [DevOps-Study-Lab](https://github.com/awsrmmustansarjavaid/DevOps-Study-Lab) | Hands-on lab notes and exercises from my DevOps learning path |
+| [charlie-mj-devops-explorer](https://github.com/awsrmmustansarjavaid/charlie-mj-devops-explorer) | Exploring DevOps tools and workflows through practical builds |
+| [charlie-mj-devops-insta-lab](https://github.com/awsrmmustansarjavaid/charlie-mj-devops-insta-lab) | Quick, focused DevOps experiments and lab setups |
 
 ---
 
 ### 📊 GitHub Stats
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=YOUR_USERNAME&show_icons=true&theme=default&hide_border=true&count_private=true" height="165"/>
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=YOUR_USERNAME&hide_border=true" height="165"/>
+  <img src="https://github-readme-stats.vercel.app/api?username=awsrmmustansarjavaid&show_icons=true&theme=default&hide_border=true&count_private=true" height="165"/>
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=awsrmmustansarjavaid&hide_border=true" height="165"/>
 </p>
 
 <p align="center"><em>Based in Pakistan 🇵🇰 • Bridging Development & Operations</em></p>
