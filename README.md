@@ -206,47 +206,46 @@ Amazon EKS
 
 ---
 
-<!-- ========================================================= -->
+---
 
-<!--                    ENGINEERING METRICS                    -->
+## ⚙️ Engineering Activity
 
-<!-- ========================================================= -->
+> **DevOps • Cloud Infrastructure • Automation • CI/CD • Kubernetes**
 
-## ⚙️ Engineering Metrics
+```text
+┌──────────────────────────────────────────────────────────────┐
+│  DEVOPS ENGINEERING                                         │
+│                                                              │
+│  ☁ Cloud Infrastructure      → AWS • CloudFormation         │
+│  ⚙ Infrastructure as Code    → Terraform                    │
+│  🐳 Containerization          → Docker                       │
+│  ☸ Orchestration              → Kubernetes • Helm            │
+│  🔄 CI/CD                     → GitHub Actions • Jenkins     │
+│  🔐 DevSecOps                 → Trivy • SonarQube            │
+│  📊 Observability             → Prometheus • Grafana         │
+│  🚀 Cloud Native              → GitOps • Amazon EKS          │
+│                                                              │
+│  Status: Building • Automating • Learning • Improving       │
+└──────────────────────────────────────────────────────────────┘
+```
 
-<p align="center">
-  <img
-    src="https://capsule-render.vercel.app/api?type=rect&color=0:020617,50:0f172a,100:172554&height=70&text=ENGINEERING%20METRICS&fontSize=24&fontColor=ffffff&fontAlignY=55"
-    width="100%"
-    alt="Engineering Metrics"
-  />
-</p>
+### Current Engineering Focus
 
-<p align="center">
-  <img
-    src="https://github-readme-stats.vercel.app/api?username=awsrmmustansarjavaid&show_icons=true&hide_border=true&rank_icon=github&theme=transparent"
-    height="165"
-    alt="GitHub Engineering Statistics"
-  />
-  <img
-    src="https://streak-stats.demolab.com/?user=awsrmmustansarjavaid&hide_border=true&theme=transparent"
-    height="165"
-    alt="Contribution Streak"
-  />
-</p>
+`AWS` · `Terraform` · `Docker` · `Kubernetes` · `Jenkins` · `GitHub Actions` · `DevSecOps` · `Observability`
 
-<p align="center">
-  <img
-    src="https://github-readme-stats.vercel.app/api/top-langs/?username=awsrmmustansarjavaid&layout=compact&hide_border=true&theme=transparent"
-    height="165"
-    alt="Technology Usage"
-  />
-</p>
+**Build → Automate → Secure → Deploy → Monitor → Improve**
+
+---
+
+### 🔗 Explore My Work
 
 <p align="center">
-  <sub>
-    Infrastructure • Automation • Cloud • Containers • CI/CD • Kubernetes
-  </sub>
+  <a href="https://github.com/awsrmmustansarjavaid">
+    <img src="https://img.shields.io/badge/GitHub-Projects-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Projects"/>
+  </a>
+  <a href="https://github.com/awsrmmustansarjavaid?tab=repositories">
+    <img src="https://img.shields.io/badge/Repositories-Explore-0f172a?style=for-the-badge&logo=github&logoColor=white" alt="Repositories"/>
+  </a>
 </p>
 
 
