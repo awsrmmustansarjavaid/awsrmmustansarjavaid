@@ -151,9 +151,17 @@ Expanding the existing infrastructure lab with **Docker and Kubernetes**, with a
 
 | Repository                                                                                         | Description                                                       |
 | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| [DevOps-Study-Lab](https://github.com/awsrmmustansarjavaid/DevOps-Study-Lab)                       | DevOps learning notes, labs, exercises, and practical experiments |
 | [charlie-cafe-devops](https://github.com/awsrmmustansarjavaid/charlie-cafe-devops)   | Charlie Cafe DevOps Project — End-to-End AWS Cloud DevOps Project  |
 | [charlie-mj-devops-explorer](https://github.com/awsrmmustansarjavaid/charlie-mj-devops-explorer) | GitHub-powered DevOps discovery for tools, labs, projects, and resources.         |
+
+
+
+### 🔧 DevOps Resources
+
+| Repo                                                                         | What It Is                                                        | Stars                                                                                                                                                                               |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [DevOps-Study-Lab](https://github.com/awsrmmustansarjavaid/DevOps-Study-Lab) | DevOps learning notes, labs, exercises, and practical experiments | [![Stars](https://img.shields.io/github/stars/awsrmmustansarjavaid/DevOps-Study-Lab?style=flat\&color=yellow)](https://github.com/awsrmmustansarjavaid/DevOps-Study-Lab/stargazers) |
+
 
 ---
 
