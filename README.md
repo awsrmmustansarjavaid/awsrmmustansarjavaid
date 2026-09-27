@@ -214,7 +214,7 @@ Amazon EKS
     height="165"
   />
   <img
-    src="https://github-readme-streak-stats.herokuapp.com/?user=awsrmmustansarjavaid&hide_border=true"
+    src="https://streak-stats.demolab.com/?user=awsrmmustansarjavaid&hide_border=true"
     height="165"
   />
 </p>
