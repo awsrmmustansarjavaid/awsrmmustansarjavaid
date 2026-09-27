@@ -206,25 +206,49 @@ Amazon EKS
 
 ---
 
-## 📈 GitHub Activity
+<!-- ========================================================= -->
+
+<!--                    ENGINEERING METRICS                    -->
+
+<!-- ========================================================= -->
+
+## ⚙️ Engineering Metrics
 
 <p align="center">
   <img
-    src="https://github-readme-stats.vercel.app/api?username=awsrmmustansarjavaid&show_icons=true&hide_border=true&rank_icon=github"
-    height="165"
-  />
-  <img
-    src="https://streak-stats.demolab.com/?user=awsrmmustansarjavaid&hide_border=true"
-    height="165"
+    src="https://capsule-render.vercel.app/api?type=rect&color=0:020617,50:0f172a,100:172554&height=70&text=ENGINEERING%20METRICS&fontSize=24&fontColor=ffffff&fontAlignY=55"
+    width="100%"
+    alt="Engineering Metrics"
   />
 </p>
 
 <p align="center">
   <img
-    src="https://github-readme-stats.vercel.app/api/top-langs/?username=awsrmmustansarjavaid&layout=compact&hide_border=true"
+    src="https://github-readme-stats.vercel.app/api?username=awsrmmustansarjavaid&show_icons=true&hide_border=true&rank_icon=github&theme=transparent"
     height="165"
+    alt="GitHub Engineering Statistics"
+  />
+  <img
+    src="https://streak-stats.demolab.com/?user=awsrmmustansarjavaid&hide_border=true&theme=transparent"
+    height="165"
+    alt="Contribution Streak"
   />
 </p>
+
+<p align="center">
+  <img
+    src="https://github-readme-stats.vercel.app/api/top-langs/?username=awsrmmustansarjavaid&layout=compact&hide_border=true&theme=transparent"
+    height="165"
+    alt="Technology Usage"
+  />
+</p>
+
+<p align="center">
+  <sub>
+    Infrastructure • Automation • Cloud • Containers • CI/CD • Kubernetes
+  </sub>
+</p>
+
 
 ---
 
