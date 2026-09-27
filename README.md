@@ -54,3 +54,26 @@ and cloud platforms that scale. Currently focused on Kubernetes and Infrastructu
 </p>
 
 <p align="center"><em>Based in Pakistan 🇵🇰 • Bridging Development & Operations</em></p>
+
+---
+
+## 📬 Connect With Me
+
+| Channel            | Link                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------- |
+| 💼 LinkedIn        | [Professional Profile](https://www.linkedin.com/in/rajamuhammadmustansarjavaid/)                          |
+| ⚙️ DevOps LinkedIn | [DevOps Projects, Labs & Articles](https://www.linkedin.com/in/raja-muhammad-mustansar-javaid-769b19395/) |
+| 📸 Instagram       | [@IT_Charlie_MJ](https://www.instagram.com/IT_Charlie_MJ/)                                                |
+
+---
+
+
+<div align="center">
+
+<h3 align="center">DevOps Engineer — Cloud Infrastructure & Automation</h3>
+
+<p align="center">
+  <em>“Build it. Automate it. Improve it.”</em>
+</p>
+
+</div>
