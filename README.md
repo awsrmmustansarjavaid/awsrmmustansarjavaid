@@ -1,30 +1,44 @@
 <!-- ========================================================= -->
 
-<!--                    DEVOPS HEADER                          -->
+<!--                 DEVOPS ENGINEERING HEADER                 -->
 
 <!-- ========================================================= -->
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:020617,45:0f172a,75:1e293b,100:334155&height=230&section=header&text=DEVOPS%20ENGINEER&fontSize=42&fontColor=ffffff&fontAlignY=38&desc=Cloud%20Infrastructure%20%7C%20Automation%20%7C%20CI%2FCD%20%7C%20Kubernetes&descAlignY=58&descSize=17&animation=fadeIn" width="100%"/>
+  <img
+    src="https://capsule-render.vercel.app/api?type=waving&color=0:020617,25:0f172a,50:172554,75:1e3a5f,100:0f172a&height=250&section=header&text=DEVOPS%20ENGINEER&fontSize=46&fontColor=ffffff&fontAlignY=32&desc=Cloud%20Infrastructure%20%7C%20Automation%20%7C%20CI%2FCD%20%7C%20Kubernetes&descAlignY=52&descSize=17&animation=fadeIn"
+    width="100%"
+  />
 </p>
 
-<h1 align="center">Hi, I'm Raja Muhammad Mustansar Javaid 👋</h1>
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=aws,terraform,docker,kubernetes,jenkins,githubactions,ansible,prometheus,grafana,git&perline=10" />
+</p>
+
+<h1 align="center">
+  Raja Muhammad Mustansar Javaid 👋
+</h1>
 
 <h3 align="center">
-DevOps Engineer — Cloud Infrastructure & Automation
+  DevOps Engineer — Cloud Infrastructure & Automation
 </h3>
 
 <p align="center">
-Building automated infrastructure, CI/CD workflows, containerized environments,
-and cloud-native platforms.
+  Building automated infrastructure, CI/CD workflows, containerized environments,
+  and cloud-native platforms.
 </p>
 
 <p align="center">
   <a href="https://www.linkedin.com/in/rajamuhammadmustansarjavaid/">
     <img src="https://img.shields.io/badge/LinkedIn-Professional-0A66C2?style=flat&logo=linkedin&logoColor=white"/>
   </a>
+  &nbsp;
   <a href="https://www.linkedin.com/in/raja-muhammad-mustansar-javaid-769b19395/">
     <img src="https://img.shields.io/badge/LinkedIn-DevOps_Journey-0A66C2?style=flat&logo=linkedin&logoColor=white"/>
+  </a>
+  &nbsp;
+  <a href="https://github.com/awsrmmustansarjavaid">
+    <img src="https://img.shields.io/badge/GitHub-Projects-181717?style=flat&logo=github&logoColor=white"/>
   </a>
 </p>
 
@@ -34,7 +48,7 @@ and cloud-native platforms.
 
 I am a **DevOps Engineer focused on cloud infrastructure, automation, CI/CD, containerization, and Kubernetes**.
 
-My current focus is on building practical DevOps environments with:
+My current focus is on building practical DevOps environments around:
 
 **Cloud Infrastructure • Infrastructure as Code • CI/CD • Docker • Kubernetes • DevSecOps • Observability**
 
@@ -48,15 +62,19 @@ My current focus is on building practical DevOps environments with:
   <img src="https://skillicons.dev/icons?i=aws,azure,terraform" />
 </p>
 
-**AWS • Azure • Terraform • CloudFormation • VPC • EC2 • S3 • RDS • IAM • Secrets Manager**
+<p align="center">
+  <strong>AWS • Azure • Terraform • CloudFormation • VPC • EC2 • S3 • RDS • IAM • Secrets Manager</strong>
+</p>
 
-### 🐳 Containers & Kubernetes
+### 🐳 Containers & Orchestration
 
 <p align="center">
   <img src="https://skillicons.dev/icons?i=docker,kubernetes,helm" />
 </p>
 
-**Docker • Kubernetes • Helm • Containerization • Kubernetes Workloads • Amazon EKS**
+<p align="center">
+  <strong>Docker • Kubernetes • Helm • Containerization • Kubernetes Workloads • Amazon EKS</strong>
+</p>
 
 ### 🔄 CI/CD & Automation
 
@@ -64,11 +82,15 @@ My current focus is on building practical DevOps environments with:
   <img src="https://skillicons.dev/icons?i=githubactions,jenkins,ansible,bash" />
 </p>
 
-**GitHub Actions • Jenkins • Ansible • Bash • CI/CD Pipelines • Deployment Automation**
+<p align="center">
+  <strong>GitHub Actions • Jenkins • Ansible • Bash • CI/CD Pipelines • Deployment Automation</strong>
+</p>
 
 ### 🔐 DevSecOps
 
-**SonarQube • OWASP Dependency-Check • Trivy • Container Security • Secrets Management**
+<p align="center">
+  <strong>SonarQube • OWASP Dependency-Check • Trivy • Container Security • Secrets Management</strong>
+</p>
 
 ### 📊 Monitoring & Observability
 
@@ -76,11 +98,17 @@ My current focus is on building practical DevOps environments with:
   <img src="https://skillicons.dev/icons?i=prometheus,grafana" />
 </p>
 
-**Prometheus • Grafana • Metrics • Dashboards • Infrastructure Monitoring**
+<p align="center">
+  <strong>Prometheus • Grafana • Metrics • Dashboards • Infrastructure Monitoring</strong>
+</p>
 
 ---
 
 ## 📚 Currently Learning
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=kubernetes,helm,jenkins,terraform,prometheus,grafana,git" />
+</p>
 
 * Kubernetes
 * Helm
@@ -101,7 +129,7 @@ My current focus is on building practical DevOps environments with:
 
 Hands-on AWS infrastructure project using **CloudFormation and GitHub Actions** to provision and automate cloud resources.
 
-**Current infrastructure includes:**
+**Infrastructure**
 
 * AWS VPC
 * Subnets & Route Tables
@@ -113,9 +141,9 @@ Hands-on AWS infrastructure project using **CloudFormation and GitHub Actions** 
 * Nested CloudFormation Stacks
 * GitHub Actions CI/CD
 
-**Current direction:**
+**Current Direction**
 
-> Expanding the existing infrastructure lab with **Docker and Kubernetes** while continuing toward a more advanced **Amazon EKS** environment.
+Expanding the existing infrastructure lab with **Docker and Kubernetes**, with a longer-term focus on **Amazon EKS**.
 
 ---
 
@@ -129,14 +157,18 @@ Hands-on AWS infrastructure project using **CloudFormation and GitHub Actions** 
 
 ---
 
-## 🎯 DevOps Roadmap
+## 🎯 Current Focus
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=aws,terraform,docker,kubernetes,jenkins,githubactions,prometheus,grafana" />
+</p>
 
 ```text
 Cloud Infrastructure
         ↓
 Infrastructure as Code
         ↓
-Docker & Containers
+Containers & Docker
         ↓
 CI/CD Automation
         ↓
@@ -156,12 +188,21 @@ Amazon EKS
 ## 📈 GitHub Activity
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=awsrmmustansarjavaid&show_icons=true&hide_border=true&rank_icon=github" height="165"/>
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=awsrmmustansarjavaid&hide_border=true" height="165"/>
+  <img
+    src="https://github-readme-stats.vercel.app/api?username=awsrmmustansarjavaid&show_icons=true&hide_border=true&rank_icon=github"
+    height="165"
+  />
+  <img
+    src="https://github-readme-streak-stats.herokuapp.com/?user=awsrmmustansarjavaid&hide_border=true"
+    height="165"
+  />
 </p>
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=awsrmmustansarjavaid&layout=compact&hide_border=true" height="165"/>
+  <img
+    src="https://github-readme-stats.vercel.app/api/top-langs/?username=awsrmmustansarjavaid&layout=compact&hide_border=true"
+    height="165"
+  />
 </p>
 
 ---
@@ -187,16 +228,19 @@ Amazon EKS
 
 <!-- ========================================================= -->
 
-<!--                    DEVOPS FOOTER                          -->
+<!--                  DEVOPS ENGINEERING FOOTER                -->
 
 <!-- ========================================================= -->
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=aws,terraform,docker,kubernetes,jenkins,githubactions,ansible,prometheus,grafana,git" />
+  <img src="https://skillicons.dev/icons?i=aws,azure,terraform,docker,kubernetes,helm,jenkins,githubactions,ansible,prometheus,grafana,git,github,bash&perline=14" />
 </p>
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:334155,25:1e293b,55:0f172a,100:020617&height=180&section=footer&text=DEVOPS%20ENGINEER&fontSize=34&fontColor=ffffff&fontAlignY=42&desc=Cloud%20Infrastructure%20%7C%20Automation%20%7C%20Continuous%20Improvement&descAlignY=63&descSize=15" width="100%"/>
+  <img
+    src="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,25:1e3a5f,50:172554,75:0f172a,100:020617&height=210&section=footer&text=DEVOPS%20ENGINEER&fontSize=40&fontColor=ffffff&fontAlignY=38&desc=Cloud%20Infrastructure%20%7C%20Automation%20%7C%20CI%2FCD%20%7C%20Kubernetes&descAlignY=60&descSize=16"
+    width="100%"
+  />
 </p>
 
 <p align="center">
