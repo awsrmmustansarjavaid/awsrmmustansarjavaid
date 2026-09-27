@@ -158,9 +158,21 @@ Expanding the existing infrastructure lab with **Docker and Kubernetes**, with a
 
 ### 🔧 DevOps Resources
 
-| Repo                                                                         | What It Is                                                        | Stars                                                                                                                                                                               |
-| ---------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [DevOps-Study-Lab](https://github.com/awsrmmustansarjavaid/DevOps-Study-Lab) | DevOps learning notes, labs, exercises, and practical experiments | [![Stars](https://img.shields.io/github/stars/awsrmmustansarjavaid/DevOps-Study-Lab?style=flat\&color=yellow)](https://github.com/awsrmmustansarjavaid/DevOps-Study-Lab/stargazers) |
+| Repo                                                                         | What It Is                                                        |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| [DevOps-Study-Lab](https://github.com/awsrmmustansarjavaid/DevOps-Study-Lab) | DevOps learning notes, labs, exercises, and practical experiments |
+
+
+### 🛠️ Projects & Hands-on Learning
+
+| Repo | What It Is | Stars |
+|------|-----------|-------|
+| [charlie-cafe-devops](https://github.com/awsrmmustansarjavaid/charlie-cafe-devops)   | Charlie Cafe DevOps Project — End-to-End AWS Cloud DevOps Project  |
+| [aws-docker-lab](https://github.com/awsrmmustansarjavaid/aws-docker-lab)   | AWS Beginner Lab: Deploy a Simple Web App with Docker on EC2 from GitHub  |
+| [devops-docker-rds-lab](https://github.com/awsrmmustansarjavaid/devops-docker-rds-lab)   | AWS Docker & RDS Lab: Deploy a Containerized Web Application with Docker and Amazon RDS on AWS  |
+| [aws-ec2-docker-cicd-microservices-lab](https://github.com/awsrmmustansarjavaid/aws-ec2-docker-cicd-microservices-lab)   | End-to-End AWS DevOps Microservices Lab (EC2 + Docker + CI/CD + Monitoring)  |
+| [CloudFormation-DevOps-Lab](https://github.com/awsrmmustansarjavaid/CloudFormation-DevOps-Lab)   | AWS CloudFormation DevOps Lab: Automate AWS Infrastructure Deployment with CloudFormation and GitHub Actions |
+| [aws-hybrid-iac-lab](https://github.com/awsrmmustansarjavaid/aws-hybrid-iac-lab)   | AWS Hybrid IaC Lab: Provision and Manage AWS Infrastructure with Terraform and CloudFormation |
 
 
 ---
