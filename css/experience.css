@@ -1,0 +1,15 @@
+/* ================================================================
+   DEVOPS SHOWCASE — css/experience.css
+   Styling unique to pages/experience.html (shared layout: css/pages.css).
+   ================================================================ */
+
+/* Accent colour for this page: "Back to home" hover + input focus ring */
+:root { --page-accent: #38BDF8; }
+
+/* Responsive grid: as many columns as fit, each card at least 320px wide.
+   Lower the number for denser pages, raise it for roomier cards. */
+#experience-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.4rem;
+}

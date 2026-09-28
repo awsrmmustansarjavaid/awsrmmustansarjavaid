@@ -1,0 +1,24 @@
+/* ================================================================
+   DEVOPS SHOWCASE — css/pages.css
+   Layout shared by ALL pages/*.html: hero banner, search/filter
+   toolbar, result counter, "Load more" button.
+   Each page's own css/<page>.css sets --page-accent and its grid.
+   ================================================================ */
+.page-hero .section-inner { padding-bottom: 1rem; }
+.page-hero h1 { font-size: clamp(2rem, 4.5vw, 3rem); margin: .8rem 0 .5rem; }
+.page-hero p  { color: var(--muted); max-width: 60ch; }
+.back-link { font-size: .85rem; color: var(--muted); }
+.back-link:hover { color: var(--page-accent, var(--accent-a)); }
+
+/* Toolbar: search box + filter dropdowns, wraps on small screens */
+.toolbar { display: flex; flex-wrap: wrap; gap: .8rem; margin-bottom: .8rem; }
+.toolbar input, .toolbar select {
+  background: var(--panel); color: var(--text);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: .65rem .9rem; font: inherit; font-size: .9rem;
+}
+.toolbar input { flex: 1 1 240px; }
+.toolbar input:focus, .toolbar select:focus { outline: 2px solid var(--page-accent, var(--accent-a)); border-color: transparent; }
+.result-count { color: var(--muted); font-size: .8rem; margin-bottom: 1.4rem; }
+.load-more { display: block; margin: 2rem auto 0; }
+.load-more[hidden] { display: none; }

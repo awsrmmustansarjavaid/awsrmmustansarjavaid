@@ -1,0 +1,15 @@
+/* ================================================================
+   DEVOPS SHOWCASE — css/labs.css
+   Styling unique to pages/labs.html (shared layout: css/pages.css).
+   ================================================================ */
+
+/* Accent colour for this page: "Back to home" hover + input focus ring */
+:root { --page-accent: #34D399; }
+
+/* Responsive grid: as many columns as fit, each card at least 300px wide.
+   Lower the number for denser pages, raise it for roomier cards. */
+#labs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.4rem;
+}

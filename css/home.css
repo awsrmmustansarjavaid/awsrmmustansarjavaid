@@ -1,0 +1,82 @@
+/* ================================================================
+   DEVOPS SHOWCASE — css/home.css  (index.html only)
+   Reproduces the reference layout on top of css/style.css:
+     1 Hero (text | illustration | tech-stack)   2 About (3 panels)
+     3 Panels (experience/projects/…)            4 Learning (2 panels)
+     5 Projects row     6 GitHub/LinkedIn bar    7 Footer
+   ================================================================ */
+/* shared "glass panel" look, reused below */
+.panel-look, section.panel > .section-inner, .duo-panel, .about-section .section-inner > *, .connect-bar, .tech-stack-panel {
+  background: linear-gradient(160deg, rgba(14,28,64,.78), rgba(8,16,40,.78));
+  border: 1px solid rgba(59,130,246,.30); border-radius: 16px;
+  box-shadow: 0 0 24px rgba(37,99,235,.10), inset 0 0 0 1px rgba(255,255,255,.02);
+}
+/* ---------- 1. HERO: three columns ---------- */
+.hero-section .section-inner { grid-template-columns: 1.05fr 1fr .62fr; gap: 1.5rem; align-items: center; }
+.hero-content h1 { font-size: clamp(2rem, 3.6vw, 3rem); }
+.btn-primary { background: linear-gradient(90deg, #1D8BFF, #5B6CFF); color: #fff; box-shadow: 0 0 22px rgba(59,130,246,.45); }
+.hero-art { position: relative; aspect-ratio: 420 / 300; }
+.hero-art svg { width: 100%; height: 100%; overflow: visible; }
+.hero-art .rack rect { fill: #0E1E45; stroke: #2F6FE0; }  .hero-art .rack circle { fill: #22D3EE; }
+.hero-art .laptop { fill: #0A1836; stroke: #38BDF8; stroke-width: 1.5; }
+.art-text { font: 800 24px Inter, sans-serif; fill: #fff; text-anchor: middle; }
+.orb { position: absolute; width: 17%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%;
+  background: rgba(10,21,48,.9); border: 1px solid rgba(56,189,248,.45); box-shadow: 0 0 18px rgba(56,189,248,.35); font-size: clamp(1.1rem, 2.4vw, 1.9rem); }
+.orb-lg { width: 21%; }
+.i-aws { color: #FF9900; }  .i-gh { color: #fff; }
+/* tech stack panel: real coloured logos */
+.tech-stack-panel { padding: 1.1rem; }
+.tech-item { border-color: rgba(59,130,246,.28); background: rgba(8,17,42,.8); }
+.tech-item i { font-size: 1.6rem; }
+/* ---------- 2. ABOUT: avatar+bio | info | quote ---------- */
+/* Three EQUAL panels: identical column widths (repeat(3,1fr)) and identical
+   heights (align-items: stretch makes every panel as tall as the tallest one) */
+.about-section .section-inner { grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 1rem; padding: .7rem 1.5rem; }
+/* Each panel centres its own content vertically so shorter panels look balanced */
+.about-section .section-inner > * { padding: 1.2rem 1.4rem; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.about-section .about-card { flex-direction: row; align-items: center; }   /* avatar beside the bio */
+.about-section .info-list { gap: 1.1rem; }
+.about-section .about-quote { transform: none; max-width: none; margin: 0; }  /* quote no longer tilted, so its box lines up with the others */
+.about-avatar { border: 3px solid transparent; background: linear-gradient(#050B1E,#050B1E) padding-box, linear-gradient(135deg,#22D3EE,#7C5CFF) border-box; width: 84px; height: 84px; }
+.chip { border: 0; }
+.chip:nth-child(odd) { background: rgba(37,99,235,.35); color: #BFDBFE; }
+.chip:nth-child(even) { background: rgba(20,184,166,.28); color: #99F6E4; }
+.chip:nth-child(4), .chip:nth-child(5) { background: rgba(109,92,255,.35); color: #DDD6FE; }
+.about-quote { font: italic 1.6rem/1.3 'Brush Script MT', 'Segoe Script', cursive; display: grid; place-items: center; text-align: center; }
+/* ---------- 3. PANEL SECTIONS ---------- */
+section.panel, section.panel-row { max-width: 1180px; padding: .6rem 1.5rem; }
+section.panel > .section-inner { padding: 1.3rem 1.6rem; }
+.section-heading { font-size: 1.25rem; }  .section-subtext { margin-bottom: 1.2rem; font-size: .88rem; }
+.experience-card { background: rgba(8,17,42,.7); }
+.experience-card h3::before { content: '🚀'; display: inline-grid; place-items: center; width: 40px; height: 40px; margin-right: .7rem; border-radius: 10px; background: #fff; font-size: 1.1rem; vertical-align: middle; }
+.experience-card:nth-child(2) h3::before { content: '🖥️'; }  .experience-card:nth-child(3) h3::before { content: '▦'; color: #2563EB; }
+.linkedin-cta-card { border-color: #2F6FE0; }
+/* ---------- 4. LEARNING: two side-by-side panels ---------- */
+.learning-duo { display: grid; grid-template-columns: 1fr 1.25fr; gap: 1rem; padding: 0; }
+.duo-panel { padding: 1.2rem 1.4rem; }
+.tile-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: .7rem; }
+.tag { font-size: .7rem; color: #38BDF8; font-weight: 500; margin-left: .5rem; }
+#learning-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; }
+#learning-grid .badge, #projects-grid .badge, #projects-grid .chip-row { display: none; }   /* compact home cards */
+.progress-fill { background: linear-gradient(90deg, #1D8BFF, #22D3EE); }
+#learning-grid .learning-card:nth-child(2) .progress-fill { background: #8B5CF6; }
+#learning-grid .learning-card:nth-child(3) .progress-fill { background: #F59E0B; }
+/* ---------- 5. PROJECTS: horizontal cards with icon ---------- */
+#projects-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+#projects-grid .project-card { display: grid; grid-template-columns: 48px 1fr; column-gap: 1rem; background: rgba(8,17,42,.7); }
+#projects-grid .project-card::before { content: '⎈'; grid-row: 1 / span 3; display: grid; place-items: center; width: 48px; height: 48px; font-size: 1.7rem; color: #3B82F6; }
+#projects-grid .project-card:nth-child(2)::before { content: '☁'; color: #FF9900; }
+#projects-grid .project-card:nth-child(3)::before { content: '🐙'; }
+#projects-grid .card-desc { font-size: .8rem; }  #projects-grid h3 { font-size: .95rem; }
+/* ---------- 6. GITHUB / LINKEDIN BAR ---------- */
+.connect-bar { display: grid; grid-template-columns: 1fr 1fr; padding: 0; }
+.connect-item { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.5rem; }
+.connect-item + .connect-item { border-left: 1px solid rgba(59,130,246,.30); }
+.connect-item div { flex: 1; }  .connect-item p { font-size: .8rem; color: var(--muted); }
+.connect-ico { font-size: 2.2rem; }  .connect-ico.in { background: #0A66C2; color: #fff; font: 800 1.3rem Inter; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 8px; }
+/* ---------- 7. RESPONSIVE ---------- */
+@media (max-width: 980px) {
+  .hero-section .section-inner, .about-section .section-inner, .learning-duo, .connect-bar { grid-template-columns: 1fr; }
+  .connect-item + .connect-item { border-left: 0; border-top: 1px solid rgba(59,130,246,.30); }
+  .hero-art { max-width: 460px; margin: 1rem auto; }
+}

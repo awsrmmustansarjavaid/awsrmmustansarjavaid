@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  DEVOPS SHOWCASE — pages/learning.html
+  Full "Learning" page. Opened from the "View all →" button on
+  index.html and from the navbar. This file is only a shell:
+    navbar + footer   → js/layout.js   (Layout.mount)
+    search / filters  → js/listing.js  (Listing.init)
+    the cards         → js/render.js   (data: activity/*.md)
+  Page-specific style: css/learning.css   Page-specific logic: js/learning.js
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Learning — Mustansar Javaid</title>
+
+  <!-- Font (same as index.html) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS order: base tokens/components → shared background → shared page layout → THIS page -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/background.css">
+  <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/learning.css">
+
+  <!-- marked.js: Markdown → HTML (used by js/markdown-parser.js) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+</head>
+<body>
+  <!-- (navbar is injected here by Layout.mount) -->
+  <main>
+
+    <!-- Page banner -->
+    <section class="page-hero"><div class="section-inner">
+      <a class="back-link" href="../index.html#learning">← Back to home</a>
+      <h1>🎓 <span class="text-gradient">Learning</span></h1>
+      <p>Everything I am studying right now, with progress. Loaded from activity/learning/*.md.</p>
+    </div></section>
+
+    <!-- Content area -->
+    <section><div class="section-inner">
+      <!-- Search / filter / sort controls: injected by js/listing.js -->
+      <div id="toolbar" class="toolbar"></div>
+      <p id="result-count" class="result-count"></p>
+
+      <!-- Responsive grid: cards are injected here by js/render.js -->
+      <div id="learning-grid"><p class="empty-state">Loading…</p></div>
+
+      <!-- Pagination: shown by listing.js only when more items exist -->
+      <button id="load-more" class="btn btn-outline load-more" hidden>Load more</button>
+    </div></section>
+
+  </main>
+  <!-- (footer is injected at the end by Layout.mount) -->
+
+  <!-- Scripts: same order as index.html; the page script goes LAST -->
+  <script src="../js/config.js"></script>
+  <script src="../js/github-api.js"></script>
+  <script src="../js/markdown-parser.js"></script>
+  <script src="../js/content-loader.js"></script>
+  <script src="../js/render.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/listing.js"></script>
+  <script src="../js/learning.js"></script>
+</body>
+</html>

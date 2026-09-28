@@ -1,0 +1,30 @@
+/* ================================================================
+   DEVOPS SHOWCASE — css/background.css
+   Shared by index.html AND every pages/*.html. Recreates the reference
+   background: deep navy, big blue/violet light sweeps from the top
+   corners, a faint dotted "circuit" texture at the top, and one slowly
+   floating orb. Also overrides the colour tokens so every page uses the
+   reference's navy/blue palette. Fixed + behind content + click-through.
+   ================================================================ */
+:root {
+  --bg: #050B1E;  --panel: #0A1530;  --panel-alt: #08112A;  --line: #1A2B57;
+  --muted: #9AA7C7;  --accent-a: #38BDF8;  --accent-b: #7C5CFF;
+}
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(rgba(56,189,248,.20) 1px, transparent 1.6px) 0 0 / 30px 30px,       /* dotted circuit texture */
+    radial-gradient(1100px 620px at -8% -6%, rgba(37,99,235,.42), transparent 62%),      /* blue sweep, top-left */
+    radial-gradient(950px 620px at 108% 6%, rgba(99,72,255,.34), transparent 62%),       /* violet sweep, top-right */
+    radial-gradient(1000px 520px at 50% 108%, rgba(37,99,235,.16), transparent 65%);     /* soft glow, bottom */
+  -webkit-mask-image: linear-gradient(#000 0, #000 55%, rgba(0,0,0,.55) 100%);
+  mask-image: linear-gradient(#000 0, #000 55%, rgba(0,0,0,.55) 100%);
+}
+body::after {   /* slowly floating orb */
+  content: ''; position: fixed; z-index: -1; pointer-events: none;
+  width: 420px; height: 420px; border-radius: 50%; top: 40%; left: 52%;
+  background: radial-gradient(circle, rgba(99,72,255,.16), transparent 70%);
+  animation: orb-float 18s ease-in-out infinite alternate;
+}
+@keyframes orb-float { to { transform: translate(-170px, 90px); } }
+@media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
