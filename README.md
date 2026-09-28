@@ -328,7 +328,7 @@ These projects are designed around:
 
 <p align="center">
 
-  <a href="./Niche%20Projects/Niche%20Projects%20README.md">
+  <a href="/Niche Projects/Niche Projects README.md.md">
     <img src="https://img.shields.io/badge/Niche%20Apps%20Projects-Explore-0f172a?style=flat&logo=github&logoColor=white" alt="Niche Apps Projects"/>
   </a>
 
