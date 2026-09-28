@@ -255,6 +255,25 @@ Amazon EKS
 
 ---
 
+## 🔗 Connect
+
+<p align="center">
+  <a href="https://www.linkedin.com/in/rajamuhammadmustansarjavaid/">
+    <img src="https://img.shields.io/badge/LinkedIn-Professional-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/>
+  </a>
+  <a href="https://www.linkedin.com/in/raja-muhammad-mustansar-javaid-769b19395/">
+    <img src="https://img.shields.io/badge/LinkedIn-DevOps_Journey-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/>
+  </a>
+  <a href="https://github.com/awsrmmustansarjavaid">
+    <img src="https://img.shields.io/badge/GitHub-Projects-181717?style=for-the-badge&logo=github&logoColor=white"/>
+  </a>
+  <a href="https://www.instagram.com/IT_Charlie_MJ/">
+    <img src="https://img.shields.io/badge/Instagram-IT_Charlie_MJ-E4405F?style=for-the-badge&logo=instagram&logoColor=white"/>
+  </a>
+</p>
+
+---
+
 <!-- ========================================================= -->
 
 <!--                  CHARLIE MJ NICHE PROJECTS                 -->
@@ -322,27 +341,6 @@ These projects are designed around:
 <!--                         END SECTION                        -->
 
 <!-- ========================================================= -->
-
-
-
----
-
-## 🔗 Connect
-
-<p align="center">
-  <a href="https://www.linkedin.com/in/rajamuhammadmustansarjavaid/">
-    <img src="https://img.shields.io/badge/LinkedIn-Professional-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/>
-  </a>
-  <a href="https://www.linkedin.com/in/raja-muhammad-mustansar-javaid-769b19395/">
-    <img src="https://img.shields.io/badge/LinkedIn-DevOps_Journey-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/>
-  </a>
-  <a href="https://github.com/awsrmmustansarjavaid">
-    <img src="https://img.shields.io/badge/GitHub-Projects-181717?style=for-the-badge&logo=github&logoColor=white"/>
-  </a>
-  <a href="https://www.instagram.com/IT_Charlie_MJ/">
-    <img src="https://img.shields.io/badge/Instagram-IT_Charlie_MJ-E4405F?style=for-the-badge&logo=instagram&logoColor=white"/>
-  </a>
-</p>
 
 ---
 
