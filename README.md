@@ -255,6 +255,78 @@ Amazon EKS
 
 ---
 
+<!-- ========================================================= -->
+
+<!--                  CHARLIE MJ NICHE PROJECTS                 -->
+
+<!-- ========================================================= -->
+
+# 🚀 Charlie MJ — My Niche Web Apps & Tools
+
+> A collection of my **niche web apps, personal tools, and focused software projects**, built to solve real problems I personally encounter in everyday work, learning, media management, content discovery, and productivity.
+
+These projects are not generic demo applications. Each project starts with a **specific problem, repetitive task, or personal workflow** and is developed into a practical, focused tool.
+
+The collection covers different areas including **time tracking, media downloading, article discovery, photo storytelling, video management, language learning, productivity, and other niche workflows**.
+
+---
+
+## 🎯 About These Niche Projects
+
+I enjoy building **small, focused applications around problems that I personally face**.
+
+Instead of building another generic application, I prefer identifying a specific repetitive, inconvenient, or interesting task and creating a lightweight tool around it.
+
+My approach is:
+
+```text
+Personal Problem
+       ↓
+   Niche Idea
+       ↓
+ Focused Tool
+       ↓
+Practical Solution
+       ↓
+ Continuous Improvement
+```
+
+These projects are designed around:
+
+* 🎯 **One specific problem**
+* 🧩 **A focused feature set**
+* 💻 **Simple and practical interfaces**
+* ⚡ **Lightweight architecture where possible**
+* 🔒 **Local/offline processing where practical**
+* 🌐 **Browser-based or Windows-based workflows**
+* 🛠️ **Open-source development**
+* 📚 **Learning through real projects**
+* 🚀 **Practical experimentation and iteration**
+
+> **Different problems. Different niche solutions. One philosophy: build tools that solve real problems I personally face.**
+
+---
+
+<p align="center">
+
+  <a href="./Niche%20Projects/Niche%20Projects%20README.md">
+    <img src="https://img.shields.io/badge/Niche%20Apps%20Projects-Explore-0f172a?style=flat&logo=github&logoColor=white" alt="Niche Apps Projects"/>
+  </a>
+
+</p>
+
+---
+
+<!-- ========================================================= -->
+
+<!--                         END SECTION                        -->
+
+<!-- ========================================================= -->
+
+
+
+---
+
 ## 🔗 Connect
 
 <p align="center">

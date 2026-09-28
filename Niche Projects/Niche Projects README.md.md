@@ -566,4 +566,4 @@ Each project has its own repository, license, documentation, and usage requireme
 
 ---
 
-> **Five different problems. Five niche solutions. One philosophy: build tools that solve real problems I personally face.**
+> **Different problems. Different niche solutions. One philosophy: build tools that solve real problems I personally face.**
