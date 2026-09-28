@@ -29,21 +29,31 @@
 </p>
 
 <p align="center">
+
   <a href="https://www.linkedin.com/in/rajamuhammadmustansarjavaid/">
     <img src="https://img.shields.io/badge/LinkedIn-Professional-0A66C2?style=flat&logo=linkedin&logoColor=white"/>
   </a>
+
   &nbsp;
+
   <a href="https://www.linkedin.com/in/raja-muhammad-mustansar-javaid-769b19395/">
     <img src="https://img.shields.io/badge/LinkedIn-DevOps_Journey-0A66C2?style=flat&logo=linkedin&logoColor=white"/>
   </a>
+
   &nbsp;
+
   <a href="https://github.com/awsrmmustansarjavaid">
     <img src="https://img.shields.io/badge/GitHub-Projects-181717?style=flat&logo=github&logoColor=white"/>
   </a>
+
+  &nbsp;
+
   <a href="https://awsrmmustansarjavaid.github.io/awsrmmustansarjavaid/">
-    <img src="https://img.shields.io/badge/DevOps-Showcase-0f172a?style=for-the-badge&logo=googlechrome&logoColor=white" alt="DevOps Showcase"/>
+    <img src="https://img.shields.io/badge/DevOps-Showcase-0f172a?style=flat&logo=googlechrome&logoColor=white" alt="DevOps Showcase"/>
   </a>
+
 </p>
+
 
 ---
 
