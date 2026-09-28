@@ -3,7 +3,7 @@ title: Kubernetes (K8s)
 type: learning
 status: in-progress
 date: 2026-09-27
-progress: 65
+progress: 15
 description: building an internal dev portal on top of a K8s cluster
 technologies:
   - Kubernetes
