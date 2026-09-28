@@ -190,6 +190,9 @@ const Render = (() => {
     setHref('linkedin-hero-link', meta.linkedin);
     setHref('linkedin-contact-link', meta.linkedin);
     setHref('linkedin-bar-link', meta.linkedin);
+    setHref('about-li-main', meta.linkedin);
+    setHref('about-li-journey', meta.linkedin_journey);
+    setHref('footer-linkedin2-link', meta.linkedin_journey);
     setHref('github-bar-link', meta.github);
 
     if (Array.isArray(meta.technologies)) {

@@ -29,7 +29,8 @@ const Layout = (() => {
         <span>© 2026 Mustansar Javaid. Built with ❤️ using GitHub Pages.</span>
         <div class="footer-icons">
           <a href="${CONFIG.links.github}" target="_blank" rel="noopener" aria-label="GitHub">🐙</a>
-          <a href="${CONFIG.links.linkedin}" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+          <a class="li-badge" href="${CONFIG.links.linkedin}" target="_blank" rel="noopener"><span>LinkedIn</span><span>Professional</span></a>
+          <a class="li-badge" href="${CONFIG.links.linkedinJourney}" target="_blank" rel="noopener"><span>LinkedIn</span><span>DevOps Journey</span></a>
         </div></div></footer>`);
 
     // Mobile hamburger (same behavior as index.html's app.js)

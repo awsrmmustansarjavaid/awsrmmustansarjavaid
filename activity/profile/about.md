@@ -1,8 +1,9 @@
 ---
-name: Mustansar Javaid
+name: Raja Muhammad Mustansar Javaid
 title: DevOps Engineer | Cloud Enthusiast
-location: Rawalpindi, Pakistan
-linkedin: https://www.linkedin.com/in/your-linkedin-handle/
+location: Islamabad, Pakistan
+linkedin: https://www.linkedin.com/in/rajamuhammadmustansarjavaid/
+linkedin_journey: https://www.linkedin.com/in/raja-muhammad-mustansar-javaid/
 github: https://github.com/awsrmmustansarjavaid
 focus: Cloud | DevOps | Automation
 avatar: assets/images/avatar.jpg

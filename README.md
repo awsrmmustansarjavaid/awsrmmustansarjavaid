@@ -40,6 +40,9 @@
   <a href="https://github.com/awsrmmustansarjavaid">
     <img src="https://img.shields.io/badge/GitHub-Projects-181717?style=flat&logo=github&logoColor=white"/>
   </a>
+  <a href="https://awsrmmustansarjavaid.github.io/awsrmmustansarjavaid/">
+    <img src="https://img.shields.io/badge/DevOps-Showcase-0f172a?style=for-the-badge&logo=googlechrome&logoColor=white" alt="DevOps Showcase"/>
+  </a>
 </p>
 
 ---

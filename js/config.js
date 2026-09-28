@@ -51,7 +51,8 @@ const CONFIG = {
   // Your public profile links, used in the hero/footer buttons.
   links: {
     github: 'https://github.com/awsrmmustansarjavaid',
-    linkedin: 'https://www.linkedin.com/in/your-linkedin-handle/',
+    linkedin: 'https://www.linkedin.com/in/rajamuhammadmustansarjavaid/',         // MAIN professional account
+    linkedinJourney: 'https://www.linkedin.com/in/raja-muhammad-mustansar-javaid/', // DevOps journey account
     email: 'mailto:youremail@example.com',
   },
 };

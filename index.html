@@ -51,6 +51,8 @@
   <link rel="stylesheet" href="css/background.css">
   <!-- Home-page layout that reproduces the reference design (hero art, panels, connect bar) -->
   <link rel="stylesheet" href="css/home.css">
+  <!-- Shared hover/transition/scroll effects (loaded last so it can refine everything above) -->
+  <link rel="stylesheet" href="css/effects.css">
 </head>
 <body>
 
@@ -72,12 +74,12 @@
       <nav class="nav-links">
         <a href="#home" class="active">Home</a>
         <a href="#about">About</a>
-        <a href="#experience">Experience</a>
-        <a href="#learning">Learning</a>
-        <a href="#projects">Projects</a>
-        <a href="#labs">Labs</a>
-        <a href="#activity">Activity</a>
-        <a href="#challenges">Challenges</a>
+        <a href="pages/experience.html">Experience</a>
+        <a href="pages/learning.html">Learning</a>
+        <a href="pages/projects.html">Projects</a>
+        <a href="pages/labs.html">Labs</a>
+        <a href="pages/activities.html">Activity</a>
+        <a href="pages/challenges.html">Challenges</a>
       </nav>
 
       <div style="display:flex; align-items:center; gap:.8rem;">
@@ -186,6 +188,11 @@
               <span class="chip">CI/CD</span>
               <span class="chip">Linux</span>
             </div>
+            <!-- Both LinkedIn accounts (URLs come from about.md / config.js) -->
+            <div class="li-row">
+              <a class="li-badge" id="about-li-main" href="#" target="_blank" rel="noopener"><span>LinkedIn</span><span>Professional</span></a>
+              <a class="li-badge" id="about-li-journey" href="#" target="_blank" rel="noopener"><span>LinkedIn</span><span>DevOps Journey</span></a>
+            </div>
           </div>
         </div>
 
@@ -209,7 +216,6 @@
         <h2 class="section-heading">💼 Professional Experience</h2>
         <p class="section-subtext">A quick summary of my career so far. I keep the complete, always-current version on LinkedIn — the card below links straight to it.</p>
 
-        <a class="btn btn-outline view-all view-all-top" href="pages/experience.html">View full experience →</a>
         <div class="experience-grid" id="experience-grid">
 
           <!-- These cards are FALLBACK placeholders only, shown if
@@ -257,6 +263,7 @@
           </div>
 
         </div>
+        <a class="btn btn-outline view-all" href="pages/experience.html">View full experience →</a>
       </div>
     </section>
 
@@ -367,6 +374,24 @@
       </div>
     </section>
 
+    <!-- ============================================================
+         DEVOPS EXPLORER — link to my other GitHub Pages project
+         ============================================================ -->
+    <section class="panel" id="explorer">
+      <div class="section-inner explorer">
+        <div>
+          <h2 class="section-heading">🧭 Charlie MJ DevOps Explorer</h2>
+          <p class="section-subtext">My GitHub Pages project: search GitHub repositories, DevOps labs, Kubernetes projects, cloud infrastructure, CI/CD pipelines and study material in one place.</p>
+          <div class="chip-row"><span class="chip">GitHub Pages</span><span class="chip">JavaScript</span><span class="chip">GitHub API</span></div>
+          <a class="btn btn-primary" href="https://awsrmmustansarjavaid.github.io/charlie-mj-devops-explorer/" target="_blank" rel="noopener">Launch DevOps Explorer ↗</a>
+        </div>
+        <!-- Screenshot preview; the whole card is a link -->
+        <a class="explorer-preview" href="https://awsrmmustansarjavaid.github.io/charlie-mj-devops-explorer/" target="_blank" rel="noopener">
+          <img src="assets/images/explorer-preview.png" alt="Charlie MJ DevOps Explorer preview" loading="lazy">
+        </a>
+      </div>
+    </section>
+
   </main>
 
   <!-- ============================================================
@@ -377,7 +402,8 @@
       <span>© 2026 Mustansar Javaid. Built with ❤️ using GitHub Pages.</span>
       <div class="footer-icons">
         <a href="#" id="footer-github-link" target="_blank" rel="noopener" aria-label="GitHub">🐙</a>
-        <a href="#" id="footer-linkedin-link" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+        <a class="li-badge" id="footer-linkedin-link" href="#" target="_blank" rel="noopener"><span>LinkedIn</span><span>Professional</span></a>
+        <a class="li-badge" id="footer-linkedin2-link" href="#" target="_blank" rel="noopener"><span>LinkedIn</span><span>DevOps Journey</span></a>
       </div>
     </div>
   </footer>
@@ -393,6 +419,8 @@
   <script src="js/content-loader.js"></script>
   <script src="js/render.js"></script>
   <script src="js/app.js"></script>
+  <!-- Scroll progress bar, reveal-on-scroll, back-to-top button -->
+  <script src="js/effects.js"></script>
 
   <!-- Wires the static GitHub/LinkedIn links above to the values in
        js/config.js, so those URLs only need to be typed once, in one
@@ -407,6 +435,9 @@
     document.getElementById('footer-github-link').href = CONFIG.links.github;
     document.getElementById('github-bar-link').href = CONFIG.links.github;
     document.getElementById('linkedin-bar-link').href = CONFIG.links.linkedin;
+    document.getElementById('about-li-main').href = CONFIG.links.linkedin;
+    document.getElementById('about-li-journey').href = CONFIG.links.linkedinJourney;
+    document.getElementById('footer-linkedin2-link').href = CONFIG.links.linkedinJourney;
     document.getElementById('footer-linkedin-link').href = CONFIG.links.linkedin;
   </script>
 

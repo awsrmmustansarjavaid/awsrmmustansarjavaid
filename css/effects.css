@@ -1,0 +1,73 @@
+/* ================================================================
+   DEVOPS SHOWCASE — css/effects.css  (index.html + every pages/*.html)
+   Shared hover / transition / scroll effects + the two-tone LinkedIn
+   badges. Loaded LAST so it refines the styles from style.css/home.css.
+   Everything respects prefers-reduced-motion (see the bottom).
+   ================================================================ */
+
+/* ---------- 1. Smooth transitions on every interactive element ---------- */
+.btn, .chip, .badge, .tech-item, .orb, .card-link, .footer-icons a, .li-badge, .brand-icon {
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease, border-color .25s ease, color .25s ease, filter .25s ease;
+}
+/* Buttons: lift + glow, press-down feedback on click */
+.btn:hover { transform: translateY(-3px); border-color: var(--accent-a); box-shadow: 0 8px 24px rgba(56,189,248,.28); }
+.btn-primary:hover { box-shadow: 0 8px 28px rgba(99,102,241,.55); filter: brightness(1.12); }
+.btn:active { transform: translateY(0) scale(.97); }
+/* Tags / chips / status labels */
+.chip:hover, .badge:hover { transform: translateY(-2px); color: #fff; box-shadow: 0 4px 14px rgba(56,189,248,.30); }
+/* Logo tiles + floating hero badges */
+.tech-item:hover, .orb:hover { transform: translateY(-4px) scale(1.06); border-color: var(--accent-a); box-shadow: 0 0 22px rgba(56,189,248,.40); }
+/* "View Repository →" links: nudge right */
+.card-link:hover { transform: translateX(5px); }
+.footer-icons a:hover { transform: translateY(-3px); border-color: var(--accent-a); }
+.brand-icon:hover { transform: rotate(-8deg) scale(1.08); }
+
+/* ---------- 2. Animated underline for navbar links ---------- */
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; border-radius: 2px;
+  background: var(--accent-gradient); transform: scaleX(0); transform-origin: left; transition: transform .3s ease;
+}
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+
+/* ---------- 3. Hover on every section / panel / card ---------- */
+section.panel > .section-inner, .duo-panel, .about-section .section-inner > *, .connect-bar,
+.card, .tech-stack-panel, .journal-item {
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+section.panel > .section-inner:hover, .duo-panel:hover, .about-section .section-inner > *:hover, .connect-bar:hover,
+.card:hover, .tech-stack-panel:hover, .journal-item:hover {
+  transform: translateY(-4px); border-color: rgba(56,189,248,.65); box-shadow: 0 12px 36px rgba(37,99,235,.28);
+}
+
+/* ---------- 4. Two-tone LinkedIn badges (grey "LinkedIn" | blue label) ---------- */
+.li-row { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .9rem; }
+.li-badge { display: inline-flex; border-radius: 5px; overflow: hidden; font: 600 .75rem Inter, Arial, sans-serif; text-decoration: none; }
+.li-badge span { padding: .34rem .65rem; color: #fff; }
+.li-badge span:first-child { background: #3B3F45; }   /* grey half */
+.li-badge span:last-child  { background: #0A66C2; }   /* LinkedIn-blue half */
+.li-badge:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(10,102,194,.55); filter: brightness(1.15); }
+.footer-icons a.li-badge { width: auto; height: auto; border: 0; border-radius: 5px; }  /* undo the round footer-icon style */
+
+/* ---------- 5. Reveal-on-scroll (class added by js/effects.js) ---------- */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ---------- 6. Scroll progress bar + back-to-top button ---------- */
+#scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 100; background: linear-gradient(90deg, #22D3EE, #7C5CFF); box-shadow: 0 0 10px rgba(56,189,248,.6); }
+#back-to-top {
+  position: fixed; right: 1.4rem; bottom: calc(1.4rem + env(safe-area-inset-bottom, 0px)); z-index: 50;
+  width: 46px; height: 46px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; color: #fff;
+  background: rgba(10,21,48,.92); border: 1px solid rgba(56,189,248,.5); box-shadow: 0 0 18px rgba(56,189,248,.25);
+  opacity: 0; pointer-events: none; transform: translateY(14px);
+  transition: opacity .3s ease, transform .3s ease, box-shadow .3s ease;
+}
+#back-to-top.show { opacity: 1; pointer-events: auto; transform: none; }   /* visible after scrolling down */
+#back-to-top:hover { transform: translateY(-4px); box-shadow: 0 0 26px rgba(56,189,248,.6); }
+header { transition: box-shadow .3s ease; }
+header.scrolled { box-shadow: 0 8px 30px rgba(0,0,0,.45); }   /* depth once the page is scrolled */
+
+/* ---------- 7. Accessibility: no motion if the user asked for none ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  * { transition-duration: .01ms !important; }
+}
