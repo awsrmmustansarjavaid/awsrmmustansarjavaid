@@ -296,7 +296,7 @@ I enjoy building **small, focused applications around problems that I personally
 
 Instead of building another generic application, I prefer identifying a specific repetitive, inconvenient, or interesting task and creating a lightweight tool around it.
 
-My approach is:
+### My approach is:
 
 ```text
 Personal Problem
@@ -310,7 +310,7 @@ Practical Solution
  Continuous Improvement
 ```
 
-These projects are designed around:
+### These projects are designed around:
 
 * 🎯 **One specific problem**
 * 🧩 **A focused feature set**
