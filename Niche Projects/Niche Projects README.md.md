@@ -44,6 +44,8 @@ Most of these projects are designed around:
 
 ---
 
+## ⭐ Explore the Projects
+
 # 1. ⏳ Charlie MJ Chrono Journey
 
 ### 🔗 Repository
@@ -601,16 +603,5 @@ Each project has its own repository, license, documentation, and usage requireme
 
 ---
 
-## ⭐ Explore the Projects
-
-| Project | Repository |
-|---|---|
-| ⏳ Charlie MJ Chrono Journey | [View Repository](https://github.com/awsrmmustansarjavaid/charlie-mj-chrono-journey) |
-| 🎬 Charlie MJ Drive Media Downloader | [View Repository](https://github.com/awsrmmustansarjavaid/charlie-MJ-drive-media-downloader) |
-| 🔎 Charlie MJ Medium Article Search Engine | [View Repository](https://github.com/awsrmmustansarjavaid/medium-article-search-engine) |
-| 📸 Charlie MJ PhotoStory | [View Repository](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory) |
-| 🎥 Charlie MJ Video Downloader | [View Repository](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader) |
-
----
 
 > **Different problems. Different niche solutions. One philosophy: build tools that solve real problems I personally face.**
