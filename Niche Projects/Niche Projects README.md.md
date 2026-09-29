@@ -10,13 +10,14 @@ The projects cover different areas including **time tracking, media downloading,
 
 ## 📌 My Niche Projects
 
-| # | Project | GitHub Repository | Purpose |
-|---|---|---|---|
-| 1 | **Charlie MJ Chrono Journey** | [charlie-mj-chrono-journey](https://github.com/awsrmmustansarjavaid/charlie-mj-chrono-journey) | Track the exact time elapsed between important past or future moments |
-| 2 | **Charlie MJ Drive Media Downloader** | [charlie-MJ-drive-media-downloader](https://github.com/awsrmmustansarjavaid/charlie-MJ-drive-media-downloader) | Simplify saving authorized Google Drive view-only media streams |
-| 3 | **Charlie MJ Medium Article Search Engine** | [medium-article-search-engine](https://github.com/awsrmmustansarjavaid/medium-article-search-engine) | Search and filter articles from any public Medium profile |
-| 4 | **Charlie MJ PhotoStory** | [CharlieMJ-PhotoStory](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory) | Create photo grids and Instagram-style stories offline |
-| 5 | **Charlie MJ Video Downloader** | [charlie-mj-video-downloader](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader) | Download, convert, manage, and organize supported media |
+| **#** | **Project**                                 | **GitHub Repository**                                                                                          | **Purpose**                                                            |
+| ----: | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+|     1 | **Charlie MJ Chrono Journey**               | [charlie-mj-chrono-journey](https://github.com/awsrmmustansarjavaid/charlie-mj-chrono-journey)                 | Track the exact time elapsed between important past or future moments  |
+|     2 | **Charlie MJ Drive Media Downloader**       | [charlie-MJ-drive-media-downloader](https://github.com/awsrmmustansarjavaid/charlie-MJ-drive-media-downloader) | Simplify saving authorized Google Drive media streams                  |
+|     3 | **Charlie MJ Instagram Post Editor**        | [charlie-mj-instagram-post-editor](https://github.com/awsrmmustansarjavaid/charlie-mj-instagram-post-editor)   | Prepare, resize, crop, and export photos for Instagram formats offline |
+|     4 | **Charlie MJ Medium Article Search Engine** | [medium-article-search-engine](https://github.com/awsrmmustansarjavaid/medium-article-search-engine)           | Search and filter articles from any public Medium profile              |
+|     5 | **Charlie MJ PhotoStory**                   | [CharlieMJ-PhotoStory](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory)                           | Create photo grids and Instagram-style stories offline                 |
+|     6 | **Charlie MJ Video Downloader**             | [charlie-mj-video-downloader](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader)             | Download, convert, manage, and organize supported media                |
 
 ---
 
@@ -442,6 +443,52 @@ It combines downloading, media processing, format selection, queue management, a
 ```
 
 The desktop application performs the heavy download and media-processing work, while the browser extension provides browser-side stream information when required.
+
+---
+
+# 6. 🖼️ Charlie MJ Instagram Post Editor
+
+### 🔗 Repository
+
+[**charlie-mj-instagram-post-editor**](https://github.com/awsrmmustansarjavaid/charlie-mj-instagram-post-editor)
+
+### 💡 What Is It?
+
+**Charlie MJ Instagram Post Editor** is a **portable Windows desktop image editor** designed to quickly convert photos and Instagram Stories into properly sized Instagram posts without unnecessary cropping, distortion, or quality loss.
+
+It processes images **locally and offline**, keeping the user's original files unchanged.
+
+### ✨ Main Features
+
+* 🖼️ Instagram Post & Story conversion
+* 📐 Portrait, Square, Landscape, Story & Reel formats
+* ✂️ Smart Crop & manual positioning
+* 🌫️ Blur, solid, gradient & mirror backgrounds
+* 🔍 Zoom, crop, rotate & flip
+* 🎨 Color adjustments & built-in filters
+* ✍️ Text & stickers
+* 👀 Instagram Feed & Profile Grid preview
+* ↩️ Undo & Redo
+* 📤 JPEG, PNG & WebP export
+* 🧹 Automatic EXIF/GPS metadata removal
+* 📦 Portable single `.exe`
+* 🔒 Local & private image processing
+* 🌐 Works completely offline
+
+### 🛠️ Technologies
+
+* Electron
+* HTML5
+* CSS3
+* Vanilla JavaScript
+* Canvas 2D API
+* electron-builder
+
+### 🎯 Problem → Solution
+
+**Problem:** Converting images between Instagram formats can result in unwanted cropping, distortion, or unnecessary quality loss.
+
+**Solution:** A lightweight, **Instagram-focused offline editor** that prepares images for different Instagram formats while giving the user control over cropping, positioning, backgrounds, and export quality.
 
 ---
 
