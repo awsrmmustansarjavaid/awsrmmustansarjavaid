@@ -18,6 +18,8 @@ The projects cover different areas including **time tracking, media downloading,
 |     4 | **Charlie MJ Medium Article Search Engine** | [medium-article-search-engine](https://github.com/awsrmmustansarjavaid/medium-article-search-engine)           | Search and filter articles from any public Medium profile              |
 |     5 | **Charlie MJ PhotoStory**                   | [CharlieMJ-PhotoStory](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory)                           | Create photo grids and Instagram-style stories offline                 |
 |     6 | **Charlie MJ Video Downloader**             | [charlie-mj-video-downloader](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader)             | Download, convert, manage, and organize supported media                |
+|     7 | **Charlie MJ YouTube Toolkit** | [charlie-mj-youtube-toolkit](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit) | A YouTube learning workspace for video analysis, subtitles, transcripts, vocabulary, notes, and study exports |
+
 
 ---
 
@@ -491,6 +493,118 @@ It processes images **locally and offline**, keeping the user's original files u
 **Problem:** Converting images between Instagram formats can result in unwanted cropping, distortion, or unnecessary quality loss.
 
 **Solution:** A lightweight, **Instagram-focused offline editor** that prepares images for different Instagram formats while giving the user control over cropping, positioning, backgrounds, and export quality.
+
+---
+
+# 7. 🎬 Charlie MJ YouTube Toolkit
+
+### 🔗 Repository
+
+[**charlie-mj-youtube-toolkit**](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit)
+
+### 💡 What Is It?
+
+**Charlie MJ YouTube Toolkit** is a niche, browser-based **YouTube learning workspace** designed especially for people who use YouTube for language learning, study, research, and personal note-taking.
+
+Instead of using separate tools for YouTube URLs, thumbnails, subtitles, transcripts, vocabulary, notes, and exports, the project brings these activities together inside one lightweight web application.
+
+The project is designed as a **static GitHub Pages application**, so it does not require a backend server, database, user account, or build pipeline.
+
+### ✨ Main Features
+
+* 🎬 YouTube URL analyzer for standard, Shorts, youtu.be, and embed URLs
+* ▶️ Embedded YouTube video player
+* 🖼️ YouTube thumbnail preview and download tools
+* 📝 Subtitle and transcript loading
+* 📄 SRT, VTT, TXT, CSV, and JSON text/subtitle support
+* 🧹 Transcript cleanup and organization
+* 🔎 Transcript search
+* ⏱️ Timestamp-based transcript navigation
+* 📋 One-click transcript copying
+* 📚 Vocabulary extraction from transcript text
+* 🌐 Source and target language organization
+* 🗒️ Personal study notes
+* 💾 Local browser session storage
+* 📤 TXT, Markdown, JSON, and CSV exports
+* 📖 Distraction-free Reading Mode
+* 📊 Live session, vocabulary, and transcript counters
+* 🌙 Light and dark themes
+* 📱 Responsive Bootstrap 5 interface
+* 🔐 No account or login required
+
+### 🧠 Learning Workflow
+
+The toolkit is designed around a simple learning workflow:
+
+```text
+YouTube Video
+      ↓
+Video / Thumbnail Analysis
+      ↓
+Subtitle / Transcript
+      ↓
+Transcript Cleanup
+      ↓
+Search & Timestamp Navigation
+      ↓
+Vocabulary Extraction
+      ↓
+Personal Notes
+      ↓
+Local Session Storage
+      ↓
+TXT / Markdown / JSON / CSV Export
+```
+
+This makes the project useful as a small **YouTube-based language-learning workspace** rather than just another YouTube utility.
+
+### 🛠️ Technologies
+
+* HTML5
+* CSS3
+* JavaScript ES Modules
+* Bootstrap 5.3
+* Bootstrap responsive grid and utilities
+* YouTube IFrame Player API
+* Browser Clipboard API
+* File API
+* Blob and download APIs
+* `localStorage`
+* SVG assets
+* GitHub Pages
+
+### ⚙️ How It Works
+
+The user starts by providing a YouTube video URL or loading compatible subtitle/transcript content.
+
+The application then processes the content directly in the browser:
+
+```text
+YouTube URL
+     ↓
+Video ID Detection
+     ↓
+Embedded YouTube Player
+     ↓
+Transcript / Subtitle Input
+     ↓
+Cleanup & Organization
+     ↓
+Vocabulary + Notes
+     ↓
+Save Study Session
+     ↓
+Export Learning Data
+```
+
+The application keeps personal study data inside the browser using `localStorage`, while exported files are generated locally.
+
+### 🎯 Project Concept
+
+The main idea behind **Charlie MJ YouTube Toolkit** is to turn ordinary YouTube videos into a more organized learning environment.
+
+It combines several small learning utilities into one focused workspace where users can **watch → read → search → collect vocabulary → take notes → save → export** without constantly switching between different websites.
+
 
 ---
 
