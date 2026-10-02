@@ -1,0 +1,1401 @@
+/* =================================================================
+   CHARLIE DEVOPS LIBRARY
+   -----------------------------------------------------------------
+   Page-specific styles for the Charlie DevOps Library.
+
+   This stylesheet controls:
+   - Library hero section
+   - Library statistics
+   - Search and filtering controls
+   - Category cards
+   - Loading and empty states
+   - Resource detail modal
+   - Markdown-rendered content
+   - Responsive/mobile layouts
+
+   Shared variables such as:
+   --line
+   --radius
+   --radius-sm
+   --panel
+   --text
+   --muted
+
+   are inherited from the main Charlie MJ website stylesheets.
+   ================================================================= */
+
+
+/* =================================================================
+   LIBRARY THEME VARIABLES
+   -----------------------------------------------------------------
+   Custom colors used specifically by the DevOps Library.
+
+   --library-accent:
+       Primary cyan/blue accent used for links, highlights,
+       borders, counters and interactive elements.
+
+   --library-accent-2:
+       Secondary purple accent used together with the primary
+       accent for gradients.
+   ================================================================= */
+
+:root {
+  --library-accent: #38BDF8;
+  --library-accent-2: #8B5CF6;
+}
+
+
+/* =================================================================
+   HERO SECTION
+   -----------------------------------------------------------------
+   Controls the introductory section at the top of the page.
+
+   The hero contains:
+   - Library badge
+   - Main library title
+   - Library description
+   - Statistics panel
+   ================================================================= */
+
+.library-hero {
+  /* Reduce the bottom spacing so the library content follows
+     naturally after the hero section. */
+  padding-bottom: 2rem;
+}
+
+
+/* -----------------------------------------------------------------
+   HERO CONTENT LAYOUT
+   -----------------------------------------------------------------
+   Uses a two-column grid on larger screens:
+
+   Left  = Library title and description
+   Right = Library statistics
+
+   The first column expands while the statistics column keeps
+   only the width it requires.
+   ----------------------------------------------------------------- */
+
+.library-hero-content {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 2rem;
+
+  align-items: end;
+
+  margin-top: 1.5rem;
+}
+
+
+/* -----------------------------------------------------------------
+   LIBRARY BADGE
+   -----------------------------------------------------------------
+   Small pill-shaped label displayed above the main title.
+   ----------------------------------------------------------------- */
+
+.library-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: .45rem;
+
+  padding: .45rem .8rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, .03);
+
+  color: var(--library-accent);
+
+  font-size: .78rem;
+
+  font-weight: 700;
+
+  letter-spacing: .02em;
+}
+
+
+/* -----------------------------------------------------------------
+   HERO TITLE
+   -----------------------------------------------------------------
+   Uses CSS clamp() so the title scales smoothly between desktop
+   and mobile screen sizes.
+   ----------------------------------------------------------------- */
+
+.library-hero h1 {
+  margin: 1rem 0 .7rem;
+
+  font-size: clamp(
+    2.2rem,
+    5vw,
+    4rem
+  );
+}
+
+
+/* -----------------------------------------------------------------
+   HERO DESCRIPTION
+   -----------------------------------------------------------------
+   Limits the text width to maintain comfortable reading length.
+   ----------------------------------------------------------------- */
+
+.library-hero p {
+  max-width: 75ch;
+
+  color: var(--muted);
+
+  line-height: 1.8;
+}
+
+
+/* =================================================================
+   LIBRARY STATISTICS
+   -----------------------------------------------------------------
+   Displays summary information such as:
+
+   - Number of categories
+   - Number of resources
+   - Number of URLs
+
+   These values are populated dynamically by JavaScript.
+   ================================================================= */
+
+
+/* -----------------------------------------------------------------
+   STATISTICS CONTAINER
+   -----------------------------------------------------------------
+   Creates three equal statistic columns.
+   ----------------------------------------------------------------- */
+
+.library-stat-panel {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(90px, 1fr)
+    );
+
+  gap: .8rem;
+}
+
+
+/* -----------------------------------------------------------------
+   INDIVIDUAL STATISTIC CARD
+   ----------------------------------------------------------------- */
+
+.library-stat {
+  min-width: 105px;
+
+  padding: 1rem;
+
+  text-align: center;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius);
+
+  background: var(--panel);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, .12);
+}
+
+
+/* -----------------------------------------------------------------
+   STATISTIC VALUE
+   -----------------------------------------------------------------
+   Displays the main numerical value.
+   ----------------------------------------------------------------- */
+
+.library-stat strong {
+  display: block;
+
+  font-size: 1.7rem;
+
+  color: var(--library-accent);
+}
+
+
+/* -----------------------------------------------------------------
+   STATISTIC LABEL
+   ----------------------------------------------------------------- */
+
+.library-stat span {
+  display: block;
+
+  margin-top: .25rem;
+
+  color: var(--muted);
+
+  font-size: .72rem;
+}
+
+
+/* =================================================================
+   LIBRARY TOOLBAR
+   -----------------------------------------------------------------
+   Contains:
+   - Search field
+   - Category selector
+   - Sorting selector
+
+   The layout changes to a single column on smaller screens.
+   ================================================================= */
+
+
+/* -----------------------------------------------------------------
+   LIBRARY SECTION
+   -----------------------------------------------------------------
+   Controls the overall vertical spacing around the library area.
+   ----------------------------------------------------------------- */
+
+.library-section {
+  padding: 1rem 0 4rem;
+}
+
+
+/* -----------------------------------------------------------------
+   TOOLBAR GRID
+   -----------------------------------------------------------------
+   Desktop layout:
+
+   Search      | Category Filter | Sort
+
+   The search field receives more available space than the two
+   selection controls.
+   ----------------------------------------------------------------- */
+
+.library-toolbar {
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 1fr)
+    minmax(180px, 220px)
+    minmax(180px, 220px);
+
+  gap: .8rem;
+
+  margin-bottom: 1rem;
+}
+
+
+/* -----------------------------------------------------------------
+   SEARCH CONTAINER
+   -----------------------------------------------------------------
+   Provides the visual wrapper around the search icon and input.
+   ----------------------------------------------------------------- */
+
+.library-search {
+  display: flex;
+
+  align-items: center;
+
+  gap: .6rem;
+
+  min-width: 0;
+
+  padding: .7rem .9rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-sm);
+
+  background: var(--panel);
+}
+
+
+/* -----------------------------------------------------------------
+   SEARCH ICON
+   -----------------------------------------------------------------
+   Slightly reduces the icon opacity so the input remains the
+   primary visual focus.
+   ----------------------------------------------------------------- */
+
+.library-search span {
+  opacity: .7;
+}
+
+
+/* -----------------------------------------------------------------
+   SEARCH INPUT
+   -----------------------------------------------------------------
+   Removes the browser's default input styling and allows the
+   field to inherit the site's typography and colors.
+   ----------------------------------------------------------------- */
+
+.library-search input {
+  width: 100%;
+
+  border: 0;
+
+  outline: 0;
+
+  background: transparent;
+
+  color: var(--text);
+
+  font: inherit;
+}
+
+
+/* -----------------------------------------------------------------
+   FILTER / SORT SELECT ELEMENTS
+   ----------------------------------------------------------------- */
+
+.library-toolbar select {
+  width: 100%;
+
+  padding: .7rem .9rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-sm);
+
+  background: var(--panel);
+
+  color: var(--text);
+
+  font: inherit;
+
+  cursor: pointer;
+}
+
+
+/* -----------------------------------------------------------------
+   FOCUS STATES
+   -----------------------------------------------------------------
+   Provides a clear visual indication when the user interacts with
+   the search field or select controls.
+
+   :focus-within allows the search container to react when its
+   internal input receives focus.
+   ----------------------------------------------------------------- */
+
+.library-search:focus-within,
+.library-toolbar select:focus {
+  border-color: var(--library-accent);
+
+  box-shadow:
+    0 0 0 2px rgba(56, 189, 248, .12);
+}
+
+
+/* =================================================================
+   RESULTS BAR
+   -----------------------------------------------------------------
+   Displays the current search/filter result information and the
+   button used to reset the active filters.
+   ================================================================= */
+
+
+/* -----------------------------------------------------------------
+   RESULT INFORMATION CONTAINER
+   ----------------------------------------------------------------- */
+
+.library-results-bar {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  margin-bottom: 1.3rem;
+
+  color: var(--muted);
+
+  font-size: .85rem;
+}
+
+
+/* -----------------------------------------------------------------
+   CLEAR FILTERS BUTTON
+   -----------------------------------------------------------------
+   Resets the active search, category and sorting selections.
+   ----------------------------------------------------------------- */
+
+.library-clear-btn {
+  padding: .45rem .75rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+
+  color: var(--muted);
+
+  cursor: pointer;
+
+  font: inherit;
+}
+
+
+/* -----------------------------------------------------------------
+   CLEAR BUTTON HOVER STATE
+   ----------------------------------------------------------------- */
+
+.library-clear-btn:hover {
+  color: var(--text);
+
+  border-color: var(--library-accent);
+}
+
+
+/* =================================================================
+   CATEGORY GRID
+   -----------------------------------------------------------------
+   Responsive grid containing all DevOps category cards.
+
+   auto-fit automatically determines how many cards can fit in
+   the available width.
+   ================================================================= */
+
+.library-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(300px, 1fr)
+    );
+
+  gap: 1.2rem;
+}
+
+
+/* =================================================================
+   CATEGORY CARD
+   -----------------------------------------------------------------
+   Individual DevOps library category card.
+
+   Each card can contain:
+   - Category number
+   - Category title
+   - Description
+   - Resource metadata
+   - Action buttons
+   ================================================================= */
+
+
+/* -----------------------------------------------------------------
+   CARD BASE
+   ----------------------------------------------------------------- */
+
+.library-card {
+  display: flex;
+
+  flex-direction: column;
+
+  min-height: 260px;
+
+  padding: 1.25rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, .045),
+      rgba(255, 255, 255, .015)
+    );
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, .14);
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+
+/* -----------------------------------------------------------------
+   CARD HOVER EFFECT
+   -----------------------------------------------------------------
+   Slightly raises the card and increases its visual emphasis when
+   the user moves the pointer over it.
+   ----------------------------------------------------------------- */
+
+.library-card:hover {
+  transform: translateY(-4px);
+
+  border-color:
+    rgba(56, 189, 248, .5);
+
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, .22);
+}
+
+
+/* -----------------------------------------------------------------
+   CARD HEADER
+   -----------------------------------------------------------------
+   Places the category information and category number in a
+   horizontal layout.
+   ----------------------------------------------------------------- */
+
+.library-card-top {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+
+/* -----------------------------------------------------------------
+   CATEGORY NUMBER
+   -----------------------------------------------------------------
+   Small gradient badge used to visually identify the category's
+   original position/order.
+   ----------------------------------------------------------------- */
+
+.library-card-number {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 38px;
+
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--library-accent),
+      var(--library-accent-2)
+    );
+
+  color: #fff;
+
+  font-size: .75rem;
+
+  font-weight: 800;
+}
+
+
+/* -----------------------------------------------------------------
+   CARD TITLE
+   ----------------------------------------------------------------- */
+
+.library-card h3 {
+  margin: 0;
+
+  line-height: 1.4;
+
+  font-size: 1.05rem;
+}
+
+
+/* -----------------------------------------------------------------
+   CARD DESCRIPTION
+   ----------------------------------------------------------------- */
+
+.library-card-description {
+  margin: .9rem 0;
+
+  color: var(--muted);
+
+  font-size: .85rem;
+
+  line-height: 1.7;
+}
+
+
+/* -----------------------------------------------------------------
+   CARD METADATA
+   -----------------------------------------------------------------
+   Contains small informational chips such as resource counts
+   or other category information.
+
+   margin-top: auto pushes the metadata toward the bottom of the
+   card when cards have different amounts of description text.
+   ----------------------------------------------------------------- */
+
+.library-card-meta {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: .45rem;
+
+  margin-top: auto;
+
+  margin-bottom: 1rem;
+}
+
+
+/* -----------------------------------------------------------------
+   METADATA CHIP
+   ----------------------------------------------------------------- */
+
+.library-chip {
+  padding: .3rem .55rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: 999px;
+
+  color: var(--muted);
+
+  font-size: .7rem;
+}
+
+
+/* -----------------------------------------------------------------
+   CARD ACTION AREA
+   -----------------------------------------------------------------
+   Holds buttons such as "View Resources" or external links.
+   ----------------------------------------------------------------- */
+
+.library-card-actions {
+  display: flex;
+
+  gap: .6rem;
+
+  flex-wrap: wrap;
+}
+
+
+/* -----------------------------------------------------------------
+   CARD ACTION BUTTON
+   -----------------------------------------------------------------
+   Flexible button that can be used for both links and JavaScript
+   actions.
+   ----------------------------------------------------------------- */
+
+.library-card-btn {
+  flex: 1 1 130px;
+
+  padding: .65rem .8rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+
+  color: var(--text);
+
+  text-align: center;
+
+  text-decoration: none;
+
+  font-size: .8rem;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+/* -----------------------------------------------------------------
+   CARD BUTTON HOVER STATE
+   ----------------------------------------------------------------- */
+
+.library-card-btn:hover {
+  border-color: var(--library-accent);
+
+  color: var(--library-accent);
+}
+
+
+/* -----------------------------------------------------------------
+   PRIMARY CARD BUTTON
+   -----------------------------------------------------------------
+   Gradient style used for the main action of a resource card.
+   ----------------------------------------------------------------- */
+
+.library-card-btn.primary {
+  border-color: transparent;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--library-accent),
+      var(--library-accent-2)
+    );
+
+  color: #fff;
+}
+
+
+/* =================================================================
+   LOADING STATE
+   -----------------------------------------------------------------
+   Displayed while the library is retrieving and processing
+   Markdown content from GitHub.
+   ================================================================= */
+
+.library-loading {
+  /* Makes the loading state span the complete grid width. */
+  grid-column: 1 / -1;
+
+  padding: 4rem 1rem;
+
+  text-align: center;
+
+  color: var(--muted);
+}
+
+
+/* -----------------------------------------------------------------
+   LOADING HEADING
+   ----------------------------------------------------------------- */
+
+.library-loading h3 {
+  margin: 1rem 0 .4rem;
+
+  color: var(--text);
+}
+
+
+/* -----------------------------------------------------------------
+   LOADING SPINNER
+   -----------------------------------------------------------------
+   Circular animated indicator shown during resource loading.
+   ----------------------------------------------------------------- */
+
+.library-spinner {
+  width: 38px;
+
+  height: 38px;
+
+  margin: 0 auto;
+
+  border: 3px solid var(--line);
+
+  border-top-color: var(--library-accent);
+
+  border-radius: 50%;
+
+  animation:
+    library-spin .8s linear infinite;
+}
+
+
+/* -----------------------------------------------------------------
+   SPINNER ANIMATION
+   ----------------------------------------------------------------- */
+
+@keyframes library-spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* =================================================================
+   EMPTY STATE
+   -----------------------------------------------------------------
+   Displayed when a search or filter produces no matching results.
+   ================================================================= */
+
+.library-empty {
+  padding: 4rem 1rem;
+
+  text-align: center;
+
+  color: var(--muted);
+}
+
+
+/* -----------------------------------------------------------------
+   EMPTY STATE ICON
+   ----------------------------------------------------------------- */
+
+.library-empty-icon {
+  font-size: 2.5rem;
+
+  margin-bottom: .8rem;
+}
+
+
+/* -----------------------------------------------------------------
+   EMPTY STATE HEADING
+   ----------------------------------------------------------------- */
+
+.library-empty h3 {
+  color: var(--text);
+}
+
+
+/* =================================================================
+   RESOURCE DETAIL MODAL
+   -----------------------------------------------------------------
+   Full-screen overlay used to display the selected resource without
+   navigating away from the library page.
+
+   The modal contains:
+   - Dark backdrop
+   - Scrollable content panel
+   - Close button
+   - Resource metadata
+   - Rendered Markdown
+   ================================================================= */
+
+
+/* -----------------------------------------------------------------
+   MODAL OVERLAY
+   ----------------------------------------------------------------- */
+
+.library-modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 1rem;
+}
+
+
+/* -----------------------------------------------------------------
+   HIDDEN MODAL STATE
+   -----------------------------------------------------------------
+   Ensures the modal is completely removed from the visual layout
+   when the HTML hidden attribute is active.
+   ----------------------------------------------------------------- */
+
+.library-modal[hidden] {
+  display: none;
+}
+
+
+/* -----------------------------------------------------------------
+   MODAL BACKDROP
+   -----------------------------------------------------------------
+   Darkens and blurs the page behind the active resource modal.
+   ----------------------------------------------------------------- */
+
+.library-modal-backdrop {
+  position: absolute;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, .78);
+
+  backdrop-filter: blur(7px);
+}
+
+
+/* -----------------------------------------------------------------
+   MODAL CONTENT PANEL
+   -----------------------------------------------------------------
+   Limits the modal width and height while allowing the resource
+   content to scroll independently.
+   ----------------------------------------------------------------- */
+
+.library-modal-dialog {
+  position: relative;
+
+  z-index: 1;
+
+  width: min(1050px, 100%);
+
+  max-height: 90vh;
+
+  overflow: auto;
+
+  padding: 2rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius);
+
+  background: var(--panel);
+
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, .45);
+}
+
+
+/* -----------------------------------------------------------------
+   MODAL CLOSE BUTTON
+   -----------------------------------------------------------------
+   Sticky close button remains accessible while scrolling through
+   a long resource document.
+   ----------------------------------------------------------------- */
+
+.library-modal-close {
+  position: sticky;
+
+  float: right;
+
+  top: 0;
+
+  width: 40px;
+
+  height: 40px;
+
+  border: 1px solid var(--line);
+
+  border-radius: 50%;
+
+  background: var(--panel);
+
+  color: var(--text);
+
+  font-size: 1.5rem;
+
+  cursor: pointer;
+
+  z-index: 2;
+}
+
+
+/* -----------------------------------------------------------------
+   MODAL HEADER
+   -----------------------------------------------------------------
+   Reserves space for the close button and separates resource
+   metadata from the Markdown content.
+   ----------------------------------------------------------------- */
+
+.library-modal-header {
+  padding-right: 3rem;
+
+  margin-bottom: 1.5rem;
+}
+
+
+/* -----------------------------------------------------------------
+   MODAL CATEGORY LABEL
+   ----------------------------------------------------------------- */
+
+.library-modal-category {
+  color: var(--library-accent);
+
+  font-size: .75rem;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .08em;
+}
+
+
+/* -----------------------------------------------------------------
+   MODAL RESOURCE TITLE
+   ----------------------------------------------------------------- */
+
+.library-modal-header h2 {
+  margin: .5rem 0;
+
+  font-size: clamp(
+    1.5rem,
+    4vw,
+    2.3rem
+  );
+}
+
+
+/* -----------------------------------------------------------------
+   MODAL RESOURCE META INFORMATION
+   ----------------------------------------------------------------- */
+
+.library-modal-header p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: .85rem;
+}
+
+
+/* =================================================================
+   MARKDOWN CONTENT
+   -----------------------------------------------------------------
+   Styles content generated from Markdown resources.
+
+   These rules ensure that GitHub/Markdown content remains visually
+   consistent with the Charlie MJ website.
+   ================================================================= */
+
+.library-modal-content {
+  color: var(--text);
+
+  line-height: 1.8;
+}
+
+
+/* -----------------------------------------------------------------
+   MARKDOWN HEADINGS
+   -----------------------------------------------------------------
+   Adds consistent vertical spacing around headings.
+   ----------------------------------------------------------------- */
+
+.library-modal-content h1,
+.library-modal-content h2,
+.library-modal-content h3,
+.library-modal-content h4 {
+  margin-top: 1.8rem;
+
+  margin-bottom: .7rem;
+}
+
+
+/* -----------------------------------------------------------------
+   MARKDOWN H1
+   ----------------------------------------------------------------- */
+
+.library-modal-content h1 {
+  font-size: 1.7rem;
+}
+
+
+/* -----------------------------------------------------------------
+   MARKDOWN H2
+   ----------------------------------------------------------------- */
+
+.library-modal-content h2 {
+  font-size: 1.35rem;
+}
+
+
+/* -----------------------------------------------------------------
+   MARKDOWN H3
+   ----------------------------------------------------------------- */
+
+.library-modal-content h3 {
+  font-size: 1.1rem;
+}
+
+
+/* -----------------------------------------------------------------
+   MARKDOWN PARAGRAPHS
+   ----------------------------------------------------------------- */
+
+.library-modal-content p {
+  color: var(--muted);
+}
+
+
+/* -----------------------------------------------------------------
+   MARKDOWN LINKS
+   ----------------------------------------------------------------- */
+
+.library-modal-content a {
+  color: var(--library-accent);
+
+  text-decoration: none;
+}
+
+
+/* -----------------------------------------------------------------
+   MARKDOWN LINK HOVER STATE
+   ----------------------------------------------------------------- */
+
+.library-modal-content a:hover {
+  text-decoration: underline;
+}
+
+
+/* -----------------------------------------------------------------
+   MARKDOWN LISTS
+   -----------------------------------------------------------------
+   Adds appropriate indentation to ordered and unordered lists.
+   ----------------------------------------------------------------- */
+
+.library-modal-content ul,
+.library-modal-content ol {
+  padding-left: 1.5rem;
+}
+
+
+/* -----------------------------------------------------------------
+   MARKDOWN BLOCKQUOTES
+   -----------------------------------------------------------------
+   Uses the library accent as a visual indicator for quoted content.
+   ----------------------------------------------------------------- */
+
+.library-modal-content blockquote {
+  margin: 1rem 0;
+
+  padding: .8rem 1rem;
+
+  border-left: 3px solid var(--library-accent);
+
+  background: rgba(255, 255, 255, .025);
+
+  color: var(--muted);
+}
+
+
+/* -----------------------------------------------------------------
+   INLINE CODE
+   -----------------------------------------------------------------
+   Gives inline Markdown code a subtle background and spacing.
+   ----------------------------------------------------------------- */
+
+.library-modal-content code {
+  padding: .15rem .35rem;
+
+  border-radius: 4px;
+
+  background: rgba(255, 255, 255, .06);
+
+  font-size: .85em;
+}
+
+
+/* -----------------------------------------------------------------
+   CODE BLOCKS
+   -----------------------------------------------------------------
+   Enables horizontal scrolling for long code lines instead of
+   breaking the overall modal layout.
+   ----------------------------------------------------------------- */
+
+.library-modal-content pre {
+  overflow-x: auto;
+
+  padding: 1rem;
+
+  border-radius: var(--radius-sm);
+
+  background: rgba(0, 0, 0, .25);
+}
+
+
+/* =================================================================
+   RESPONSIVE DESIGN
+   -----------------------------------------------------------------
+   Tablet and mobile adjustments for the DevOps Library.
+
+   The layout progressively changes from multi-column desktop
+   layouts to compact single-column mobile layouts.
+   ================================================================= */
+
+
+/* =================================================================
+   TABLET / SMALL DESKTOP
+   -----------------------------------------------------------------
+   Applies when the viewport width is 850px or smaller.
+   ================================================================= */
+
+@media (max-width: 850px) {
+
+
+  /* ---------------------------------------------------------------
+     HERO LAYOUT
+     ---------------------------------------------------------------
+     Moves the statistics below the hero content.
+     --------------------------------------------------------------- */
+
+  .library-hero-content {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* ---------------------------------------------------------------
+     STATISTICS WIDTH
+     --------------------------------------------------------------- */
+
+  .library-stat-panel {
+    width: 100%;
+  }
+
+
+  /* ---------------------------------------------------------------
+     TOOLBAR
+     ---------------------------------------------------------------
+     Stacks search, category and sorting controls vertically.
+     --------------------------------------------------------------- */
+
+  .library-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =================================================================
+   MOBILE
+   -----------------------------------------------------------------
+   Additional layout adjustments for small smartphone screens.
+   ================================================================= */
+
+@media (max-width: 520px) {
+
+
+  /* ---------------------------------------------------------------
+     MOBILE STATISTICS
+     ---------------------------------------------------------------
+     Keeps the three statistics in a compact horizontal row.
+     --------------------------------------------------------------- */
+
+  .library-stat-panel {
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
+  }
+
+
+  /* ---------------------------------------------------------------
+     COMPACT STATISTIC CARDS
+     --------------------------------------------------------------- */
+
+  .library-stat {
+    min-width: 0;
+
+    padding: .75rem .4rem;
+  }
+
+
+  /* ---------------------------------------------------------------
+     SMALLER STATISTIC NUMBERS
+     --------------------------------------------------------------- */
+
+  .library-stat strong {
+    font-size: 1.35rem;
+  }
+
+
+  /* ---------------------------------------------------------------
+     SMALLER STATISTIC LABELS
+     --------------------------------------------------------------- */
+
+  .library-stat span {
+    font-size: .65rem;
+  }
+
+
+  /* ---------------------------------------------------------------
+     MOBILE CATEGORY GRID
+     ---------------------------------------------------------------
+     Displays one category card per row.
+     --------------------------------------------------------------- */
+
+  .library-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* ---------------------------------------------------------------
+     MOBILE MODAL
+     ---------------------------------------------------------------
+     Reduces modal padding so more screen space is available for
+     reading the resource content.
+     --------------------------------------------------------------- */
+
+  .library-modal-dialog {
+    padding: 1.2rem;
+  }
+
+}
+
+/* ================================================================
+   HOME PAGE — LIBRARY PREVIEW
+   ================================================================ */
+
+.library-home-section {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.4fr)
+    minmax(260px, .6fr);
+
+  gap: 2rem;
+
+  align-items: center;
+}
+
+.library-home-section .btn {
+  margin-top: 1.2rem;
+}
+
+.library-home-preview {
+  display: flex;
+
+  align-items: center;
+
+  gap: 1rem;
+
+  padding: 1.3rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius);
+
+  background: var(--panel);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, .12);
+}
+
+.library-preview-icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 60px;
+  height: 60px;
+
+  flex: 0 0 60px;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--library-accent),
+      var(--library-accent-2)
+    );
+
+  font-size: 1.8rem;
+}
+
+.library-home-preview strong {
+  display: block;
+
+  margin-bottom: .35rem;
+}
+
+.library-home-preview p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: .8rem;
+
+  line-height: 1.6;
+}
+
+@media (max-width: 800px) {
+
+  .library-home-section {
+    grid-template-columns: 1fr;
+  }
+
+}

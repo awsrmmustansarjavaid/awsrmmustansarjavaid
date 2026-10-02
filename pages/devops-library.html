@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <!-- ============================================================
+       DOCUMENT METADATA
+       Basic document configuration and responsive viewport settings.
+       ============================================================ -->
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Charlie DevOps Library — Mustansar Javaid</title>
+
+  <!--
+    SEO description for search engines and link previews.
+    Describes the purpose and main content of the DevOps Library.
+  -->
+  <meta
+    name="description"
+    content="Charlie DevOps Library — a Markdown-driven collection of DevOps courses, documentation, tools, projects, Kubernetes resources, YouTube channels and learning material."
+  >
+
+
+  <!-- ============================================================
+       EXTERNAL FONTS
+       Loads the Inter font family used throughout the website.
+       ============================================================ -->
+
+  <!-- Establish an early connection to Google's font servers
+       to improve font loading performance. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <!-- Main typography used by the DevOps Library page. -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- ============================================================
+       EXISTING WEBSITE STYLESHEETS
+       Shared styles inherited from the main Charlie MJ website.
+       ============================================================ -->
+
+  <!-- Global website styles and common components. -->
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Global page background and visual background effects. -->
+  <link rel="stylesheet" href="../css/background.css">
+
+  <!-- Shared page-level layout and component styles. -->
+  <link rel="stylesheet" href="../css/pages.css">
+
+  <!-- Global animations, transitions and visual effects. -->
+  <link rel="stylesheet" href="../css/effects.css">
+
+
+  <!-- ============================================================
+       DEVOPS LIBRARY STYLES
+       Page-specific styling for the Charlie DevOps Library.
+       ============================================================ -->
+
+  <!-- Dedicated stylesheet for the DevOps Library page. -->
+  <link rel="stylesheet" href="../css/devops-library.css">
+
+
+  <!-- ============================================================
+       MARKDOWN PARSER
+       marked.js converts Markdown content into HTML so that
+       GitHub-hosted Markdown resources can be displayed inside
+       the library interface.
+       ============================================================ -->
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"
+  ></script>
+
+</head>
+
+
+<body>
+
+  <!-- ============================================================
+       MAIN PAGE CONTENT
+       Contains the hero section and the complete library interface.
+       ============================================================ -->
+
+  <main>
+
+
+    <!-- ==========================================================
+         PAGE HERO / LIBRARY INTRODUCTION
+         Displays the library title, description and statistics.
+         ========================================================== -->
+
+    <section class="page-hero library-hero">
+
+      <div class="section-inner">
+
+
+        <!-- --------------------------------------------------------
+             NAVIGATION
+             Returns the visitor to the DevOps Library section
+             on the main Charlie MJ homepage.
+             -------------------------------------------------------- -->
+
+        <a
+          class="back-link"
+          href="../index.html#devops-library"
+        >
+          ← Back to home
+        </a>
+
+
+        <!-- --------------------------------------------------------
+             HERO CONTENT
+             Contains the library identity, title, description and
+             dynamically generated statistics.
+             -------------------------------------------------------- -->
+
+        <div class="library-hero-content">
+
+
+          <!-- ======================================================
+               LIBRARY INTRODUCTION
+               ====================================================== -->
+
+          <div>
+
+            <!-- Library identity badge. -->
+            <span class="library-badge">
+              📚 Charlie MJ Knowledge Base
+            </span>
+
+
+            <!-- Main page heading. -->
+            <h1>
+              <span class="text-gradient">
+                Charlie DevOps Library
+              </span>
+            </h1>
+
+
+            <!-- Short explanation of the library's purpose. -->
+            <p>
+              My personal collection of DevOps courses, documentation,
+              tools, projects, Kubernetes resources, YouTube channels,
+              study material and useful references.
+            </p>
+
+          </div>
+
+
+          <!-- ======================================================
+               LIBRARY STATISTICS
+               Values are populated dynamically by JavaScript based
+               on the loaded Markdown library data.
+               ====================================================== -->
+
+          <div class="library-stat-panel">
+
+
+            <!-- ----------------------------------------------------
+                 CATEGORY COUNT
+                 Displays the total number of library categories.
+                 ---------------------------------------------------- -->
+
+            <div class="library-stat">
+
+              <strong id="category-count">
+                0
+              </strong>
+
+              <span>
+                Categories
+              </span>
+
+            </div>
+
+
+            <!-- ----------------------------------------------------
+                 RESOURCE COUNT
+                 Displays the total number of resources available
+                 across all library categories.
+                 ---------------------------------------------------- -->
+
+            <div class="library-stat">
+
+              <strong id="resource-count">
+                0
+              </strong>
+
+              <span>
+                Resources
+              </span>
+
+            </div>
+
+
+            <!-- ----------------------------------------------------
+                 URL COUNT
+                 Displays the total number of resource URLs.
+                 ---------------------------------------------------- -->
+
+            <div class="library-stat">
+
+              <strong id="url-count">
+                0
+              </strong>
+
+              <span>
+                URLs
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================================
+         DEVOPS RESOURCE LIBRARY
+         Main interactive section containing search, filters,
+         sorting controls and dynamically generated categories.
+         ========================================================== -->
+
+    <section class="library-section">
+
+      <div class="section-inner">
+
+
+        <!-- ========================================================
+             SEARCH AND FILTER TOOLBAR
+             Allows users to search resources, filter by category
+             and change the resource sorting order.
+             ======================================================== -->
+
+        <div class="library-toolbar">
+
+
+          <!-- ------------------------------------------------------
+               RESOURCE SEARCH
+               Searches through the available DevOps library data.
+               ------------------------------------------------------ -->
+
+          <div class="library-search">
+
+            <!-- Search icon. -->
+            <span>
+              🔎
+            </span>
+
+
+            <!-- Search input field. -->
+            <input
+              type="search"
+              id="library-search"
+              placeholder="Search DevOps resources..."
+              autocomplete="off"
+            >
+
+          </div>
+
+
+          <!-- ------------------------------------------------------
+               CATEGORY FILTER
+               Category options are populated dynamically using
+               the available library data.
+               ------------------------------------------------------ -->
+
+          <select id="library-category">
+
+            <!-- Default option showing all categories. -->
+            <option value="">
+              All Categories
+            </option>
+
+          </select>
+
+
+          <!-- ------------------------------------------------------
+               RESOURCE SORTING
+               Provides multiple sorting options for the library.
+               ------------------------------------------------------ -->
+
+          <select id="library-sort">
+
+            <!-- Maintains the original order defined in the source. -->
+            <option value="number">
+              Original Order
+            </option>
+
+            <!-- Alphabetical ascending order. -->
+            <option value="az">
+              A → Z
+            </option>
+
+            <!-- Alphabetical descending order. -->
+            <option value="za">
+              Z → A
+            </option>
+
+            <!-- Categories with the highest resource count first. -->
+            <option value="resources-high">
+              Most Resources
+            </option>
+
+            <!-- Categories with the lowest resource count first. -->
+            <option value="resources-low">
+              Least Resources
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- ========================================================
+             SEARCH RESULT INFORMATION
+             Displays the current number of matching results and
+             provides a control for resetting all filters.
+             ======================================================== -->
+
+        <div class="library-results-bar">
+
+
+          <!-- ------------------------------------------------------
+               DYNAMIC RESULT COUNT
+               JavaScript updates this element after filtering,
+               searching or sorting the library.
+               ------------------------------------------------------ -->
+
+          <div id="library-result-count">
+            Loading library...
+          </div>
+
+
+          <!-- ------------------------------------------------------
+               CLEAR FILTERS BUTTON
+               Resets search, category and sorting selections.
+               ------------------------------------------------------ -->
+
+          <button
+            id="clear-library-filters"
+            class="library-clear-btn"
+            type="button"
+          >
+            Clear filters
+          </button>
+
+        </div>
+
+
+        <!-- ========================================================
+             CATEGORY GRID
+             JavaScript dynamically generates the library category
+             cards and resource information inside this container.
+             ======================================================== -->
+
+        <div
+          id="library-grid"
+          class="library-grid"
+        >
+
+
+          <!-- ------------------------------------------------------
+               INITIAL LOADING STATE
+               Displayed while Markdown resources are being loaded
+               and processed from GitHub.
+               ------------------------------------------------------ -->
+
+          <div class="library-loading">
+
+            <!-- Animated loading indicator. -->
+            <div class="library-spinner"></div>
+
+
+            <!-- Loading status heading. -->
+            <h3>
+              Loading Charlie DevOps Library...
+            </h3>
+
+
+            <!-- Additional loading information. -->
+            <p>
+              Reading Markdown resources from GitHub.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- ========================================================
+             EMPTY SEARCH RESULT STATE
+             Displayed when no resources match the current search
+             or filter configuration.
+             ======================================================== -->
+
+        <div
+          id="library-empty"
+          class="library-empty"
+          hidden
+        >
+
+          <!-- Empty-result visual indicator. -->
+          <div class="library-empty-icon">
+            🔎
+          </div>
+
+
+          <!-- Empty-result heading. -->
+          <h3>
+            No resources found
+          </h3>
+
+
+          <!-- Guidance for the user. -->
+          <p>
+            Try another search term or clear the filters.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ============================================================
+       RESOURCE DETAIL MODAL
+       Displays detailed information about a selected DevOps
+       resource without navigating away from the library page.
+       ============================================================ -->
+
+  <div
+    id="library-modal"
+    class="library-modal"
+    hidden
+    aria-hidden="true"
+  >
+
+
+    <!-- ------------------------------------------------------------
+         MODAL BACKDROP
+         Covers the page behind the modal and provides visual focus
+         on the selected resource.
+         ------------------------------------------------------------ -->
+
+    <div class="library-modal-backdrop"></div>
+
+
+    <!-- ------------------------------------------------------------
+         MODAL DIALOG
+         Accessible dialog container used to display resource
+         details, metadata and rendered Markdown content.
+         ------------------------------------------------------------ -->
+
+    <article
+      class="library-modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="library-modal-title"
+    >
+
+
+      <!-- ----------------------------------------------------------
+           MODAL CLOSE BUTTON
+           Closes the resource detail window.
+           ---------------------------------------------------------- -->
+
+      <button
+        id="library-modal-close"
+        class="library-modal-close"
+        type="button"
+        aria-label="Close resource"
+      >
+        ×
+      </button>
+
+
+      <!-- ==========================================================
+           MODAL HEADER
+           Contains category, resource title and metadata.
+           ========================================================== -->
+
+      <div class="library-modal-header">
+
+
+        <!-- --------------------------------------------------------
+             RESOURCE CATEGORY
+             Dynamically updated according to the selected resource.
+             -------------------------------------------------------- -->
+
+        <span
+          id="library-modal-category"
+          class="library-modal-category"
+        >
+          DevOps
+        </span>
+
+
+        <!-- --------------------------------------------------------
+             RESOURCE TITLE
+             Dynamically populated when a resource is selected.
+             -------------------------------------------------------- -->
+
+        <h2 id="library-modal-title">
+          Resource Library
+        </h2>
+
+
+        <!-- --------------------------------------------------------
+             RESOURCE METADATA
+             JavaScript can populate this area with information such
+             as resource count, source or other useful details.
+             -------------------------------------------------------- -->
+
+        <p id="library-modal-meta"></p>
+
+      </div>
+
+
+      <!-- ==========================================================
+           MODAL CONTENT
+           Rendered Markdown/resource content is inserted here.
+           ========================================================== -->
+
+      <div
+        id="library-modal-content"
+        class="library-modal-content"
+      >
+      </div>
+
+    </article>
+
+  </div>
+
+
+  <!-- ============================================================
+       EXISTING WEBSITE JAVASCRIPT
+       Shared JavaScript modules required by the main website and
+       GitHub/Markdown integration.
+       ============================================================ -->
+
+       <!-- ============================================================
+     GLOBAL WEBSITE CONFIGURATION
+     ============================================================ -->
+
+<script src="../js/config.js"></script>
+
+
+<!-- ============================================================
+     SHARED GITHUB API
+     ============================================================ -->
+
+<script src="../js/github-api.js"></script>
+
+
+<!-- ============================================================
+     SHARED MARKDOWN PARSER
+     ============================================================ -->
+
+<script src="../js/markdown-parser.js"></script>
+
+
+<!-- ============================================================
+     SHARED WEBSITE LAYOUT
+     
+     Injects:
+       - Navbar
+       - Navigation links
+       - Footer
+     
+     The DevOps Library is registered as:
+     
+       ['devops-library', 'DevOps Library']
+     ============================================================ -->
+
+<script src="../js/layout.js"></script>
+
+
+<!-- ============================================================
+     DEVOPS LIBRARY
+     
+     Loads Markdown files from:
+     
+       /activity/Charlie-DevOps-Library/
+     
+     and provides:
+     
+       - Search
+       - Filtering
+       - Sorting
+       - Grid
+       - Statistics
+       - Load More
+       - Markdown Viewer
+     ============================================================ -->
+
+<script src="../js/devops-library.js"></script>
+
+
+<!-- ============================================================
+     GLOBAL VISUAL EFFECTS
+     ============================================================ -->
+
+<script src="../js/effects.js"></script>
+
+
+<!-- ============================================================
+     MOUNT SHARED WEBSITE LAYOUT
+     
+     "devops-library" must match the key used in layout.js:
+     
+       ['devops-library', 'DevOps Library']
+     ============================================================ -->
+
+<script>
+  Layout.mount('devops-library');
+</script>
+  
+
+</body>
+
+</html>
