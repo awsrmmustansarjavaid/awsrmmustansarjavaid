@@ -1,80 +1,103 @@
 /* =================================================================
    CHARLIE DEVOPS LIBRARY
    -----------------------------------------------------------------
-   Page-specific styles for the Charlie DevOps Library.
+   FINAL PAGE STYLESHEET
 
-   This stylesheet controls:
-   - Library hero section
-   - Library statistics
-   - Search and filtering controls
-   - Category cards
-   - Loading and empty states
-   - Resource detail modal
-   - Markdown-rendered content
-   - Responsive/mobile layouts
+   DESIGN RULE
+   -----------------------------------------------------------------
+   The existing category-card design is preserved.
 
-   Shared variables such as:
-   --line
-   --radius
-   --radius-sm
-   --panel
-   --text
-   --muted
+   This stylesheet focuses on:
+   - Professional typography
+   - Clear internal hierarchy
+   - Better spacing
+   - Category header typography
+   - Centered category title
+   - Professional description typography
+   - Metadata typography
+   - Featured-resource typography
+   - Responsive typography
 
-   are inherited from the main Charlie MJ website stylesheets.
+   LEVEL 1 INTERNAL HIERARCHY
+
+       01  DEVOPS
+
+       Charlie DEVOPS Course
+
+       17 curated resources in the Charlie DEVOPS Course section.
+
+       17 resources    Markdown
+
+       FEATURED RESOURCES
+
+       YAML Fundamentals for DevOps, Cloud and IaC Engineers
+       Crash Course on Python
+       Introduction to YAML
+
+       [ View Resources ] [ GitHub ]
+
+   IMPORTANT
+   -----------------------------------------------------------------
+   Card shape, gradients, borders, number box, hover effects,
+   background and button design remain essentially unchanged.
    ================================================================= */
 
 
 /* =================================================================
-   LIBRARY THEME VARIABLES
-   -----------------------------------------------------------------
-   Custom colors used specifically by the DevOps Library.
-
-   --library-accent:
-       Primary cyan/blue accent used for links, highlights,
-       borders, counters and interactive elements.
-
-   --library-accent-2:
-       Secondary purple accent used together with the primary
-       accent for gradients.
+   THEME
    ================================================================= */
 
 :root {
+
   --library-accent: #38BDF8;
+
   --library-accent-2: #8B5CF6;
+
+  --library-card-glow:
+    rgba(56, 189, 248, .16);
+
+  --library-card-purple-glow:
+    rgba(139, 92, 246, .13);
+
+  --library-card-surface:
+    rgba(255, 255, 255, .035);
+
+  --library-card-surface-strong:
+    rgba(255, 255, 255, .055);
+
+
+  /* ---------------------------------------------------------------
+     LEVEL 1 TYPOGRAPHY SYSTEM
+     --------------------------------------------------------------- */
+
+  --library-eyebrow:
+    rgba(56, 189, 248, .92);
+
+  --library-category-title:
+    #f8fafc;
+
+  --library-category-description:
+    rgba(203, 213, 225, .76);
+
+  --library-preview-title:
+    rgba(241, 245, 249, .82);
+
+  --library-preview-muted:
+    rgba(148, 163, 184, .72);
+
+  --library-meta-text:
+    rgba(203, 213, 225, .70);
 }
 
 
 /* =================================================================
-   HERO SECTION
-   -----------------------------------------------------------------
-   Controls the introductory section at the top of the page.
-
-   The hero contains:
-   - Library badge
-   - Main library title
-   - Library description
-   - Statistics panel
+   LIBRARY HERO
    ================================================================= */
 
 .library-hero {
-  /* Reduce the bottom spacing so the library content follows
-     naturally after the hero section. */
   padding-bottom: 2rem;
 }
 
-
-/* -----------------------------------------------------------------
-   HERO CONTENT LAYOUT
-   -----------------------------------------------------------------
-   Uses a two-column grid on larger screens:
-
-   Left  = Library title and description
-   Right = Library statistics
-
-   The first column expands while the statistics column keeps
-   only the width it requires.
-   ----------------------------------------------------------------- */
 
 .library-hero-content {
   display: grid;
@@ -90,12 +113,6 @@
   margin-top: 1.5rem;
 }
 
-
-/* -----------------------------------------------------------------
-   LIBRARY BADGE
-   -----------------------------------------------------------------
-   Small pill-shaped label displayed above the main title.
-   ----------------------------------------------------------------- */
 
 .library-badge {
   display: inline-flex;
@@ -122,29 +139,21 @@
 }
 
 
-/* -----------------------------------------------------------------
-   HERO TITLE
-   -----------------------------------------------------------------
-   Uses CSS clamp() so the title scales smoothly between desktop
-   and mobile screen sizes.
-   ----------------------------------------------------------------- */
-
 .library-hero h1 {
   margin: 1rem 0 .7rem;
 
-  font-size: clamp(
-    2.2rem,
-    5vw,
-    4rem
-  );
+  font-size:
+    clamp(
+      2.2rem,
+      5vw,
+      4rem
+    );
+
+  line-height: 1.05;
+
+  letter-spacing: -.035em;
 }
 
-
-/* -----------------------------------------------------------------
-   HERO DESCRIPTION
-   -----------------------------------------------------------------
-   Limits the text width to maintain comfortable reading length.
-   ----------------------------------------------------------------- */
 
 .library-hero p {
   max-width: 75ch;
@@ -157,22 +166,7 @@
 
 /* =================================================================
    LIBRARY STATISTICS
-   -----------------------------------------------------------------
-   Displays summary information such as:
-
-   - Number of categories
-   - Number of resources
-   - Number of URLs
-
-   These values are populated dynamically by JavaScript.
    ================================================================= */
-
-
-/* -----------------------------------------------------------------
-   STATISTICS CONTAINER
-   -----------------------------------------------------------------
-   Creates three equal statistic columns.
-   ----------------------------------------------------------------- */
 
 .library-stat-panel {
   display: grid;
@@ -186,10 +180,6 @@
   gap: .8rem;
 }
 
-
-/* -----------------------------------------------------------------
-   INDIVIDUAL STATISTIC CARD
-   ----------------------------------------------------------------- */
 
 .library-stat {
   min-width: 105px;
@@ -205,75 +195,91 @@
   background: var(--panel);
 
   box-shadow:
-    0 10px 30px rgba(0, 0, 0, .12);
+    0 10px 30px
+    rgba(0, 0, 0, .12);
 }
 
-
-/* -----------------------------------------------------------------
-   STATISTIC VALUE
-   -----------------------------------------------------------------
-   Displays the main numerical value.
-   ----------------------------------------------------------------- */
 
 .library-stat strong {
   display: block;
 
   font-size: 1.7rem;
 
+  line-height: 1;
+
   color: var(--library-accent);
 }
 
 
-/* -----------------------------------------------------------------
-   STATISTIC LABEL
-   ----------------------------------------------------------------- */
-
 .library-stat span {
   display: block;
 
-  margin-top: .25rem;
+  margin-top: .35rem;
 
   color: var(--muted);
 
   font-size: .72rem;
+
+  line-height: 1.3;
 }
 
 
 /* =================================================================
-   LIBRARY TOOLBAR
-   -----------------------------------------------------------------
-   Contains:
-   - Search field
-   - Category selector
-   - Sorting selector
-
-   The layout changes to a single column on smaller screens.
+   LIBRARY SECTION
    ================================================================= */
 
-
-/* -----------------------------------------------------------------
-   LIBRARY SECTION
-   -----------------------------------------------------------------
-   Controls the overall vertical spacing around the library area.
-   ----------------------------------------------------------------- */
-
 .library-section {
+  position: relative;
+
   padding: 1rem 0 4rem;
+
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(56, 189, 248, .08),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(139, 92, 246, .08),
+      transparent 30%
+    );
 }
 
 
-/* -----------------------------------------------------------------
-   TOOLBAR GRID
-   -----------------------------------------------------------------
-   Desktop layout:
+.library-section::before {
+  content: "";
 
-   Search      | Category Filter | Sort
+  position: absolute;
 
-   The search field receives more available space than the two
-   selection controls.
-   ----------------------------------------------------------------- */
+  inset: 0;
+
+  pointer-events: none;
+
+  opacity: .25;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, .035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, .035) 1px,
+      transparent 1px
+    );
+
+  background-size: 32px 32px;
+}
+
+
+/* =================================================================
+   TOOLBAR
+   ================================================================= */
 
 .library-toolbar {
+  position: relative;
+
   display: grid;
 
   grid-template-columns:
@@ -286,12 +292,6 @@
   margin-bottom: 1rem;
 }
 
-
-/* -----------------------------------------------------------------
-   SEARCH CONTAINER
-   -----------------------------------------------------------------
-   Provides the visual wrapper around the search icon and input.
-   ----------------------------------------------------------------- */
 
 .library-search {
   display: flex;
@@ -309,27 +309,17 @@
   border-radius: var(--radius-sm);
 
   background: var(--panel);
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
 }
 
-
-/* -----------------------------------------------------------------
-   SEARCH ICON
-   -----------------------------------------------------------------
-   Slightly reduces the icon opacity so the input remains the
-   primary visual focus.
-   ----------------------------------------------------------------- */
 
 .library-search span {
   opacity: .7;
 }
 
-
-/* -----------------------------------------------------------------
-   SEARCH INPUT
-   -----------------------------------------------------------------
-   Removes the browser's default input styling and allows the
-   field to inherit the site's typography and colors.
-   ----------------------------------------------------------------- */
 
 .library-search input {
   width: 100%;
@@ -346,9 +336,10 @@
 }
 
 
-/* -----------------------------------------------------------------
-   FILTER / SORT SELECT ELEMENTS
-   ----------------------------------------------------------------- */
+.library-search input::placeholder {
+  color: var(--muted);
+}
+
 
 .library-toolbar select {
   width: 100%;
@@ -366,41 +357,32 @@
   font: inherit;
 
   cursor: pointer;
+
+  outline: none;
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
 }
 
-
-/* -----------------------------------------------------------------
-   FOCUS STATES
-   -----------------------------------------------------------------
-   Provides a clear visual indication when the user interacts with
-   the search field or select controls.
-
-   :focus-within allows the search container to react when its
-   internal input receives focus.
-   ----------------------------------------------------------------- */
 
 .library-search:focus-within,
 .library-toolbar select:focus {
   border-color: var(--library-accent);
 
   box-shadow:
-    0 0 0 2px rgba(56, 189, 248, .12);
+    0 0 0 2px
+    rgba(56, 189, 248, .12);
 }
 
 
 /* =================================================================
    RESULTS BAR
-   -----------------------------------------------------------------
-   Displays the current search/filter result information and the
-   button used to reset the active filters.
    ================================================================= */
 
-
-/* -----------------------------------------------------------------
-   RESULT INFORMATION CONTAINER
-   ----------------------------------------------------------------- */
-
 .library-results-bar {
+  position: relative;
+
   display: flex;
 
   align-items: center;
@@ -417,12 +399,6 @@
 }
 
 
-/* -----------------------------------------------------------------
-   CLEAR FILTERS BUTTON
-   -----------------------------------------------------------------
-   Resets the active search, category and sorting selections.
-   ----------------------------------------------------------------- */
-
 .library-clear-btn {
   padding: .45rem .75rem;
 
@@ -437,68 +413,1215 @@
   cursor: pointer;
 
   font: inherit;
+
+  transition:
+    border-color .2s ease,
+    color .2s ease,
+    background .2s ease;
 }
 
-
-/* -----------------------------------------------------------------
-   CLEAR BUTTON HOVER STATE
-   ----------------------------------------------------------------- */
 
 .library-clear-btn:hover {
   color: var(--text);
 
   border-color: var(--library-accent);
+
+  background: rgba(56, 189, 248, .05);
 }
 
 
 /* =================================================================
-   CATEGORY GRID
-   -----------------------------------------------------------------
-   Responsive grid containing all DevOps category cards.
-
-   auto-fit automatically determines how many cards can fit in
-   the available width.
+   VIEW INTRO
    ================================================================= */
 
+.library-view-intro {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 1rem;
+
+  margin: 1.5rem 0 1.2rem;
+}
+
+
+.library-view-label {
+  font-size: .7rem;
+
+  font-weight: 800;
+
+  letter-spacing: .16em;
+
+  color: var(--library-accent);
+}
+
+
+.library-view-line {
+  flex: 1;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(56, 189, 248, .45),
+      transparent
+    );
+}
+
+
+/* =================================================================
+   LEVEL 1 — CATEGORY GRID
+   ================================================================= */
+
+.library-category-view {
+  position: relative;
+}
+
+
 .library-grid {
+  position: relative;
+
   display: grid;
 
   grid-template-columns:
     repeat(
       auto-fit,
-      minmax(300px, 1fr)
+      minmax(320px, 1fr)
     );
 
-  gap: 1.2rem;
+  gap: 1.4rem;
 }
 
 
 /* =================================================================
-   CATEGORY CARD
+   LEVEL 1 — CATEGORY CARD
    -----------------------------------------------------------------
-   Individual DevOps library category card.
-
-   Each card can contain:
-   - Category number
-   - Category title
-   - Description
-   - Resource metadata
-   - Action buttons
+   EXISTING CARD DESIGN PRESERVED
    ================================================================= */
 
-
-/* -----------------------------------------------------------------
-   CARD BASE
-   ----------------------------------------------------------------- */
-
 .library-card {
+  position: relative;
+
+  overflow: hidden;
+
   display: flex;
 
   flex-direction: column;
 
-  min-height: 260px;
+  min-height: 385px;
 
-  padding: 1.25rem;
+  padding: 1.5rem;
+
+  border: 1px solid
+    rgba(255, 255, 255, .09);
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, .055),
+      rgba(255, 255, 255, .018)
+    );
+
+  box-shadow:
+    0 14px 38px
+    rgba(0, 0, 0, .16);
+
+  isolation: isolate;
+
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease,
+    background .25s ease;
+}
+
+
+.library-card::before {
+  content: "";
+
+  position: absolute;
+
+  width: 190px;
+
+  height: 190px;
+
+  right: -95px;
+
+  top: -95px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(56, 189, 248, .18),
+      transparent 68%
+    );
+
+  pointer-events: none;
+
+  z-index: -1;
+
+  transition:
+    transform .35s ease,
+    opacity .35s ease;
+}
+
+
+.library-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 160px;
+
+  height: 160px;
+
+  left: -90px;
+
+  bottom: -95px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(139, 92, 246, .14),
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  z-index: -1;
+
+  transition:
+    transform .35s ease,
+    opacity .35s ease;
+}
+
+
+.library-card:hover {
+  transform: translateY(-6px);
+
+  border-color:
+    rgba(56, 189, 248, .38);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(56, 189, 248, .055),
+      rgba(139, 92, 246, .035),
+      rgba(255, 255, 255, .018)
+    );
+
+  box-shadow:
+    0 22px 50px
+    rgba(0, 0, 0, .24),
+    0 0 35px
+    rgba(56, 189, 248, .06);
+}
+
+
+.library-card:hover::before {
+  transform: scale(1.35);
+
+  opacity: .9;
+}
+
+
+.library-card:hover::after {
+  transform: scale(1.25);
+
+  opacity: .9;
+}
+
+
+/* =================================================================
+   LEVEL 1 — CARD HEADER
+   -----------------------------------------------------------------
+   TYPOGRAPHY CHANGE ONLY
+
+   Desired visual hierarchy:
+
+       01  DEVOPS
+
+   Number and type sit on the SAME editorial line.
+   ================================================================= */
+
+.library-card-header,
+.library-card-top {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: .7rem;
+
+  width: 100%;
+
+  margin-bottom: 1.15rem;
+}
+
+
+/* =================================================================
+   CATEGORY NUMBER
+   -----------------------------------------------------------------
+   The existing number box is preserved.
+   ================================================================= */
+
+.library-card-number {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 50px;
+
+  height: 50px;
+
+  flex: 0 0 50px;
+
+  border: 1px solid
+    rgba(255, 255, 255, .16);
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--library-accent),
+      var(--library-accent-2)
+    );
+
+  color: #fff;
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+
+  font-size: .76rem;
+
+  font-weight: 900;
+
+  letter-spacing: .04em;
+
+  line-height: 1;
+
+  box-shadow:
+    0 8px 22px
+    rgba(56, 189, 248, .16);
+}
+
+
+.library-card-number::after {
+  content: "";
+
+  position: absolute;
+
+  inset: -5px;
+
+  border: 1px solid
+    rgba(56, 189, 248, .08);
+
+  border-radius: 18px;
+
+  pointer-events: none;
+}
+
+
+/* =================================================================
+   CATEGORY TYPE
+   -----------------------------------------------------------------
+   INLINE EDITORIAL LABEL:
+
+       01  DEVOPS
+
+   rather than:
+
+       01
+
+       DEVOPS
+   ================================================================= */
+
+.library-card-type {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-width: 0;
+
+  margin: 0;
+
+  color: var(--library-eyebrow);
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+
+  font-size: .68rem;
+
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  letter-spacing: .14em;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+
+/* -----------------------------------------------------------------
+   SUPPORT EXISTING TYPE SELECTORS
+   ----------------------------------------------------------------- */
+
+.library-card-top > div:last-child > div:first-child,
+.library-card-top > div:last-child > span:first-child {
+  display: inline-flex;
+
+  align-items: center;
+
+  margin: 0;
+
+  color: var(--library-eyebrow);
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+
+  font-size: .68rem;
+
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  letter-spacing: .14em;
+
+  text-transform: uppercase;
+}
+
+
+/* =================================================================
+   LEVEL 1 — CARD BODY
+   -----------------------------------------------------------------
+   Main content column.
+
+   The body itself does NOT center everything.
+   Individual typography elements control their own alignment.
+   ================================================================= */
+
+.library-card-body {
+  display: flex;
+
+  flex-direction: column;
+
+  flex: 1;
+
+  min-width: 0;
+
+  width: 100%;
+
+  text-align: left;
+}
+
+
+/* =================================================================
+   CARD BODY — TYPE SUPPORT
+   ================================================================= */
+
+.library-card-body .library-card-type,
+.library-card-body .library-type,
+.library-card-body .card-type,
+.library-card-body .category-type {
+  display: block;
+
+  margin: 0 0 .55rem;
+
+  color: var(--library-eyebrow);
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+
+  font-size: .65rem;
+
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  letter-spacing: .15em;
+
+  text-transform: uppercase;
+}
+
+
+/* =================================================================
+   LEVEL 1 — MAIN CATEGORY TITLE
+   -----------------------------------------------------------------
+   PRIMARY TYPOGRAPHY:
+
+       Charlie DEVOPS Course
+
+   Centered.
+   Strong.
+   Clean.
+   Editorial.
+   ================================================================= */
+
+.library-card-body h3,
+.library-card h3 {
+  width: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  color: var(--library-category-title);
+
+  font-family: inherit;
+
+  font-size:
+    clamp(
+      1.28rem,
+      1.65vw,
+      1.48rem
+    );
+
+  font-weight: 800;
+
+  line-height: 1.22;
+
+  letter-spacing: -.024em;
+
+  text-align: center;
+
+  text-wrap: balance;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =================================================================
+   LEVEL 1 — DESCRIPTION
+   -----------------------------------------------------------------
+   Secondary typography.
+
+       17 curated resources in the Charlie DEVOPS Course section.
+
+   Clearly smaller than H3 but NOT tiny.
+   ================================================================= */
+
+.library-card-body > p,
+.library-card-body > .library-card-description,
+.library-card-body p.library-card-description,
+.library-card-description {
+  width: 100%;
+
+  max-width: 48ch;
+
+  margin:
+    .7rem auto 0;
+
+  padding:
+    0 0 1.05rem;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, .065);
+
+  color:
+    var(--library-category-description);
+
+  font-size: .86rem;
+
+  font-weight: 400;
+
+  line-height: 1.65;
+
+  letter-spacing: .002em;
+
+  text-align: center;
+
+  text-wrap: pretty;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =================================================================
+   DESCRIPTION → METADATA SPACING
+   ================================================================= */
+
+.library-card-body > p + .library-card-meta,
+.library-card-body .library-card-description + .library-card-meta {
+  margin-top: .9rem;
+}
+
+
+/* =================================================================
+   CATEGORY METADATA
+   -----------------------------------------------------------------
+   Desired:
+
+       17 resources    Markdown
+
+   Metadata is deliberately quieter than the title/description.
+   ================================================================= */
+
+.library-card-meta {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: .55rem;
+
+  width: 100%;
+
+  margin:
+    .9rem 0 1.05rem;
+
+  padding: 0;
+
+  color: var(--library-meta-text);
+
+  font-size: .69rem;
+
+  font-weight: 650;
+
+  line-height: 1.3;
+
+  letter-spacing: .015em;
+
+  text-align: center;
+}
+
+
+/* =================================================================
+   METADATA ITEMS
+   ================================================================= */
+
+.library-card-meta > span {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 27px;
+
+  padding:
+    .32rem .62rem;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, .08);
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, .025);
+
+  color:
+    var(--library-meta-text);
+
+  font-size: .68rem;
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  letter-spacing: .01em;
+
+  white-space: nowrap;
+}
+
+
+/* =================================================================
+   RESOURCE COUNT
+   ================================================================= */
+
+.library-card-meta > span:first-child {
+  border-color:
+    rgba(56, 189, 248, .18);
+
+  background:
+    rgba(56, 189, 248, .055);
+
+  color:
+    var(--library-accent);
+
+  font-weight: 800;
+}
+
+
+/* =================================================================
+   FORMAT / SECONDARY METADATA
+   ================================================================= */
+
+.library-card-meta > span:nth-child(2) {
+  color:
+    rgba(203, 213, 225, .68);
+}
+
+
+/* =================================================================
+   EXISTING LIBRARY CHIP SUPPORT
+   ================================================================= */
+
+.library-card-body .library-chip {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 27px;
+
+  padding:
+    .32rem .62rem;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, .08);
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, .025);
+
+  color:
+    var(--library-meta-text);
+
+  font-size: .68rem;
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  letter-spacing: .01em;
+
+  white-space: nowrap;
+}
+
+
+.library-card-body .library-card-meta .library-chip:first-child {
+  border-color:
+    rgba(56, 189, 248, .18);
+
+  background:
+    rgba(56, 189, 248, .055);
+
+  color:
+    var(--library-accent);
+
+  font-weight: 800;
+}
+
+
+.library-card-body .library-card-meta .library-chip:nth-child(2) {
+  color:
+    rgba(203, 213, 225, .68);
+}
+
+
+/* =================================================================
+   LEVEL 1 — CATEGORY PREVIEW
+   -----------------------------------------------------------------
+   Supports:
+
+       .library-category-preview
+
+   and:
+
+       .library-card-preview
+
+   TYPOGRAPHY ONLY.
+
+   The preview remains a contained section of the existing card.
+   ================================================================= */
+
+.library-category-preview,
+.library-card-preview {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: .15rem;
+
+  width: 100%;
+
+  margin:
+    1rem 0 1.15rem;
+
+  padding:
+    .85rem .9rem 1rem;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, .075);
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, .035),
+      rgba(255, 255, 255, .012)
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, .025);
+
+   text-align: center; 
+   font-size: small;
+
+}
+
+/* =========================================
+   FEATURED RESOURCES
+   ========================================= */
+
+.library-category-preview .library-card-preview-item,
+.library-card-preview .library-card-preview-item {
+  display: block;
+
+  width: 100%;
+  min-width: 0;
+
+  margin: .15rem 0;
+  padding: .5rem .45rem;
+
+  color: var(--library-preview-title);
+
+  font-size: .90rem;
+  font-weight: 800;
+  line-height: 1.5;
+
+  text-align: center;
+
+  letter-spacing: 0;
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+
+  transition:
+    color .2s ease,
+    background .2s ease;
+}
+
+/* =================================================================
+   PREVIEW TOP ACCENT
+   ================================================================= */
+
+.library-category-preview::before,
+.library-card-preview::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  top: 0;
+
+  width: 42%;
+
+  height: 2px;
+
+  border-radius:
+    0 0 4px 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--library-accent),
+      var(--library-accent-2),
+      transparent
+    );
+}
+
+
+/* =================================================================
+   PREVIEW LABEL
+   ================================================================= */
+
+.library-category-preview::after,
+.library-card-preview::after {
+  content: "FEATURED RESOURCES";
+
+  display: block;
+
+  order: -1;
+
+  width: 100%;
+
+  margin:
+    0 0 .65rem;
+
+  color:
+    rgba(148, 163, 184, .68);
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+
+  font-size: .57rem;
+
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  letter-spacing: .14em;
+
+  text-align: center;
+}
+
+
+
+/* =================================================================
+   FEATURED RESOURCE ITEMS
+   -----------------------------------------------------------------
+   FINAL TYPOGRAPHY:
+
+   - Medium/readable size
+   - Bold
+   - Centered
+   - Comfortable line-height
+   - Clear separation between resources
+
+   ================================================================= */
+
+.library-category-preview .library-card-preview-item,
+.library-card-preview .library-card-preview-item {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+
+  min-width: 0;
+
+  margin: .15rem 0;
+
+  padding:
+    .5rem .45rem;
+
+  border: 0;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, .045);
+
+  border-radius: 0;
+
+  background: transparent;
+
+  color:
+    var(--library-preview-title);
+
+  font-size: .78rem;
+
+  font-weight: 700;
+
+  line-height: 1.5;
+
+  letter-spacing: 0;
+
+  text-align: center;
+
+  white-space: normal;
+
+  overflow: visible;
+
+  overflow-wrap: anywhere;
+
+  text-overflow: clip;
+
+  transition:
+    color .2s ease,
+    background .2s ease;
+}
+
+
+/* =================================================================
+   LAST PREVIEW ITEM
+   ================================================================= */
+
+.library-category-preview
+.library-card-preview-item:last-child,
+.library-card-preview
+.library-card-preview-item:last-child {
+  border-bottom: 0;
+
+  padding-bottom: .2rem;
+}
+
+
+/* =================================================================
+   PREVIEW ITEM MARKER
+   -----------------------------------------------------------------
+   Kept subtle so the resource title remains the focus.
+   ================================================================= */
+
+.library-category-preview
+.library-card-preview-item::before,
+.library-card-preview
+.library-card-preview-item::before {
+  content: "›";
+
+  position: absolute;
+
+  left: .05rem;
+
+  top: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 17px;
+
+  height: 17px;
+
+  transform: translateY(-50%);
+
+  border:
+    1px solid
+    rgba(56, 189, 248, .15);
+
+  border-radius: 5px;
+
+  background:
+    rgba(56, 189, 248, .045);
+
+  color:
+    var(--library-accent);
+
+  font-size: .68rem;
+
+  font-weight: 900;
+
+  line-height: 1;
+}
+
+
+/* =================================================================
+   PREVIEW HOVER
+   ================================================================= */
+
+.library-card:hover
+.library-category-preview
+.library-card-preview-item,
+.library-card:hover
+.library-card-preview
+.library-card-preview-item {
+  color:
+    rgba(248, 250, 252, .94);
+}
+
+
+.library-category-preview
+.library-card-preview-item:hover,
+.library-card-preview
+.library-card-preview-item:hover {
+  color: #f8fafc;
+
+  background:
+    rgba(255, 255, 255, .018);
+}
+
+
+/* =================================================================
+   CATEGORY ACTIONS
+   ================================================================= */
+
+.library-card-actions {
+  display: flex;
+
+  align-items: stretch;
+
+  justify-content: center;
+
+  gap: .65rem;
+
+  flex-wrap: wrap;
+
+  width: 100%;
+
+  margin-top: auto;
+
+  padding-top: .1rem;
+}
+
+
+.library-card-body .library-card-actions {
+  display: flex;
+
+  align-items: stretch;
+
+  justify-content: center;
+
+  gap: .65rem;
+
+  flex-wrap: wrap;
+
+  width: 100%;
+
+  margin-top: auto;
+
+  padding-top: .1rem;
+}
+
+
+/* =================================================================
+   CATEGORY BUTTONS
+   ================================================================= */
+
+.library-card-btn {
+  flex:
+    1 1 130px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 42px;
+
+  padding:
+    .68rem .85rem;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, .018);
+
+  color:
+    var(--text);
+
+  text-align: center;
+
+  text-decoration: none;
+
+  font-size: .75rem;
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  letter-spacing: .005em;
+
+  cursor: pointer;
+
+  transition:
+    border-color .2s ease,
+    color .2s ease,
+    background .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+
+.library-card-btn:hover {
+  border-color:
+    rgba(56, 189, 248, .45);
+
+  color:
+    var(--library-accent);
+
+  background:
+    rgba(56, 189, 248, .045);
+
+  transform:
+    translateY(-1px);
+}
+
+
+.library-card-btn.primary {
+  border-color: transparent;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--library-accent),
+      var(--library-accent-2)
+    );
+
+  color: #fff;
+
+  box-shadow:
+    0 7px 18px
+    rgba(56, 189, 248, .13);
+}
+
+
+.library-card-btn.primary:hover {
+  color: #fff;
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 10px 25px
+    rgba(56, 189, 248, .22);
+}
+
+
+/* =================================================================
+   LEVEL 2 — RESOURCE VIEW
+   ================================================================= */
+
+.library-resource-view {
+  position: relative;
+
+  margin-top: 1rem;
+}
+
+
+.library-resource-view[hidden] {
+  display: none !important;
+}
+
+
+.library-resource-header {
+  position: relative;
+
+  margin-bottom: 1.5rem;
+
+  padding: 1.4rem;
 
   border: 1px solid var(--line);
 
@@ -512,107 +1635,125 @@
     );
 
   box-shadow:
-    0 12px 30px rgba(0, 0, 0, .14);
+    0 12px 35px
+    rgba(0, 0, 0, .14);
+}
+
+
+/* =================================================================
+   BACK BUTTON
+   ================================================================= */
+
+.library-back-categories {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: .45rem;
+
+  margin-bottom: 1.2rem;
+
+  padding: .6rem .9rem;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+
+  color: var(--muted);
+
+  font: inherit;
+
+  font-size: .78rem;
+
+  font-weight: 700;
+
+  cursor: pointer;
 
   transition:
-    transform .2s ease,
     border-color .2s ease,
-    box-shadow .2s ease;
+    color .2s ease,
+    background .2s ease,
+    transform .2s ease;
 }
 
 
-/* -----------------------------------------------------------------
-   CARD HOVER EFFECT
-   -----------------------------------------------------------------
-   Slightly raises the card and increases its visual emphasis when
-   the user moves the pointer over it.
-   ----------------------------------------------------------------- */
-
-.library-card:hover {
-  transform: translateY(-4px);
-
+.library-back-categories:hover {
   border-color:
-    rgba(56, 189, 248, .5);
+    var(--library-accent);
 
-  box-shadow:
-    0 18px 40px rgba(0, 0, 0, .22);
+  color:
+    var(--library-accent);
+
+  background:
+    rgba(56, 189, 248, .06);
+
+  transform:
+    translateX(-2px);
 }
 
 
-/* -----------------------------------------------------------------
-   CARD HEADER
-   -----------------------------------------------------------------
-   Places the category information and category number in a
-   horizontal layout.
-   ----------------------------------------------------------------- */
+/* =================================================================
+   RESOURCE HEADER
+   ================================================================= */
 
-.library-card-top {
-  display: flex;
-
-  align-items: flex-start;
-
-  justify-content: space-between;
-
-  gap: 1rem;
+.library-resource-heading {
+  min-width: 0;
 }
 
 
-/* -----------------------------------------------------------------
-   CATEGORY NUMBER
-   -----------------------------------------------------------------
-   Small gradient badge used to visually identify the category's
-   original position/order.
-   ----------------------------------------------------------------- */
-
-.library-card-number {
+.library-resource-category-number {
   display: inline-flex;
 
   align-items: center;
 
   justify-content: center;
 
-  width: 38px;
+  margin-bottom: .65rem;
 
-  height: 38px;
+  padding: .3rem .65rem;
 
-  flex: 0 0 38px;
+  border:
+    1px solid
+    rgba(56, 189, 248, .25);
 
-  border-radius: 10px;
+  border-radius: 999px;
 
   background:
-    linear-gradient(
-      135deg,
-      var(--library-accent),
-      var(--library-accent-2)
-    );
+    rgba(56, 189, 248, .07);
 
-  color: #fff;
+  color:
+    var(--library-accent);
 
-  font-size: .75rem;
+  font-family: monospace;
+
+  font-size: .68rem;
 
   font-weight: 800;
 }
 
 
-/* -----------------------------------------------------------------
-   CARD TITLE
-   ----------------------------------------------------------------- */
+#library-resource-category-title {
+  margin: 0 0 .55rem;
 
-.library-card h3 {
-  margin: 0;
+  font-size:
+    clamp(
+      1.35rem,
+      3vw,
+      2rem
+    );
 
-  line-height: 1.4;
+  line-height: 1.25;
 
-  font-size: 1.05rem;
+  letter-spacing: -.02em;
 }
 
 
-/* -----------------------------------------------------------------
-   CARD DESCRIPTION
-   ----------------------------------------------------------------- */
+#library-resource-category-description {
+  max-width: 75ch;
 
-.library-card-description {
-  margin: .9rem 0;
+  margin: 0;
 
   color: var(--muted);
 
@@ -622,17 +1763,459 @@
 }
 
 
-/* -----------------------------------------------------------------
-   CARD METADATA
-   -----------------------------------------------------------------
-   Contains small informational chips such as resource counts
-   or other category information.
+#library-resource-category-count {
+  display: inline-flex;
 
-   margin-top: auto pushes the metadata toward the bottom of the
-   card when cards have different amounts of description text.
-   ----------------------------------------------------------------- */
+  align-items: center;
 
-.library-card-meta {
+  justify-content: center;
+
+  margin-top: 1rem;
+
+  padding: .45rem .7rem;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, .025);
+
+  color:
+    var(--library-accent);
+
+  font-size: .7rem;
+
+  font-weight: 700;
+}
+
+
+/* =================================================================
+   LEVEL 2 — RESOURCE GRID
+   ================================================================= */
+
+#library-resource-grid {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 1.35rem;
+}
+
+
+/* =================================================================
+   RESOURCE CARD
+   ================================================================= */
+
+.resource-card {
+  position: relative;
+
+  overflow: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, .09);
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, .055),
+      rgba(255, 255, 255, .018)
+    );
+
+  box-shadow:
+    0 12px 40px
+    rgba(0, 0, 0, .18);
+
+  backdrop-filter: blur(12px);
+
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+
+.resource-card:hover {
+  transform: translateY(-7px);
+
+  border-color:
+    rgba(56, 189, 248, .35);
+
+  box-shadow:
+    0 20px 55px
+    rgba(0, 0, 0, .32),
+    0 0 30px
+    rgba(56, 189, 248, .07);
+}
+
+
+/* =================================================================
+   RESOURCE THUMBNAIL
+   ================================================================= */
+
+.resource-thumbnail {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  background: #0b1120;
+}
+
+
+.resource-thumbnail > img {
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition:
+    transform .45s ease,
+    filter .45s ease;
+}
+
+
+.resource-card:hover
+.resource-thumbnail > img {
+  transform: scale(1.055);
+
+  filter: brightness(1.08);
+}
+
+
+/* =================================================================
+   GENERATED THUMBNAIL
+   ================================================================= */
+
+.resource-thumbnail-generated {
+  isolation: isolate;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(56, 189, 248, .34),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(139, 92, 246, .38),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #07111f,
+      #111827 50%,
+      #160f2b
+    );
+}
+
+
+.resource-thumbnail-generated::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -1;
+
+  background:
+    linear-gradient(
+      135deg,
+      transparent 45%,
+      rgba(56, 189, 248, .08) 46%,
+      transparent 47%
+    );
+
+  background-size: 30px 30px;
+}
+
+
+.thumbnail-grid {
+  position: absolute;
+
+  inset: 0;
+
+  opacity: .18;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, .15) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, .15) 1px,
+      transparent 1px
+    );
+
+  background-size: 28px 28px;
+}
+
+
+.thumbnail-orbit {
+  position: absolute;
+
+  border:
+    1px solid
+    rgba(56, 189, 248, .22);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+.orbit-one {
+  width: 190px;
+
+  height: 190px;
+
+  right: -80px;
+
+  top: -90px;
+}
+
+
+.orbit-two {
+  width: 130px;
+
+  height: 130px;
+
+  left: -60px;
+
+  bottom: -60px;
+
+  border-color:
+    rgba(139, 92, 246, .28);
+}
+
+
+.thumbnail-content {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  padding: 1.6rem;
+}
+
+
+.thumbnail-label {
+  margin-bottom: .45rem;
+
+  font-size: .62rem;
+
+  font-weight: 800;
+
+  letter-spacing: .16em;
+
+  color:
+    rgba(255, 255, 255, .65);
+}
+
+
+.thumbnail-main {
+  display: block;
+
+  max-width: 90%;
+
+  font-size:
+    clamp(
+      1.35rem,
+      2.4vw,
+      2rem
+    );
+
+  line-height: 1;
+
+  font-weight: 900;
+
+  letter-spacing: -.025em;
+
+  color: #fff;
+
+  text-shadow:
+    0 4px 20px
+    rgba(0, 0, 0, .45);
+}
+
+
+.thumbnail-secondary {
+  margin-top: .55rem;
+
+  max-width: 90%;
+
+  font-size: .82rem;
+
+  font-weight: 800;
+
+  letter-spacing: .08em;
+
+  text-transform: uppercase;
+
+  color:
+    rgba(56, 189, 248, .95);
+}
+
+
+.thumbnail-code {
+  margin-top: auto;
+
+  font-family: monospace;
+
+  font-size: .58rem;
+
+  letter-spacing: .05em;
+
+  color:
+    rgba(255, 255, 255, .42);
+}
+
+
+.thumbnail-overlay {
+  position: absolute;
+
+  left: .75rem;
+
+  bottom: .75rem;
+
+  padding: .3rem .5rem;
+
+  border-radius: 999px;
+
+  background:
+    rgba(0, 0, 0, .62);
+
+  backdrop-filter: blur(6px);
+
+  font-size: .58rem;
+
+  font-weight: 800;
+
+  letter-spacing: .08em;
+
+  color: #fff;
+}
+
+
+/* =================================================================
+   RESOURCE CARD BODY
+   ================================================================= */
+
+.resource-card-body {
+  display: flex;
+
+  flex-direction: column;
+
+  flex: 1;
+
+  padding: 1.15rem;
+}
+
+
+.resource-card-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: .75rem;
+
+  margin-bottom: .7rem;
+}
+
+
+.resource-number {
+  font-family: monospace;
+
+  font-size: .68rem;
+
+  font-weight: 700;
+
+  color: var(--muted);
+}
+
+
+.resource-tech {
+  padding: .28rem .55rem;
+
+  border:
+    1px solid
+    rgba(56, 189, 248, .22);
+
+  border-radius: 999px;
+
+  background:
+    rgba(56, 189, 248, .07);
+
+  color:
+    var(--library-accent);
+
+  font-size: .6rem;
+
+  font-weight: 800;
+
+  letter-spacing: .06em;
+}
+
+
+.resource-title {
+  margin: 0 0 .65rem;
+
+  font-size: 1.05rem;
+
+  line-height: 1.35;
+
+  letter-spacing: -.01em;
+}
+
+
+.resource-description {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: .82rem;
+
+  line-height: 1.65;
+}
+
+
+.resource-card-meta {
   display: flex;
 
   flex-wrap: wrap;
@@ -641,114 +2224,65 @@
 
   margin-top: auto;
 
-  margin-bottom: 1rem;
-}
-
-
-/* -----------------------------------------------------------------
-   METADATA CHIP
-   ----------------------------------------------------------------- */
-
-.library-chip {
-  padding: .3rem .55rem;
-
-  border: 1px solid var(--line);
-
-  border-radius: 999px;
+  padding-top: 1rem;
 
   color: var(--muted);
 
-  font-size: .7rem;
-}
-
-
-/* -----------------------------------------------------------------
-   CARD ACTION AREA
-   -----------------------------------------------------------------
-   Holds buttons such as "View Resources" or external links.
-   ----------------------------------------------------------------- */
-
-.library-card-actions {
-  display: flex;
-
-  gap: .6rem;
-
-  flex-wrap: wrap;
-}
-
-
-/* -----------------------------------------------------------------
-   CARD ACTION BUTTON
-   -----------------------------------------------------------------
-   Flexible button that can be used for both links and JavaScript
-   actions.
-   ----------------------------------------------------------------- */
-
-.library-card-btn {
-  flex: 1 1 130px;
-
-  padding: .65rem .8rem;
-
-  border: 1px solid var(--line);
-
-  border-radius: var(--radius-sm);
-
-  background: transparent;
-
-  color: var(--text);
-
-  text-align: center;
-
-  text-decoration: none;
-
-  font-size: .8rem;
-
-  font-weight: 600;
-
-  cursor: pointer;
-}
-
-
-/* -----------------------------------------------------------------
-   CARD BUTTON HOVER STATE
-   ----------------------------------------------------------------- */
-
-.library-card-btn:hover {
-  border-color: var(--library-accent);
-
-  color: var(--library-accent);
-}
-
-
-/* -----------------------------------------------------------------
-   PRIMARY CARD BUTTON
-   -----------------------------------------------------------------
-   Gradient style used for the main action of a resource card.
-   ----------------------------------------------------------------- */
-
-.library-card-btn.primary {
-  border-color: transparent;
-
-  background:
-    linear-gradient(
-      135deg,
-      var(--library-accent),
-      var(--library-accent-2)
-    );
-
-  color: #fff;
+  font-size: .67rem;
 }
 
 
 /* =================================================================
-   LOADING STATE
-   -----------------------------------------------------------------
-   Displayed while the library is retrieving and processing
-   Markdown content from GitHub.
+   RESOURCE ACTIONS
+   ================================================================= */
+
+.resource-card-actions {
+  display: flex;
+
+  gap: .55rem;
+
+  margin-top: 1rem;
+}
+
+
+.resource-card-actions
+.library-card-btn {
+  flex: 1;
+
+  text-align: center;
+
+  text-decoration: none;
+}
+
+
+.resource-open-btn {
+  border-color:
+    rgba(56, 189, 248, .35);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(56, 189, 248, .16),
+      rgba(139, 92, 246, .14)
+    );
+}
+
+
+.resource-open-btn:hover {
+  border-color:
+    rgba(56, 189, 248, .6);
+
+  box-shadow:
+    0 0 20px
+    rgba(56, 189, 248, .10);
+}
+
+
+/* =================================================================
+   LOADING
    ================================================================= */
 
 .library-loading {
-  /* Makes the loading state span the complete grid width. */
   grid-column: 1 / -1;
 
   padding: 4rem 1rem;
@@ -759,22 +2293,12 @@
 }
 
 
-/* -----------------------------------------------------------------
-   LOADING HEADING
-   ----------------------------------------------------------------- */
-
 .library-loading h3 {
   margin: 1rem 0 .4rem;
 
   color: var(--text);
 }
 
-
-/* -----------------------------------------------------------------
-   LOADING SPINNER
-   -----------------------------------------------------------------
-   Circular animated indicator shown during resource loading.
-   ----------------------------------------------------------------- */
 
 .library-spinner {
   width: 38px;
@@ -783,9 +2307,12 @@
 
   margin: 0 auto;
 
-  border: 3px solid var(--line);
+  border:
+    3px solid
+    var(--line);
 
-  border-top-color: var(--library-accent);
+  border-top-color:
+    var(--library-accent);
 
   border-radius: 50%;
 
@@ -794,23 +2321,15 @@
 }
 
 
-/* -----------------------------------------------------------------
-   SPINNER ANIMATION
-   ----------------------------------------------------------------- */
-
 @keyframes library-spin {
-
   to {
     transform: rotate(360deg);
   }
-
 }
 
 
 /* =================================================================
-   EMPTY STATE
-   -----------------------------------------------------------------
-   Displayed when a search or filter produces no matching results.
+   EMPTY STATES
    ================================================================= */
 
 .library-empty {
@@ -822,44 +2341,88 @@
 }
 
 
-/* -----------------------------------------------------------------
-   EMPTY STATE ICON
-   ----------------------------------------------------------------- */
-
 .library-empty-icon {
-  font-size: 2.5rem;
-
   margin-bottom: .8rem;
+
+  font-size: 2.5rem;
 }
 
-
-/* -----------------------------------------------------------------
-   EMPTY STATE HEADING
-   ----------------------------------------------------------------- */
 
 .library-empty h3 {
   color: var(--text);
 }
 
 
-/* =================================================================
-   RESOURCE DETAIL MODAL
-   -----------------------------------------------------------------
-   Full-screen overlay used to display the selected resource without
-   navigating away from the library page.
+#library-resource-empty {
+  margin-top: 1rem;
+}
 
-   The modal contains:
-   - Dark backdrop
-   - Scrollable content panel
-   - Close button
-   - Resource metadata
-   - Rendered Markdown
+
+/* =================================================================
+   LOAD MORE
    ================================================================= */
 
+.library-load-more {
+  display: block;
 
-/* -----------------------------------------------------------------
-   MODAL OVERLAY
-   ----------------------------------------------------------------- */
+  margin: 2rem auto 0;
+
+  padding: .75rem 1.1rem;
+
+  border:
+    1px solid
+    rgba(56, 189, 248, .3);
+
+  border-radius: var(--radius-sm);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(56, 189, 248, .08),
+      rgba(139, 92, 246, .08)
+    );
+
+  color: var(--text);
+
+  font: inherit;
+
+  font-size: .8rem;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    border-color .2s ease,
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+
+.library-load-more:hover {
+  border-color:
+    var(--library-accent);
+
+  color:
+    var(--library-accent);
+
+  background:
+    rgba(56, 189, 248, .08);
+
+  transform:
+    translateY(-2px);
+}
+
+
+.library-load-more[hidden] {
+  display: none !important;
+}
+
+
+/* =================================================================
+   MODAL
+   ================================================================= */
 
 .library-modal {
   position: fixed;
@@ -878,48 +2441,30 @@
 }
 
 
-/* -----------------------------------------------------------------
-   HIDDEN MODAL STATE
-   -----------------------------------------------------------------
-   Ensures the modal is completely removed from the visual layout
-   when the HTML hidden attribute is active.
-   ----------------------------------------------------------------- */
-
 .library-modal[hidden] {
   display: none;
 }
 
-
-/* -----------------------------------------------------------------
-   MODAL BACKDROP
-   -----------------------------------------------------------------
-   Darkens and blurs the page behind the active resource modal.
-   ----------------------------------------------------------------- */
 
 .library-modal-backdrop {
   position: absolute;
 
   inset: 0;
 
-  background: rgba(0, 0, 0, .78);
+  background:
+    rgba(0, 0, 0, .78);
 
   backdrop-filter: blur(7px);
 }
 
-
-/* -----------------------------------------------------------------
-   MODAL CONTENT PANEL
-   -----------------------------------------------------------------
-   Limits the modal width and height while allowing the resource
-   content to scroll independently.
-   ----------------------------------------------------------------- */
 
 .library-modal-dialog {
   position: relative;
 
   z-index: 1;
 
-  width: min(1050px, 100%);
+  width:
+    min(1050px, 100%);
 
   max-height: 90vh;
 
@@ -927,23 +2472,21 @@
 
   padding: 2rem;
 
-  border: 1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
 
-  border-radius: var(--radius);
+  border-radius:
+    var(--radius);
 
-  background: var(--panel);
+  background:
+    var(--panel);
 
   box-shadow:
-    0 30px 100px rgba(0, 0, 0, .45);
+    0 30px 100px
+    rgba(0, 0, 0, .45);
 }
 
-
-/* -----------------------------------------------------------------
-   MODAL CLOSE BUTTON
-   -----------------------------------------------------------------
-   Sticky close button remains accessible while scrolling through
-   a long resource document.
-   ----------------------------------------------------------------- */
 
 .library-modal-close {
   position: sticky;
@@ -956,28 +2499,42 @@
 
   height: 40px;
 
-  border: 1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
 
   border-radius: 50%;
 
-  background: var(--panel);
+  background:
+    var(--panel);
 
-  color: var(--text);
+  color:
+    var(--text);
 
   font-size: 1.5rem;
 
   cursor: pointer;
 
   z-index: 2;
+
+  transition:
+    border-color .2s ease,
+    color .2s ease,
+    background .2s ease;
 }
 
 
-/* -----------------------------------------------------------------
-   MODAL HEADER
-   -----------------------------------------------------------------
-   Reserves space for the close button and separates resource
-   metadata from the Markdown content.
-   ----------------------------------------------------------------- */
+.library-modal-close:hover {
+  border-color:
+    var(--library-accent);
+
+  color:
+    var(--library-accent);
+
+  background:
+    rgba(56, 189, 248, .06);
+}
+
 
 .library-modal-header {
   padding-right: 3rem;
@@ -986,12 +2543,9 @@
 }
 
 
-/* -----------------------------------------------------------------
-   MODAL CATEGORY LABEL
-   ----------------------------------------------------------------- */
-
 .library-modal-category {
-  color: var(--library-accent);
+  color:
+    var(--library-accent);
 
   font-size: .75rem;
 
@@ -1003,41 +2557,30 @@
 }
 
 
-/* -----------------------------------------------------------------
-   MODAL RESOURCE TITLE
-   ----------------------------------------------------------------- */
-
 .library-modal-header h2 {
   margin: .5rem 0;
 
-  font-size: clamp(
-    1.5rem,
-    4vw,
-    2.3rem
-  );
+  font-size:
+    clamp(
+      1.5rem,
+      4vw,
+      2.3rem
+    );
 }
 
-
-/* -----------------------------------------------------------------
-   MODAL RESOURCE META INFORMATION
-   ----------------------------------------------------------------- */
 
 .library-modal-header p {
   margin: 0;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
   font-size: .85rem;
 }
 
 
 /* =================================================================
-   MARKDOWN CONTENT
-   -----------------------------------------------------------------
-   Styles content generated from Markdown resources.
-
-   These rules ensure that GitHub/Markdown content remains visually
-   consistent with the Charlie MJ website.
+   MARKDOWN
    ================================================================= */
 
 .library-modal-content {
@@ -1046,12 +2589,6 @@
   line-height: 1.8;
 }
 
-
-/* -----------------------------------------------------------------
-   MARKDOWN HEADINGS
-   -----------------------------------------------------------------
-   Adds consistent vertical spacing around headings.
-   ----------------------------------------------------------------- */
 
 .library-modal-content h1,
 .library-modal-content h2,
@@ -1063,45 +2600,25 @@
 }
 
 
-/* -----------------------------------------------------------------
-   MARKDOWN H1
-   ----------------------------------------------------------------- */
-
 .library-modal-content h1 {
   font-size: 1.7rem;
 }
 
-
-/* -----------------------------------------------------------------
-   MARKDOWN H2
-   ----------------------------------------------------------------- */
 
 .library-modal-content h2 {
   font-size: 1.35rem;
 }
 
 
-/* -----------------------------------------------------------------
-   MARKDOWN H3
-   ----------------------------------------------------------------- */
-
 .library-modal-content h3 {
   font-size: 1.1rem;
 }
 
 
-/* -----------------------------------------------------------------
-   MARKDOWN PARAGRAPHS
-   ----------------------------------------------------------------- */
-
 .library-modal-content p {
   color: var(--muted);
 }
 
-
-/* -----------------------------------------------------------------
-   MARKDOWN LINKS
-   ----------------------------------------------------------------- */
 
 .library-modal-content a {
   color: var(--library-accent);
@@ -1110,20 +2627,10 @@
 }
 
 
-/* -----------------------------------------------------------------
-   MARKDOWN LINK HOVER STATE
-   ----------------------------------------------------------------- */
-
 .library-modal-content a:hover {
   text-decoration: underline;
 }
 
-
-/* -----------------------------------------------------------------
-   MARKDOWN LISTS
-   -----------------------------------------------------------------
-   Adds appropriate indentation to ordered and unordered lists.
-   ----------------------------------------------------------------- */
 
 .library-modal-content ul,
 .library-modal-content ol {
@@ -1131,192 +2638,104 @@
 }
 
 
-/* -----------------------------------------------------------------
-   MARKDOWN BLOCKQUOTES
-   -----------------------------------------------------------------
-   Uses the library accent as a visual indicator for quoted content.
-   ----------------------------------------------------------------- */
-
 .library-modal-content blockquote {
   margin: 1rem 0;
 
   padding: .8rem 1rem;
 
-  border-left: 3px solid var(--library-accent);
+  border-left:
+    3px solid
+    var(--library-accent);
 
-  background: rgba(255, 255, 255, .025);
+  background:
+    rgba(255, 255, 255, .025);
 
-  color: var(--muted);
+  color:
+    var(--muted);
 }
 
-
-/* -----------------------------------------------------------------
-   INLINE CODE
-   -----------------------------------------------------------------
-   Gives inline Markdown code a subtle background and spacing.
-   ----------------------------------------------------------------- */
 
 .library-modal-content code {
   padding: .15rem .35rem;
 
   border-radius: 4px;
 
-  background: rgba(255, 255, 255, .06);
+  background:
+    rgba(255, 255, 255, .06);
 
   font-size: .85em;
 }
 
-
-/* -----------------------------------------------------------------
-   CODE BLOCKS
-   -----------------------------------------------------------------
-   Enables horizontal scrolling for long code lines instead of
-   breaking the overall modal layout.
-   ----------------------------------------------------------------- */
 
 .library-modal-content pre {
   overflow-x: auto;
 
   padding: 1rem;
 
-  border-radius: var(--radius-sm);
+  border-radius:
+    var(--radius-sm);
 
-  background: rgba(0, 0, 0, .25);
+  background:
+    rgba(0, 0, 0, .25);
+}
+
+
+.library-modal-content pre code {
+  padding: 0;
+
+  background: transparent;
+}
+
+
+.library-modal-content table {
+  width: 100%;
+
+  margin: 1.2rem 0;
+
+  border-collapse: collapse;
+
+  font-size: .82rem;
+}
+
+
+.library-modal-content th,
+.library-modal-content td {
+  padding: .65rem .75rem;
+
+  border:
+    1px solid
+    var(--line);
+
+  text-align: left;
+}
+
+
+.library-modal-content th {
+  color: var(--text);
+
+  background:
+    rgba(255, 255, 255, .04);
+}
+
+
+.library-modal-content td {
+  color: var(--muted);
+}
+
+
+.library-modal-content img {
+  max-width: 100%;
+
+  height: auto;
+
+  border-radius:
+    var(--radius-sm);
 }
 
 
 /* =================================================================
-   RESPONSIVE DESIGN
-   -----------------------------------------------------------------
-   Tablet and mobile adjustments for the DevOps Library.
-
-   The layout progressively changes from multi-column desktop
-   layouts to compact single-column mobile layouts.
+   HOME PAGE LIBRARY PREVIEW
    ================================================================= */
-
-
-/* =================================================================
-   TABLET / SMALL DESKTOP
-   -----------------------------------------------------------------
-   Applies when the viewport width is 850px or smaller.
-   ================================================================= */
-
-@media (max-width: 850px) {
-
-
-  /* ---------------------------------------------------------------
-     HERO LAYOUT
-     ---------------------------------------------------------------
-     Moves the statistics below the hero content.
-     --------------------------------------------------------------- */
-
-  .library-hero-content {
-    grid-template-columns: 1fr;
-  }
-
-
-  /* ---------------------------------------------------------------
-     STATISTICS WIDTH
-     --------------------------------------------------------------- */
-
-  .library-stat-panel {
-    width: 100%;
-  }
-
-
-  /* ---------------------------------------------------------------
-     TOOLBAR
-     ---------------------------------------------------------------
-     Stacks search, category and sorting controls vertically.
-     --------------------------------------------------------------- */
-
-  .library-toolbar {
-    grid-template-columns: 1fr;
-  }
-
-}
-
-
-/* =================================================================
-   MOBILE
-   -----------------------------------------------------------------
-   Additional layout adjustments for small smartphone screens.
-   ================================================================= */
-
-@media (max-width: 520px) {
-
-
-  /* ---------------------------------------------------------------
-     MOBILE STATISTICS
-     ---------------------------------------------------------------
-     Keeps the three statistics in a compact horizontal row.
-     --------------------------------------------------------------- */
-
-  .library-stat-panel {
-    grid-template-columns:
-      repeat(
-        3,
-        1fr
-      );
-  }
-
-
-  /* ---------------------------------------------------------------
-     COMPACT STATISTIC CARDS
-     --------------------------------------------------------------- */
-
-  .library-stat {
-    min-width: 0;
-
-    padding: .75rem .4rem;
-  }
-
-
-  /* ---------------------------------------------------------------
-     SMALLER STATISTIC NUMBERS
-     --------------------------------------------------------------- */
-
-  .library-stat strong {
-    font-size: 1.35rem;
-  }
-
-
-  /* ---------------------------------------------------------------
-     SMALLER STATISTIC LABELS
-     --------------------------------------------------------------- */
-
-  .library-stat span {
-    font-size: .65rem;
-  }
-
-
-  /* ---------------------------------------------------------------
-     MOBILE CATEGORY GRID
-     ---------------------------------------------------------------
-     Displays one category card per row.
-     --------------------------------------------------------------- */
-
-  .library-grid {
-    grid-template-columns: 1fr;
-  }
-
-
-  /* ---------------------------------------------------------------
-     MOBILE MODAL
-     ---------------------------------------------------------------
-     Reduces modal padding so more screen space is available for
-     reading the resource content.
-     --------------------------------------------------------------- */
-
-  .library-modal-dialog {
-    padding: 1.2rem;
-  }
-
-}
-
-/* ================================================================
-   HOME PAGE — LIBRARY PREVIEW
-   ================================================================ */
 
 .library-home-section {
   display: grid;
@@ -1330,9 +2749,11 @@
   align-items: center;
 }
 
+
 .library-home-section .btn {
   margin-top: 1.2rem;
 }
+
 
 .library-home-preview {
   display: flex;
@@ -1343,23 +2764,31 @@
 
   padding: 1.3rem;
 
-  border: 1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
 
-  border-radius: var(--radius);
+  border-radius:
+    var(--radius);
 
-  background: var(--panel);
+  background:
+    var(--panel);
 
   box-shadow:
-    0 12px 30px rgba(0, 0, 0, .12);
+    0 12px 30px
+    rgba(0, 0, 0, .12);
 }
+
 
 .library-preview-icon {
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   width: 60px;
+
   height: 60px;
 
   flex: 0 0 60px;
@@ -1376,11 +2805,13 @@
   font-size: 1.8rem;
 }
 
+
 .library-home-preview strong {
   display: block;
 
   margin-bottom: .35rem;
 }
+
 
 .library-home-preview p {
   margin: 0;
@@ -1392,10 +2823,520 @@
   line-height: 1.6;
 }
 
-@media (max-width: 800px) {
+
+/* =================================================================
+   RESPONSIVE — 1050px
+   ================================================================= */
+
+@media (max-width: 1050px) {
+
+  #library-resource-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+/* =================================================================
+   RESPONSIVE — 850px
+   ================================================================= */
+
+@media (max-width: 850px) {
+
+  .library-hero-content {
+    grid-template-columns: 1fr;
+  }
+
+
+  .library-stat-panel {
+    width: 100%;
+  }
+
+
+  .library-toolbar {
+    grid-template-columns: 1fr;
+  }
+
 
   .library-home-section {
     grid-template-columns: 1fr;
   }
 
+
+  .library-card {
+    min-height: 370px;
+  }
 }
+
+
+/* =================================================================
+   RESPONSIVE — 680px
+   ================================================================= */
+
+@media (max-width: 680px) {
+
+  .library-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  #library-resource-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .resource-card-actions {
+    flex-direction: column;
+  }
+
+
+  .library-view-intro {
+    margin-top: 1rem;
+  }
+
+
+  .library-card {
+    min-height: 0;
+
+    padding: 1.2rem;
+
+    border-radius: 17px;
+  }
+
+
+  /* ---------------------------------------------------------------
+     MOBILE CARD HEADER
+     --------------------------------------------------------------- */
+
+  .library-card-header,
+  .library-card-top {
+    gap: .65rem;
+
+    margin-bottom: 1rem;
+  }
+
+
+  .library-card-number {
+    width: 44px;
+
+    height: 44px;
+
+    flex-basis: 44px;
+
+    border-radius: 13px;
+  }
+
+
+  .library-card-type {
+    font-size: .64rem;
+
+    letter-spacing: .12em;
+  }
+
+
+  .library-card-top > div:last-child > div:first-child,
+  .library-card-top > div:last-child > span:first-child {
+    font-size: .64rem;
+
+    letter-spacing: .12em;
+  }
+
+
+  /* ---------------------------------------------------------------
+     MOBILE LEVEL 1 TYPOGRAPHY
+     --------------------------------------------------------------- */
+
+  .library-card-body h3,
+  .library-card h3 {
+    font-size: 1.18rem;
+
+    line-height: 1.25;
+  }
+
+
+  .library-card-body > p,
+  .library-card-body > .library-card-description,
+  .library-card-body p.library-card-description,
+  .library-card-description {
+    max-width: 46ch;
+
+    font-size: .81rem;
+
+    line-height: 1.62;
+  }
+
+
+  .library-card-meta {
+    gap: .45rem;
+
+    margin-top: .8rem;
+
+    margin-bottom: .95rem;
+
+    font-size: .66rem;
+  }
+
+
+  .library-card-meta > span,
+  .library-card-body .library-chip {
+    min-height: 26px;
+
+    padding:
+      .3rem .56rem;
+
+    font-size: .64rem;
+  }
+
+
+  /* ---------------------------------------------------------------
+     MOBILE PREVIEW
+     --------------------------------------------------------------- */
+
+  .library-category-preview,
+  .library-card-preview {
+    margin-top: .9rem;
+
+    margin-bottom: 1rem;
+
+    padding:
+      .75rem .8rem .9rem;
+  }
+
+
+  .library-category-preview::after,
+  .library-card-preview::after {
+    font-size: .55rem;
+
+    letter-spacing: .13em;
+  }
+
+
+  /* ---------------------------------------------------------------
+     MOBILE FEATURED RESOURCES
+     --------------------------------------------------------------- */
+
+  .library-category-preview
+  .library-card-preview-item,
+  .library-card-preview
+  .library-card-preview-item {
+    margin: .1rem 0;
+
+    padding:
+      .46rem .4rem;
+
+    font-size: .71rem;
+
+    font-weight: 700;
+
+    line-height: 1.48;
+  }
+
+
+  .library-card-actions {
+    flex-direction: column;
+  }
+
+
+  .library-card-btn {
+    width: 100%;
+  }
+
+
+  .library-resource-header {
+    padding: 1rem;
+  }
+
+
+  .library-back-categories {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+
+  #library-resource-category-title {
+    font-size: 1.45rem;
+  }
+
+
+  .thumbnail-content {
+    padding: 1.15rem;
+  }
+
+
+  .thumbnail-main {
+    font-size: 1.35rem;
+  }
+
+
+  .library-modal {
+    padding: .5rem;
+  }
+
+
+  .library-modal-dialog {
+    max-height: 94vh;
+
+    padding: 1.2rem;
+  }
+
+
+  .library-modal-header {
+    padding-right: 2.5rem;
+  }
+
+
+  .library-modal-content {
+    overflow-wrap: anywhere;
+  }
+
+
+  .library-modal-content table {
+    display: block;
+
+    overflow-x: auto;
+
+    white-space: nowrap;
+  }
+}
+
+
+/* =================================================================
+   RESPONSIVE — 520px
+   ================================================================= */
+
+@media (max-width: 520px) {
+
+  .library-stat-panel {
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
+  }
+
+
+  .library-stat {
+    min-width: 0;
+
+    padding:
+      .75rem .4rem;
+  }
+
+
+  .library-stat strong {
+    font-size: 1.35rem;
+  }
+
+
+  .library-stat span {
+    font-size: .65rem;
+  }
+
+
+  .library-results-bar {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: .7rem;
+  }
+
+
+  .library-card {
+    min-height: 0;
+
+    padding: 1rem;
+  }
+
+
+  /* ---------------------------------------------------------------
+     SMALL SCREEN HEADER
+     --------------------------------------------------------------- */
+
+  .library-card-header,
+  .library-card-top {
+    gap: .55rem;
+  }
+
+
+  .library-card-number {
+    width: 42px;
+
+    height: 42px;
+
+    flex-basis: 42px;
+
+    border-radius: 12px;
+  }
+
+
+  .library-card-type {
+    font-size: .61rem;
+
+    letter-spacing: .10em;
+  }
+
+
+  .library-card-top > div:last-child > div:first-child,
+  .library-card-top > div:last-child > span:first-child {
+    font-size: .61rem;
+
+    letter-spacing: .10em;
+  }
+
+
+  /* ---------------------------------------------------------------
+     SMALL SCREEN TYPOGRAPHY
+     --------------------------------------------------------------- */
+
+  .library-card-body h3,
+  .library-card h3 {
+    font-size: 1.08rem;
+
+    line-height: 1.27;
+  }
+
+
+  .library-card-body > p,
+  .library-card-body > .library-card-description,
+  .library-card-body p.library-card-description,
+  .library-card-description {
+    font-size: .79rem;
+
+    line-height: 1.6;
+  }
+
+
+  .library-card-meta {
+    gap: .4rem;
+
+    margin-top: .75rem;
+
+    margin-bottom: .9rem;
+  }
+
+
+  .library-card-meta > span,
+  .library-card-body .library-chip {
+    min-height: 25px;
+
+    padding:
+      .28rem .52rem;
+
+    font-size: .62rem;
+  }
+
+
+  .library-category-preview,
+  .library-card-preview {
+    margin-top: .8rem;
+
+    padding:
+      .7rem .72rem .8rem;
+  }
+
+
+  .library-category-preview::after,
+  .library-card-preview::after {
+    margin-bottom: .5rem;
+
+    font-size: .53rem;
+  }
+
+
+  /* ---------------------------------------------------------------
+     SMALL SCREEN FEATURED RESOURCES
+     --------------------------------------------------------------- */
+
+  .library-category-preview
+  .library-card-preview-item,
+  .library-card-preview
+  .library-card-preview-item {
+    font-size: .68rem;
+
+    font-weight: 700;
+
+    line-height: 1.46;
+  }
+
+
+  .library-card-actions {
+    flex-direction: column;
+  }
+
+
+  .library-card-btn {
+    width: 100%;
+  }
+
+
+  .resource-card-body {
+    padding: 1rem;
+  }
+
+
+  .library-resource-category-number {
+    margin-bottom: .5rem;
+  }
+
+
+  #library-resource-category-count {
+    width: 100%;
+  }
+
+
+  .library-modal-dialog {
+    padding: 1rem;
+  }
+
+
+  .library-modal-close {
+    width: 36px;
+
+    height: 36px;
+
+    font-size: 1.3rem;
+  }
+}
+
+
+/* =================================================================
+   ACCESSIBILITY
+   ================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .library-card,
+  .resource-card,
+  .resource-thumbnail > img,
+  .library-card-btn,
+  .library-back-categories,
+  .library-load-more {
+    transition: none;
+  }
+
+
+  .library-spinner {
+    animation: none;
+  }
+}
+
+
+/* =================================================================
+   HIDDEN STATE SAFETY
+   ================================================================= */
+
+.library-category-view[hidden],
+.library-resource-view[hidden] {
+  display: none !important;
+}
+
+
+/* =================================================================
+   END OF CHARLIE DEVOPS LIBRARY CSS
+   ================================================================= */
+

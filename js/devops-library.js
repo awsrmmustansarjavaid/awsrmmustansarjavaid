@@ -4,29 +4,70 @@
 
    PURPOSE
    -------
-   Controls the Charlie DevOps Library page.
 
-   The Markdown files inside:
+   Controls the Charlie DevOps Resource Library.
+
+   Markdown files inside:
 
        /activity/Charlie-DevOps-Library/
 
-   are the SOURCE OF TRUTH.
+   remain the SOURCE OF TRUTH.
 
-   There is intentionally NO separate JSON database.
+   No separate JSON database is required.
 
+   ================================================================
+   TWO-LEVEL LIBRARY ARCHITECTURE
+   ================================================================
+
+   LEVEL 1 — CATEGORY VIEW
+   -----------------------
+
+       Charlie DevOps Resource Library
+
+       ┌───────────────────────────────┐
+       │ 01                            │
+       │ Charlie DEVOPS Course         │
+       │ 17 resources                  │
+       │                               │
+       │ View Resources →              │
+       │ GitHub ↗                      │
+       └───────────────────────────────┘
+
+
+   LEVEL 2 — RESOURCE VIEW
+   ------------------------
+
+       Charlie DEVOPS Course
+
+       ┌───────────────┐
+       │   THUMBNAIL   │
+       ├───────────────┤
+       │ #01   YOUTUBE │
+       │               │
+       │ Resource Name │
+       │ Description   │
+       │               │
+       │ Open Resource │
+       │ Source        │
+       └───────────────┘
+
+       ← Back to Categories
+
+
+   ================================================================
    DATA FLOW
-   ---------
+   ================================================================
 
        GitHub Repository
               │
               ▼
-       activity/Charlie-DevOps-Library/
+       Markdown Directory
               │
               ▼
        GitHubAPI.listDirectory()
               │
               ▼
-       *.md files
+       *.md category files
               │
               ▼
        GitHubAPI.fetchRawFile()
@@ -35,46 +76,71 @@
        MarkdownParser.parse()
               │
               ▼
-       Charlie DevOps Library
+       Category Objects
               │
-              ├── Search
-              ├── Category Filter
-              ├── Sort
-              ├── Grid
-              ├── Statistics
-              ├── Load More
-              └── Markdown Viewer
+              ├── Category Cards
+              │
+              └── Resource Objects
+                       │
+                       ├── YouTube Thumbnail
+                       ├── Website Screenshot
+                       └── Generated Fallback Thumbnail
 
 
+   ================================================================
    IMPORTANT
-   ---------
-   This file uses the existing website modules:
+   ================================================================
 
-       CONFIG
-       GitHubAPI
-       MarkdownParser
+   This file expects the following HTML IDs:
 
-   No second GitHub API implementation is required.
+       #library-search
+       #library-category
+       #library-sort
+       #library-result-count
+       #clear-library-filters
+
+       #library-category-view
+       #library-grid
+       #library-empty
+
+       #library-resource-view
+       #library-resource-grid
+       #library-resource-empty
+
+       #library-resource-category-number
+       #library-resource-category-title
+       #library-resource-category-description
+       #library-resource-category-count
+
+       #library-back-to-categories
+       #library-load-more
+
+       #library-modal
+       #library-modal-close
+       #library-modal-category
+       #library-modal-title
+       #library-modal-meta
+       #library-modal-content
 
    ================================================================ */
 
 
+/* =================================================================
+   MAIN MODULE
+   ================================================================= */
+
 const DevOpsLibrary = (() => {
 
 
-  /* ==============================================================
+  /* ================================================================
      CONFIGURATION
-     ============================================================== */
-
+     ================================================================ */
 
   /*
-     Location of the Markdown database inside the repository.
+     Location of the Markdown library inside the repository.
 
-     GitHubAPI automatically combines this path with:
-
-         CONFIG.githubUsername
-         CONFIG.githubRepo
-         CONFIG.branch
+     GitHubAPI uses this path together with the project
+     configuration from config.js.
   */
 
   const LIBRARY_PATH =
@@ -82,50 +148,102 @@ const DevOpsLibrary = (() => {
 
 
   /*
-     Number of category cards displayed initially.
+     Number of items displayed initially.
 
-     Example:
+     LEVEL 1:
+         6 categories
 
-         12 categories initially
-
-     Additional categories are displayed through
-     the "Load More" button.
+     LEVEL 2:
+         6 resources
   */
 
-  const PAGE_SIZE = 12;
+  const PAGE_SIZE = 6;
 
+
+  /* ================================================================
+     APPLICATION STATE
+     ================================================================ */
 
   /*
-     Internal application state.
+     Complete list of loaded categories.
 
-     categories
-     ----------
-     Contains every successfully loaded Markdown category.
+     Each category contains:
 
-     filteredCategories
-     ------------------
-     Contains the current search/filter/sort result.
-
-     visibleCount
-     ------------
-     Controls how many cards are currently displayed.
+         filename
+         path
+         title
+         description
+         resourceCount
+         resourceTitles
+         urls
+         resources
+         markdown
+         html
   */
 
   let categories = [];
 
+
+  /*
+     Categories after search/filter/sort.
+  */
+
   let filteredCategories = [];
-
-  let visibleCount = PAGE_SIZE;
-
-
-
-  /* ==============================================================
-     DOM HELPER
-     ============================================================== */
 
 
   /*
-     Small helper for selecting a single DOM element.
+     Number of category cards currently visible.
+  */
+
+  let visibleCategoryCount =
+    PAGE_SIZE;
+
+
+  /*
+     Current library view.
+
+     Possible values:
+
+         "categories"
+         "resources"
+  */
+
+  let currentView =
+    'categories';
+
+
+  /*
+     Index of the currently opened category.
+
+     null means no category is open.
+  */
+
+  let activeCategoryIndex =
+    null;
+
+
+  /*
+     Resources belonging to the active category after
+     resource-level filtering.
+  */
+
+  let filteredResources = [];
+
+
+  /*
+     Number of resource cards currently visible.
+  */
+
+  let visibleResourceCount =
+    PAGE_SIZE;
+
+
+  /* ================================================================
+     DOM HELPER
+     ================================================================ */
+
+  /*
+     Short helper for selecting one element.
   */
 
   function $(selector) {
@@ -135,17 +253,15 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
+  /* ================================================================
      HTML ESCAPE
-     ============================================================== */
-
+     ================================================================ */
 
   /*
-     Escapes text before inserting it into HTML.
+     Escapes dynamic text before inserting it into HTML.
 
-     This is especially important for Markdown-derived titles,
-     descriptions and resource names.
+     This is especially important because category/resource
+     information comes from Markdown files stored in GitHub.
   */
 
   function escapeHtml(value = '') {
@@ -165,21 +281,17 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     EXTRACT SECTION TITLE
-     ============================================================== */
-
+  /* ================================================================
+     EXTRACT CATEGORY TITLE
+     ================================================================ */
 
   /*
-     Most Markdown files contain an H1 such as:
+     Preferred Markdown format:
 
          # Charlie DEVOPS Course
 
-     The H1 becomes the category title.
-
-     If no H1 exists, the filename is converted into
-     a readable title.
+     If the Markdown does not contain an H1, the filename is
+     converted into a readable title.
 
      Example:
 
@@ -218,21 +330,18 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
+  /* ================================================================
      EXTRACT RESOURCE COUNT
-     ============================================================== */
-
+     ================================================================ */
 
   /*
-     Looks for a Markdown line such as:
+     Looks for:
 
          **Resources:** 17 unique URLs in this section.
 
-     If found, that number becomes the resource count.
+     If that information exists, use it.
 
-     If the line does not exist, the JavaScript falls back
-     to counting:
+     Otherwise count:
 
          [Open resource]
 
@@ -254,10 +363,6 @@ const DevOpsLibrary = (() => {
     }
 
 
-    /*
-       Fallback method.
-    */
-
     const links =
       markdown.match(
         /\[Open resource\]/gi
@@ -271,24 +376,16 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
+  /* ================================================================
      EXTRACT RESOURCE TITLES
-     ============================================================== */
-
+     ================================================================ */
 
   /*
-     Looks for Markdown headings such as:
+     Finds headings such as:
 
          ## 1. YAML Fundamentals
-         ## 2. Linux Fundamentals
-         ## 3. Docker Study
-
-     These titles are used by:
-
-         Search
-         Card previews
-         Filtering
+         ## 2. Docker Course
+         ## 3. Kubernetes Documentation
   */
 
   function extractResourceTitles(markdown) {
@@ -307,22 +404,16 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
+  /* ================================================================
      EXTRACT RESOURCE URLS
-     ============================================================== */
-
+     ================================================================ */
 
   /*
-     Finds Markdown links in this format:
+     Supports:
 
          [Open resource](<https://example.com>)
 
-     The extracted URLs are used for:
-
-         Statistics
-         Resource counting
-         Future functionality
+     Returns an array of URLs.
   */
 
   function extractUrls(markdown) {
@@ -341,7 +432,9 @@ const DevOpsLibrary = (() => {
 
       if (match[1]) {
 
-        urls.push(match[1]);
+        urls.push(
+          match[1].trim()
+        );
 
       }
 
@@ -353,23 +446,683 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     EXTRACT DESCRIPTION
-     ============================================================== */
-
+  /* ================================================================
+     EXTRACT INDIVIDUAL RESOURCES
+     ================================================================ */
 
   /*
-     Creates a short description for each category card.
+     Converts Markdown resource sections into structured objects.
 
      Example:
 
-         **Resources:** 17 unique URLs in this section.
+         ## 1. YAML Fundamentals
+
+         **Short detail:** Learn YAML for DevOps.
+
+         [Open resource](<https://example.com>)
 
      becomes:
 
-         17 curated resources in the Docker Study Research section.
+         {
+             number: "1",
+             title: "YAML Fundamentals",
+             url: "https://example.com",
+             description: "Learn YAML for DevOps."
+         }
   */
+
+  function extractResources(markdown) {
+
+    const resources = [];
+
+
+    /*
+       Find numbered H2 sections.
+    */
+
+    const sectionRegex =
+      /^##\s+(\d+)\.\s+(.+?)(?=\n)/gm;
+
+
+    const sections = [
+      ...markdown.matchAll(sectionRegex)
+    ];
+
+
+    sections.forEach(
+      (section, index) => {
+
+
+        /* ----------------------------------------------------------
+           Resource number
+           ---------------------------------------------------------- */
+
+        const number =
+          section[1];
+
+
+        /* ----------------------------------------------------------
+           Resource title
+           ---------------------------------------------------------- */
+
+        const title =
+          section[2].trim();
+
+
+        /* ----------------------------------------------------------
+           Start of resource content
+           ---------------------------------------------------------- */
+
+        const start =
+          section.index +
+          section[0].length;
+
+
+        /* ----------------------------------------------------------
+           End of resource content
+           ---------------------------------------------------------- */
+
+        const end =
+          index + 1 < sections.length
+            ? sections[index + 1].index
+            : markdown.length;
+
+
+        const content =
+          markdown.slice(
+            start,
+            end
+          );
+
+
+        /* ----------------------------------------------------------
+           Find resource URL
+           ---------------------------------------------------------- */
+
+        const urlMatch =
+          content.match(
+            /\[Open resource\]\(<([^>]+)>\)/
+          );
+
+
+        /*
+           If there is no resource URL, ignore this section.
+        */
+
+        if (!urlMatch) {
+
+          return;
+
+        }
+
+
+        /* ----------------------------------------------------------
+           Find short description
+           ---------------------------------------------------------- */
+
+        const detailMatch =
+          content.match(
+            /\*\*Short detail:\*\*\s*(.+)/i
+          );
+
+
+        /* ----------------------------------------------------------
+           Store resource object
+           ---------------------------------------------------------- */
+
+        resources.push({
+
+          number,
+
+          title,
+
+          url:
+            urlMatch[1].trim(),
+
+          description:
+            detailMatch
+              ? detailMatch[1].trim()
+              : `DevOps learning resource covering ${title}.`
+
+        });
+
+      }
+    );
+
+
+    return resources;
+
+  }
+
+
+  /* ================================================================
+     DETECT TECHNOLOGY
+     ================================================================ */
+
+  /*
+     Attempts to determine which technology a resource belongs to.
+
+     Example:
+
+         Kubernetes Official Documentation
+
+     becomes:
+
+         KUBERNETES
+  */
+
+  function detectTechnology(
+    title,
+    url = ''
+  ) {
+
+    const text =
+      `${title} ${url}`.toLowerCase();
+
+
+    const technologies = [
+
+      ['kubernetes', 'KUBERNETES'],
+      ['docker', 'DOCKER'],
+      ['terraform', 'TERRAFORM'],
+      ['ansible', 'ANSIBLE'],
+      ['jenkins', 'JENKINS'],
+      ['github', 'GITHUB'],
+      ['gitlab', 'GITLAB'],
+      ['aws', 'AWS'],
+      ['amazon web services', 'AWS'],
+      ['azure', 'AZURE'],
+      ['google cloud', 'GCP'],
+      ['gcp', 'GCP'],
+      ['python', 'PYTHON'],
+      ['bash', 'BASH'],
+      ['linux', 'LINUX'],
+      ['yaml', 'YAML'],
+      ['json', 'JSON'],
+      ['cloudformation', 'CLOUDFORMATION'],
+      ['devops', 'DEVOPS'],
+      ['ci/cd', 'CI/CD'],
+      ['cicd', 'CI/CD'],
+      ['container', 'CONTAINERS'],
+      ['git', 'GIT']
+
+    ];
+
+
+    for (
+      const [keyword, label]
+      of technologies
+    ) {
+
+      if (
+        text.includes(keyword)
+      ) {
+
+        return label;
+
+      }
+
+    }
+
+
+    return 'DEVOPS';
+
+  }
+
+
+  /* ================================================================
+     GET IMPORTANT THUMBNAIL WORDS
+     ================================================================ */
+
+  /*
+     Removes common words so generated thumbnails contain
+     meaningful technical words.
+  */
+
+  function getThumbnailWords(
+    title,
+    technology
+  ) {
+
+    const stopWords = new Set([
+
+      'the',
+      'and',
+      'for',
+      'with',
+      'from',
+      'into',
+      'your',
+      'you',
+      'of',
+      'to',
+      'a',
+      'an',
+      'in',
+      'on',
+      'course',
+      'tutorial',
+      'tutorials',
+      'complete',
+      'introduction',
+      'learn',
+      'learning'
+
+    ]);
+
+
+    const words =
+      title
+
+        .replace(
+          /[^\w\s/-]/g,
+          ' '
+        )
+
+        .split(/\s+/)
+
+        .filter(Boolean)
+
+        .filter(word =>
+          !stopWords.has(
+            word.toLowerCase()
+          )
+        );
+
+
+    const important =
+      words
+
+        .slice(0, 3)
+
+        .map(word =>
+          word.toUpperCase()
+        );
+
+
+    if (!important.length) {
+
+      important.push(
+        technology
+      );
+
+    }
+
+
+    return important;
+
+  }
+
+
+  /* ================================================================
+     CREATE FALLBACK THUMBNAIL
+     ================================================================ */
+
+  /*
+     Creates a visual thumbnail completely with HTML/CSS.
+
+     This is used if:
+
+         YouTube thumbnail fails
+
+     OR
+
+         Website screenshot fails
+  */
+
+  function createFallbackThumbnail(
+    title,
+    url
+  ) {
+
+    const technology =
+      detectTechnology(
+        title,
+        url
+      );
+
+
+    const words =
+      getThumbnailWords(
+        title,
+        technology
+      );
+
+
+    const mainWord =
+      technology;
+
+
+    const secondary =
+      words
+
+        .filter(word =>
+          word !== mainWord
+        )
+
+        .slice(0, 2)
+
+        .join(' ');
+
+
+    return `
+
+      <div
+        class="resource-thumbnail resource-thumbnail-generated"
+        data-tech="${escapeHtml(technology)}"
+      >
+
+        <div class="thumbnail-grid"></div>
+
+        <div class="thumbnail-orbit orbit-one"></div>
+
+        <div class="thumbnail-orbit orbit-two"></div>
+
+        <div class="thumbnail-content">
+
+          <span class="thumbnail-label">
+            CHARLIE DEVOPS
+          </span>
+
+          <strong class="thumbnail-main">
+            ${escapeHtml(mainWord)}
+          </strong>
+
+          <span class="thumbnail-secondary">
+            ${escapeHtml(
+              secondary || 'LEARNING'
+            )}
+          </span>
+
+          <span class="thumbnail-code">
+            &lt;/&gt; BUILD • AUTOMATE • DEPLOY
+          </span>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  /* ================================================================
+     GET YOUTUBE VIDEO ID
+     ================================================================ */
+
+  /*
+     Supports:
+
+         https://www.youtube.com/watch?v=VIDEO_ID
+
+         https://youtu.be/VIDEO_ID
+
+         https://www.youtube.com/shorts/VIDEO_ID
+
+         https://www.youtube.com/embed/VIDEO_ID
+  */
+
+  function getYouTubeVideoId(url) {
+
+    try {
+
+      const parsed =
+        new URL(url);
+
+
+      const hostname =
+        parsed.hostname
+          .toLowerCase();
+
+
+      /*
+         Standard YouTube watch URL.
+      */
+
+      if (
+        hostname.includes('youtube.com')
+      ) {
+
+        const videoId =
+          parsed.searchParams.get('v');
+
+
+        if (videoId) {
+
+          return videoId;
+
+        }
+
+
+        const pathParts =
+          parsed.pathname
+            .split('/')
+            .filter(Boolean);
+
+
+        if (
+          pathParts.length >= 2 &&
+          (
+            pathParts[0] === 'shorts' ||
+            pathParts[0] === 'embed'
+          )
+        ) {
+
+          return pathParts[1];
+
+        }
+
+      }
+
+
+      /*
+         Short youtu.be URL.
+      */
+
+      if (
+        hostname === 'youtu.be'
+      ) {
+
+        return parsed.pathname
+          .replace(/^\/+/, '')
+          .split('/')[0];
+
+      }
+
+    } catch (error) {
+
+      /*
+         Invalid URLs simply fall back to generated
+         thumbnails.
+      */
+
+      return '';
+
+    }
+
+
+    return '';
+
+  }
+
+
+  /* ================================================================
+     GET RESOURCE THUMBNAIL
+     ================================================================ */
+
+  /*
+     Thumbnail priority:
+
+         1. YouTube thumbnail
+         2. Website screenshot
+         3. Generated fallback after image error
+  */
+
+  function getResourceThumbnail(
+    title,
+    url
+  ) {
+
+    const youtubeId =
+      getYouTubeVideoId(url);
+
+
+    /* ------------------------------------------------------------
+       YOUTUBE
+       ------------------------------------------------------------ */
+
+    if (youtubeId) {
+
+      return `
+
+        <div
+          class="resource-thumbnail"
+          data-title="${escapeHtml(title)}"
+          data-url="${escapeHtml(url)}"
+        >
+
+          <img
+            src="https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/hqdefault.jpg"
+            alt="${escapeHtml(title)}"
+            loading="lazy"
+            data-thumbnail-fallback="true"
+          >
+
+          <div class="thumbnail-overlay">
+
+            <span>
+              YOUTUBE
+            </span>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* ------------------------------------------------------------
+       GENERAL WEBSITE
+       ------------------------------------------------------------ */
+
+    const previewUrl =
+      `https://image.thum.io/get/width/900/crop/520/noanimate/${url}`;
+
+
+    return `
+
+      <div
+        class="resource-thumbnail"
+        data-title="${escapeHtml(title)}"
+        data-url="${escapeHtml(url)}"
+      >
+
+        <img
+          src="${escapeHtml(previewUrl)}"
+          alt="${escapeHtml(title)}"
+          loading="lazy"
+          data-thumbnail-fallback="true"
+        >
+
+        <div class="thumbnail-overlay">
+
+          <span>
+            WEB RESOURCE
+          </span>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  /* ================================================================
+     THUMBNAIL ERROR HANDLERS
+     ================================================================ */
+
+  /*
+     Replaces failed external thumbnails with the generated
+     Charlie DevOps thumbnail.
+  */
+
+  function bindThumbnailFallbacks() {
+
+    document
+      .querySelectorAll(
+        'img[data-thumbnail-fallback="true"]'
+      )
+      .forEach(img => {
+
+        /*
+           Avoid attaching the same listener more than once.
+        */
+
+        if (
+          img.dataset.fallbackBound === 'true'
+        ) {
+
+          return;
+
+        }
+
+
+        img.dataset.fallbackBound =
+          'true';
+
+
+        img.addEventListener(
+          'error',
+          () => {
+
+            const container =
+              img.closest(
+                '.resource-thumbnail'
+              );
+
+
+            if (!container) {
+
+              return;
+
+            }
+
+
+            const title =
+              container.dataset.title ||
+              'DevOps Resource';
+
+
+            const url =
+              container.dataset.url ||
+              '';
+
+
+            container.outerHTML =
+              createFallbackThumbnail(
+                title,
+                url
+              );
+
+          },
+          {
+            once: true
+          }
+        );
+
+      });
+
+  }
+
+
+  /* ================================================================
+     EXTRACT CATEGORY DESCRIPTION
+     ================================================================ */
 
   function extractDescription(
     markdown,
@@ -384,42 +1137,32 @@ const DevOpsLibrary = (() => {
 
     if (summary) {
 
-      return `${summary[1]} curated resources in the ${title} section.`;
+      return (
+        `${summary[1]} curated resources in the ` +
+        `${title} section.`
+      );
 
     }
 
 
-    return 'DevOps learning and reference resources.';
+    return (
+      'DevOps learning and reference resources.'
+    );
 
   }
 
 
-
-  /* ==============================================================
+  /* ================================================================
      LOAD ONE MARKDOWN FILE
-     ============================================================== */
-
-
-  /*
-     Downloads and processes one Markdown file.
-
-     The GitHub API provides:
-
-         name
-         path
-         download_url
-
-     The existing MarkdownParser handles Markdown rendering.
-  */
+     ================================================================ */
 
   async function loadFile(file) {
 
     try {
 
-
-      /* ----------------------------------------------------------
-         Download raw Markdown
-         ---------------------------------------------------------- */
+      /*
+         Download Markdown from GitHub.
+      */
 
       const raw =
         await GitHubAPI.fetchRawFile(
@@ -434,17 +1177,17 @@ const DevOpsLibrary = (() => {
       }
 
 
-      /* ----------------------------------------------------------
-         Parse Markdown using the existing website parser.
-         ---------------------------------------------------------- */
+      /*
+         Convert Markdown to HTML for the Source modal.
+      */
 
       const parsed =
         MarkdownParser.parse(raw);
 
 
-      /* ----------------------------------------------------------
-         Extract category information.
-         ---------------------------------------------------------- */
+      /*
+         Extract all category information.
+      */
 
       const title =
         extractTitle(
@@ -465,6 +1208,10 @@ const DevOpsLibrary = (() => {
         extractUrls(raw);
 
 
+      const resources =
+        extractResources(raw);
+
+
       const description =
         extractDescription(
           raw,
@@ -472,9 +1219,9 @@ const DevOpsLibrary = (() => {
         );
 
 
-      /* ----------------------------------------------------------
-         Return normalized category object.
-         ---------------------------------------------------------- */
+      /*
+         Return one normalized category object.
+      */
 
       return {
 
@@ -495,6 +1242,8 @@ const DevOpsLibrary = (() => {
 
         urls,
 
+        resources,
+
         description,
 
         markdown:
@@ -507,7 +1256,6 @@ const DevOpsLibrary = (() => {
 
 
     } catch (error) {
-
 
       console.warn(
         'Charlie DevOps Library: failed to load',
@@ -523,26 +1271,9 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
+  /* ================================================================
      LOAD COMPLETE LIBRARY
-     ============================================================== */
-
-
-  /*
-     Complete library loading process:
-
-         1. Read directory from GitHub.
-         2. Keep Markdown files.
-         3. Ignore 99-URL-MANIFEST.md.
-         4. Download Markdown files.
-         5. Parse Markdown.
-         6. Build category objects.
-         7. Sort categories.
-         8. Update statistics.
-         9. Build category filter.
-        10. Render the grid.
-  */
+     ================================================================ */
 
   async function loadLibrary() {
 
@@ -552,10 +1283,9 @@ const DevOpsLibrary = (() => {
 
     try {
 
-
-      /* ----------------------------------------------------------
-         Get all Markdown files from GitHub.
-         ---------------------------------------------------------- */
+      /*
+         Read directory from GitHub.
+      */
 
       const files =
         await GitHubAPI.listDirectory(
@@ -563,9 +1293,9 @@ const DevOpsLibrary = (() => {
         );
 
 
-      /* ----------------------------------------------------------
-         Keep only Markdown files.
-         ---------------------------------------------------------- */
+      /*
+         Keep Markdown files only.
+      */
 
       const markdownFiles =
         files
@@ -577,18 +1307,19 @@ const DevOpsLibrary = (() => {
           )
 
           /*
-             Keep 99-URL-MANIFEST.md in GitHub as a technical
-             reference file, but do not show it as a category card.
+             The manifest remains in GitHub but is not
+             displayed as a category.
           */
 
           .filter(file =>
-            file.name !== '99-URL-MANIFEST.md'
+            file.name !==
+            '99-URL-MANIFEST.md'
           );
 
 
-      /* ----------------------------------------------------------
-         Load every Markdown file.
-         ---------------------------------------------------------- */
+      /*
+         Load all Markdown files.
+      */
 
       const loaded =
         await Promise.all(
@@ -596,64 +1327,53 @@ const DevOpsLibrary = (() => {
         );
 
 
-      /* ----------------------------------------------------------
-         Remove files that failed to load.
-         ---------------------------------------------------------- */
+      /*
+         Remove failed files.
+      */
 
       categories =
         loaded.filter(Boolean);
 
 
-      /* ----------------------------------------------------------
-         Preserve the numeric Markdown order.
-
-         Example:
-
-             01
-             03
-             04
-             05
-             06
-             ...
-             25
-  */
+      /*
+         Preserve original numbered order.
+      */
 
       categories.sort(
         compareOriginalOrder
       );
 
 
-      /* ----------------------------------------------------------
-         Initial filter state.
-         ---------------------------------------------------------- */
+      /*
+         Initialize filtered category collection.
+      */
 
       filteredCategories =
         [...categories];
 
 
-      /* ----------------------------------------------------------
-         Update library statistics.
-         ---------------------------------------------------------- */
+      /*
+         Update top-level statistics.
+      */
 
       updateStats();
 
 
-      /* ----------------------------------------------------------
+      /*
          Build category dropdown.
-         ---------------------------------------------------------- */
+      */
 
       buildCategoryFilter();
 
 
-      /* ----------------------------------------------------------
-         Render category grid.
-         ---------------------------------------------------------- */
+      /*
+         Render initial category view.
+      */
 
       render();
 
 
     } catch (error) {
-
 
       console.error(
         'Charlie DevOps Library: failed to load library',
@@ -687,36 +1407,26 @@ const DevOpsLibrary = (() => {
   }
 
 
+  /* ================================================================
+     COMPARE ORIGINAL CATEGORY ORDER
+     ================================================================ */
 
-  /* ==============================================================
-     SORT BY ORIGINAL FILE NUMBER
-     ============================================================== */
-
-
-  /*
-     Keeps the Markdown library in its original numbered order.
-
-     Example:
-
-         01
-         03
-         04
-         05
-         ...
-         25
-  */
-
-  function compareOriginalOrder(a, b) {
+  function compareOriginalOrder(
+    a,
+    b
+  ) {
 
     const numberA =
       Number(
-        a.filename.match(/^\d+/)?.[0] || 999
+        a.filename.match(/^\d+/)?.[0] ||
+        999
       );
 
 
     const numberB =
       Number(
-        b.filename.match(/^\d+/)?.[0] || 999
+        b.filename.match(/^\d+/)?.[0] ||
+        999
       );
 
 
@@ -725,11 +1435,9 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     BUILD CATEGORY FILTER DROPDOWN
-     ============================================================== */
-
+  /* ================================================================
+     BUILD CATEGORY FILTER
+     ================================================================ */
 
   function buildCategoryFilter() {
 
@@ -744,27 +1452,22 @@ const DevOpsLibrary = (() => {
     }
 
 
-    /*
-       Start with the default "All Categories" option.
-    */
-
     select.innerHTML = `
+
       <option value="">
         All Categories
       </option>
+
     `;
 
-
-    /*
-       Add every Markdown category.
-    */
 
     categories.forEach(
       (category, index) => {
 
-
         const option =
-          document.createElement('option');
+          document.createElement(
+            'option'
+          );
 
 
         option.value =
@@ -775,7 +1478,9 @@ const DevOpsLibrary = (() => {
           category.title;
 
 
-        select.appendChild(option);
+        select.appendChild(
+          option
+        );
 
       }
     );
@@ -783,19 +1488,9 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     UPDATE STATISTICS
-     ============================================================== */
-
-
-  /*
-     Updates:
-
-         Category count
-         Resource count
-         URL count
-  */
+  /* ================================================================
+     UPDATE GLOBAL STATISTICS
+     ================================================================ */
 
   function updateStats() {
 
@@ -811,26 +1506,20 @@ const DevOpsLibrary = (() => {
       $('#url-count');
 
 
-    /*
-       Total resources from every Markdown category.
-    */
-
     const totalResources =
       categories.reduce(
         (total, category) =>
-          total + category.resourceCount,
+          total +
+          category.resourceCount,
         0
       );
 
 
-    /*
-       Total extracted resource URLs.
-    */
-
     const totalUrls =
       categories.reduce(
         (total, category) =>
-          total + category.urls.length,
+          total +
+          category.urls.length,
         0
       );
 
@@ -861,32 +1550,44 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     RENDER GRID
-     ============================================================== */
-
+  /* ================================================================
+     RENDER MAIN VIEW
+     ================================================================ */
 
   /*
-     Renders the currently filtered/sorted category collection.
+     Central rendering function.
 
-     IMPORTANT
-     ---------
-     updateLoadMoreButton() is intentionally called here.
+     The application has two views:
 
-     This means the Load More button automatically reacts to:
+         categories
+         resources
 
-         Search
-         Category filter
-         Sorting
-         Clearing filters
-         Loading more items
-
-     Therefore the button cannot remain visible when there
-     are no additional categories to display.
+     The correct renderer is selected automatically.
   */
 
   function render() {
+
+    if (
+      currentView === 'resources'
+    ) {
+
+      renderResourceView();
+
+      return;
+
+    }
+
+
+    renderCategoryView();
+
+  }
+
+
+  /* ================================================================
+     RENDER CATEGORY VIEW
+     ================================================================ */
+
+  function renderCategoryView() {
 
     const grid =
       $('#library-grid');
@@ -903,39 +1604,31 @@ const DevOpsLibrary = (() => {
     }
 
 
-    /*
-       Only display the current visible amount.
-    */
-
     const visible =
       filteredCategories.slice(
         0,
-        visibleCount
+        visibleCategoryCount
       );
 
 
-    /* ------------------------------------------------------------
-       No search/filter results
-       ------------------------------------------------------------ */
+    /*
+       No categories found.
+    */
 
-    if (visible.length === 0) {
+    if (!visible.length) {
 
       grid.innerHTML = '';
 
 
       if (empty) {
 
-        empty.hidden = false;
+        empty.hidden =
+          false;
 
       }
 
 
       updateResultCount();
-
-      /*
-         IMPORTANT:
-         Also update Load More when there are zero results.
-      */
 
       updateLoadMoreButton();
 
@@ -944,214 +1637,205 @@ const DevOpsLibrary = (() => {
     }
 
 
-    /* ------------------------------------------------------------
-       Hide empty-state message.
-       ------------------------------------------------------------ */
+    /*
+       Categories exist.
+    */
 
     if (empty) {
 
-      empty.hidden = true;
+      empty.hidden =
+        true;
 
     }
 
 
-    /* ------------------------------------------------------------
-       Build category cards.
-       ------------------------------------------------------------ */
+    /*
+       Render category cards only.
+    */
 
     grid.innerHTML =
       visible
-        .map(buildCard)
+        .map(buildCategoryCard)
         .join('');
 
 
-    /* ------------------------------------------------------------
-       Update result information.
-       ------------------------------------------------------------ */
-
     updateResultCount();
-
-
-    /*
-       IMPORTANT:
-       Update Load More every time render() runs.
-
-       This fixes the situation where:
-
-           Search
-           Filter
-           Sort
-
-       changes the number of available results.
-    */
 
     updateLoadMoreButton();
 
   }
 
 
-
-  /* ==============================================================
+  /* ================================================================
      BUILD CATEGORY CARD
-     ============================================================== */
-
+     ================================================================ */
 
   /*
-     Creates one visual card for one Markdown category.
+     IMPORTANT:
+
+     This function creates ONLY the Level 1 category card.
+
+     Resource thumbnails are NOT rendered here.
   */
 
-  function buildCard(category) {
+  function buildCategoryCard(
+    category
+  ) {
 
+    const categoryIndex =
+      categories.indexOf(
+        category
+      );
 
-    const index =
-      categories.indexOf(category);
-
-
-    /*
-       Extract numeric section number.
-
-       Example:
-
-           11-docker-study-research.md
-
-       becomes:
-
-           11
-    */
 
     const number =
       category.filename
-        .match(/^\d+/)?.[0] || '—';
-
-
-    /*
-       Display up to three resource titles
-       as small preview chips.
-    */
-
-    const previewTitles =
-      category.resourceTitles
-
-        .slice(0, 3)
-
-        .map(title => `
-
-          <span class="library-chip">
-            ${escapeHtml(title)}
-          </span>
-
-        `)
-
-        .join('');
+        .match(/^\d+/)?.[0] ||
+        '—';
 
 
     return `
 
+      <!-- ========================================================
+           LEVEL 1 — CATEGORY CARD
+           ======================================================== -->
+
       <article
-        class="library-card"
-        data-category-index="${index}"
+        class="library-card category-card"
       >
 
+        <div class="library-card-header">
 
-        <!-- =====================================================
-             CARD HEADER
-             ===================================================== -->
+          <span class="library-card-number">
 
-        <div class="library-card-top">
+            ${escapeHtml(number)}
+
+          </span>
+
+          <span class="library-card-type">
+
+            DEVOPS
+
+          </span>
+
+        </div>
 
 
-          <div>
+        <div class="library-card-body">
 
-            <h3>
-              ${escapeHtml(category.title)}
-            </h3>
+          <h3>
+
+            ${escapeHtml(
+              category.title
+            )}
+
+          </h3>
+
+
+          <p>
+
+            ${escapeHtml(
+              category.description
+            )}
+
+          </p>
+
+
+          <div class="library-card-meta">
+
+            <span>
+
+              ${category.resourceCount}
+              resources
+
+            </span>
+
+            <span>
+
+              Markdown
+
+            </span>
 
           </div>
 
 
-          <span
-            class="library-card-number"
-            title="Section number"
-          >
-            ${escapeHtml(number)}
-          </span>
+          <!-- ====================================================
+               RESOURCE PREVIEW
+
+               Only resource titles are shown here.
+
+               NO thumbnails are shown at Level 1.
+               ==================================================== -->
+
+          ${
+            category.resourceTitles &&
+            category.resourceTitles.length
+              ? `
+
+                <div
+                  class="library-category-preview"
+                >
+
+                  ${category.resourceTitles
+                    .slice(0, 3)
+                    .map(title => `
+
+                      <span>
+                        ${escapeHtml(title)}
+                      </span>
+
+                    `)
+                    .join('')}
+
+                </div>
+
+              `
+              : ''
+          }
 
 
-        </div>
-
-
-        <!-- =====================================================
-             DESCRIPTION
-             ===================================================== -->
-
-        <p class="library-card-description">
-
-          ${escapeHtml(category.description)}
-
-        </p>
-
-
-        <!-- =====================================================
-             RESOURCE INFORMATION
-             ===================================================== -->
-
-        <div class="library-card-meta">
-
-
-          <span class="library-chip">
-
-            ${category.resourceCount}
-            resources
-
-          </span>
-
-
-          <span class="library-chip">
-
-            Markdown
-
-          </span>
-
-
-          ${previewTitles}
-
-
-        </div>
-
-
-        <!-- =====================================================
-             CARD ACTIONS
-             ===================================================== -->
-
-        <div class="library-card-actions">
-
-
-          <button
-            class="library-card-btn primary"
-            type="button"
-            data-action="open"
-            data-index="${index}"
+          <div
+            class="library-card-actions"
           >
 
-            View Resources →
+            <!-- ==================================================
+                 ENTER LEVEL 2
+                 ================================================== -->
 
-          </button>
+            <button
+              class="library-card-btn primary"
+              type="button"
+              data-action="view-resources"
+              data-index="${categoryIndex}"
+            >
+
+              View Resources →
+
+            </button>
 
 
-          <a
-            class="library-card-btn"
-            href="${buildGitHubUrl(category.path)}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+            <!-- ==================================================
+                 GITHUB SOURCE
+                 ================================================== -->
 
-            GitHub ↗
+            <a
+              class="library-card-btn"
+              href="${escapeHtml(
+                buildGitHubUrl(
+                  category.path
+                )
+              )}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
 
-          </a>
+              GitHub ↗
 
+            </a>
+
+          </div>
 
         </div>
-
 
       </article>
 
@@ -1160,64 +1844,697 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     BUILD GITHUB FILE URL
-     ============================================================== */
-
+  /* ================================================================
+     OPEN RESOURCE VIEW
+     ================================================================ */
 
   /*
-     Creates a direct GitHub URL to the Markdown file.
+     Opens Level 2 for the selected category.
   */
 
-  function buildGitHubUrl(path) {
+  function openResourceView(
+    categoryIndex
+  ) {
 
-    return `https://github.com/${CONFIG.githubUsername}/${CONFIG.githubRepo}/blob/${CONFIG.branch}/${path}`;
+    const category =
+      categories[categoryIndex];
+
+
+    if (!category) {
+
+      return;
+
+    }
+
+
+    /*
+       Save active category.
+    */
+
+    activeCategoryIndex =
+      categoryIndex;
+
+
+    currentView =
+      'resources';
+
+
+    /*
+       Reset resource pagination.
+    */
+
+    visibleResourceCount =
+      PAGE_SIZE;
+
+
+    /*
+       Start with every resource.
+    */
+
+    filteredResources =
+      [...(
+        category.resources || []
+      )];
+
+
+    /*
+       Update selected category header.
+    */
+
+    updateResourceHeader(
+      category
+    );
+
+
+    /*
+       Hide Level 1.
+    */
+
+    const categoryView =
+      $('#library-category-view');
+
+
+    if (categoryView) {
+
+      categoryView.hidden =
+        true;
+
+    }
+
+
+    /*
+       Show Level 2.
+    */
+
+    const resourceView =
+      $('#library-resource-view');
+
+
+    if (resourceView) {
+
+      resourceView.hidden =
+        false;
+
+    }
+
+
+    /*
+       Change section label.
+    */
+
+    const viewLabel =
+      $('#library-view-label');
+
+
+    if (viewLabel) {
+
+      viewLabel.textContent =
+        'CATEGORY RESOURCES';
+
+    }
+
+
+    /*
+       Render resources.
+    */
+
+    renderResourceView();
+
+
+    /*
+       Scroll to the library.
+    */
+
+    scrollToLibrary();
 
   }
 
 
+  /* ================================================================
+     UPDATE RESOURCE HEADER
+     ================================================================ */
 
-  /* ==============================================================
-     SEARCH / FILTER
-     ============================================================== */
+  function updateResourceHeader(
+    category
+  ) {
 
+    const numberElement =
+      $('#library-resource-category-number');
+
+
+    const titleElement =
+      $('#library-resource-category-title');
+
+
+    const descriptionElement =
+      $('#library-resource-category-description');
+
+
+    const countElement =
+      $('#library-resource-category-count');
+
+
+    const number =
+      category.filename
+        .match(/^\d+/)?.[0] ||
+        '—';
+
+
+    if (numberElement) {
+
+      numberElement.textContent =
+        number;
+
+    }
+
+
+    if (titleElement) {
+
+      titleElement.textContent =
+        category.title;
+
+    }
+
+
+    if (descriptionElement) {
+
+      descriptionElement.textContent =
+        category.description;
+
+    }
+
+
+    if (countElement) {
+
+      countElement.textContent =
+        `${category.resources.length} Resources`;
+
+    }
+
+  }
+
+
+  /* ================================================================
+     RENDER RESOURCE VIEW
+     ================================================================ */
 
   /*
-     Applies:
+     Displays individual resource cards.
 
-         Search
-         Category filter
-         Sort
+     This is the ONLY place where resource thumbnails are rendered.
+  */
 
-     Then resets pagination and renders the results.
+  function renderResourceView() {
+
+    const grid =
+      $('#library-resource-grid');
+
+
+    const empty =
+      $('#library-resource-empty');
+
+
+    if (!grid) {
+
+      return;
+
+    }
+
+
+    const visible =
+      filteredResources.slice(
+        0,
+        visibleResourceCount
+      );
+
+
+    /*
+       No resources.
+    */
+
+    if (!visible.length) {
+
+      grid.innerHTML = '';
+
+
+      if (empty) {
+
+        empty.hidden =
+          false;
+
+      }
+
+
+      updateResultCount();
+
+      updateLoadMoreButton();
+
+      return;
+
+    }
+
+
+    /*
+       Resources exist.
+    */
+
+    if (empty) {
+
+      empty.hidden =
+        true;
+
+    }
+
+
+    const category =
+      categories[
+        activeCategoryIndex
+      ];
+
+
+    if (!category) {
+
+      return;
+
+    }
+
+
+    /*
+       Render individual resource cards.
+    */
+
+    grid.innerHTML =
+      visible
+        .map(resource =>
+          buildResourceCard(
+            resource,
+            category
+          )
+        )
+        .join('');
+
+
+    /*
+       Attach thumbnail error handlers.
+    */
+
+    bindThumbnailFallbacks();
+
+
+    updateResultCount();
+
+    updateLoadMoreButton();
+
+  }
+
+
+  /* ================================================================
+     BUILD RESOURCE CARD
+     ================================================================ */
+
+  /*
+     Creates one Level 2 resource card.
+
+     Resource cards contain:
+
+         Thumbnail
+         Number
+         Technology
+         Title
+         Description
+         Category
+         Open Resource
+         Source
+  */
+
+  function buildResourceCard(
+    resource,
+    category
+  ) {
+
+    const technology =
+      detectTechnology(
+        resource.title,
+        resource.url
+      );
+
+
+    const thumbnail =
+      getResourceThumbnail(
+        resource.title,
+        resource.url
+      );
+
+
+    const categoryIndex =
+      categories.indexOf(
+        category
+      );
+
+
+    return `
+
+      <!-- ========================================================
+           LEVEL 2 — RESOURCE CARD
+           ======================================================== -->
+
+      <article
+        class="library-card resource-card"
+        data-resource-url="${escapeHtml(
+          resource.url
+        )}"
+      >
+
+        <!-- ======================================================
+             RESOURCE THUMBNAIL
+             ====================================================== -->
+
+        ${thumbnail}
+
+
+        <div class="resource-card-body">
+
+          <!-- ====================================================
+               RESOURCE META
+               ==================================================== -->
+
+          <div class="resource-card-top">
+
+            <span class="resource-number">
+
+              #${escapeHtml(
+                resource.number
+              )}
+
+            </span>
+
+            <span class="resource-tech">
+
+              ${escapeHtml(
+                technology
+              )}
+
+            </span>
+
+          </div>
+
+
+          <!-- ====================================================
+               RESOURCE TITLE
+               ==================================================== -->
+
+          <h3 class="resource-title">
+
+            ${escapeHtml(
+              resource.title
+            )}
+
+          </h3>
+
+
+          <!-- ====================================================
+               RESOURCE DESCRIPTION
+               ==================================================== -->
+
+          <p class="resource-description">
+
+            ${escapeHtml(
+              resource.description
+            )}
+
+          </p>
+
+
+          <!-- ====================================================
+               RESOURCE META INFORMATION
+               ==================================================== -->
+
+          <div class="resource-card-meta">
+
+            <span>
+
+              ${escapeHtml(
+                category.title
+              )}
+
+            </span>
+
+            <span>
+              •
+            </span>
+
+            <span>
+              DEVOPS
+            </span>
+
+          </div>
+
+
+          <!-- ====================================================
+               RESOURCE ACTIONS
+               ==================================================== -->
+
+          <div
+            class="resource-card-actions"
+          >
+
+            <!-- Open actual website/resource. -->
+
+            <a
+              class="library-card-btn primary resource-open-btn"
+              href="${escapeHtml(
+                resource.url
+              )}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+
+              Open Resource ↗
+
+            </a>
+
+
+            <!-- Open complete Markdown source. -->
+
+            <button
+              class="library-card-btn resource-source-btn"
+              type="button"
+              data-action="open"
+              data-index="${categoryIndex}"
+            >
+
+              Source
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    `;
+
+  }
+
+
+  /* ================================================================
+     CLOSE RESOURCE VIEW
+     ================================================================ */
+
+  /*
+     Returns from Level 2 to Level 1.
+  */
+
+  function closeResourceView() {
+
+    currentView =
+      'categories';
+
+
+    activeCategoryIndex =
+      null;
+
+
+    filteredResources =
+      [];
+
+
+    visibleResourceCount =
+      PAGE_SIZE;
+
+
+    const categoryView =
+      $('#library-category-view');
+
+
+    const resourceView =
+      $('#library-resource-view');
+
+
+    /*
+       Show categories.
+    */
+
+    if (categoryView) {
+
+      categoryView.hidden =
+        false;
+
+    }
+
+
+    /*
+       Hide resources.
+    */
+
+    if (resourceView) {
+
+      resourceView.hidden =
+        true;
+
+    }
+
+
+    /*
+       Restore main section label.
+    */
+
+    const viewLabel =
+      $('#library-view-label');
+
+
+    if (viewLabel) {
+
+      viewLabel.textContent =
+        'DEVOPS RESOURCE LIBRARY';
+
+    }
+
+
+    /*
+       Render category state again.
+    */
+
+    render();
+
+
+    /*
+       Scroll back to library.
+    */
+
+    scrollToLibrary();
+
+  }
+
+
+  /* ================================================================
+     SCROLL TO LIBRARY
+     ================================================================ */
+
+  function scrollToLibrary() {
+
+    const librarySection =
+      document.querySelector(
+        '.library-section'
+      );
+
+
+    if (!librarySection) {
+
+      return;
+
+    }
+
+
+    librarySection.scrollIntoView({
+
+      behavior: 'smooth',
+
+      block: 'start'
+
+    });
+
+  }
+
+
+  /* ================================================================
+     BUILD GITHUB FILE URL
+     ================================================================ */
+
+  function buildGitHubUrl(
+    path
+  ) {
+
+    return (
+      `https://github.com/` +
+      `${CONFIG.githubUsername}/` +
+      `${CONFIG.githubRepo}/blob/` +
+      `${CONFIG.branch}/` +
+      `${path}`
+    );
+
+  }
+
+
+  /* ================================================================
+     APPLY FILTERS
+     ================================================================ */
+
+  /*
+     Search behaves differently depending on the current view.
+
+     LEVEL 1:
+
+         Search categories.
+
+     LEVEL 2:
+
+         Search resources inside the active category.
   */
 
   function applyFilters() {
 
+    if (
+      currentView === 'resources'
+    ) {
+
+      applyResourceFilters();
+
+      return;
+
+    }
+
+
+    applyCategoryFilters();
+
+  }
+
+
+  /* ================================================================
+     CATEGORY FILTERS
+     ================================================================ */
+
+  function applyCategoryFilters() {
 
     const search =
-      ($('#library-search')?.value || '')
+      (
+        $('#library-search')?.value ||
+        ''
+      )
         .trim()
         .toLowerCase();
 
 
-    const category =
-      $('#library-category')?.value || '';
+    const categoryValue =
+      $('#library-category')?.value ||
+      '';
 
 
     const sort =
-      $('#library-sort')?.value || 'number';
+      $('#library-sort')?.value ||
+      'number';
 
-
-    /*
-       Search through:
-
-           Category title
-           Description
-           Filename
-           Resource titles
-    */
 
     filteredCategories =
       categories.filter(
@@ -1232,23 +2549,28 @@ const DevOpsLibrary = (() => {
 
             item.filename,
 
-            ...item.resourceTitles
+            ...item.resourceTitles,
+
+            ...(item.resources || [])
+              .map(resource =>
+                resource.title
+              )
 
           ]
-
             .join(' ')
-
             .toLowerCase();
 
 
           const matchesSearch =
             !search ||
-            searchableText.includes(search);
+            searchableText.includes(
+              search
+            );
 
 
           const matchesCategory =
-            !category ||
-            Number(category) === index;
+            !categoryValue ||
+            Number(categoryValue) === index;
 
 
           return (
@@ -1260,45 +2582,145 @@ const DevOpsLibrary = (() => {
       );
 
 
-    /* ------------------------------------------------------------
-       Apply selected sorting.
-       ------------------------------------------------------------ */
+    /*
+       Sort the category results.
+    */
 
-    sortCategories(sort);
+    sortCategories(
+      sort
+    );
 
 
     /*
-       Every new search/filter starts from the first page.
+       Reset category pagination.
     */
 
-    visibleCount =
+    visibleCategoryCount =
       PAGE_SIZE;
 
 
     /*
-       render() will also update the Load More button.
+       Render category view.
     */
 
-    render();
+    renderCategoryView();
 
   }
 
 
+  /* ================================================================
+     RESOURCE FILTERS
+     ================================================================ */
 
-  /* ==============================================================
-     SORT FILTERED RESULTS
-     ============================================================== */
+  function applyResourceFilters() {
+
+    const category =
+      categories[
+        activeCategoryIndex
+      ];
 
 
-  function sortCategories(sort) {
+    if (!category) {
 
+      return;
+
+    }
+
+
+    const search =
+      (
+        $('#library-search')?.value ||
+        ''
+      )
+        .trim()
+        .toLowerCase();
+
+
+    const sort =
+      $('#library-sort')?.value ||
+      'number';
+
+
+    /*
+       Filter resources.
+    */
+
+    filteredResources =
+      (category.resources || [])
+        .filter(resource => {
+
+          const technology =
+            detectTechnology(
+              resource.title,
+              resource.url
+            );
+
+
+          const searchableText = [
+
+            resource.number,
+
+            resource.title,
+
+            resource.description,
+
+            resource.url,
+
+            technology,
+
+            category.title
+
+          ]
+            .join(' ')
+            .toLowerCase();
+
+
+          return (
+            !search ||
+            searchableText.includes(
+              search
+            )
+          );
+
+        });
+
+
+    /*
+       Sort resources.
+    */
+
+    sortResources(
+      sort
+    );
+
+
+    /*
+       Reset resource pagination.
+    */
+
+    visibleResourceCount =
+      PAGE_SIZE;
+
+
+    /*
+       Render Level 2.
+    */
+
+    renderResourceView();
+
+  }
+
+
+  /* ================================================================
+     SORT CATEGORIES
+     ================================================================ */
+
+  function sortCategories(
+    sort
+  ) {
 
     switch (sort) {
 
-
-      /* ----------------------------------------------------------
-         Alphabetical A → Z
-         ---------------------------------------------------------- */
 
       case 'az':
 
@@ -1312,10 +2734,6 @@ const DevOpsLibrary = (() => {
         break;
 
 
-      /* ----------------------------------------------------------
-         Alphabetical Z → A
-         ---------------------------------------------------------- */
-
       case 'za':
 
         filteredCategories.sort(
@@ -1328,10 +2746,6 @@ const DevOpsLibrary = (() => {
         break;
 
 
-      /* ----------------------------------------------------------
-         Most resources first
-         ---------------------------------------------------------- */
-
       case 'resources-high':
 
         filteredCategories.sort(
@@ -1343,10 +2757,6 @@ const DevOpsLibrary = (() => {
         break;
 
 
-      /* ----------------------------------------------------------
-         Fewest resources first
-         ---------------------------------------------------------- */
-
       case 'resources-low':
 
         filteredCategories.sort(
@@ -1357,10 +2767,6 @@ const DevOpsLibrary = (() => {
 
         break;
 
-
-      /* ----------------------------------------------------------
-         Original Markdown numbering
-         ---------------------------------------------------------- */
 
       case 'number':
 
@@ -1377,16 +2783,86 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     RESULT COUNT
-     ============================================================== */
-
+  /* ================================================================
+     SORT RESOURCES
+     ================================================================ */
 
   /*
-     Displays information such as:
+     Resource sorting uses:
 
-         Showing 12 of 25 categories • 340 resources
+         Original number
+         A → Z
+         Z → A
+
+     The resource page does not have a meaningful
+     "Most Resources" / "Least Resources" operation because
+     each card represents one resource.
+  */
+
+  function sortResources(
+    sort
+  ) {
+
+    switch (sort) {
+
+
+      case 'az':
+
+        filteredResources.sort(
+          (a, b) =>
+            a.title.localeCompare(
+              b.title
+            )
+        );
+
+        break;
+
+
+      case 'za':
+
+        filteredResources.sort(
+          (a, b) =>
+            b.title.localeCompare(
+              a.title
+            )
+        );
+
+        break;
+
+
+      case 'resources-high':
+
+      case 'resources-low':
+
+      case 'number':
+
+      default:
+
+        filteredResources.sort(
+          (a, b) =>
+            Number(a.number) -
+            Number(b.number)
+        );
+
+        break;
+
+    }
+
+  }
+
+
+  /* ================================================================
+     RESULT COUNT
+     ================================================================ */
+
+  /*
+     LEVEL 1 example:
+
+         Showing 6 of 12 categories • 143 resources
+
+     LEVEL 2 example:
+
+         Showing 6 of 17 resources in Charlie DEVOPS Course
   */
 
   function updateResultCount() {
@@ -1402,10 +2878,53 @@ const DevOpsLibrary = (() => {
     }
 
 
+    if (
+      currentView === 'resources'
+    ) {
+
+      const category =
+        categories[
+          activeCategoryIndex
+        ];
+
+
+      if (!category) {
+
+        element.textContent =
+          'No category selected';
+
+        return;
+
+      }
+
+
+      element.textContent =
+        `Showing ${
+          Math.min(
+            visibleResourceCount,
+            filteredResources.length
+          )
+        } of ${
+          filteredResources.length
+        } resources in ${
+          category.title
+        }`;
+
+
+      return;
+
+    }
+
+
+    /*
+       CATEGORY VIEW
+    */
+
     const totalResources =
       filteredCategories.reduce(
         (total, item) =>
-          total + item.resourceCount,
+          total +
+          item.resourceCount,
         0
       );
 
@@ -1413,7 +2932,7 @@ const DevOpsLibrary = (() => {
     element.textContent =
       `Showing ${
         Math.min(
-          visibleCount,
+          visibleCategoryCount,
           filteredCategories.length
         )
       } of ${
@@ -1425,18 +2944,27 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     OPEN RESOURCE MODAL
-     ============================================================== */
-
+  /* ================================================================
+     OPEN MARKDOWN SOURCE MODAL
+     ================================================================ */
 
   /*
-     Opens the Markdown content inside the Library modal.
+     Opens the complete Markdown category.
+
+     This is intentionally separate from:
+
+         Open Resource ↗
+
+     Open Resource:
+         opens the actual external resource.
+
+     Source:
+         opens the Markdown source modal.
   */
 
-  function openModal(index) {
-
+  function openModal(
+    index
+  ) {
 
     const category =
       categories[index];
@@ -1498,7 +3026,7 @@ const DevOpsLibrary = (() => {
 
 
     /*
-       Insert the HTML generated by MarkdownParser.
+       Render parsed Markdown HTML.
     */
 
     if (content) {
@@ -1508,7 +3036,7 @@ const DevOpsLibrary = (() => {
 
 
       /*
-         Make Markdown links open safely in new tabs.
+         Make Markdown links open safely.
       */
 
       content
@@ -1535,7 +3063,6 @@ const DevOpsLibrary = (() => {
       modal.hidden =
         false;
 
-
       modal.setAttribute(
         'aria-hidden',
         'false'
@@ -1545,7 +3072,7 @@ const DevOpsLibrary = (() => {
 
 
     /*
-       Prevent page scrolling while modal is open.
+       Prevent background page scrolling.
     */
 
     document.body.style.overflow =
@@ -1554,14 +3081,11 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     CLOSE RESOURCE MODAL
-     ============================================================== */
-
+  /* ================================================================
+     CLOSE MODAL
+     ================================================================ */
 
   function closeModal() {
-
 
     const modal =
       $('#library-modal');
@@ -1584,141 +3108,27 @@ const DevOpsLibrary = (() => {
     );
 
 
-    /*
-       Restore normal page scrolling.
-    */
-
     document.body.style.overflow =
       '';
 
   }
 
 
-
-  /* ==============================================================
-     CREATE LOAD MORE BUTTON
-     ============================================================== */
-
+  /* ================================================================
+     LOAD MORE BUTTON
+     ================================================================ */
 
   /*
-     Creates the Load More button once.
+     The HTML already contains:
 
-     The button is automatically updated by:
+         #library-load-more
 
-         updateLoadMoreButton()
+     Therefore this function does NOT create another button.
 
-     after every render.
-  */
-
-  function createLoadMoreButton() {
-
-
-    const section =
-      document.querySelector(
-        '.library-section .section-inner'
-      );
-
-
-    if (!section) {
-
-      return;
-
-    }
-
-
-    /*
-       Prevent duplicate button creation.
-    */
-
-    if ($('#library-load-more')) {
-
-      return;
-
-    }
-
-
-    /*
-       Create button.
-    */
-
-    const button =
-      document.createElement('button');
-
-
-    button.id =
-      'library-load-more';
-
-
-    button.className =
-      'btn btn-outline load-more';
-
-
-    button.type =
-      'button';
-
-
-    button.textContent =
-      'Load more categories →';
-
-
-    section.appendChild(button);
-
-
-    /*
-       Load another group of categories.
-    */
-
-    button.addEventListener(
-      'click',
-      () => {
-
-
-        visibleCount +=
-          PAGE_SIZE;
-
-
-        /*
-           render() automatically updates:
-
-               Grid
-               Result count
-               Load More visibility
-        */
-
-        render();
-
-      }
-    );
-
-  }
-
-
-
-  /* ==============================================================
-     UPDATE LOAD MORE BUTTON
-     ============================================================== */
-
-
-  /*
-     Determines whether the Load More button should be visible.
-
-     Example:
-
-         25 total categories
-         12 visible
-
-         → SHOW button
-
-         25 total categories
-         25 visible
-
-         → HIDE button
-
-     This function is called after every render().
+     It simply updates its state.
   */
 
   function updateLoadMoreButton() {
-
 
     const button =
       $('#library-load-more');
@@ -1731,30 +3141,157 @@ const DevOpsLibrary = (() => {
     }
 
 
+    if (
+      currentView === 'resources'
+    ) {
+
+      const hasMoreResources =
+        visibleResourceCount <
+        filteredResources.length;
+
+
+      button.hidden =
+        !hasMoreResources;
+
+
+      button.textContent =
+        'Load More Resources →';
+
+
+      return;
+
+    }
+
+
     /*
-       Hide button when all filtered categories are already visible.
-
-       Also handles:
-
-           0 results
-           Search results
-           Category filters
-           Load More
-           Reset filters
+       CATEGORY VIEW
     */
 
-    button.hidden =
-      visibleCount >=
+    const hasMoreCategories =
+      visibleCategoryCount <
       filteredCategories.length;
+
+
+    button.hidden =
+      !hasMoreCategories;
+
+
+    button.textContent =
+      'Load More Categories →';
 
   }
 
 
+  /* ================================================================
+     HANDLE LOAD MORE
+     ================================================================ */
 
-  /* ==============================================================
+  function handleLoadMore() {
+
+    if (
+      currentView === 'resources'
+    ) {
+
+      visibleResourceCount +=
+        PAGE_SIZE;
+
+
+      renderResourceView();
+
+      return;
+
+    }
+
+
+    visibleCategoryCount +=
+      PAGE_SIZE;
+
+
+    renderCategoryView();
+
+  }
+
+
+  /* ================================================================
+     CLEAR FILTERS
+     ================================================================ */
+
+  function clearFilters() {
+
+    const search =
+      $('#library-search');
+
+
+    const category =
+      $('#library-category');
+
+
+    const sort =
+      $('#library-sort');
+
+
+    if (search) {
+
+      search.value =
+        '';
+
+    }
+
+
+    if (category) {
+
+      category.value =
+        '';
+
+    }
+
+
+    if (sort) {
+
+      sort.value =
+        'number';
+
+    }
+
+
+    /*
+       If the user is inside a category,
+       return to the main category view.
+    */
+
+    if (
+      currentView === 'resources'
+    ) {
+
+      closeResourceView();
+
+    }
+
+
+    /*
+       Reset category filtering.
+    */
+
+    filteredCategories =
+      [...categories];
+
+
+    visibleCategoryCount =
+      PAGE_SIZE;
+
+
+    /*
+       Render clean category state.
+    */
+
+    renderCategoryView();
+
+  }
+
+
+  /* ================================================================
      EVENT LISTENERS
-     ============================================================== */
-
+     ================================================================ */
 
   function bindEvents() {
 
@@ -1779,6 +3316,18 @@ const DevOpsLibrary = (() => {
       $('#library-grid');
 
 
+    const resourceGrid =
+      $('#library-resource-grid');
+
+
+    const backButton =
+      $('#library-back-to-categories');
+
+
+    const loadMore =
+      $('#library-load-more');
+
+
     const close =
       $('#library-modal-close');
 
@@ -1789,9 +3338,9 @@ const DevOpsLibrary = (() => {
       );
 
 
-    /* ------------------------------------------------------------
-       Search
-       ------------------------------------------------------------ */
+    /* ============================================================
+       SEARCH
+       ============================================================ */
 
     if (search) {
 
@@ -1803,23 +3352,47 @@ const DevOpsLibrary = (() => {
     }
 
 
-    /* ------------------------------------------------------------
-       Category filter
-       ------------------------------------------------------------ */
+    /* ============================================================
+       CATEGORY DROPDOWN
+       ============================================================ */
 
     if (category) {
 
       category.addEventListener(
         'change',
-        applyFilters
+        () => {
+
+          /*
+             Category dropdown is a Level 1 filter.
+
+             If the visitor selects a category,
+             only that category is shown.
+
+             The visitor can then click:
+
+                 View Resources →
+          */
+
+          if (
+            currentView === 'resources'
+          ) {
+
+            closeResourceView();
+
+          }
+
+
+          applyCategoryFilters();
+
+        }
       );
 
     }
 
 
-    /* ------------------------------------------------------------
-       Sorting
-       ------------------------------------------------------------ */
+    /* ============================================================
+       SORTING
+       ============================================================ */
 
     if (sort) {
 
@@ -1831,59 +3404,29 @@ const DevOpsLibrary = (() => {
     }
 
 
-    /* ------------------------------------------------------------
-       Clear filters
-       ------------------------------------------------------------ */
+    /* ============================================================
+       CLEAR FILTERS
+       ============================================================ */
 
     if (clear) {
 
       clear.addEventListener(
         'click',
-        () => {
-
-
-          if (search) {
-
-            search.value = '';
-
-          }
-
-
-          if (category) {
-
-            category.value = '';
-
-          }
-
-
-          if (sort) {
-
-            sort.value = 'number';
-
-          }
-
-
-          /*
-             applyFilters() resets visibleCount and
-             calls render().
-          */
-
-          applyFilters();
-
-        }
+        clearFilters
       );
 
     }
 
 
-    /* ------------------------------------------------------------
-       Grid Event Delegation
+    /* ============================================================
+       CATEGORY GRID
+       ============================================================
 
-       One listener handles all current and future cards.
+       Handles:
 
-       This is more efficient than creating an individual
-       click listener for every card button.
-       ------------------------------------------------------------ */
+           View Resources
+           Source
+    */
 
     if (grid) {
 
@@ -1892,13 +3435,86 @@ const DevOpsLibrary = (() => {
         event => {
 
 
-          const button =
+          /*
+             View Resources button.
+          */
+
+          const resourceButton =
+            event.target.closest(
+              '[data-action="view-resources"]'
+            );
+
+
+          if (resourceButton) {
+
+            const index =
+              Number(
+                resourceButton.dataset.index
+              );
+
+
+            openResourceView(
+              index
+            );
+
+
+            return;
+
+          }
+
+
+          /*
+             Source button.
+          */
+
+          const sourceButton =
             event.target.closest(
               '[data-action="open"]'
             );
 
 
-          if (!button) {
+          if (sourceButton) {
+
+            const index =
+              Number(
+                sourceButton.dataset.index
+              );
+
+
+            openModal(
+              index
+            );
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* ============================================================
+       RESOURCE GRID
+       ============================================================
+
+       Handles:
+
+           Source
+    */
+
+    if (resourceGrid) {
+
+      resourceGrid.addEventListener(
+        'click',
+        event => {
+
+          const sourceButton =
+            event.target.closest(
+              '[data-action="open"]'
+            );
+
+
+          if (!sourceButton) {
 
             return;
 
@@ -1907,11 +3523,13 @@ const DevOpsLibrary = (() => {
 
           const index =
             Number(
-              button.dataset.index
+              sourceButton.dataset.index
             );
 
 
-          openModal(index);
+          openModal(
+            index
+          );
 
         }
       );
@@ -1919,9 +3537,37 @@ const DevOpsLibrary = (() => {
     }
 
 
-    /* ------------------------------------------------------------
-       Close modal button
-       ------------------------------------------------------------ */
+    /* ============================================================
+       BACK TO CATEGORIES
+       ============================================================ */
+
+    if (backButton) {
+
+      backButton.addEventListener(
+        'click',
+        closeResourceView
+      );
+
+    }
+
+
+    /* ============================================================
+       LOAD MORE
+       ============================================================ */
+
+    if (loadMore) {
+
+      loadMore.addEventListener(
+        'click',
+        handleLoadMore
+      );
+
+    }
+
+
+    /* ============================================================
+       CLOSE MODAL BUTTON
+       ============================================================ */
 
     if (close) {
 
@@ -1933,9 +3579,9 @@ const DevOpsLibrary = (() => {
     }
 
 
-    /* ------------------------------------------------------------
-       Click modal backdrop to close.
-       ------------------------------------------------------------ */
+    /* ============================================================
+       MODAL BACKDROP
+       ============================================================ */
 
     if (backdrop) {
 
@@ -1947,17 +3593,17 @@ const DevOpsLibrary = (() => {
     }
 
 
-    /* ------------------------------------------------------------
-       ESC key closes modal.
-       ------------------------------------------------------------ */
+    /* ============================================================
+       ESCAPE KEY
+       ============================================================ */
 
     document.addEventListener(
       'keydown',
       event => {
 
-
         if (
-          event.key === 'Escape'
+          event.key ===
+          'Escape'
         ) {
 
           closeModal();
@@ -1970,41 +3616,40 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
-     INITIALIZE LIBRARY
-     ============================================================== */
-
+  /* ================================================================
+     INITIALIZE
+     ================================================================ */
 
   async function init() {
 
+    /*
+       Start with Level 1.
+    */
+
+    currentView =
+      'categories';
+
+
+    activeCategoryIndex =
+      null;
+
 
     /*
-       Register UI events first.
+       Bind all UI events.
     */
 
     bindEvents();
 
 
     /*
-       Create Load More button.
-
-       It starts hidden until library data is loaded and
-       updateLoadMoreButton() determines whether more results exist.
-    */
-
-    createLoadMoreButton();
-
-
-    /*
-       Load Markdown data from GitHub.
+       Load Markdown library from GitHub.
     */
 
     await loadLibrary();
 
 
     /*
-       Final Load More state after GitHub data has loaded.
+       Make sure Load More button has the correct state.
     */
 
     updateLoadMoreButton();
@@ -2012,11 +3657,9 @@ const DevOpsLibrary = (() => {
   }
 
 
-
-  /* ==============================================================
+  /* ================================================================
      PUBLIC API
-     ============================================================== */
-
+     ================================================================ */
 
   return {
 
@@ -2028,16 +3671,9 @@ const DevOpsLibrary = (() => {
 })();
 
 
-
 /* ================================================================
    START CHARLIE DEVOPS LIBRARY
-
-   Wait until the HTML document is ready.
-
-   This guarantees that the required HTML elements exist before
-   the Library starts accessing them.
    ================================================================ */
-
 
 document.addEventListener(
   'DOMContentLoaded',
@@ -2047,3 +3683,4 @@ document.addEventListener(
 
   }
 );
+

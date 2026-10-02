@@ -19,6 +19,8 @@ The projects cover different areas including **time tracking, media downloading,
 |     5 | **Charlie MJ PhotoStory**                   | [CharlieMJ-PhotoStory](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory)                           | Create photo grids and Instagram-style stories offline                 |
 |     6 | **Charlie MJ Video Downloader**             | [charlie-mj-video-downloader](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader)             | Download, convert, manage, and organize supported media                |
 |     7 | **Charlie MJ YouTube Toolkit** | [charlie-mj-youtube-toolkit](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit) | A YouTube learning workspace for video analysis, subtitles, transcripts, vocabulary, notes, and study exports |
+|     8 | **Charlie MJ Tool Archive** | [charlie-mj-tool-archive](https://github.com/awsrmmustansarjavaid/charlie-mj-tool-archive) | Organize, search, manage, and locally store useful tools, websites, AI services, resources, and bookmarks |
+
 
 
 ---
@@ -605,6 +607,139 @@ The main idea behind **Charlie MJ YouTube Toolkit** is to turn ordinary YouTube 
 
 It combines several small learning utilities into one focused workspace where users can **watch → read → search → collect vocabulary → take notes → save → export** without constantly switching between different websites.
 
+
+---
+
+# 8. 🗂️ Charlie MJ Tool Archive
+
+### 🔗 Repository
+
+**charlie-mj-tool-archive**
+
+### 💡 What Is It?
+
+**Charlie MJ Tool Archive** is a local-first Chrome Extension designed to organize a large collection of online tools, websites, AI services, developer resources, learning resources, media tools, dictionaries, job sites, personal projects, and bookmarks in one searchable dashboard.
+
+Instead of relying on a traditional browser bookmark structure, the extension provides a visual tool library with categories, search, favorites, recently used tools, filtering, detailed tool information, and personal management features.
+
+The current release includes a bundled library of **290 unique tools** and is built with **Chrome Manifest V3**.
+
+### ✨ Main Features
+
+* 🗂️ Continuously expanding tool library
+* 🔎 Search by name, URL, category, description, notes, and tags
+* 📁 Category-based organization
+* ⭐ Favorites
+* 🕐 Recently used tools
+* 🆕 Recently added sorting
+* 🔖 Type filtering
+* 🔗 Open tools in new Chrome tabs
+* 🚀 Open all visible tools
+* ℹ️ Detailed tool information
+* ✏️ Edit and update tools
+* ➕ Add new tools
+* 📋 Duplicate URL protection
+* 🗑️ Delete tools
+* 📥 Import Chrome bookmarks HTML
+* 📥 Import JSON
+* 📤 Export JSON backups
+* 📊 Export CSV
+* ♻️ Restore the default tool library
+* 🌙 Light / Dark / System themes
+* 📐 Comfortable / Compact grid layouts
+* 💾 Local-first browser storage
+* 🖱️ Chrome context-menu integration
+* ⌨️ Keyboard shortcut support
+* 🌐 Responsive layout
+* 🔄 Automatic default-library migration
+* 🖼️ Favicon support with fallback initials
+
+The repository documents that the extension stores its core library locally and does not require a backend or account.
+
+### 🛠️ Technologies
+
+* HTML5
+* CSS3
+* JavaScript
+* Chrome Extension Manifest V3
+* Chrome Extension APIs
+* `chrome.storage.local`
+* Chrome Context Menus API
+* Chrome Commands API
+* JSON
+* CSV
+* Browser Local Storage
+* Responsive CSS
+
+### ⚙️ How It Works
+
+The extension maintains a default catalog of tools while allowing the user to create and manage their own local collection.
+
+The basic workflow is:
+
+```text
+Online Tools / Websites / Resources
+
+             ↓
+
+      Default Tool Library
+
+             ↓
+
+     Chrome Extension
+
+             ↓
+
+   Category Organization
+
+             ↓
+
+ Search / Filter / Favorites
+
+             ↓
+
+ Add / Edit / Delete / Duplicate
+
+             ↓
+
+ Local Chrome Storage
+
+             ↓
+
+ JSON / CSV Export & Backup
+```
+
+The project separates the **version-controlled default tool collection** from the user's personal local additions. The bundled catalog is maintained through `default-tools.json`, while user-specific changes can be stored in `chrome.storage.local`.
+
+### 📦 Project Structure
+
+```text
+charlie-mj-tool-archive/
+├── manifest.json
+├── README.md
+├── LICENSE
+├── data/
+│   └── default-tools.json
+├── docs/
+│   └── DATA-FORMAT.md
+├── icons/
+│   ├── logo.svg
+│   ├── icon16.png
+│   ├── icon32.png
+│   ├── icon48.png
+│   └── icon128.png
+└── src/
+    ├── background.js
+    ├── dashboard.html
+    ├── dashboard.js
+    └── styles.css
+```
+
+### 🎯 Purpose
+
+The main purpose of **Charlie MJ Tool Archive** is to turn a large and messy collection of useful websites and online resources into a personal, searchable, categorized digital tool library.
+
+It is particularly useful for keeping frequently used **AI tools, developer tools, DevOps resources, media tools, learning websites, dictionaries, utilities, and other online resources** organized in one place.
 
 ---
 

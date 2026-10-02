@@ -5,6 +5,7 @@
 
   <!-- ============================================================
        DOCUMENT METADATA
+       ------------------------------------------------------------
        Basic document configuration and responsive viewport settings.
        ============================================================ -->
 
@@ -17,10 +18,14 @@
 
   <title>Charlie DevOps Library — Mustansar Javaid</title>
 
-  <!--
-    SEO description for search engines and link previews.
-    Describes the purpose and main content of the DevOps Library.
-  -->
+
+  <!-- ============================================================
+       SEO DESCRIPTION
+       ------------------------------------------------------------
+       Describes the purpose and content of the Charlie DevOps
+       Resource Library for search engines and link previews.
+       ============================================================ -->
+
   <meta
     name="description"
     content="Charlie DevOps Library — a Markdown-driven collection of DevOps courses, documentation, tools, projects, Kubernetes resources, YouTube channels and learning material."
@@ -29,14 +34,22 @@
 
   <!-- ============================================================
        EXTERNAL FONTS
-       Loads the Inter font family used throughout the website.
+       ------------------------------------------------------------
+       Loads the Inter font family used throughout the library.
        ============================================================ -->
 
-  <!-- Establish an early connection to Google's font servers
-       to improve font loading performance. -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!--
+    Establish an early connection to Google's font servers
+    to improve font loading performance.
+  -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
 
-  <!-- Main typography used by the DevOps Library page. -->
+  <!--
+    Main typography used by the DevOps Library page.
+  -->
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
@@ -45,36 +58,61 @@
 
   <!-- ============================================================
        EXISTING WEBSITE STYLESHEETS
+       ------------------------------------------------------------
        Shared styles inherited from the main Charlie MJ website.
        ============================================================ -->
 
   <!-- Global website styles and common components. -->
-  <link rel="stylesheet" href="../css/style.css">
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
 
-  <!-- Global page background and visual background effects. -->
-  <link rel="stylesheet" href="../css/background.css">
+  <!-- Global page background and visual effects. -->
+  <link
+    rel="stylesheet"
+    href="../css/background.css"
+  >
 
   <!-- Shared page-level layout and component styles. -->
-  <link rel="stylesheet" href="../css/pages.css">
+  <link
+    rel="stylesheet"
+    href="../css/pages.css"
+  >
 
   <!-- Global animations, transitions and visual effects. -->
-  <link rel="stylesheet" href="../css/effects.css">
+  <link
+    rel="stylesheet"
+    href="../css/effects.css"
+  >
 
 
   <!-- ============================================================
        DEVOPS LIBRARY STYLES
-       Page-specific styling for the Charlie DevOps Library.
+       ------------------------------------------------------------
+       Page-specific styles for:
+
+       - Category cards
+       - Resource cards
+       - Resource thumbnails
+       - Category navigation
+       - Resource detail view
+       - Search/filter controls
+       - Responsive layouts
        ============================================================ -->
 
-  <!-- Dedicated stylesheet for the DevOps Library page. -->
-  <link rel="stylesheet" href="../css/devops-library.css">
+  <link
+    rel="stylesheet"
+    href="../css/devops-library.css"
+  >
 
 
   <!-- ============================================================
        MARKDOWN PARSER
-       marked.js converts Markdown content into HTML so that
-       GitHub-hosted Markdown resources can be displayed inside
-       the library interface.
+       ------------------------------------------------------------
+       marked.js converts Markdown content into HTML.
+
+       Markdown files remain the source of truth for the library.
        ============================================================ -->
 
   <script
@@ -88,7 +126,17 @@
 
   <!-- ============================================================
        MAIN PAGE CONTENT
-       Contains the hero section and the complete library interface.
+       ------------------------------------------------------------
+       The page contains two library views:
+
+       VIEW 1 — CATEGORY VIEW
+         Displays the main category cards.
+
+       VIEW 2 — RESOURCE VIEW
+         Displays individual resource cards after the visitor
+         enters a category.
+
+       Only one view is displayed at a time.
        ============================================================ -->
 
   <main>
@@ -96,7 +144,9 @@
 
     <!-- ==========================================================
          PAGE HERO / LIBRARY INTRODUCTION
-         Displays the library title, description and statistics.
+         ----------------------------------------------------------
+         Displays the main Charlie DevOps Library identity,
+         description and dynamic statistics.
          ========================================================== -->
 
     <section class="page-hero library-hero">
@@ -104,11 +154,9 @@
       <div class="section-inner">
 
 
-        <!-- --------------------------------------------------------
-             NAVIGATION
-             Returns the visitor to the DevOps Library section
-             on the main Charlie MJ homepage.
-             -------------------------------------------------------- -->
+        <!-- ========================================================
+             BACK TO MAIN WEBSITE
+             ======================================================== -->
 
         <a
           class="back-link"
@@ -118,11 +166,9 @@
         </a>
 
 
-        <!-- --------------------------------------------------------
+        <!-- ========================================================
              HERO CONTENT
-             Contains the library identity, title, description and
-             dynamically generated statistics.
-             -------------------------------------------------------- -->
+             ======================================================== -->
 
         <div class="library-hero-content">
 
@@ -133,21 +179,30 @@
 
           <div>
 
-            <!-- Library identity badge. -->
+            <!--
+              Library identity badge.
+            -->
             <span class="library-badge">
               📚 Charlie MJ Knowledge Base
             </span>
 
 
-            <!-- Main page heading. -->
+            <!--
+              Main library heading.
+            -->
             <h1>
+
               <span class="text-gradient">
                 Charlie DevOps Library
               </span>
+
             </h1>
 
 
-            <!-- Short explanation of the library's purpose. -->
+            <!--
+              Short description explaining the purpose of
+              the DevOps knowledge library.
+            -->
             <p>
               My personal collection of DevOps courses, documentation,
               tools, projects, Kubernetes resources, YouTube channels,
@@ -159,8 +214,8 @@
 
           <!-- ======================================================
                LIBRARY STATISTICS
-               Values are populated dynamically by JavaScript based
-               on the loaded Markdown library data.
+               ------------------------------------------------------
+               These values are populated dynamically by JavaScript.
                ====================================================== -->
 
           <div class="library-stat-panel">
@@ -168,7 +223,6 @@
 
             <!-- ----------------------------------------------------
                  CATEGORY COUNT
-                 Displays the total number of library categories.
                  ---------------------------------------------------- -->
 
             <div class="library-stat">
@@ -186,8 +240,6 @@
 
             <!-- ----------------------------------------------------
                  RESOURCE COUNT
-                 Displays the total number of resources available
-                 across all library categories.
                  ---------------------------------------------------- -->
 
             <div class="library-stat">
@@ -205,7 +257,6 @@
 
             <!-- ----------------------------------------------------
                  URL COUNT
-                 Displays the total number of resource URLs.
                  ---------------------------------------------------- -->
 
             <div class="library-stat">
@@ -231,8 +282,18 @@
 
     <!-- ==========================================================
          DEVOPS RESOURCE LIBRARY
-         Main interactive section containing search, filters,
-         sorting controls and dynamically generated categories.
+         ----------------------------------------------------------
+         Main interactive library section.
+
+         IMPORTANT:
+
+         There are TWO separate views inside this section.
+
+         1. CATEGORY VIEW
+            Main landing screen.
+
+         2. RESOURCE VIEW
+            Opens after selecting a category.
          ========================================================== -->
 
     <section class="library-section">
@@ -242,17 +303,20 @@
 
         <!-- ========================================================
              SEARCH AND FILTER TOOLBAR
-             Allows users to search resources, filter by category
-             and change the resource sorting order.
+             --------------------------------------------------------
+             JavaScript controls:
+
+             - Search
+             - Category filter
+             - Sorting
              ======================================================== -->
 
         <div class="library-toolbar">
 
 
-          <!-- ------------------------------------------------------
-               RESOURCE SEARCH
-               Searches through the available DevOps library data.
-               ------------------------------------------------------ -->
+          <!-- ======================================================
+               SEARCH
+               ====================================================== -->
 
           <div class="library-search">
 
@@ -262,7 +326,7 @@
             </span>
 
 
-            <!-- Search input field. -->
+            <!-- Search input. -->
             <input
               type="search"
               id="library-search"
@@ -273,15 +337,14 @@
           </div>
 
 
-          <!-- ------------------------------------------------------
+          <!-- ======================================================
                CATEGORY FILTER
-               Category options are populated dynamically using
-               the available library data.
-               ------------------------------------------------------ -->
+               ------------------------------------------------------
+               JavaScript populates the category options.
+               ====================================================== -->
 
           <select id="library-category">
 
-            <!-- Default option showing all categories. -->
             <option value="">
               All Categories
             </option>
@@ -289,34 +352,33 @@
           </select>
 
 
-          <!-- ------------------------------------------------------
-               RESOURCE SORTING
-               Provides multiple sorting options for the library.
-               ------------------------------------------------------ -->
+          <!-- ======================================================
+               SORTING
+               ====================================================== -->
 
           <select id="library-sort">
 
-            <!-- Maintains the original order defined in the source. -->
+            <!-- Original Markdown order. -->
             <option value="number">
               Original Order
             </option>
 
-            <!-- Alphabetical ascending order. -->
+            <!-- Alphabetical ascending. -->
             <option value="az">
               A → Z
             </option>
 
-            <!-- Alphabetical descending order. -->
+            <!-- Alphabetical descending. -->
             <option value="za">
               Z → A
             </option>
 
-            <!-- Categories with the highest resource count first. -->
+            <!-- Categories with most resources first. -->
             <option value="resources-high">
               Most Resources
             </option>
 
-            <!-- Categories with the lowest resource count first. -->
+            <!-- Categories with least resources first. -->
             <option value="resources-low">
               Least Resources
             </option>
@@ -328,17 +390,13 @@
 
         <!-- ========================================================
              SEARCH RESULT INFORMATION
-             Displays the current number of matching results and
-             provides a control for resetting all filters.
              ======================================================== -->
 
         <div class="library-results-bar">
 
 
           <!-- ------------------------------------------------------
-               DYNAMIC RESULT COUNT
-               JavaScript updates this element after filtering,
-               searching or sorting the library.
+               RESULT COUNT
                ------------------------------------------------------ -->
 
           <div id="library-result-count">
@@ -347,8 +405,7 @@
 
 
           <!-- ------------------------------------------------------
-               CLEAR FILTERS BUTTON
-               Resets search, category and sorting selections.
+               CLEAR FILTERS
                ------------------------------------------------------ -->
 
           <button
@@ -363,38 +420,146 @@
 
 
         <!-- ========================================================
-             CATEGORY GRID
-             JavaScript dynamically generates the library category
-             cards and resource information inside this container.
+             CURRENT VIEW LABEL
+             --------------------------------------------------------
+             JavaScript can change this label:
+
+             CATEGORY VIEW:
+               DEVOPS RESOURCE LIBRARY
+
+             RESOURCE VIEW:
+               CATEGORY RESOURCES
+             ======================================================== -->
+
+        <div class="library-view-intro">
+
+          <!-- Current view label. -->
+          <span
+            id="library-view-label"
+            class="library-view-label"
+          >
+            DEVOPS RESOURCE LIBRARY
+          </span>
+
+
+          <!-- Decorative horizontal divider. -->
+          <span class="library-view-line"></span>
+
+        </div>
+
+
+        <!-- ========================================================
+             ========================================================
+             VIEW 1 — CATEGORY VIEW
+             ========================================================
+             --------------------------------------------------------
+             This is the DEFAULT library screen.
+
+             It displays the category cards.
+
+             Example:
+
+             ┌───────────────────────────────┐
+             │ 01                            │
+             │                               │
+             │ Charlie DEVOPS Course         │
+             │                               │
+             │ 17 curated resources...       │
+             │                               │
+             │ 17 resources   Markdown       │
+             │                               │
+             │ View Resources →   GitHub ↗   │
+             └───────────────────────────────┘
+
+             Clicking:
+
+                 View Resources →
+
+             changes the page to VIEW 2.
+             ========================================================
              ======================================================== -->
 
         <div
-          id="library-grid"
-          class="library-grid"
+          id="library-category-view"
+          class="library-category-view"
         >
 
 
-          <!-- ------------------------------------------------------
-               INITIAL LOADING STATE
-               Displayed while Markdown resources are being loaded
-               and processed from GitHub.
-               ------------------------------------------------------ -->
+          <!-- ======================================================
+               CATEGORY CARD GRID
+               ------------------------------------------------------
+               JavaScript inserts the category cards here.
 
-          <div class="library-loading">
+               IMPORTANT:
 
-            <!-- Animated loading indicator. -->
-            <div class="library-spinner"></div>
+               This ID exists ONLY ONCE in this HTML file.
+
+               JavaScript should use:
+
+                   #library-grid
+
+               for the main category cards.
+               ====================================================== -->
+
+          <div
+            id="library-grid"
+            class="library-grid"
+          >
+
+            <!-- ====================================================
+                 INITIAL LOADING STATE
+                 ==================================================== -->
+
+            <div class="library-loading">
+
+              <!-- Animated loading spinner. -->
+              <div class="library-spinner"></div>
 
 
-            <!-- Loading status heading. -->
+              <!-- Loading heading. -->
+              <h3>
+                Loading Charlie DevOps Library...
+              </h3>
+
+
+              <!-- Loading description. -->
+              <p>
+                Reading Markdown resources from GitHub.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- ======================================================
+               CATEGORY EMPTY STATE
+               ------------------------------------------------------
+               Shown when no categories match the current search
+               or filter.
+               ====================================================== -->
+
+          <div
+            id="library-empty"
+            class="library-empty"
+            hidden
+          >
+
+            <!-- Empty state icon. -->
+            <div class="library-empty-icon">
+              🔎
+            </div>
+
+
+            <!-- Empty state heading. -->
             <h3>
-              Loading Charlie DevOps Library...
+              No categories found
             </h3>
 
 
-            <!-- Additional loading information. -->
+            <!-- Empty state description. -->
             <p>
-              Reading Markdown resources from GitHub.
+              Try another search term or clear the filters.
             </p>
 
           </div>
@@ -403,35 +568,224 @@
 
 
         <!-- ========================================================
-             EMPTY SEARCH RESULT STATE
-             Displayed when no resources match the current search
-             or filter configuration.
+             ========================================================
+             VIEW 2 — RESOURCE VIEW
+             ========================================================
+             --------------------------------------------------------
+             This view is HIDDEN by default.
+
+             JavaScript displays it when the user clicks:
+
+                 View Resources →
+
+             on a category card.
+
+             Example:
+
+                 Charlie DEVOPS Course
+                          ↓
+                 View Resources →
+                          ↓
+                 Resource View
+                          ↓
+                 ┌──────────┐ ┌──────────┐ ┌──────────┐
+                 │Thumbnail │ │Thumbnail │ │Thumbnail │
+                 │          │ │          │ │          │
+                 │ YAML     │ │ Python   │ │ YAML     │
+                 └──────────┘ └──────────┘ └──────────┘
+
+             This view uses a DIFFERENT grid:
+
+                 #library-resource-grid
+
+             Therefore:
+
+                 #library-grid
+                     =
+                 Category cards
+
+                 #library-resource-grid
+                     =
+                 Resource cards
+             ========================================================
              ======================================================== -->
 
         <div
-          id="library-empty"
-          class="library-empty"
+          id="library-resource-view"
+          class="library-resource-view"
           hidden
         >
 
-          <!-- Empty-result visual indicator. -->
-          <div class="library-empty-icon">
-            🔎
+
+          <!-- ======================================================
+               RESOURCE VIEW HEADER
+               ====================================================== -->
+
+          <div class="library-resource-header">
+
+
+            <!-- ====================================================
+                 BACK TO CATEGORIES
+                 ----------------------------------------------------
+                 Returns to the main category-card screen.
+                 ==================================================== -->
+
+            <button
+              id="library-back-to-categories"
+              class="library-back-categories"
+              type="button"
+            >
+              ← Back to Categories
+            </button>
+
+
+            <!-- ====================================================
+                 SELECTED CATEGORY INFORMATION
+                 ----------------------------------------------------
+                 JavaScript fills these values dynamically.
+                 ==================================================== -->
+
+            <div class="library-resource-heading">
+
+
+              <!-- --------------------------------------------------
+                   CATEGORY NUMBER
+                   -------------------------------------------------- -->
+
+              <span
+                id="library-resource-category-number"
+                class="library-resource-category-number"
+              >
+                --
+              </span>
+
+
+              <!-- --------------------------------------------------
+                   CATEGORY TITLE
+                   -------------------------------------------------- -->
+
+              <h2
+                id="library-resource-category-title"
+              >
+                DevOps Resources
+              </h2>
+
+
+              <!-- --------------------------------------------------
+                   CATEGORY DESCRIPTION
+                   -------------------------------------------------- -->
+
+              <p
+                id="library-resource-category-description"
+              >
+                Explore resources from this DevOps category.
+              </p>
+
+
+              <!-- --------------------------------------------------
+                   RESOURCE COUNT
+                   -------------------------------------------------- -->
+
+              <span
+                id="library-resource-category-count"
+                class="library-resource-category-count"
+              >
+                0 Resources
+              </span>
+
+            </div>
+
           </div>
 
 
-          <!-- Empty-result heading. -->
-          <h3>
-            No resources found
-          </h3>
+          <!-- ======================================================
+               INDIVIDUAL RESOURCE CARD GRID
+               ------------------------------------------------------
+               IMPORTANT:
+
+               This is the grid where the thumbnail cards appear.
+
+               JavaScript should insert cards such as:
+
+               .resource-card
+                   ├── .resource-thumbnail
+                   ├── .resource-card-body
+                   ├── .resource-tech
+                   ├── .resource-title
+                   ├── .resource-description
+                   └── Open Resource
+               ====================================================== -->
+
+          <div
+            id="library-resource-grid"
+            class="library-resource-grid"
+          >
+
+            <!--
+              JavaScript dynamically inserts the resource cards here.
+            -->
+
+          </div>
 
 
-          <!-- Guidance for the user. -->
-          <p>
-            Try another search term or clear the filters.
-          </p>
+          <!-- ======================================================
+               RESOURCE EMPTY STATE
+               ------------------------------------------------------
+               Used when the selected category contains no resources
+               or no resources match the search.
+               ====================================================== -->
+
+          <div
+            id="library-resource-empty"
+            class="library-empty"
+            hidden
+          >
+
+            <!-- Empty state icon. -->
+            <div class="library-empty-icon">
+              📦
+            </div>
+
+
+            <!-- Empty state heading. -->
+            <h3>
+              No resources found
+            </h3>
+
+
+            <!-- Empty state explanation. -->
+            <p>
+              This category currently has no matching resources.
+            </p>
+
+          </div>
 
         </div>
+
+
+        <!-- ========================================================
+             LOAD MORE BUTTON
+             --------------------------------------------------------
+             JavaScript controls this button.
+
+             CATEGORY VIEW:
+                 Load More Categories →
+
+             RESOURCE VIEW:
+                 Load More Resources →
+
+             The JavaScript can change the button text depending
+             on the active view.
+             ======================================================== -->
+
+        <button
+          id="library-load-more"
+          class="library-load-more"
+          type="button"
+          hidden
+        >
+          Load More Categories →
+        </button>
 
       </div>
 
@@ -442,8 +796,13 @@
 
   <!-- ============================================================
        RESOURCE DETAIL MODAL
-       Displays detailed information about a selected DevOps
-       resource without navigating away from the library page.
+       ------------------------------------------------------------
+       Existing modal system.
+
+       The modal remains separate from both library views.
+
+       It can display the complete Markdown content for a selected
+       category/resource.
        ============================================================ -->
 
   <div
@@ -454,20 +813,16 @@
   >
 
 
-    <!-- ------------------------------------------------------------
+    <!-- ==========================================================
          MODAL BACKDROP
-         Covers the page behind the modal and provides visual focus
-         on the selected resource.
-         ------------------------------------------------------------ -->
+         ========================================================== -->
 
     <div class="library-modal-backdrop"></div>
 
 
-    <!-- ------------------------------------------------------------
+    <!-- ==========================================================
          MODAL DIALOG
-         Accessible dialog container used to display resource
-         details, metadata and rendered Markdown content.
-         ------------------------------------------------------------ -->
+         ========================================================== -->
 
     <article
       class="library-modal-dialog"
@@ -477,10 +832,9 @@
     >
 
 
-      <!-- ----------------------------------------------------------
+      <!-- ========================================================
            MODAL CLOSE BUTTON
-           Closes the resource detail window.
-           ---------------------------------------------------------- -->
+           ======================================================== -->
 
       <button
         id="library-modal-close"
@@ -492,18 +846,16 @@
       </button>
 
 
-      <!-- ==========================================================
+      <!-- ========================================================
            MODAL HEADER
-           Contains category, resource title and metadata.
-           ========================================================== -->
+           ======================================================== -->
 
       <div class="library-modal-header">
 
 
-        <!-- --------------------------------------------------------
+        <!-- ------------------------------------------------------
              RESOURCE CATEGORY
-             Dynamically updated according to the selected resource.
-             -------------------------------------------------------- -->
+             ------------------------------------------------------ -->
 
         <span
           id="library-modal-category"
@@ -513,37 +865,34 @@
         </span>
 
 
-        <!-- --------------------------------------------------------
+        <!-- ------------------------------------------------------
              RESOURCE TITLE
-             Dynamically populated when a resource is selected.
-             -------------------------------------------------------- -->
+             ------------------------------------------------------ -->
 
         <h2 id="library-modal-title">
           Resource Library
         </h2>
 
 
-        <!-- --------------------------------------------------------
+        <!-- ------------------------------------------------------
              RESOURCE METADATA
-             JavaScript can populate this area with information such
-             as resource count, source or other useful details.
-             -------------------------------------------------------- -->
+             ------------------------------------------------------ -->
 
         <p id="library-modal-meta"></p>
 
       </div>
 
 
-      <!-- ==========================================================
-           MODAL CONTENT
-           Rendered Markdown/resource content is inserted here.
-           ========================================================== -->
+      <!-- ========================================================
+           MODAL MARKDOWN CONTENT
+           --------------------------------------------------------
+           JavaScript inserts rendered Markdown here.
+           ======================================================== -->
 
       <div
         id="library-modal-content"
         class="library-modal-content"
-      >
-      </div>
+      ></div>
 
     </article>
 
@@ -551,88 +900,93 @@
 
 
   <!-- ============================================================
-       EXISTING WEBSITE JAVASCRIPT
-       Shared JavaScript modules required by the main website and
-       GitHub/Markdown integration.
+       GLOBAL WEBSITE CONFIGURATION
        ============================================================ -->
 
-       <!-- ============================================================
-     GLOBAL WEBSITE CONFIGURATION
-     ============================================================ -->
-
-<script src="../js/config.js"></script>
+  <script src="../js/config.js"></script>
 
 
-<!-- ============================================================
-     SHARED GITHUB API
-     ============================================================ -->
+  <!-- ============================================================
+       SHARED GITHUB API
+       ------------------------------------------------------------
+       Handles GitHub directory and raw-file operations.
+       ============================================================ -->
 
-<script src="../js/github-api.js"></script>
-
-
-<!-- ============================================================
-     SHARED MARKDOWN PARSER
-     ============================================================ -->
-
-<script src="../js/markdown-parser.js"></script>
+  <script src="../js/github-api.js"></script>
 
 
-<!-- ============================================================
-     SHARED WEBSITE LAYOUT
-     
-     Injects:
-       - Navbar
-       - Navigation links
-       - Footer
-     
-     The DevOps Library is registered as:
-     
-       ['devops-library', 'DevOps Library']
-     ============================================================ -->
+  <!-- ============================================================
+       SHARED MARKDOWN PARSER
+       ------------------------------------------------------------
+       Provides Markdown processing used by the library.
+       ============================================================ -->
 
-<script src="../js/layout.js"></script>
+  <script src="../js/markdown-parser.js"></script>
 
 
-<!-- ============================================================
-     DEVOPS LIBRARY
-     
-     Loads Markdown files from:
-     
-       /activity/Charlie-DevOps-Library/
-     
-     and provides:
-     
+  <!-- ============================================================
+       SHARED WEBSITE LAYOUT
+       ------------------------------------------------------------
+       Mounts common Charlie MJ website components.
+       ============================================================ -->
+
+  <script src="../js/layout.js"></script>
+
+
+  <!-- ============================================================
+       DEVOPS LIBRARY JAVASCRIPT
+       ------------------------------------------------------------
+       Main library controller.
+
+       This file controls:
+
+       - Loading Markdown categories
+       - Extracting resources
+       - Category cards
+       - Resource cards
        - Search
        - Filtering
        - Sorting
-       - Grid
        - Statistics
+       - Category navigation
+       - Resource thumbnails
+       - Thumbnail fallbacks
+       - Back to Categories
+       - Modal
        - Load More
-       - Markdown Viewer
-     ============================================================ -->
+       ============================================================ -->
 
-<script src="../js/devops-library.js"></script>
-
-
-<!-- ============================================================
-     GLOBAL VISUAL EFFECTS
-     ============================================================ -->
-
-<script src="../js/effects.js"></script>
+  <script src="../js/devops-library.js"></script>
 
 
-<!-- ============================================================
-     MOUNT SHARED WEBSITE LAYOUT
-     
-     "devops-library" must match the key used in layout.js:
-     
-       ['devops-library', 'DevOps Library']
-     ============================================================ -->
+  <!-- ============================================================
+       GLOBAL VISUAL EFFECTS
+       ============================================================ -->
 
-<script>
-  Layout.mount('devops-library');
-</script>
-  
+  <script src="../js/effects.js"></script>
+
+
+  <!-- ============================================================
+       MOUNT SHARED WEBSITE LAYOUT
+       ------------------------------------------------------------
+       "devops-library" must match the key registered inside
+       layout.js.
+       ============================================================ -->
+
+  <script>
+
+    /*
+      Mount the shared Charlie MJ website layout.
+
+      The DevOps Library page is identified by:
+
+          devops-library
+    */
+
+    Layout.mount('devops-library');
+
+  </script>
+
 
 </body>
 
