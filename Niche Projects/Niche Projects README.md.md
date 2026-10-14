@@ -1,239 +1,288 @@
-# 🚀 Charlie MJ — My Niche Web Apps & Tools
+ <div align="center">
 
-> A collection of my **niche web apps and personal tools**, built to solve real problems I personally encountered in everyday work, learning, media management, content discovery, and productivity.
+# 🚀 CHARLIE MJ
+### NICHE WEB APPS & DIGITAL TOOLS
 
-These projects are not generic demo applications. Each one started from a **specific problem I wanted to solve for myself** and was developed into a practical, focused tool.
+**A Personal Collection of Purpose-Built Applications, Developer Utilities & Digital Solutions**
 
-The projects cover different areas including **time tracking, media downloading, article discovery, photo storytelling, and video management**.
+Turning everyday problems into focused, practical, and lightweight software.
 
----
+<br>
 
-## 📌 My Niche Projects
+[![GitHub](https://img.shields.io/badge/GitHub-Explore_My_Projects-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid)
+[![Repositories](https://img.shields.io/badge/Projects-11-2563EB?style=for-the-badge&logo=github)](#-project-collection)
+[![Open Source](https://img.shields.io/badge/Open-Source-16A34A?style=for-the-badge&logo=opensourceinitiative)](#-development-philosophy)
 
-| **#** | **Project**                                 | **GitHub Repository**                                                                                          | **Purpose**                                                            |
-| ----: | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-|     1 | **Charlie MJ Chrono Journey**               | [charlie-mj-chrono-journey](https://github.com/awsrmmustansarjavaid/charlie-mj-chrono-journey)                 | Track the exact time elapsed between important past or future moments  |
-|     2 | **Charlie MJ Drive Media Downloader**       | [charlie-MJ-drive-media-downloader](https://github.com/awsrmmustansarjavaid/charlie-MJ-drive-media-downloader) | Simplify saving authorized Google Drive media streams                  |
-|     3 | **Charlie MJ Instagram Post Editor**        | [charlie-mj-instagram-post-editor](https://github.com/awsrmmustansarjavaid/charlie-mj-instagram-post-editor)   | Prepare, resize, crop, and export photos for Instagram formats offline |
-|     4 | **Charlie MJ Medium Article Search Engine** | [medium-article-search-engine](https://github.com/awsrmmustansarjavaid/medium-article-search-engine)           | Search and filter articles from any public Medium profile              |
-|     5 | **Charlie MJ PhotoStory**                   | [CharlieMJ-PhotoStory](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory)                           | Create photo grids and Instagram-style stories offline                 |
-|     6 | **Charlie MJ Video Downloader**             | [charlie-mj-video-downloader](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader)             | Download, convert, manage, and organize supported media                |
-|     7 | **Charlie MJ YouTube Toolkit** | [charlie-mj-youtube-toolkit](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit) | A YouTube learning workspace for video analysis, subtitles, transcripts, vocabulary, notes, and study exports |
-|     8 | **Charlie MJ Tool Archive** | [charlie-mj-tool-archive](https://github.com/awsrmmustansarjavaid/charlie-mj-tool-archive) | Organize, search, manage, and locally store useful tools, websites, AI services, resources, and bookmarks |
-| 9     | **Charlie MJ Music** | [charlie-mj-music](https://github.com/awsrmmustansarjavaid/charlie-mj-music) | Turn feelings, relationships, and special moments into personalized song, poetry, quote, caption, and romantic-content discoveries |
-| 10 | **Charlie MJ OCR & Language Studio** | [charliemj-ocr-studio](https://github.com/awsrmmustansarjavaid/charliemj-ocr-studio) | Extract text from screenshots, organize bilingual vocabulary, create language-learning notes, and process OCR locally with optional Ollama AI |
-| 11 | **Charlie MJ Language** | [charlie-mj-language](https://github.com/awsrmmustansarjavaid/charlie-mj-language) | A YouTube language-learning Chrome extension for subtitles, bilingual transcripts, vocabulary extraction, translation, dictionaries, notes, bookmarks, and personalized study libraries |
+<br>
 
+**Personal Problems → Niche Ideas → Focused Applications → Practical Solutions**
+
+</div>
 
 ---
 
-# 🎯 About These Niche Projects
+## ✨ About This Collection
 
-I enjoy building **small, focused applications around problems that I personally face**.
+Welcome to my **Charlie MJ Niche Projects** collection.
 
-Instead of building another generic application, I prefer identifying a specific repetitive or inconvenient task and creating a lightweight tool around it.
+This repository showcases a collection of independent web applications, browser extensions, desktop utilities, and personal productivity tools that I build around real problems I personally encounter.
 
-This collection represents that approach:
+I don't focus on creating generic demonstration applications. Instead, I identify a specific inconvenience, explore possible solutions, and develop a dedicated application designed to make that task easier.
 
-**Personal Problem → Niche Idea → Focused Tool → Practical Solution**
+My projects cover several areas:
 
-Most of these projects are designed around:
+- 🎬 Media Management & Video Utilities
+- 🌍 Language Learning & Translation
+- 🧠 OCR & Intelligent Text Processing
+- 🗂️ Productivity & Digital Organization
+- 📸 Photo Editing & Visual Storytelling
+- 🎵 Music & Content Discovery
+- ⏳ Time Management & Personal Utilities
+- 🔎 Research & Information Discovery
 
-- 🎯 One specific problem
-- 🧩 A focused feature set
-- 💻 Simple and practical interfaces
-- ⚡ Lightweight architecture where possible
-- 🔒 Local/offline processing where practical
-- 🌐 Browser-based or Windows-based workflows
-- 🛠️ Open-source development
-- 📚 Learning through real projects
+Each project has its own repository, development roadmap, features, and documentation.
 
 ---
 
-## ⭐ Explore the Projects
+## 📊 Project Overview
 
-# 1. ⏳ Charlie MJ Chrono Journey
+<div align="center">
 
-### 🔗 Repository
+| **11** | **7+** | **Multiple** | **Open Source** |
+|:---:|:---:|:---:|:---:|
+| Projects | Development Areas | Technologies | GitHub Repositories |
 
-[**charlie-mj-chrono-journey**](https://github.com/awsrmmustansarjavaid/charlie-mj-chrono-journey)
+</div>
 
-### 💡 What Is It?
+## 🧭 Explore by Category
 
-**Charlie MJ Chrono Journey** is a niche time-tracking web app that calculates the exact amount of time between a selected date/time and the current moment — or between a current moment and a future date.
+| Category | Projects | Explore |
+|---|---|---|
+| ⏳ Time & Productivity | Chrono Journey | [Explore](#1--charlie-mj-chrono-journey) |
+| 🎬 Media & Downloading | Drive Media Downloader, Video Downloader | [Explore](#2--charlie-mj-drive-media-downloader) |
+| 🔎 Research & Discovery | Medium Article Search Engine | [Explore](#4--charlie-mj-medium-profile-article-search-engine) |
+| 📸 Image & Photo Editing | Instagram Post Editor, PhotoStory | [Explore](#3--charlie-mj-instagram-post-editor) |
+| 🎥 YouTube & Learning | YouTube Toolkit, Charlie MJ Language | [Explore](#7--charlie-mj-youtube-toolkit) |
+| 🗂️ Digital Organization | Tool Archive | [Explore](#8--charlie-mj-tool-archive) |
+| 🎵 Music & Creativity | Charlie MJ Music | [Explore](#9--charlie-mj-music) |
+| 🧠 OCR & Language Processing | OCR & Language Studio | [Explore](#10--charlie-mj-ocr--language-studio) |
 
-Instead of displaying only a simple countdown, it presents the journey using:
+---
+
+# 🧩 PROJECT COLLECTION
+
+A closer look at the applications, their purpose, capabilities, architecture, and technologies.
+
+---
+
+## 01. ⏳ Charlie MJ Chrono Journey
+
+**A Personal Time Journey, Date Calculator & Live Countdown Application**
+
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-chrono-journey)
+
+### 💡 Project Overview
+
+Charlie MJ Chrono Journey is a niche time-tracking web application that calculates the exact amount of time between an important past date and the present moment, or between the present and a future date.
+
+Instead of displaying only a simple countdown, it visualizes the complete time journey:
 
 **Years → Months → Days → Hours → Minutes → Seconds**
 
-The application was created to make important personal dates and time periods easier to visualize.
+The application makes important personal dates, milestones, anniversaries, and future events easier to visualize and track.
 
-### ✨ Main Features
+### ✨ Key Features
 
-- 🕐 Live current time
-- 📅 Calendar interface
-- 🌍 Timezone selection
-- ⏳ Time since / time until calculations
-- 📆 Calendar-accurate date calculations
-- 🗓️ Leap-year and month-length awareness
-- 🔢 Total days, hours, minutes and seconds
-- 🌐 Internet-verified time
-- ❤️ Multiple saved time journeys
-- ⭐ Favorite journeys
-- ✏️ Edit and duplicate journeys
-- 💾 Local browser storage
-- 📤 JSON import/export
-- 🌙 Dark and light themes
-- 📱 Responsive design
+- 🕐 Live current time.
+- 📅 Interactive calendar interface.
+- 🌍 Timezone selection.
+- ⏳ Time Since / Time Until calculations.
+- 📆 Calendar-accurate date calculations.
+- 🗓️ Leap-year and month-length awareness.
+- 🔢 Total days, hours, minutes, and seconds.
+- 🌐 Internet-verified time.
+- ❤️ Multiple saved time journeys.
+- ⭐ Favorite journeys.
+- ✏️ Edit and duplicate journeys.
+- 💾 Local browser storage.
+- 📤 JSON import and export.
+- 🌙 Dark and light themes.
+- 📱 Responsive interface.
 
-### 🛠️ Technologies
+### 🛠️ Technology Stack
 
-- HTML5
-- CSS3
-- JavaScript ES6+
-- Bootstrap 5
-- Bootstrap Icons
-- `Date`
-- `Intl.DateTimeFormat`
-- `localStorage`
-- `fetch()`
-- Public time API
+`HTML5` `CSS3` `JavaScript ES6+` `Bootstrap 5` `Bootstrap Icons` `Date API` `Intl.DateTimeFormat` `localStorage` `Fetch API`
 
-### ⚙️ How It Works
-
-The user creates a time journey by selecting a date, time, title, and timezone.
-
-The application then:
+### ⚙️ Application Workflow
 
 ```text
-Selected Date/Time
+Select Date & Time
        ↓
 Timezone Processing
        ↓
-Current Internet Time
+Current Time Retrieval
        ↓
 Calendar-Aware Calculation
        ↓
-Years / Months / Days / Hours / Minutes / Seconds
+Years / Months / Days
        ↓
-Live Updating Counter
+Hours / Minutes / Seconds
+       ↓
+Live Updating Time Journey
+       ↓
+Save & Manage Journeys
 ```
 
-Everything runs on the client side, with journeys stored locally in the browser.
+<div align="center">
+
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-chrono-journey)
+
+</div>
 
 ---
 
-# 2. 🎬 Charlie MJ Drive Media Downloader
+## 02. 🎬 Charlie MJ Drive Media Downloader
 
-### 🔗 Repository
+**A Browser Extension for Authorized Google Drive Media Workflows**
 
-[**charlie-MJ-drive-media-downloader**](https://github.com/awsrmmustansarjavaid/charlie-MJ-drive-media-downloader)
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-MJ-drive-media-downloader)
 
-### 💡 What Is It?
+### 💡 Project Overview
 
-**Charlie MJ Drive Media Downloader** is a Chrome/Chromium extension created to simplify a repetitive workflow for saving **Google Drive media that the user is already authorized to access**.
+Charlie MJ Drive Media Downloader is a Chrome/Chromium extension designed to simplify the process of identifying and opening media streams from Google Drive files that the user is already authorized to access.
 
-Instead of manually opening DevTools, searching network requests, identifying media streams, cleaning URLs, and opening them individually, the extension automatically detects relevant media requests and presents usable streams.
+It reduces the need to manually inspect browser developer tools, search network requests, identify media streams, and clean stream URLs.
 
-### ✨ Main Features
+### ✨ Key Features
 
-- 🎥 Automatic media detection
-- 🎵 Video/audio stream detection
-- 📊 File-size detection
-- 🏷️ Quality/format labels
-- 🧹 Automatic byte-range parameter cleanup
-- ♻️ Automatic deduplication
-- 📐 Sort streams by size
-- ▶️ One-click stream opening
-- 🪶 Lightweight extension
-- 🔒 No external server
-- 🔒 No analytics
-- 💻 Runs directly inside the browser
+- 🎥 Automatic media detection.
+- 🎵 Video and audio stream detection.
+- 📊 File-size detection.
+- 🏷️ Quality and format labels.
+- 🧹 Automatic byte-range parameter cleanup.
+- ♻️ Automatic stream deduplication.
+- 📐 Sort streams by size.
+- ▶️ One-click stream opening.
+- 🪶 Lightweight extension.
+- 🔒 No external application server.
+- 🔒 No analytics.
+- 💻 Runs directly inside the browser.
 
-### 🛠️ Technologies
+### 🛠️ Technology Stack
 
-- Chrome Extension Manifest V3
-- Vanilla JavaScript
-- HTML5
-- CSS3
-- `chrome.webRequest`
-- `chrome.tabs`
-- Manifest V3 Service Worker
-- Chrome Runtime Messaging
+`Chrome Extension MV3` `JavaScript` `HTML5` `CSS3` `chrome.webRequest` `chrome.tabs` `Service Worker` `Chrome Runtime Messaging`
 
-### ⚙️ How It Works
+### ⚙️ Application Workflow
 
 ```text
 Google Drive Video
        ↓
 Browser Plays Media
        ↓
-videoplayback Requests
+Media Network Requests
        ↓
 chrome.webRequest
        ↓
-Detect Video / Audio
+Detect Video / Audio Streams
        ↓
 Read Media Metadata
        ↓
-Remove Chunk Parameters
+Clean & Deduplicate Streams
        ↓
-Deduplicate Streams
+Display Available Results
        ↓
-Popup Displays Results
-       ↓
-Open Stream
-       ↓
-Browser Native Player
+Open Authorized Stream
 ```
 
-The extension does **not** bypass authentication or access controls. It is intended for media the user's browser session is already authorized to access.
+**Security Note:** This project is intended for media the user's existing browser session is authorized to access. It does not bypass authentication or access controls.
+
+<div align="center">
+
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-MJ-drive-media-downloader)
+
+</div>
 
 ---
 
-# 3. 🔎 Charlie MJ Medium Profile Article Search Engine
+## 03. 📸 Charlie MJ Instagram Post Editor
 
-### 🔗 Repository
+**A Portable Offline Instagram Image Preparation & Editing Application**
 
-[**medium-article-search-engine**](https://github.com/awsrmmustansarjavaid/medium-article-search-engine)
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-instagram-post-editor)
 
-### 💡 What Is It?
+### 💡 Project Overview
 
-**Charlie MJ Medium Profile Article Search Engine** is a lightweight browser-based search tool for finding articles inside a **public Medium profile**.
+Charlie MJ Instagram Post Editor is a portable Windows desktop image editor designed to prepare photographs for Instagram posts, Stories, and Reels without unnecessary cropping, distortion, or quality loss.
 
-The idea came from a simple problem: finding a particular topic or keyword across a Medium profile can require manually browsing through articles.
+It processes images locally, gives users control over image positioning and backgrounds, and exports them in suitable social-media dimensions.
 
-This tool turns that process into a focused search experience.
+### ✨ Key Features
 
-### ✨ Main Features
+- 🖼️ Instagram Post and Story conversion.
+- 📐 Portrait, Square, Landscape, Story, and Reel formats.
+- ✂️ Smart Crop and manual positioning.
+- 🌫️ Blur, solid, gradient, and mirror backgrounds.
+- 🔍 Zoom, crop, rotate, and flip.
+- 🎨 Color adjustments and built-in filters.
+- ✍️ Text and stickers.
+- 👀 Instagram Feed and Profile Grid preview.
+- ↩️ Undo and Redo.
+- 📤 JPEG, PNG, and WebP export.
+- 🧹 Automatic EXIF/GPS metadata removal.
+- 📦 Portable single EXE.
+- 🔒 Local and private image processing.
+- 🌐 Completely offline operation.
 
-- 🔍 Search article titles and content
-- 🏷️ Multiple additional keywords
-- 🟨 Keyword highlighting
-- 🖼️ Article cover images
-- ↕️ Newest/oldest/title sorting
-- 🔲 Grid view
-- 📋 List view
-- 🌙 Dark mode
-- 💾 Remember last-used profile
-- 📱 Responsive interface
-- ⚡ No backend
-- 🪶 No installation required
+### 🛠️ Technology Stack
 
-### 🛠️ Technologies
+`Electron` `HTML5` `CSS3` `JavaScript` `Canvas 2D API` `electron-builder`
 
-- HTML5
-- CSS3
-- Vanilla JavaScript ES6+
-- Bootstrap 5
-- Bootstrap Icons
-- Medium RSS
-- RSS2JSON API
-- `fetch()`
-- DOM API
-- `localStorage`
+### 🎯 Problem → Solution
 
-### ⚙️ How It Works
+**Problem:** Preparing images for different Instagram formats can result in unwanted cropping, distortion, and quality loss.
+
+**Solution:** A dedicated offline editor that provides flexible image positioning, smart backgrounds, editing tools, and controlled export quality.
+
+<div align="center">
+
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-instagram-post-editor)
+
+</div>
+
+---
+
+## 04. 🔎 Charlie MJ Medium Profile Article Search Engine
+
+**A Focused Search Engine for Public Medium Profiles**
+
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/medium-article-search-engine)
+
+### 💡 Project Overview
+
+Charlie MJ Medium Profile Article Search Engine is a lightweight browser-based research tool that allows users to search and filter articles from any public Medium profile.
+
+Instead of manually browsing through hundreds of articles, users can search titles, content, and additional keywords through one focused interface.
+
+### ✨ Key Features
+
+- 🔍 Search article titles and content.
+- 🏷️ Multiple additional keywords.
+- 🟨 Keyword highlighting.
+- 🖼️ Article cover images.
+- ↕️ Newest, oldest, and title sorting.
+- 🔲 Grid view.
+- 📋 List view.
+- 🌙 Dark mode.
+- 💾 Remember last-used profile.
+- 📱 Responsive interface.
+- ⚡ No custom backend.
+- 🪶 No installation required.
+
+### 🛠️ Technology Stack
+
+`HTML5` `CSS3` `JavaScript ES6+` `Bootstrap 5` `Bootstrap Icons` `Medium RSS` `RSS2JSON API` `Fetch API` `DOM API` `localStorage`
+
+### ⚙️ Application Workflow
 
 ```text
 Medium Profile URL
@@ -242,7 +291,7 @@ Public Medium RSS Feed
        ↓
 RSS2JSON Bridge
        ↓
-JSON Article Data
+Article JSON Data
        ↓
 Client-Side Search
        ↓
@@ -252,300 +301,266 @@ Keyword Highlighting
        ↓
 Sorting / Grid / List
        ↓
-Article Results
+Article Discovery
 ```
 
-The application is intentionally client-side and has no database or custom backend. The RSS-to-JSON bridge handles the browser-side CORS limitation.
+### 🎯 Why This Project?
 
-### 🎯 Why This Is a Niche Tool
+It solves one specific problem:
 
-It focuses on one very specific task:
+> Finding useful information inside public Medium profiles without manually browsing every article.
 
-> **Finding information inside public Medium profiles quickly.**
+<div align="center">
 
-That makes it a good example of turning a small personal inconvenience into a dedicated utility.
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/medium-article-search-engine)
+
+</div>
 
 ---
 
-# 4. 📸 Charlie MJ PhotoStory
+## 05. 🖼️ Charlie MJ PhotoStory
 
-### 🔗 Repository
+**An Offline Photo Grid, Collage & Instagram Story Creator**
 
-[**CharlieMJ-PhotoStory**](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory)
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory)
 
-### 💡 What Is It?
+### 💡 Project Overview
 
-**Charlie MJ PhotoStory** is an offline photo-grid and story creation tool designed around creating social-media-style photo stories.
+Charlie MJ PhotoStory is an offline photo-grid and visual storytelling application designed to combine multiple photographs into social-media-style compositions.
 
-It allows multiple photographs to be combined into layouts such as **2×2 and 2×3 grids**, edited individually, decorated with text, and exported as a high-quality **1080×1920 9:16 JPG**.
+Users can create layouts such as 2×2 and 2×3 grids, edit individual photographs, apply visual adjustments, add text, and export high-resolution 1080×1920 JPG images.
 
-### ✨ Main Features
+The project includes a web application and a Windows application built with Tauri.
 
-- 🖼️ 2×2 photo grid
-- 🖼️ 2×3 photo grid
-- ➕ Add photos
-- 🔄 Replace photos
-- 🗑️ Remove photos
-- 🖱️ Drag & drop
-- 🔍 Zoom
-- ✋ Pan
-- 🔄 Rotate
-- ↔️ Flip
-- ✍️ Text tool
-- 🔤 Font customization
-- 🎨 Text color and styling
-- ☀️ Brightness
-- 🌓 Contrast
-- 🌈 Saturation
-- ⚫ Grayscale
-- ↩️ Undo/redo
-- 💾 Save/reopen projects
-- 📤 HD JPG export
-- 🔒 Fully offline
+### ✨ Key Features
 
-### 🛠️ Technologies
+- 🖼️ 2×2 photo grids.
+- 🖼️ 2×3 photo grids.
+- ➕ Add photographs.
+- 🔄 Replace photographs.
+- 🗑️ Remove photographs.
+- 🖱️ Drag and drop.
+- 🔍 Zoom.
+- ✋ Pan.
+- 🔄 Rotate.
+- ↔️ Flip.
+- ✍️ Text editing.
+- 🔤 Font customization.
+- 🎨 Text color and styling.
+- ☀️ Brightness adjustment.
+- 🌓 Contrast adjustment.
+- 🌈 Saturation adjustment.
+- ⚫ Grayscale.
+- ↩️ Undo and Redo.
+- 💾 Save and reopen projects.
+- 📤 High-quality JPG export.
+- 🔒 Fully offline operation.
 
-The project has two main forms:
+### 🛠️ Technology Stack
 
-**Web Application**
+**Web Application:** `HTML` `CSS` `JavaScript`
 
-- HTML
-- CSS
-- JavaScript
+**Windows Application:** `Tauri` `Web Frontend` `Native Windows Packaging` `GitHub Actions`
 
-**Windows Application**
-
-- Tauri
-- Web frontend
-- Native Windows packaging
-
-The repository also uses GitHub Actions to build the Windows application.
-
-### ⚙️ How It Works
+### ⚙️ Application Workflow
 
 ```text
-Select Photos
-      ↓
+Select Photographs
+       ↓
 Choose Grid Layout
-      ↓
-Position / Crop / Zoom / Rotate
-      ↓
-Apply Image Adjustments
-      ↓
-Add Text
-      ↓
-Preview Story
-      ↓
+       ↓
+Position / Crop / Zoom
+       ↓
+Rotate / Flip / Adjust
+       ↓
+Add Text & Styling
+       ↓
+Preview PhotoStory
+       ↓
 Render Canvas
-      ↓
-Export 1080×1920 JPG
+       ↓
+Export 1080 × 1920 JPG
 ```
 
-The application is designed around **privacy and offline usage**: photos do not need to be uploaded to a server.
+### 🔐 Privacy
+
+Photographs are processed locally without requiring users to upload their personal images to an external server.
+
+<div align="center">
+
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory)
+
+</div>
 
 ---
 
-# 5. 🎬 Charlie MJ Video Downloader
+## 06. 🎥 Charlie MJ Video Downloader
 
-### 🔗 Repository
+**A Windows Desktop Media Downloader, Converter & Management Application**
 
-[**charlie-mj-video-downloader**](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader)
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader)
 
-### 💡 What Is It?
+### 💡 Project Overview
 
-**Charlie MJ Video Downloader** is a Windows desktop media download manager with two major workflows:
+Charlie MJ Video Downloader is a Windows desktop media application that combines web downloading, browser media capture, audio/video processing, format selection, and download management.
 
-1. **Direct/Web Download** using `yt-dlp`
-2. **Browser Media Capture** using a Chrome/Edge extension and native messaging
+It provides two major workflows:
 
-It combines downloading, media processing, format selection, queue management, audio/video handling, and FFmpeg-based merging into one desktop application.
+1. **Direct/Web Download:** Supported media downloading through `yt-dlp`.
+2. **Browser Media Capture:** Chrome/Edge extension integration through native messaging.
 
-### ✨ Main Features
+The application combines these workflows with FFmpeg-based media processing and a desktop management interface.
 
-#### 🎥 Video & Audio
+### ✨ Key Features
 
-- Video downloads
-- Multiple quality levels
-- Best-quality profiles
-- Video-only downloads
-- Audio-only downloads
-- MP4/WebM/MKV
-- MP3/M4A/WAV/FLAC/OPUS
-- Playlist/batch architecture
-- Subtitle support
-- Thumbnail support
-- Chapter/metadata support
-- Codec/FPS information
+**🎬 Video & Audio**
 
-#### 🌐 Browser Capture
+- Video downloads.
+- Multiple quality levels.
+- Best-quality profiles.
+- Video-only downloads.
+- Audio-only downloads.
+- MP4, WebM, and MKV.
+- MP3, M4A, WAV, FLAC, and OPUS.
+- Playlist and batch architecture.
+- Subtitle support.
+- Thumbnail support.
+- Chapter and metadata support.
+- Codec and FPS information.
 
-- Chrome Manifest V3
-- Edge-compatible architecture
-- Browser page capture
-- Media stream detection
-- Google Drive `videoplayback` detection
-- Video/audio pairing
-- Stream deduplication
-- Download & Combine
-- Watch Browser mode
+**🌐 Browser Capture**
 
-#### 📥 Download Manager
+- Chrome Manifest V3.
+- Edge-compatible architecture.
+- Browser page capture.
+- Media stream detection.
+- Google Drive media request detection.
+- Video/audio pairing.
+- Stream deduplication.
+- Download and Combine.
+- Watch Browser mode.
 
-- Queue
-- Priority
-- Pause/resume
-- Cancellation
-- Retry architecture
-- Concurrent downloads
-- Progress reporting
-- Speed reporting
-- Download history foundation
-- SQLite foundation
-- Temporary-file cleanup
-- Download verification
+**📥 Download Management**
 
-### 🛠️ Technologies
+- Download queue.
+- Priority management.
+- Pause and resume.
+- Cancellation.
+- Retry architecture.
+- Concurrent downloads.
+- Progress reporting.
+- Speed reporting.
+- Download history foundation.
+- SQLite foundation.
+- Temporary-file cleanup.
+- Download verification.
 
-- Tauri 2
-- Rust
-- React
-- TypeScript
-- SQLite
-- FFmpeg
-- ffprobe
-- yt-dlp
-- Chrome/Edge Manifest V3
-- Native Messaging
-- NSIS
-- GitHub Actions
+### 🛠️ Technology Stack
 
-### ⚙️ How It Works
+`Tauri 2` `Rust` `React` `TypeScript` `SQLite` `FFmpeg` `ffprobe` `yt-dlp` `Chrome MV3` `Native Messaging` `NSIS` `GitHub Actions`
+
+### ⚙️ Application Architecture
 
 ```text
-                 ┌───────────────┐
-                 │ Chrome / Edge │
-                 └───────┬───────┘
-                         ↓
-                 Native Messaging
-                         ↓
-                  Native Host
-                         ↓
-        ┌─────────────────────────┐
-        │ Charlie MJ Desktop App │
-        │   Tauri + React + Rust  │
-        └────────────┬────────────┘
-                     ↓
-              ┌──────┴──────┐
-              ↓             ↓
-            yt-dlp      Browser Capture
-              ↓             ↓
-              └──────┬──────┘
-                     ↓
-               Video / Audio
-                     ↓
-                  FFmpeg
-                     ↓
-                 ffprobe
-                     ↓
-                Final Media
+             Chrome / Edge
+                  ↓
+           Native Messaging
+                  ↓
+              Native Host
+                  ↓
+       Charlie MJ Desktop App
+           Tauri + React
+                  ↓
+          ┌───────┴───────┐
+          ↓               ↓
+        yt-dlp       Browser Capture
+          ↓               ↓
+          └───────┬───────┘
+                  ↓
+            Video / Audio
+                  ↓
+               FFmpeg
+                  ↓
+               ffprobe
+                  ↓
+             Final Media
 ```
 
-The desktop application performs the heavy download and media-processing work, while the browser extension provides browser-side stream information when required.
+The desktop application handles download management and media processing, while browser integration provides additional media-stream information when required.
+
+<div align="center">
+
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader)
+
+</div>
 
 ---
 
-# 6. 🖼️ Charlie MJ Instagram Post Editor
+## 07. 🎬 Charlie MJ YouTube Toolkit
 
-### 🔗 Repository
+**A YouTube-Based Video Analysis, Transcript & Language Learning Workspace**
 
-[**charlie-mj-instagram-post-editor**](https://github.com/awsrmmustansarjavaid/charlie-mj-instagram-post-editor)
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit)
 
-### 💡 What Is It?
+### 💡 Project Overview
 
-**Charlie MJ Instagram Post Editor** is a **portable Windows desktop image editor** designed to quickly convert photos and Instagram Stories into properly sized Instagram posts without unnecessary cropping, distortion, or quality loss.
+Charlie MJ YouTube Toolkit is a browser-based learning workspace that brings together YouTube video analysis, thumbnail utilities, subtitles, transcripts, vocabulary extraction, personal notes, and learning exports.
 
-It processes images **locally and offline**, keeping the user's original files unchanged.
+Instead of using separate websites for different YouTube-related tasks, the project provides a centralized interface.
 
-### ✨ Main Features
+It is designed as a static GitHub Pages application without requiring a custom backend, database server, or user account.
 
-* 🖼️ Instagram Post & Story conversion
-* 📐 Portrait, Square, Landscape, Story & Reel formats
-* ✂️ Smart Crop & manual positioning
-* 🌫️ Blur, solid, gradient & mirror backgrounds
-* 🔍 Zoom, crop, rotate & flip
-* 🎨 Color adjustments & built-in filters
-* ✍️ Text & stickers
-* 👀 Instagram Feed & Profile Grid preview
-* ↩️ Undo & Redo
-* 📤 JPEG, PNG & WebP export
-* 🧹 Automatic EXIF/GPS metadata removal
-* 📦 Portable single `.exe`
-* 🔒 Local & private image processing
-* 🌐 Works completely offline
+### ✨ Key Features
 
-### 🛠️ Technologies
+**🎬 Video & Thumbnail**
 
-* Electron
-* HTML5
-* CSS3
-* Vanilla JavaScript
-* Canvas 2D API
-* electron-builder
+- YouTube URL analyzer.
+- Standard, Shorts, youtu.be, and embed URL support.
+- Embedded YouTube player.
+- Thumbnail preview.
+- Thumbnail download utilities.
 
-### 🎯 Problem → Solution
+**📝 Transcript & Subtitle**
 
-**Problem:** Converting images between Instagram formats can result in unwanted cropping, distortion, or unnecessary quality loss.
+- Subtitle and transcript loading.
+- SRT, VTT, TXT, CSV, and JSON support.
+- Transcript cleanup.
+- Transcript organization.
+- Transcript search.
+- Timestamp-based navigation.
+- One-click copying.
 
-**Solution:** A lightweight, **Instagram-focused offline editor** that prepares images for different Instagram formats while giving the user control over cropping, positioning, backgrounds, and export quality.
+**📚 Language Learning**
 
----
+- Vocabulary extraction.
+- Source and target language organization.
+- Personal study notes.
+- Local study sessions.
+- Vocabulary and transcript counters.
 
-# 7. 🎬 Charlie MJ YouTube Toolkit
+**📤 Productivity & Export**
 
-### 🔗 Repository
+- TXT export.
+- Markdown export.
+- JSON export.
+- CSV export.
+- Distraction-free Reading Mode.
+- Light and dark themes.
+- Responsive Bootstrap interface.
+- No account or login required.
 
-[**charlie-mj-youtube-toolkit**](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit)
+### 🛠️ Technology Stack
 
-### 💡 What Is It?
+`HTML5` `CSS3` `JavaScript ES Modules` `Bootstrap 5.3` `YouTube IFrame Player API` `Clipboard API` `File API` `Blob API` `localStorage` `SVG` `GitHub Pages`
 
-**Charlie MJ YouTube Toolkit** is a niche, browser-based **YouTube learning workspace** designed especially for people who use YouTube for language learning, study, research, and personal note-taking.
-
-Instead of using separate tools for YouTube URLs, thumbnails, subtitles, transcripts, vocabulary, notes, and exports, the project brings these activities together inside one lightweight web application.
-
-The project is designed as a **static GitHub Pages application**, so it does not require a backend server, database, user account, or build pipeline.
-
-### ✨ Main Features
-
-* 🎬 YouTube URL analyzer for standard, Shorts, youtu.be, and embed URLs
-* ▶️ Embedded YouTube video player
-* 🖼️ YouTube thumbnail preview and download tools
-* 📝 Subtitle and transcript loading
-* 📄 SRT, VTT, TXT, CSV, and JSON text/subtitle support
-* 🧹 Transcript cleanup and organization
-* 🔎 Transcript search
-* ⏱️ Timestamp-based transcript navigation
-* 📋 One-click transcript copying
-* 📚 Vocabulary extraction from transcript text
-* 🌐 Source and target language organization
-* 🗒️ Personal study notes
-* 💾 Local browser session storage
-* 📤 TXT, Markdown, JSON, and CSV exports
-* 📖 Distraction-free Reading Mode
-* 📊 Live session, vocabulary, and transcript counters
-* 🌙 Light and dark themes
-* 📱 Responsive Bootstrap 5 interface
-* 🔐 No account or login required
-
-### 🧠 Learning Workflow
-
-The toolkit is designed around a simple learning workflow:
+### ⚙️ Learning Workflow
 
 ```text
 YouTube Video
       ↓
 Video / Thumbnail Analysis
       ↓
-Subtitle / Transcript
+Subtitle / Transcript Loading
       ↓
 Transcript Cleanup
       ↓
@@ -555,181 +570,119 @@ Vocabulary Extraction
       ↓
 Personal Notes
       ↓
-Local Session Storage
+Save Learning Session
       ↓
-TXT / Markdown / JSON / CSV Export
+TXT / Markdown / JSON / CSV
 ```
-
-This makes the project useful as a small **YouTube-based language-learning workspace** rather than just another YouTube utility.
-
-### 🛠️ Technologies
-
-* HTML5
-* CSS3
-* JavaScript ES Modules
-* Bootstrap 5.3
-* Bootstrap responsive grid and utilities
-* YouTube IFrame Player API
-* Browser Clipboard API
-* File API
-* Blob and download APIs
-* `localStorage`
-* SVG assets
-* GitHub Pages
-
-### ⚙️ How It Works
-
-The user starts by providing a YouTube video URL or loading compatible subtitle/transcript content.
-
-The application then processes the content directly in the browser:
-
-```text
-YouTube URL
-     ↓
-Video ID Detection
-     ↓
-Embedded YouTube Player
-     ↓
-Transcript / Subtitle Input
-     ↓
-Cleanup & Organization
-     ↓
-Vocabulary + Notes
-     ↓
-Save Study Session
-     ↓
-Export Learning Data
-```
-
-The application keeps personal study data inside the browser using `localStorage`, while exported files are generated locally.
 
 ### 🎯 Project Concept
 
-The main idea behind **Charlie MJ YouTube Toolkit** is to turn ordinary YouTube videos into a more organized learning environment.
+Turn ordinary YouTube videos into a structured learning environment:
 
-It combines several small learning utilities into one focused workspace where users can **watch → read → search → collect vocabulary → take notes → save → export** without constantly switching between different websites.
+**Watch → Read → Search → Collect Vocabulary → Take Notes → Save → Export**
 
+<div align="center">
+
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit)
+
+</div>
 
 ---
 
-# 8. 🗂️ Charlie MJ Tool Archive
+## 08. 🗂️ Charlie MJ Tool Archive
 
-### 🔗 Repository
+**A Local-First Personal Digital Library for Online Tools, Websites & Resources**
 
-**charlie-mj-tool-archive**
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-tool-archive)
 
-### 💡 What Is It?
+### 💡 Project Overview
 
-**Charlie MJ Tool Archive** is a local-first Chrome Extension designed to organize a large collection of online tools, websites, AI services, developer resources, learning resources, media tools, dictionaries, job sites, personal projects, and bookmarks in one searchable dashboard.
+Charlie MJ Tool Archive is a local-first Chrome extension designed to organize a large collection of useful websites, AI services, developer resources, learning platforms, media tools, dictionaries, utilities, and bookmarks.
 
-Instead of relying on a traditional browser bookmark structure, the extension provides a visual tool library with categories, search, favorites, recently used tools, filtering, detailed tool information, and personal management features.
+Instead of relying on traditional browser bookmarks, it provides a searchable, categorized, and customizable digital tool library.
 
-The current release includes a bundled library of **290 unique tools** and is built with **Chrome Manifest V3**.
+The current project description identifies a bundled library of **290 unique tools**.
 
-### ✨ Main Features
+### ✨ Key Features
 
-* 🗂️ Continuously expanding tool library
-* 🔎 Search by name, URL, category, description, notes, and tags
-* 📁 Category-based organization
-* ⭐ Favorites
-* 🕐 Recently used tools
-* 🆕 Recently added sorting
-* 🔖 Type filtering
-* 🔗 Open tools in new Chrome tabs
-* 🚀 Open all visible tools
-* ℹ️ Detailed tool information
-* ✏️ Edit and update tools
-* ➕ Add new tools
-* 📋 Duplicate URL protection
-* 🗑️ Delete tools
-* 📥 Import Chrome bookmarks HTML
-* 📥 Import JSON
-* 📤 Export JSON backups
-* 📊 Export CSV
-* ♻️ Restore the default tool library
-* 🌙 Light / Dark / System themes
-* 📐 Comfortable / Compact grid layouts
-* 💾 Local-first browser storage
-* 🖱️ Chrome context-menu integration
-* ⌨️ Keyboard shortcut support
-* 🌐 Responsive layout
-* 🔄 Automatic default-library migration
-* 🖼️ Favicon support with fallback initials
+- 🗂️ Expanding tool library.
+- 🔎 Search by name, URL, category, description, notes, and tags.
+- 📁 Category-based organization.
+- ⭐ Favorites.
+- 🕐 Recently used tools.
+- 🆕 Recently added sorting.
+- 🔖 Type filtering.
+- 🔗 Open tools in new Chrome tabs.
+- 🚀 Open all visible tools.
+- ℹ️ Detailed tool information.
+- ✏️ Edit and update tools.
+- ➕ Add new tools.
+- 📋 Duplicate URL protection.
+- 🗑️ Delete tools.
+- 📥 Chrome bookmarks HTML import.
+- 📥 JSON import.
+- 📤 JSON backup export.
+- 📊 CSV export.
+- ♻️ Restore default tool library.
+- 🌙 Light / Dark / System themes.
+- 📐 Comfortable / Compact grid layouts.
+- 💾 Local-first storage.
+- 🖱️ Chrome context-menu integration.
+- ⌨️ Keyboard shortcuts.
+- 🌐 Responsive interface.
+- 🔄 Automatic default-library migration.
+- 🖼️ Favicon support with fallback initials.
 
-The repository documents that the extension stores its core library locally and does not require a backend or account.
+### 🛠️ Technology Stack
 
-### 🛠️ Technologies
+`HTML5` `CSS3` `JavaScript` `Chrome Extension MV3` `Chrome Storage API` `Context Menus API` `Commands API` `JSON` `CSV` `Responsive CSS`
 
-* HTML5
-* CSS3
-* JavaScript
-* Chrome Extension Manifest V3
-* Chrome Extension APIs
-* `chrome.storage.local`
-* Chrome Context Menus API
-* Chrome Commands API
-* JSON
-* CSV
-* Browser Local Storage
-* Responsive CSS
-
-### ⚙️ How It Works
-
-The extension maintains a default catalog of tools while allowing the user to create and manage their own local collection.
-
-The basic workflow is:
+### ⚙️ Application Architecture
 
 ```text
 Online Tools / Websites / Resources
-
-             ↓
-
-      Default Tool Library
-
-             ↓
-
-     Chrome Extension
-
-             ↓
-
-   Category Organization
-
-             ↓
-
- Search / Filter / Favorites
-
-             ↓
-
- Add / Edit / Delete / Duplicate
-
-             ↓
-
- Local Chrome Storage
-
-             ↓
-
- JSON / CSV Export & Backup
+                ↓
+        Default Tool Library
+                ↓
+         Chrome Extension
+                ↓
+       Category Organization
+                ↓
+       Search / Filters / Tags
+                ↓
+       Favorites / Recently Used
+                ↓
+       Add / Edit / Delete Tools
+                ↓
+         Local Chrome Storage
+                ↓
+         JSON / CSV Backup
 ```
 
-The project separates the **version-controlled default tool collection** from the user's personal local additions. The bundled catalog is maintained through `default-tools.json`, while user-specific changes can be stored in `chrome.storage.local`.
+### 📦 Data Organization
 
-### 📦 Project Structure
+The project separates its version-controlled default tool collection from user-specific additions.
 
 ```text
 charlie-mj-tool-archive/
+│
 ├── manifest.json
 ├── README.md
 ├── LICENSE
+│
 ├── data/
 │   └── default-tools.json
+│
 ├── docs/
 │   └── DATA-FORMAT.md
+│
 ├── icons/
 │   ├── logo.svg
 │   ├── icon16.png
 │   ├── icon32.png
 │   ├── icon48.png
 │   └── icon128.png
+│
 └── src/
     ├── background.js
     ├── dashboard.html
@@ -737,276 +690,245 @@ charlie-mj-tool-archive/
     └── styles.css
 ```
 
-### 🎯 Purpose
+### 🎯 Project Purpose
 
-The main purpose of **Charlie MJ Tool Archive** is to turn a large and messy collection of useful websites and online resources into a personal, searchable, categorized digital tool library.
+Create a personal digital resource center where frequently used AI tools, developer utilities, DevOps resources, media applications, learning websites, dictionaries, and productivity tools remain organized and easily accessible.
 
-It is particularly useful for keeping frequently used **AI tools, developer tools, DevOps resources, media tools, learning websites, dictionaries, utilities, and other online resources** organized in one place.
+<div align="center">
+
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-tool-archive)
+
+</div>
 
 ---
 
-# 9. 🎵 Charlie MJ Music
+## 09. 🎵 Charlie MJ Music
 
-### 🔗 Repository
+**A Personalized Music, Poetry, Romantic Content & Emotional Discovery Platform**
 
-[**charlie-mj-music**](https://github.com/awsrmmustansarjavaid/charlie-mj-music)
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-music)
 
-### 💡 What Is It?
+### 💡 Project Overview
 
-**Charlie MJ Music** is a niche romantic music-discovery web application designed for couples, lovers, married partners, and anyone who struggles to find the **right song, poetry, quote, or caption for a special moment**.
+Charlie MJ Music is a niche romantic music-discovery application designed for couples, lovers, married partners, and anyone looking for the right song, poem, quote, or caption for a special moment.
 
-Instead of requiring users to already know the song or search keywords, the application allows them to describe:
+Sometimes people know exactly what they feel but don't know what song or words express those feelings.
 
-* ❤️ What they are feeling
-* 💑 Their relationship
-* 📅 Their special occasion
-* 📝 Their story or situation
-* 📸 An optional photo
-* 🎵 Their preferred music style
+This application transforms personal feelings, relationship situations, special occasions, and memories into meaningful content-discovery searches.
 
-The application then transforms that emotional context into **music and romantic-content discovery searches**.
+### ✨ Key Features
 
-### ✨ Main Features
+**❤️ Personal Moments**
 
-* ❤️ Create personalized love moments
-* 🎵 Discover songs based on feelings and situations
-* ▶️ YouTube music discovery
-* 🟢 Spotify music discovery
-* 📖 Romantic poetry discovery
-* 💬 Wise love quote discovery
-* 📱 Instagram/social caption discovery
-* 💌 Romantic message and love-letter ideas
-* 🧠 Feeling-to-search-keyword translation
-* 💑 Couple and relationship-focused discovery
-* 🎂 Birthday moments
-* 💍 Marriage anniversaries
-* 💒 Wedding and first-dance moments
-* 💕 Proposal moments
-* 🌹 First-love moments
-* 🌍 Long-distance relationship moments
-* 💔 Missing-someone moments
-* 🤝 Relationship healing and reconnection
-* 🥰 Gratitude and appreciation moments
-* ♾️ Forever-love and soulmate themes
-* 📸 Photo-based romantic moments
-* 🎼 Music-style selection
-* 🎙️ Browser-based song recognition support
-* 💾 Local browser memory storage
-* 📤 Export personal memories
-* 🌙 Romantic dark/light themes
-* ✨ Animated romantic UI
-* 📱 Fully responsive design
-* 🔒 Privacy-first client-side architecture
-* 🚫 No backend required
-* 🚫 No database required
-* 🚫 No GitHub Actions required
+- Create personalized love moments.
+- Describe feelings and situations.
+- Relationship-focused discovery.
+- Optional photo-based moments.
+- Music-style selection.
 
-### 🛠️ Technologies
+**🎵 Music Discovery**
 
-* HTML5
-* CSS3
-* JavaScript ES6+
-* Bootstrap 5
-* Bootstrap Icons
-* Web APIs
-* `localStorage`
-* `IndexedDB` where applicable
-* Browser microphone APIs
-* YouTube search
-* Spotify browser integration
-* Client-side search generation
-* GitHub Pages
+- YouTube music discovery.
+- Spotify music discovery.
+- Personalized song searches.
+- Browser-based song recognition support.
 
-### ⚙️ How It Works
+**📖 Romantic Content**
 
-The user creates a **Moment** by describing their feelings, relationship, event, and situation.
+- Romantic poetry discovery.
+- Love quotes.
+- Instagram and social captions.
+- Romantic messages.
+- Love-letter ideas.
 
-The application then converts that information into meaningful discovery concepts.
+**💑 Special Occasions**
+
+- Birthdays.
+- Marriage anniversaries.
+- Weddings.
+- First-dance moments.
+- Proposals.
+- Long-distance relationships.
+- Missing-someone moments.
+- Relationship healing.
+- Gratitude and appreciation.
+- Soulmate and forever-love themes.
+
+**💾 Personalization**
+
+- Local browser memory storage.
+- Export personal memories.
+- Romantic dark/light themes.
+- Animated interface.
+- Responsive design.
+- Privacy-first client-side architecture.
+
+### 🛠️ Technology Stack
+
+`HTML5` `CSS3` `JavaScript ES6+` `Bootstrap 5` `Bootstrap Icons` `Web APIs` `localStorage` `IndexedDB` `Browser Microphone APIs` `YouTube Search` `Spotify Integration` `GitHub Pages`
+
+### ⚙️ Discovery Workflow
 
 ```text
-User's Feelings + Story
-          ↓
-      Love Moment
-          ↓
-   Feeling Analysis
-          ↓
-  Romantic Themes
-          ↓
-   Search Keywords
-          ↓
- ┌────────┬─────────┬─────────┬─────────┐
- │ YouTube│ Spotify │ Poetry  │ Quotes  │
- └────────┴─────────┴─────────┴─────────┘
-          ↓
-     Discovery Pack
-          ↓
- Songs + Poetry + Quotes + Captions
-          ↓
-      Save Your Moment
+User's Feelings + Personal Story
+              ↓
+          Love Moment
+              ↓
+         Feeling Analysis
+              ↓
+         Romantic Themes
+              ↓
+          Search Keywords
+              ↓
+     ┌────────┼────────┐
+     ↓        ↓        ↓
+  YouTube  Spotify   Poetry
+     ↓        ↓        ↓
+    Songs    Music   Quotes
+              ↓
+         Discovery Pack
+              ↓
+     Songs + Poetry + Captions
+              ↓
+         Save Your Moment
 ```
 
-### 💕 Example
+### 💕 Project Philosophy
 
-A user might write:
+> Sometimes people know exactly what they feel, but they don't know what song describes it.
 
-> *“I'm away from my wife because of work. I miss her every day and want a song that expresses how much I love her and how much I want to come home.”*
-
-Instead of expecting the user to know what to search for, **Charlie MJ Music** can derive concepts such as:
-
-```text
-Long Distance Love
-Missing You
-Married Love
-Coming Home
-Deep Love
-Reunion
-Emotional Romantic Song
-Hopeful Love
-```
-
-These concepts can then be used to discover:
-
-```text
-🎵 Songs
-📖 Poetry
-💬 Quotes
-📱 Captions
-💌 Romantic Messages
-```
+Charlie MJ Music bridges the gap between personal emotions and meaningful music and romantic-content discovery.
 
 ### 🔐 Privacy & Architecture
 
-Charlie MJ Music is designed as a **static, client-side application**.
+The application is designed as a static, client-side application.
 
-```text
-Browser
-   ↓
-Charlie MJ Music
-   ↓
-Local Processing
-   ↓
-External Search Services
-```
+Personal moments and preferences can remain in the user's browser without requiring a custom application backend or database server.
 
-There is no application backend storing users' personal relationship information.
+<div align="center">
 
-Personal moments, memories, and preferences can remain inside the user's browser.
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-music)
 
-The project is designed specifically for **GitHub Pages**, without requiring:
-
-* Node.js backend
-* Python backend
-* Database server
-* VPS
-* GitHub Actions
-* Private server API
-
-### 🎯 Purpose
-
-The main idea behind **Charlie MJ Music** is simple:
-
-> **Sometimes people know exactly what they feel, but they don't know what song describes it.**
-
-Charlie MJ Music tries to bridge that gap by turning **emotions and personal moments into meaningful music and romantic-content discovery**.
+</div>
 
 ---
 
-# 10. 🧠 Charlie MJ OCR & Language Studio
+## 10. 🧠 Charlie MJ OCR & Language Studio
 
-### 🔗 Repository
+**A Portable OCR, Multilingual Vocabulary & Local AI Language Learning Workspace**
 
-[**charliemj-ocr-studio**](https://github.com/awsrmmustansarjavaid/charliemj-ocr-studio)
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/charliemj-ocr-studio)
 
-### 💡 What Is It?
+### 💡 Project Overview
 
-**Charlie MJ OCR & Language Studio** is a portable Windows desktop application designed for OCR extraction, multilingual text recognition, vocabulary organization, and language learning.
+Charlie MJ OCR & Language Studio is a portable Windows desktop application designed for complete OCR extraction, multilingual text recognition, bilingual vocabulary organization, and language learning.
 
-It transforms screenshots, flashcards, scanned learning materials, and images into structured, editable language-learning notes.
+It transforms screenshots, flashcards, scanned learning materials, and images into structured, editable learning resources.
 
-The application follows an important principle:
+The core philosophy is:
 
 **Complete OCR Extraction First → Intelligent Organization Second.**
 
-Instead of limiting extraction to an expected number of words or vocabulary entries, it processes the complete image first and then organizes the recognized content into structured text, bilingual vocabulary, headings, and learning materials.
+The application extracts the available text before organizing it into structured sections, vocabulary pairs, headings, and reusable study materials.
 
-It also provides optional local AI integration through Ollama, allowing users to organize vocabulary, improve extracted notes, and access AI-powered language-learning assistance without relying on cloud AI services.
+It also supports optional local AI integration through Ollama.
 
-### ✨ Main Features
+### ✨ Key Features
 
-- 🧠 **Three OCR Modes** — Smart, Raw, and AI Smart.
-- 🔎 **Complete Image OCR** — Extract visible text without predefined vocabulary-count limits.
-- 🌍 **Multilingual OCR** — English, Turkish, Urdu, Arabic, Persian, and additional installable languages.
-- 🎚️ **Three Processing Levels** — Fast, Balanced, and Deep.
-- ♾️ **Unlimited Image Queue** — Add, reorder, remove, undo, and reprocess multiple images.
-- ✂️ **Advanced Select Area** — Zoom, fit, pan, rotate, crop, and select multiple OCR regions.
-- 📚 **Bilingual Vocabulary Extraction** — Recognize and organize vocabulary from bilingual screenshots and tables.
-- 📝 **Four-Panel Text Editor** — Organize extracted content into editable sections.
-- 🔍 **Find & Replace** — Search and modify extracted text.
-- 🔠 **Text Organization** — Headings, vocabulary bullets, sorting, and duplicate removal.
-- 🤖 **Local AI Integration** — Optional Ollama-powered AI processing.
-- 🧩 **Specialized Local AI Agents** — OCR Structure, Vocabulary, and Study Tutor.
-- 🛡️ **AI Lossless Safety** — Preserve vocabulary pairs omitted during AI formatting.
-- 📤 **Multiple Export Formats** — Markdown, TXT, HTML, DOCX, and CSV.
-- 💾 **Local Processing** — OCR operates locally without requiring a cloud OCR API.
-- 💻 **Portable Windows Application** — Run without a traditional installer or administrator privileges.
-- 🔄 **Automatic Language Discovery** — Detect installed Tesseract language packs and install additional official language packs when needed.
-- 🧪 **Automated Testing** — Regression tests, portable EXE startup checks, and build verification.
-- 🔐 **Privacy-Focused Architecture** — Optional AI processing through local Ollama.
+**🧠 OCR Engine**
 
-### 🛠️ Technologies
+- Three OCR modes: Smart, Raw, and AI Smart.
+- Complete image OCR extraction.
+- Multilingual OCR.
+- English, Turkish, Urdu, Arabic, Persian, and additional installable languages.
+- Fast, Balanced, and Deep processing levels.
+- Unlimited image queue.
+- Image reordering and reprocessing.
 
-- Python
-- Tesseract OCR
-- Pillow
-- CustomTkinter / Tkinter
-- Ollama
-- HTML / Markdown / CSV / DOCX export support
-- PyInstaller
-- GitHub Actions
-- JSON
-- Local File Storage
+**✂️ Image Processing**
 
-### ⚙️ How It Works
+- Advanced Select Area.
+- Zoom and Fit.
+- Pan.
+- Rotate.
+- Crop.
+- Multiple OCR regions.
 
-The application processes images through a complete OCR and organization pipeline:
+**📚 Language Learning**
+
+- Bilingual vocabulary extraction.
+- Vocabulary pair organization.
+- Four-panel text editor.
+- Find and Replace.
+- Headings and vocabulary bullets.
+- Sorting and duplicate removal.
+
+**🤖 Local AI**
+
+- Optional Ollama integration.
+- OCR Structure Agent.
+- Vocabulary Agent.
+- Study Tutor Agent.
+- AI Lossless Safety.
+- Local AI-powered text organization.
+
+**📤 Export & Productivity**
+
+- Markdown export.
+- TXT export.
+- HTML export.
+- DOCX export.
+- CSV export.
+- Local processing.
+- Portable Windows application.
+- Automatic language discovery.
+- Regression tests and build verification.
+
+### 🛠️ Technology Stack
+
+`Python` `Tesseract OCR` `Pillow` `CustomTkinter` `Tkinter` `Ollama` `PyInstaller` `GitHub Actions` `JSON` `Local File Storage`
+
+### ⚙️ Application Workflow
 
 ```text
 Screenshots / Flashcards / Images
-              ↓
-       Image Import System
-              ↓
-       OCR Mode Selection
-        ↙      ↓       ↘
-      Raw    Smart    AI Smart
-        ↘      ↓       ↙
+                ↓
+          Image Import
+                ↓
+           OCR Mode
+       ↙       ↓       ↘
+     Raw     Smart    AI Smart
+       ↘       ↓       ↙
        Complete OCR Extraction
-              ↓
-    Structure & Vocabulary Detection
-              ↓
+                ↓
+      Structure & Vocabulary
+                ↓
        Bilingual Organization
-              ↓
-       Optional Local Ollama AI
-              ↓
-        Four-Panel Text Editor
-              ↓
-     Review / Edit / Organize Notes
-              ↓
-     Markdown / TXT / HTML / DOCX / CSV
+                ↓
+       Optional Local Ollama
+                ↓
+        Four-Panel Editor
+                ↓
+         Review & Editing
+                ↓
+       Export Learning Materials
+                ↓
+      MD / TXT / HTML / DOCX / CSV
 ```
-
-### 🌐 Language Learning Workflow
-
-The application is particularly useful for people learning languages through screenshots, online learning materials, vocabulary lists, bilingual dictionaries, and flashcards.
-
-Users can extract vocabulary from images, organize original and translated words, edit the results, remove duplicates, and export everything into reusable study materials.
 
 ### 🤖 Optional Local AI Integration
 
-The application supports optional local AI through **Ollama**.
+The application supports optional AI processing through locally installed Ollama models.
 
-Users can connect a locally installed Ollama model to access AI-powered formatting, vocabulary organization, OCR structure assistance, and study-tutor functionality.
+Users can connect a local model for:
 
-AI integration is optional. The core OCR engine and text editor continue working independently without Ollama.
+- Vocabulary organization.
+- OCR structure assistance.
+- Text formatting.
+- Language-learning explanations.
+- Study-tutor functionality.
+
+AI integration remains optional. The core OCR engine and text editor continue to work independently.
 
 ### 🔒 Privacy & Portability
 
@@ -1015,66 +937,107 @@ AI integration is optional. The core OCR engine and text editor continue working
 - Optional AI communicates with local Ollama.
 - No administrator installation is required.
 - No automatic startup entry is required.
-- User settings are stored alongside the portable application.
-- Additional OCR language packs can be installed when explicitly requested.
+- Settings are stored alongside the portable application.
+- Additional OCR language packs can be installed when requested.
 
-**Charlie MJ OCR & Language Studio** is designed to provide a lightweight, portable, privacy-focused environment for converting images into organized language-learning resources.
+<div align="center">
+
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charliemj-ocr-studio)
+
+</div>
 
 ---
 
-# 11. 🌍 Charlie MJ Language
+## 11. 🌍 Charlie MJ Language
 
-### 🔗 Repository
+**A YouTube Language Learning Chrome Extension with Dual Subtitles, Interactive Transcripts & Personal Learning Library**
 
-[**charlie-mj-language**](https://github.com/awsrmmustansarjavaid/charlie-mj-language)
+[![Repository](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-language)
 
-### 💡 What Is It?
+### 💡 Project Overview
 
-**Charlie MJ Language** is a lightweight, local-first Chrome extension designed to transform YouTube into an interactive language-learning environment.
+Charlie MJ Language is a lightweight, local-first Chrome extension designed to transform YouTube into an interactive language-learning environment.
 
-It helps users learn languages naturally while watching YouTube videos by combining subtitles, original and translated transcripts, vocabulary extraction, sentence translation, dictionary lookups, playback controls, personal notes, and learning-library management.
+It helps users learn naturally while watching videos by combining subtitles, original and translated transcripts, vocabulary extraction, sentence translation, dictionary lookups, playback controls, personal notes, and learning-library management.
 
-Instead of switching between multiple websites and applications, users can watch videos, understand unfamiliar words, save useful sentences, organize vocabulary, and review their learning materials directly within the YouTube experience.
+Instead of switching between multiple websites and applications, users can watch videos, understand unfamiliar words, save useful sentences, organize vocabulary, and review learning materials directly within YouTube.
 
-The extension follows a complete learning workflow:
+### 🎯 Learning Workflow
 
 **Watch → Understand → Capture → Organize → Review → Continue**
 
-### ✨ Main Features
+### ✨ Key Features
 
-- 🎬 **YouTube Learning Integration** — Interactive language-learning tools directly within YouTube.
-- 📝 **Dual Subtitle Display** — Display original and translated subtitles together.
-- 🌍 **Multilingual Caption Support** — Discover available manual and auto-generated YouTube caption tracks.
-- ⚡ **Fast Transcript Extraction** — Quickly retrieve available YouTube transcripts using the existing transcript engine.
-- 📜 **Timestamped Transcript Window** — View complete transcripts with video timeline synchronization.
-- 🔄 **Real-Time Transcript Highlighting** — Highlight the currently spoken sentence during video playback.
-- 🌐 **Caption Language Discovery** — Discover available caption languages when YouTube exposes them.
-- 🔤 **Interactive Word Learning** — Select words to access translation and dictionary information.
-- 📖 **Dictionary Integration** — Access word meanings, translations, and available language information.
-- 🧩 **Part-of-Speech Highlighting** — Visually distinguish vocabulary and grammatical information where available.
-- 💬 **Sentence Learning** — Save, translate, and study complete sentences.
-- 🔁 **Sentence Replay** — Replay sentences, use looping, A/B replay, and playback-speed controls where available.
-- 📚 **Vocabulary Library** — Save, organize, search, and review learned vocabulary.
-- 📌 **Timeline Bookmarks** — Save important moments from YouTube videos.
-- ❤️ **Watch Later** — Save videos for future learning sessions.
-- 📝 **Note Lab** — Create and manage personal learning notes.
-- 📂 **Learning Dashboard** — Manage vocabulary, sentences, bookmarks, notes, and saved learning materials.
-- 🔍 **Search & Filtering** — Find saved learning materials using supported library filters.
-- 📤 **Import & Export** — Export transcripts and supported learning data for external use.
-- 🎯 **Focus Mode** — Customize the learning experience and reduce unnecessary distractions.
-- 🛠️ **Customizable Learning Toolbar** — Configure toolbar position, dimensions, scale, arrangement, and visibility.
-- 🖥️ **Resizable Transcript Window** — Drag, resize, dock, pin, minimize, maximize, and customize the transcript interface.
-- 🎨 **Advanced Subtitle Customization** — Independently configure original and translated subtitle appearance, typography, dimensions, wrapping, and opacity.
-- ⚙️ **Professional Settings Dashboard** — Organized settings with responsive grid layouts, grouped controls, and live previews.
-- 🔔 **Custom Success Notifications** — Configure notification placement and interface feedback.
-- 💾 **Local-First Storage** — Keep settings and saved learning materials in Chrome local storage.
-- 🧩 **Modular Transcript Service Engine** — Separate transcript-service configuration designed to support future providers without replacing the existing stable fetching system.
+**🎬 YouTube Integration**
+
+- Interactive language-learning tools directly within YouTube.
+- YouTube video integration.
+- Available caption discovery.
+- Original and translated subtitle support.
+
+**📝 Dual Subtitles & Transcripts**
+
+- Original and translated subtitle display.
+- Manual and auto-generated caption discovery where available.
+- Fast transcript extraction.
+- Timestamped transcript window.
+- Real-time transcript highlighting.
+- Caption language discovery.
+- Video timeline synchronization.
+
+**🔤 Interactive Language Learning**
+
+- Select words for translation.
+- Dictionary integration.
+- Word meanings and language information.
+- Part-of-speech highlighting where available.
+- Sentence translation.
+- Sentence saving.
+- Sentence replay.
+- A/B replay.
+- Looping.
+- Playback-speed controls.
+
+**📚 Personal Learning Library**
+
+- Vocabulary library.
+- Saved sentences.
+- Timeline bookmarks.
+- Watch Later.
+- Note Lab.
+- Learning dashboard.
+- Search and filtering.
+- Import and export.
+- Video-linked learning records.
+
+**🎯 Customization & Interface**
+
+- Focus Mode.
+- Customizable learning toolbar.
+- Toolbar position, dimensions, and scale.
+- Resizable transcript window.
+- Drag, resize, dock, pin, minimize, and maximize.
+- Original and translated subtitle typography.
+- Subtitle dimensions and wrapping.
+- Independent subtitle appearance.
+- Professional settings dashboard.
+- Grouped settings and responsive layouts.
+- Live previews.
+- Custom success notifications.
+
+**💾 Local-First Architecture**
+
+- Chrome local storage.
+- Local learning records.
+- Exportable learning materials.
+- Modular transcript-service architecture.
+- Optional external translation and dictionary providers.
 
 ### 🤖 Optional Local AI & Future Integrations
 
 The project is designed to support additional language-learning capabilities without replacing its existing transcript and learning systems.
 
-Potential extensions include:
+Potential expansion areas include:
 
 - Local AI integration through Ollama.
 - Word-by-word vocabulary translation.
@@ -1083,57 +1046,46 @@ Potential extensions include:
 - Context-aware language explanations.
 - Additional modular transcript providers.
 
-These are planned expansion possibilities, not claims that every integration is already available in the current release.
+These are expansion possibilities and should not be interpreted as confirmation that every integration is already available in the current release.
 
-### 🛠️ Technologies
+### 🛠️ Technology Stack
 
-- JavaScript (ES6+)
-- HTML5
-- CSS3
-- Chrome Extension Manifest V3
-- Chrome Extension APIs
-- YouTube Player Integration
-- Chrome Storage API
-- JSON
-- Local Browser Storage
-- Modular JavaScript Architecture
+`JavaScript ES6+` `HTML5` `CSS3` `Chrome Extension Manifest V3` `Chrome Extension APIs` `YouTube Player Integration` `Chrome Storage API` `JSON` `Local Browser Storage` `Modular JavaScript`
 
-### ⚙️ How It Works
-
-Charlie MJ Language integrates its learning tools into the YouTube viewing experience.
+### ⚙️ Application Workflow
 
 ```text
-       YouTube Video
-             ↓
-     Video & Caption Detection
-             ↓
-    Original Caption Extraction
-             ↓
-   Available Caption Languages
-             ↓
-     Original + Translated
-          Subtitles
-             ↓
-      Timestamped Transcript
-             ↓
-     Real-Time Synchronization
-             ↓
-       Interactive Learning
-        ↙      ↓       ↘
-    Vocabulary Sentence  Dictionary
-        ↘      ↓       ↙
+           YouTube Video
+                 ↓
+       Video & Caption Detection
+                 ↓
+       Original Caption Extraction
+                 ↓
+        Available Caption Languages
+                 ↓
+         Original + Translated
+              Subtitles
+                 ↓
+        Timestamped Transcript
+                 ↓
+       Real-Time Synchronization
+                 ↓
+         Interactive Learning
+          ↙       ↓       ↘
+     Vocabulary Sentence Dictionary
+          ↘       ↓       ↙
        Personal Learning Library
-             ↓
-    Notes / Bookmarks / Watch Later
-             ↓
-       Review & Export
+                 ↓
+       Notes / Bookmarks / Watch Later
+                 ↓
+           Review & Export
 ```
 
 ### 📚 Personal Learning Library
 
 The extension provides a centralized environment for managing language-learning materials.
 
-Users can save and organize:
+Users can organize:
 
 - Individual vocabulary words.
 - Translated words and their meanings.
@@ -1142,8 +1094,6 @@ Users can save and organize:
 - Timestamped bookmarks.
 - Personal notes.
 - Videos saved for later.
-
-Saved materials remain available through the extension's local learning-library workflows.
 
 ### 🎨 Customization & User Experience
 
@@ -1161,8 +1111,6 @@ Users can configure:
 - Success notification positions.
 - Learning-interface settings.
 
-The settings dashboard uses a professional dark interface, responsive two-column layouts, grouped controls, and subtle hover effects.
-
 ### 🔒 Privacy & Storage
 
 - Local-first extension architecture.
@@ -1176,126 +1124,183 @@ Some translation and dictionary features communicate with external providers whe
 
 ### 📦 Installation
 
-1. Download or clone the GitHub repository.
+1. Download or clone the repository.
 2. Open Google Chrome.
 3. Navigate to `chrome://extensions`.
 4. Enable Developer Mode.
 5. Select **Load unpacked**.
-6. Choose the extracted project folder containing `manifest.json`.
+6. Choose the extracted folder containing `manifest.json`.
 7. Open or refresh a YouTube video.
 
-**Charlie MJ Language** turns everyday YouTube watching into a structured, interactive, and personalized language-learning experience.
+<div align="center">
+
+[![Open GitHub Repository](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-language)
+
+</div>
 
 ---
 
-# 🧩 What Connects These Projects?
+# 🧠 WHAT CONNECTS THESE PROJECTS?
 
-Although these projects solve completely different problems, they share the same development philosophy.
+Although these applications solve different problems, they share the same development philosophy.
 
-### 🎯 Problem-Focused Development
+## 🎯 1. Problem-Focused Development
 
-Each project starts with a practical problem rather than trying to build a large platform.
+Every project begins with a practical problem rather than an attempt to build another generic application.
 
-### 🛠️ Build the Smallest Useful Tool
+I look for repetitive, inconvenient, or time-consuming tasks and explore how a dedicated tool could simplify them.
 
-The goal is to create a focused application that solves the problem without unnecessary complexity.
+## 🧩 2. Build Focused Applications
 
-### 💻 Different Technologies for Different Problems
+My goal is to build applications with a clear purpose, a practical feature set, and an interface that makes the intended workflow easier.
 
-I use the technology that fits the problem:
+## 💻 3. Use the Right Technology
 
-- **HTML/CSS/JavaScript** for lightweight browser applications
-- **Bootstrap** for responsive interfaces
-- **Chrome Manifest V3** for browser automation
-- **RSS/API integration** for data-driven tools
-- **Tauri + Rust** for lightweight Windows applications
-- **React + TypeScript** for richer desktop interfaces
-- **FFmpeg** for media processing
-- **yt-dlp** for supported web media extraction
-- **SQLite** for local application data
-- **GitHub Actions** for automation and builds
+I select technologies according to the requirements of each project.
 
-### 🔐 Privacy & Local Processing
+| Technology | How I Use It |
+|---|---|
+| HTML / CSS / JavaScript | Lightweight browser applications |
+| Bootstrap | Responsive interfaces |
+| Chrome Manifest V3 | Browser extensions and automation |
+| APIs / RSS | Data-driven applications |
+| Tauri + Rust | Lightweight Windows desktop applications |
+| React + TypeScript | Rich desktop interfaces |
+| Electron | Portable desktop applications |
+| Python | OCR and local processing |
+| FFmpeg | Media processing |
+| yt-dlp | Supported web media extraction |
+| SQLite | Local application data |
+| GitHub Actions | Automated builds and workflows |
 
-Where practical, these projects avoid unnecessary servers and accounts.
+## 🔐 4. Privacy & Local Processing
 
-Several applications are designed to work directly in the browser or locally on the user's computer.
+Where practical, I prefer architectures that reduce unnecessary backend dependencies.
 
-### 📚 Learning Through Real Problems
+Several projects are designed to operate directly in the browser or locally on Windows.
 
-These projects also serve as practical learning projects where I can experiment with:
+This helps reduce infrastructure requirements while keeping the applications practical and accessible.
 
-- Frontend development
-- JavaScript
-- Browser APIs
-- Web extensions
-- APIs and RSS
-- Client-side storage
-- Desktop application development
-- Rust
-- React
-- TypeScript
-- Media processing
-- GitHub Actions
-- Open-source development
+## 📚 5. Learning Through Real Projects
 
----
+These applications also provide opportunities to develop practical experience in:
 
-# 🚀 My Niche Project Philosophy
-
-> **I don't build projects only to demonstrate technology. I build small, focused tools around problems I actually experience.**
-
-That makes each project a combination of:
-
-**Personal Problem + Niche Idea + Technology + Practical Solution**
-
-These projects are part of my ongoing **Charlie MJ Niche Projects** collection and represent my approach to learning, experimenting, and building useful software.
+- Frontend development.
+- JavaScript and Python.
+- Browser APIs.
+- Chrome extensions.
+- API integrations.
+- Client-side storage.
+- Desktop application development.
+- Rust.
+- React and TypeScript.
+- OCR and image processing.
+- Media processing.
+- GitHub Actions.
+- Open-source development.
 
 ---
 
-# 📂 Projects at a Glance
+# 🏗️ DEVELOPMENT PHILOSOPHY
 
-### ⏳ Time
+<div align="center">
 
-**Charlie MJ Chrono Journey**  
-A personal time-journey and countdown tool.
+### PERSONAL PROBLEM
 
-### 🎬 Drive Media
+⬇️
 
-**Charlie MJ Drive Media Downloader**  
-A browser extension for simplifying authorized Google Drive media workflows.
+### NICHE IDEA
 
-### 🔎 Articles
+⬇️
 
-**Charlie MJ Medium Profile Article Search Engine**  
-A focused search engine for public Medium profiles.
+### TECHNOLOGY & DEVELOPMENT
 
-### 📸 Photos
+⬇️
 
-**Charlie MJ PhotoStory**  
-An offline photo-grid and story creation tool.
+### FOCUSED APPLICATION
 
-### 🎥 Video
+⬇️
 
-**Charlie MJ Video Downloader**  
-A Windows media downloader and management application.
+### PRACTICAL SOLUTION
 
----
+</div>
 
-# 👨‍💻 Author
+> I don't build projects only to demonstrate technology. I build small, focused tools around problems I actually experience.
 
-**Raja Muhammad Mustansar Javaid**
-
-- GitHub: [awsrmmustansarjavaid](https://github.com/awsrmmustansarjavaid)
-- Focus: DevOps, Cloud, Automation, Web Applications, Desktop Tools & Open Source
+This is the philosophy behind my **Charlie MJ Niche Projects** collection.
 
 ---
 
-# 📜 License
+# 📂 ALL PROJECTS AT A GLANCE
 
-Each project has its own repository, license, documentation, and usage requirements. Please check the individual repository before using or redistributing a project.
+| # | Project | Primary Purpose | Repository |
+|---:|---|---|---|
+| 01 | ⏳ Charlie MJ Chrono Journey | Time tracking and countdowns | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-chrono-journey) |
+| 02 | 🎬 Charlie MJ Drive Media Downloader | Authorized Google Drive media workflows | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-MJ-drive-media-downloader) |
+| 03 | 📸 Charlie MJ Instagram Post Editor | Offline Instagram image editing | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-instagram-post-editor) |
+| 04 | 🔎 Charlie MJ Medium Article Search Engine | Medium profile article discovery | [GitHub](https://github.com/awsrmmustansarjavaid/medium-article-search-engine) |
+| 05 | 🖼️ Charlie MJ PhotoStory | Offline photo grids and stories | [GitHub](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory) |
+| 06 | 🎥 Charlie MJ Video Downloader | Desktop media downloading and management | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader) |
+| 07 | 🎬 Charlie MJ YouTube Toolkit | YouTube analysis and learning workspace | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit) |
+| 08 | 🗂️ Charlie MJ Tool Archive | Personal digital tool library | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-tool-archive) |
+| 09 | 🎵 Charlie MJ Music | Music and romantic content discovery | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-music) |
+| 10 | 🧠 Charlie MJ OCR & Language Studio | OCR and multilingual learning | [GitHub](https://github.com/awsrmmustansarjavaid/charliemj-ocr-studio) |
+| 11 | 🌍 Charlie MJ Language | YouTube language-learning extension | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-language) |
 
 ---
 
+# 👨‍💻 ABOUT THE DEVELOPER
 
-> **Different problems. Different niche solutions. One philosophy: build tools that solve real problems I personally face.**
+<div align="center">
+
+## Raja Muhammad Mustansar Javaid
+
+**Independent Developer | DevOps Learner | Cloud & Automation Enthusiast | Open-Source Builder**
+
+I enjoy developing practical applications, experimenting with different technologies, learning through real-world projects, and turning everyday problems into useful digital tools.
+
+<br>
+
+[![GitHub Profile](https://img.shields.io/badge/GitHub-Visit_My_Profile-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid)
+
+</div>
+
+### Areas of Interest
+
+- DevOps & Cloud Computing
+- Automation & Infrastructure
+- Web Application Development
+- Browser Extensions
+- Desktop Application Development
+- Artificial Intelligence & Local AI
+- Media Processing
+- Language Learning Technologies
+- Open-Source Development
+
+---
+
+# 📜 LICENSE & USAGE
+
+Each project has its own repository, license, documentation, and usage requirements.
+
+Please visit the individual repository to review its license before using, modifying, or redistributing any project.
+
+---
+
+<div align="center">
+
+# 🚀 DIFFERENT PROBLEMS. DIFFERENT NICHE SOLUTIONS.
+
+### ONE PHILOSOPHY: BUILD TO SOLVE REAL PROBLEMS.
+
+**Designed around personal needs. Built with practical technologies. Shared through open-source development.**
+
+<br>
+
+[![Explore All Projects](https://img.shields.io/badge/EXPLORE_ALL_MY_PROJECTS-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid?tab=repositories)
+
+[![GitHub](https://img.shields.io/badge/Follow_My_GitHub-100000?style=social&logo=github)](https://github.com/awsrmmustansarjavaid)
+
+<sub>Charlie MJ — Niche Web Apps & Digital Tools</sub>
+
+</div>
