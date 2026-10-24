@@ -62,7 +62,7 @@ Select **Explore** to jump directly to the relevant project section.
 | 🎬 Media & Downloading | Drive Media Downloader, Video Downloader | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#media-downloading) |
 | 🔎 Research & Discovery | Medium Article Search Engine | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#research-discovery) |
 | 📸 Image & Photo Editing | Instagram Post Editor, PhotoStory | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#image-photo-editing) |
-| 🎥 YouTube & Learning | YouTube Toolkit, Charlie MJ Language | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#youtube-learning) |
+| 🎥 YouTube & Learning        | YouTube Toolkit, Charlie MJ Language, Charlie MJ YouTube | [Explore](https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/blob/main/Niche%20Projects/Niche%20Projects%20README.md.md#youtube-learning) |
 | 🗂️ Digital Organization | Charlie MJ Tool Archive | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#digital-organization) |
 | 🎵 Music & Creativity | Charlie MJ Music | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#music-creativity) |
 | 🧠 OCR & Language Processing | Charlie MJ OCR & Language Studio | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#ocr-language-processing) |
@@ -1036,6 +1036,295 @@ AI integration remains optional. The core OCR engine and text editor continue to
 
 ---
 
+## 12. 🎥 Charlie MJ YouTube
+
+**A Database-Driven YouTube Content Discovery, Personalization, Learning & Library Chrome Extension**
+
+[Repository](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube)
+
+### 💡 Project Overview
+
+Charlie MJ YouTube is a database-driven Chrome extension designed to transform the YouTube experience around the user's selected **country, language, interests, learning goals, technical interests, and content niches**.
+
+Instead of relying entirely on YouTube's default recommendations, the extension provides a structured system for controlling and discovering content through **General Mode, Tech Mode, Language Mode, and Niche Mode**.
+
+The extension combines personalized content discovery with language learning, technical-content discovery, niche-based filtering, an advanced YouTube Library, courses, profiles, categories, collections, database management, synchronization, notifications, and configurable YouTube tools.
+
+### 🎯 Core Concept
+
+```text
+Target Country
+       +
+Target Language
+       +
+Selected Mode
+       +
+Profile / Niche
+       ↓
+Content Discovery & Filtering
+       ↓
+YouTube Personalization
+       ↓
+Library / Collections / Courses
+       ↓
+Personalized YouTube Experience
+```
+
+### 🧩 General Mode
+
+General Mode provides the main personalized YouTube experience.
+
+Users can configure their preferred:
+
+- 🌍 Target country.
+- 🗣️ Target language.
+- 🎯 Content preferences.
+- 🔎 Discovery behavior.
+- 🚫 Filtering preferences.
+- 📋 Whitelist and blocklist behavior.
+- ⚙️ YouTube-related settings.
+
+The goal is to make YouTube discovery more aligned with the user's selected geographic and language preferences.
+
+### 💻 Tech Mode
+
+Tech Mode is designed specifically for technical and technology-focused YouTube discovery.
+
+It supports specialized profiles and content areas such as:
+
+- 💻 Programming.
+- 🧑‍💻 Software Development.
+- 🤖 Artificial Intelligence.
+- 🔐 Cybersecurity.
+- ☁️ Cloud Computing.
+- ⚙️ DevOps.
+- 🗄️ Databases.
+- 🌐 Networking.
+- 🛠️ Engineering.
+- 📚 Technical Learning.
+- 🧪 Developer Tools.
+- 🖥️ Technology Tutorials.
+
+Users can create and manage custom technology profiles to focus YouTube discovery around specific technical interests.
+
+### 🌍 Language Mode
+
+Language Mode transforms YouTube into a language-focused content discovery environment.
+
+Users can configure:
+
+- 🌍 Target country.
+- 🗣️ Target language.
+- 📚 Language-learning profiles.
+- 📝 Vocabulary-focused content.
+- 🎧 Listening content.
+- 🗣️ Speaking content.
+- 📖 Grammar content.
+- 🔤 Pronunciation content.
+- 🌐 Cultural content.
+- 🎬 Language-learning videos.
+
+This allows YouTube discovery to be oriented toward the selected language and its associated content ecosystem.
+
+### 🧠 Niche Mode
+
+Niche Mode provides structured content discovery based on specialized interests.
+
+Supported niche areas include:
+
+- 💼 Business & Entrepreneurship.
+- 📈 Productivity & Lifestyle.
+- 🎨 Art & Creative Skills.
+- 👗 Fashion.
+- 🏋️ Fitness & Health.
+- 💆 Personal Grooming & Hygiene Care.
+- 🧠 Personal Mental Wellness & Self-Care.
+- ❤️ Life Coaching, Relationships & Marriage.
+- 🎙️ Podcasts — All Topics.
+- 💡 Unique Ideas, Creativity & Innovation.
+- 🌱 Gardening, Plants & Horticulture.
+- 🧵 Handmade Skills & Crafts.
+- 🎬 Documentaries, History, Science & Culture.
+- 🎵 Music & Poetry.
+- 📚 Additional database-driven niches and custom profiles.
+
+Niche profiles can contain structured categories and large collections of searchable terms, allowing the extension to discover content around highly specific subjects.
+
+### 📚 YouTube Library
+
+Charlie MJ YouTube includes an integrated library for organizing YouTube content.
+
+Users can:
+
+- 🔗 Save YouTube videos.
+- 📺 Save YouTube playlists.
+- 📚 Save long-form learning content.
+- 🗂️ Organize saved content into categories.
+- 📁 Organize content into collections.
+- 🔎 Search the library.
+- ✏️ Edit saved items.
+- 🏷️ Categorize saved content.
+- 🔄 Manage library organization.
+- 🛡️ Prevent duplicate YouTube items.
+
+### 🎓 YouTube Courses
+
+The extension provides a dedicated YouTube Courses workflow for long-form learning content.
+
+YouTube videos longer than **one hour** can automatically be treated as course content.
+
+Courses can be created from:
+
+- 🎥 Individual YouTube videos.
+- 📺 YouTube playlists.
+- 📚 Long-form educational content.
+
+This makes the Library useful not only as a bookmark system, but also as a structured personal learning archive.
+
+### 🗂️ Categories & Collections
+
+Library organization includes dedicated:
+
+- 🏷️ Categories.
+- 📁 Collections.
+- 🎓 Courses.
+- 🔗 YouTube items.
+
+Users can assign saved content to categories and collections while keeping the original YouTube identity and metadata.
+
+### 🗄️ Database-Driven Architecture
+
+Charlie MJ YouTube uses structured database files to support its targeting and discovery system.
+
+The database architecture includes:
+
+- 🌍 Countries.
+- 🗣️ Languages.
+- 🧠 Niches.
+- 💻 Technology profiles.
+- 📚 Language profiles.
+- 🎯 Content filters.
+- ✅ Whitelists.
+- 🚫 Blocklists.
+- 📊 Structured profile data.
+
+The database-driven design makes it possible to expand the extension without hard-coding every content category directly into the main YouTube interface.
+
+### 🔄 Data Sync
+
+The extension includes a Data Sync workflow for managing database information and synchronization.
+
+It supports database-oriented workflows such as:
+
+- 📥 Importing data.
+- 📤 Exporting data.
+- 🔄 Synchronizing database information.
+- 🌐 GitHub-based data sources.
+- 🔍 Comparing local and remote data.
+- 🗃️ Managing structured JSON datasets.
+
+### ⚙️ Advanced Settings
+
+Charlie MJ YouTube provides a modular settings system for configuring different parts of the extension.
+
+Settings areas include:
+
+- 🎯 Target Country.
+- 🗣️ Target Language.
+- 🧠 Modes & Profiles.
+- 🔐 Privacy.
+- 📊 Data Sync.
+- ⚡ Extension Performance.
+- 🔔 Notifications.
+- 🛠️ Toolbar.
+- 📺 YouTube tools.
+- 🚫 Ad-blocking controls.
+- 🗄️ Database management.
+
+### 🔔 Notifications & User Feedback
+
+The extension provides interface feedback for important actions such as:
+
+- 💾 Saving settings.
+- 📥 Importing data.
+- 📤 Exporting data.
+- 🔄 Synchronization.
+- 🧩 Profile management.
+- 📚 Library operations.
+- ⚙️ Configuration changes.
+
+### 🛡️ Smart Duplicate Protection
+
+Saved YouTube content uses the video's or playlist's actual YouTube identity for duplicate detection rather than relying only on title similarity.
+
+This helps prevent the same YouTube content from being repeatedly added to the personal library.
+
+### 🛠️ Technologies
+
+`JavaScript ES6+` `HTML5` `CSS3` `Chrome Extensions` `Manifest V3` `Chrome Storage API` `Service Worker` `YouTube DOM` `JSON Database` `GitHub Data Sync` `YouTube Metadata` `Browser Storage`
+
+### ⚙️ Overall Workflow
+
+```text
+Open YouTube
+      ↓
+Extension Initialization
+      ↓
+Load Settings & Database
+      ↓
+Select Country + Language
+      ↓
+Select Mode
+      ↓
+Select Profile / Niche
+      ↓
+Analyze YouTube Content
+      ↓
+Apply Targeting & Filtering
+      ↓
+Personalized Content Discovery
+      ↓
+Save Useful Content
+      ↓
+Library / Category / Collection
+      ↓
+YouTube Courses
+      ↓
+Personal Learning & Content Archive
+```
+
+### 🚀 Why Charlie MJ YouTube?
+
+Charlie MJ YouTube brings several YouTube workflows together inside one extension:
+
+```text
+🌍 Country Targeting
+        +
+🗣️ Language Targeting
+        +
+💻 Technology Discovery
+        +
+🌍 Language Learning
+        +
+🧠 Niche Discovery
+        +
+📚 YouTube Library
+        +
+🎓 YouTube Courses
+        +
+🗂️ Categories & Collections
+        +
+🗄️ Database Management
+        +
+🔄 Data Sync
+        ↓
+🎥 Personalized YouTube Experience
+```
+
+[![🚀 EXPLORE PROJECT](https://img.shields.io/badge/🚀_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube)
+
+---
+
 # 🧠 WHAT CONNECTS THESE PROJECTS?
 
 Although these applications solve different problems, they share the same development philosophy.
@@ -1140,6 +1429,7 @@ This is the philosophy behind my **Charlie MJ Niche Projects** collection.
 | 09 | 🗂️ Charlie MJ Tool Archive | Personal digital tool library | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-tool-archive) |
 | 10 | 🎵 Charlie MJ Music | Music and romantic content discovery | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-music) |
 | 11 | 🧠 Charlie MJ OCR & Language Studio | OCR and multilingual learning | [GitHub](https://github.com/awsrmmustansarjavaid/charliemj-ocr-studio) |
+| 12    | 🎥 Charlie MJ YouTube                      | YouTube personalization, discovery, learning & library   | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube) |
 
 ---
 
