@@ -62,7 +62,7 @@ Select **Explore** to jump directly to the relevant project section.
 | 🎬 Media & Downloading | Drive Media Downloader, Video Downloader | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#media-downloading) |
 | 🔎 Research & Discovery | Medium Article Search Engine | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#research-discovery) |
 | 📸 Image & Photo Editing | Instagram Post Editor, PhotoStory | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#image-photo-editing) |
-| 🎥 YouTube & Learning        | YouTube Toolkit, Charlie MJ Language, Charlie MJ YouTube | [Explore](https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/blob/main/Niche%20Projects/Niche%20Projects%20README.md.md#youtube-learning) |
+| 🎥 YouTube & Learning | YouTube Toolkit, Charlie MJ Language | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#youtube-learning) |
 | 🗂️ Digital Organization | Charlie MJ Tool Archive | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#digital-organization) |
 | 🎵 Music & Creativity | Charlie MJ Music | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#music-creativity) |
 | 🧠 OCR & Language Processing | Charlie MJ OCR & Language Studio | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#ocr-language-processing) |
