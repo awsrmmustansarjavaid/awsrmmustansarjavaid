@@ -61,11 +61,13 @@ Select **Explore** to jump directly to the relevant project section.
 | ⏳ Time & Productivity | Charlie MJ Chrono Journey | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#chrono-journey) |
 | 🎬 Media & Downloading | Drive Media Downloader, Video Downloader | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#media-downloading) |
 | 🔎 Research & Discovery | Medium Article Search Engine | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#research-discovery) |
+| 📚 Reading & Knowledge | [Charlie MJ Reader](https://github.com/awsrmmustansarjavaid/Charlie-MJ-Reader) | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#reading-knowledge) |
 | 📸 Image & Photo Editing | Instagram Post Editor, PhotoStory | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#image-photo-editing) |
-| 🎥 YouTube & Learning | YouTube Toolkit, Charlie MJ Language , Charlie MJ YouTube | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#youtube-learning) |
+| 🎥 YouTube & Learning | YouTube Toolkit, Charlie MJ Language, Charlie MJ YouTube | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#youtube-learning) |
 | 🗂️ Digital Organization | Charlie MJ Tool Archive | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#digital-organization) |
 | 🎵 Music & Creativity | Charlie MJ Music | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#music-creativity) |
 | 🧠 OCR & Language Processing | Charlie MJ OCR & Language Studio | [![Explore](https://img.shields.io/badge/Explore-Visit_Category-2563EB?style=for-the-badge)](#ocr-language-processing) |
+
 
 ---
 
@@ -1325,6 +1327,101 @@ Charlie MJ YouTube brings several YouTube workflows together inside one extensio
 
 ---
 
+## 13. 📚 Charlie MJ Reader
+
+**An Intelligent Browser-Based Reading, Knowledge Management & Productivity Extension**
+
+[Repository](https://github.com/awsrmmustansarjavaid/Charlie-MJ-Reader) ([![GitHub](https://img.shields.io/badge/GitHub-View_Repository-181717?style=flat-square&logo=github)](https://github.com/awsrmmustansarjavaid/Charlie-MJ-Reader))
+
+### 💡 Project Overview
+
+Charlie MJ Reader is a local-first Chrome Manifest V3 browser extension designed to transform ordinary web browsing into an organized reading, learning, and knowledge-management experience.
+
+It combines distraction-free article reading, intelligent content capture, synchronized text-to-speech, vocabulary building, highlights, personal notes, reading analytics, website management, and productivity tools in one unified workspace.
+
+The extension works only on websites explicitly enabled by the user, keeping other websites untouched.
+
+### ✨ Key Features
+
+- 📖 **Smart Article Reader** — Capture, organize, and read web articles in a dedicated reading workspace.
+- 🌐 **Supported Website Management** — Enable, disable, and configure individual websites and URL paths.
+- 🎯 **Floating Reading Toolbar** — Access reading, vocabulary, productivity, and focus tools directly on supported websites.
+- 🔊 **Smart Audio Reader** — Text-to-speech with play, pause, resume, sentence navigation, speed, pitch, and voice controls.
+- 📝 **Smart Text Selection** — Select and save words, sentences, paragraphs, and custom text.
+- 📚 **Vocabulary Builder** — Save vocabulary with definitions, translations, pronunciation, examples, synonyms, and notes.
+- 🌍 **Language Learning Mode** — Read articles, translate selected text, explore vocabulary, and use grammar-category highlighting.
+- 💬 **Quote & Paragraph Collection** — Save meaningful quotes, paragraphs, lines, and selected passages.
+- 🖍️ **Smart Highlights** — Highlight and organize important content from supported websites and saved articles.
+- 📌 **Reading Position Bookmarks** — Save reading positions and restore progress when returning to an article.
+- 📊 **Reading Analytics** — Track reading progress, completion, history, and productivity statistics.
+- 🗂️ **Article Library** — Search, organize, edit, remove, import, export, and manage saved articles.
+- 📰 **Website & Newspaper Library** — Organize websites, newspapers, author profiles, categories, and favorite sources.
+- 🔍 **SEO & Website Intelligence** — Website information, on-page SEO checks, ranking data, and article audits.
+- 🎯 **Focus Mode** — Reduce distractions with brightness, contrast, dimming, blur, and reading appearance controls.
+- ⏱️ **Productivity Tools** — Built-in Pomodoro timer, 80/20 timer, and native reading controls.
+- 🎨 **Custom Reading Experience** — Themes, fonts, font sizes, reading width, line height, and toolbar customization.
+- 🔔 **Smart Notifications** — Configurable notifications with position, duration, and individual event controls.
+- 📤 **Data Export & Backup** — Export articles, vocabulary, highlights, and saved content in supported formats, with full JSON backup and restore.
+- 🔒 **Local-First Storage** — Store reading data locally using Chrome storage.
+- 💤 **Website Sleep Mode** — Automatically keep unsupported or disabled websites untouched.
+
+### 🛠️ Technologies
+
+`Chrome Extension MV3` `JavaScript` `HTML5` `CSS3` `Chrome Storage API` `Chrome Tabs API` `Chrome Scripting API` `Service Worker` `Content Scripts` `Chrome Context Menus` `Web Speech API` `Speech Synthesis` `JSON` `DOM Manipulation` `SEO Analysis` `Local-First Architecture`
+
+### ⚙️ Workflow
+
+```text
+User Opens a Supported Website
+             ↓
+      Website Activation Gate
+             ↓
+      Article Detection
+             ↓
+    Floating Reading Toolbar
+             ↓
+    Capture Article Content
+             ↓
+      Reading Engine
+             ↓
+   ┌─────────┼──────────┐
+   ↓         ↓          ↓
+Read       Listen     Capture
+Article    with TTS   Content
+   ↓         ↓          ↓
+   │      Highlight    Vocabulary
+   │      & Auto-scroll Quotes
+   │         ↓          Paragraphs
+   └─────────┼──────────┘
+             ↓
+       Reader Workspace
+             ↓
+    My Reading Library
+             ↓
+   Notes / Highlights / History
+             ↓
+      Analytics & Progress
+             ↓
+      Export & Backup
+```
+
+### 🔐 Privacy & Security
+
+- Local-first data storage using `chrome.storage.local`.
+- Website activation is controlled through the Supported Websites settings.
+- Unsupported websites remain untouched.
+- No cookie manipulation or authentication bypass.
+- No paywall or quota bypass.
+- AI configuration is opt-in; article text is not sent to an AI service by the extension.
+- Translation sends selected text only when the user explicitly requests translation.
+- No automatic GitHub synchronization; backup and export operations are user-controlled.
+
+**Architecture:** Built with a modular JavaScript architecture, Chrome Manifest V3, a shared reading engine, and a unified saved-article database.
+
+[🚀 EXPLORE PROJECT](https://github.com/awsrmmustansarjavaid/Charlie-MJ-Reader) ([![Explore Project](https://img.shields.io/badge/%F0%9F%9A%80_EXPLORE_PROJECT-181717?style=for-the-badge&logo=github)](https://github.com/awsrmmustansarjavaid/Charlie-MJ-Reader))
+
+---
+
 # 🧠 WHAT CONNECTS THESE PROJECTS?
 
 Although these applications solve different problems, they share the same development philosophy.
@@ -1420,16 +1517,17 @@ This is the philosophy behind my **Charlie MJ Niche Projects** collection.
 |---:|---|---|---|
 | 01 | ⏳ Charlie MJ Chrono Journey | Time tracking and countdowns | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-chrono-journey) |
 | 02 | 🎬 Charlie MJ Drive Media Downloader | Authorized Google Drive media workflows | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-MJ-drive-media-downloader) |
-| 03 | 🎥 Charlie MJ Video Downloader | Desktop media downloading and management | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader) |
-| 04 | 🔎 Charlie MJ Medium Article Search Engine | Medium profile article discovery | [GitHub](https://github.com/awsrmmustansarjavaid/medium-article-search-engine) |
-| 05 | 📸 Charlie MJ Instagram Post Editor | Offline Instagram image editing | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-instagram-post-editor) |
-| 06 | 🖼️ Charlie MJ PhotoStory | Offline photo grids and stories | [GitHub](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory) |
-| 07 | 🎬 Charlie MJ YouTube Toolkit | YouTube analysis and learning workspace | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit) |
-| 08 | 🌍 Charlie MJ Language | YouTube language-learning extension | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-language) |
-| 09 | 🗂️ Charlie MJ Tool Archive | Personal digital tool library | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-tool-archive) |
-| 10 | 🎵 Charlie MJ Music | Music and romantic content discovery | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-music) |
-| 11 | 🧠 Charlie MJ OCR & Language Studio | OCR and multilingual learning | [GitHub](https://github.com/awsrmmustansarjavaid/charliemj-ocr-studio) |
-| 12    | 🎥 Charlie MJ YouTube                      | YouTube personalization, discovery, learning & library   | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube) |
+| 03 | 📚 Charlie MJ Reader | Smart article reading, text-to-speech, vocabulary building, knowledge management and reading analytics | [GitHub](https://github.com/awsrmmustansarjavaid/Charlie-MJ-Reader) |
+| 04 | 🎥 Charlie MJ Video Downloader | Desktop media downloading and management | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-video-downloader) |
+| 05 | 🔎 Charlie MJ Medium Article Search Engine | Medium profile article discovery | [GitHub](https://github.com/awsrmmustansarjavaid/medium-article-search-engine) |
+| 06 | 📸 Charlie MJ Instagram Post Editor | Offline Instagram image editing | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-instagram-post-editor) |
+| 07 | 🖼️ Charlie MJ PhotoStory | Offline photo grids and stories | [GitHub](https://github.com/awsrmmustansarjavaid/CharlieMJ-PhotoStory) |
+| 08 | 🎬 Charlie MJ YouTube Toolkit | YouTube analysis and learning workspace | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube-toolkit) |
+| 09 | 🌍 Charlie MJ Language | YouTube language-learning extension | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-language) |
+| 10 | 🗂️ Charlie MJ Tool Archive | Personal digital tool library | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-tool-archive) |
+| 11 | 🎵 Charlie MJ Music | Music and romantic content discovery | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-music) |
+| 12 | 🧠 Charlie MJ OCR & Language Studio | OCR and multilingual learning | [GitHub](https://github.com/awsrmmustansarjavaid/charliemj-ocr-studio) |
+| 13 | 🎥 Charlie MJ YouTube | YouTube personalization, discovery, learning and library | [GitHub](https://github.com/awsrmmustansarjavaid/charlie-mj-youtube) |
 
 ---
 
