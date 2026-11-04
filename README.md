@@ -328,7 +328,7 @@ Practical Solution
 
 <p align="center">
 
-  <a href="/Niche Projects/Niche Projects README.md.md">
+  <a href="/Niche Projects/Niche Projects README.md">
     <img src="https://img.shields.io/badge/Niche%20Apps%20Projects-Explore-0f172a?style=flat&logo=github&logoColor=white" alt="Niche Apps Projects"/>
   </a>
 
