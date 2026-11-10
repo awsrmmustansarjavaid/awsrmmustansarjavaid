@@ -1,0 +1,202 @@
+# Day 02 — Linux File System Hierarchy & Navigation
+
+[← Day 01](../day-01/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Tracker](../LEARNING-TRACKER.md) | [Day 03 →](../day-03/README.md)
+
+| | |
+|---|---|
+| **Phase** | Phase 1 - Foundations |
+| **Week** | Week 1 — Linux & Systems Engineering |
+| **Difficulty** | Beginner |
+| **Estimated time** | 3.5 hours |
+| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-07` |
+
+> **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
+
+---
+
+## 1. Daily Objectives
+
+By the end of today you must be able to:
+
+- [ ] Navigate the Linux directory tree without a GUI
+- [ ] Explain the purpose of /etc, /var, /usr, /opt, /home, /tmp, /proc
+- [ ] Use absolute/relative paths, links and wildcards
+
+## 2. Prerequisites
+
+- Day 1 completed.
+- Your lab from [LAB-ENVIRONMENT-SETUP.md](../LAB-ENVIRONMENT-SETUP.md) is running.
+- Previous day's work is committed to GitHub.
+
+## 3. Learning Topics
+
+### 3.1 Filesystem Hierarchy Standard
+
+Everything is a file under a single root `/`. `/etc` holds configuration, `/var/log` logs, `/usr/bin` user programs, `/opt` third-party software, `/home` user data, `/tmp` temporary files, `/proc` and `/sys` expose kernel state as files.
+
+### 3.2 Paths and links
+
+Absolute paths start with `/`; relative paths start from `pwd`. A hard link is another name for the same inode; a symlink is a pointer to a path. Symlinks are widely used for config switching (e.g. nginx sites-enabled).
+
+### 3.3 Globbing
+
+`*`, `?`, `[a-z]` and `{a,b}` are expanded by the shell before the command runs.
+
+## 4. Practical Labs
+
+Work through these in order. Record the commands you ran and the output in `lab-notes.md` inside this folder.
+
+1. [ ] Walk through `/` with `ls` and write one sentence about each top-level directory.
+2. [ ] Create `~/lab/{app,logs,backup}` with one command using brace expansion.
+3. [ ] Create a file, a hard link and a symlink; delete the original and observe the difference.
+4. [ ] Use `ls -li` to show inode numbers.
+5. [ ] Use `du -sh /var/* 2>/dev/null | sort -h` to find big directories.
+
+## 5. Real-World Scenario
+
+> A teammate says 'the config is somewhere in /etc but I can't find which file sets the SSH port.' Find it using `grep -r` and document the path.
+
+**Your task:** solve it in your lab, document the steps, the commands, what you verified, and what could go wrong in production.
+
+## 6. Commands & Scripts
+
+Type these yourself and adapt names/paths to your lab. Lines starting with `#` (or `//`) explain the step that follows. Review every command before running it; replace placeholders such as `<PID>`, `$VPC`, `USER`.
+
+```bash
+# Move around
+cd /etc && pwd && cd - && cd ~
+# Brace expansion creates many dirs at once
+mkdir -p ~/lab/{app,logs,backup}
+# Hard link vs symlink
+echo hi > a.txt; ln a.txt hard.txt; ln -s a.txt soft.txt; ls -li
+# Directory tree view
+tree -L 2 ~/lab
+# Disk usage of directories
+du -sh /var/* 2>/dev/null | sort -h
+# Find a config key
+sudo grep -rn "Port" /etc/ssh/ 2>/dev/null
+```
+
+## 7. Assignments (independent work)
+
+Complete without copying from the lesson. Look things up in official documentation when needed.
+
+| # | Assignment | Expected outcome |
+|---|---|---|
+| 1 | Write a one-page FHS cheat sheet in markdown. | You can demonstrate, without notes: *navigate the Linux directory tree without a GUI* — with evidence committed to `day-02/`. |
+| 2 | Recreate a typical web app layout under `/opt/myapp` with releases/current symlink pattern. | You can demonstrate, without notes: *explain the purpose of /etc, /var, /usr, /opt, /home, /tmp, /proc* — with evidence committed to `day-02/`. |
+| 3 | Explain what `/proc/cpuinfo` and `/proc/meminfo` show. | You can demonstrate, without notes: *use absolute/relative paths, links and wildcards* — with evidence committed to `day-02/`. |
+
+## 8. Troubleshooting
+
+| Problem | Likely cause and fix |
+|---|---|
+| `Permission denied` listing a folder | Use `sudo`, or check permissions with `ls -ld <dir>`. |
+| Broken symlink (red in ls) | Target missing or path relative to the wrong directory; recreate with absolute path. |
+
+**Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
+
+## 9. Security, Reliability & Cost Considerations
+
+- **Security:** Do not run `rm -rf` with variables or wildcards unless you echo the command first. Understand `/` vs `./` before deleting.
+- **Reliability:** What fails first here? How would you detect it and recover?
+- **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
+
+## 10. Daily Completion Checklist
+
+- [ ] Read and understand the learning material.
+- [ ] Complete all practical exercises.
+- [ ] Execute commands independently.
+- [ ] Complete the real-world scenario.
+- [ ] Troubleshoot at least one issue.
+- [ ] Complete the daily assignment.
+- [ ] Answer the interview questions.
+- [ ] Document important findings.
+- [ ] Push work to GitHub.
+- [ ] Complete the self-assessment.
+
+## 11. Daily Deliverables
+
+- [ ] Practical lab completed.
+- [ ] Screenshots or terminal evidence saved (`evidence/`).
+- [ ] Documentation written (`lab-notes.md`).
+- [ ] GitHub repository updated.
+- [ ] Day-specific: scenario write-up and assignment outputs committed.
+
+## 12. Interview Preparation
+
+Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
+
+1. What is stored in /etc and /var?
+2. Hard link vs symbolic link?
+3. What is an inode?
+4. What does `/proc` represent?
+5. **Scenario:** A teammate says 'the config is somewhere in /etc but I can't find which file sets the SSH port. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
+
+## 13. Self-Assessment
+
+Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
+
+| Check | 0 | 1 | 2 | 3 |
+|---|---|---|---|---|
+| Can I explain at least 8 top-level directories? | ☐ | ☐ | ☐ | ☐ |
+| Can I create a releases/current deployment layout? | ☐ | ☐ | ☐ | ☐ |
+| Do I know why hard links cannot cross filesystems? | ☐ | ☐ | ☐ | ☐ |
+| Navigate the Linux directory tree without a GUI | ☐ | ☐ | ☐ | ☐ |
+| Explain the purpose of /etc, /var, /usr, /opt, /home, /tmp, /proc | ☐ | ☐ | ☐ | ☐ |
+| Use absolute/relative paths, links and wildcards | ☐ | ☐ | ☐ | ☐ |
+
+> Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
+
+## 14. GitHub Submission
+
+Commit today's work under `day-02/` in your own repository:
+
+```text
+day-02/
+├── README.md        # this guide (keep; tick your checkboxes)
+├── lab-notes.md     # commands, outputs, what broke and how you fixed it
+├── interview.md     # your answers
+├── scripts/         # scripts, manifests, code created today
+└── evidence/        # screenshots / terminal output (no secrets!)
+```
+
+```bash
+git switch -c day-02
+git add day-02/
+git commit -m "day-02: linux file system hierarchy & navigation"
+git push -u origin day-02
+gh pr create --fill   # review your own PR, then merge
+```
+
+**Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
+
+## 15. Time Allocation
+
+| Activity | Minutes |
+|---|---|
+| Read and take notes (Sections 3, 9) | 42 |
+| Hands-on labs and commands (Sections 4–6) | 94 |
+| Assignment + troubleshooting (Sections 7–8) | 42 |
+| Interview practice, documentation, Git push (Sections 11–14) | 32 |
+| **Total** | **210 (≈ 3.5 h)** |
+
+## 16. Daily Reflection
+
+**What did I learn?**
+
+
+**What problems did I encounter?**
+
+
+**How did I solve them?**
+
+
+**What do I need to revise?**
+
+
+**One thing I will automate or improve tomorrow:**
+
+---
+
+[← Day 01](../day-01/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 03 →](../day-03/README.md)
