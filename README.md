@@ -446,8 +446,17 @@ Practical Solution
 
   <h2>📊 GitHub Activity & Analytics</h2>
 
-  <!-- Animated Activity Graph Widget -->
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=awsrmmustansarjavaid&theme=react-dark&hide_border=true&area=true" alt="GitHub Activity Graph" width="100%" />
+  
+  <!-- GitHub Activity Graph -->
+  <p align="center">
+    <a href="https://github.com/awsrmmustansarjavaid">
+      <img
+        src="https://github-readme-activity-graph.vercel.app/graph?username=awsrmmustansarjavaid&theme=react-dark"
+        alt="GitHub Activity Graph"
+        width="100%"
+      />
+    </a>
+  </p>
 
   <br/><br/>
 
