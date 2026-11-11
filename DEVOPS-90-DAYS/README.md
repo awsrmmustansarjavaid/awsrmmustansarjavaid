@@ -1,70 +1,49 @@
-# DEVOPS 90 DAYS — Professional Engineering Roadmap (2026 Edition)
+# Merged DevOps 90-Day Master Plan
 
-A 90-day, hands-on curriculum that builds **practical DevOps/Platform/SRE engineering capability** — not a pile of tutorials. Every day has its own folder, a full lesson, labs, a real-world scenario, a troubleshooting drill, security notes, interview questions, a self-assessment and a GitHub submission checklist.
+A unified, day-by-day DevOps learning program merged from the two supplied ZIP repositories.
 
-> **Outcome:** at Day 90 you can build, secure, deploy, observe and operate a production-style system end to end, and prove it with three portfolio-grade capstone projects.
+## What was merged
 
-## How to use this repository
+- **Primary curriculum:** the complete 90-day professional roadmap, with structured daily lessons, objectives, hands-on labs, real-world scenarios, troubleshooting, security/reliability notes, interview preparation, self-assessment, and GitHub deliverables.
+- **Practical companion repository:** the original `90DaysOfDevOps-master` day folders, notes, scripts, configuration files, project artifacts, and supporting resources.
+- **Daily integration:** each `day-XX/README.md` links to its matching original source folder and, where available, a `SUPPLEMENTARY-MATERIALS.md` that brings the extra Markdown notes into that day's workflow.
 
-1. Complete [LAB-ENVIRONMENT-SETUP.md](LAB-ENVIRONMENT-SETUP.md) before Day 1.
-2. Open `day-XX/README.md` each day. Follow it top to bottom. Tick the checkboxes as you go.
-3. Do the labs **by typing, not copying**. Break things on purpose. Fix them.
-4. Commit your work daily (see Section 14 of every day).
-5. Update [LEARNING-TRACKER.md](LEARNING-TRACKER.md) at the end of each day; do a revision pass every Sunday.
-6. Build the three capstones as described in [PROJECTS-AND-CAPSTONES.md](PROJECTS-AND-CAPSTONES.md).
-7. Finish with [ASSESSMENT-AND-CERTIFICATION.md](ASSESSMENT-AND-CERTIFICATION.md) and [CAREER-AND-INTERVIEW-PREPARATION.md](CAREER-AND-INTERVIEW-PREPARATION.md).
+## Start here
 
-## Repository structure
+1. Read [LAB-ENVIRONMENT-SETUP.md](LAB-ENVIRONMENT-SETUP.md).
+2. Review the [90-Day Roadmap](90-DAY-ROADMAP.md).
+3. Start with [Day 01](day-01/README.md) and complete one day at a time.
+4. Track progress in [Learning Tracker](LEARNING-TRACKER.md).
+5. Complete the [Projects and Capstones](PROJECTS-AND-CAPSTONES.md).
+6. Finish with [Assessment and Certification](ASSESSMENT-AND-CERTIFICATION.md) and [Career and Interview Preparation](CAREER-AND-INTERVIEW-PREPARATION.md).
 
-```text
-DEVOPS-90-DAYS/
-├── README.md
-├── 90-DAY-ROADMAP.md
-├── LEARNING-TRACKER.md
-├── PROJECTS-AND-CAPSTONES.md
-├── CAREER-AND-INTERVIEW-PREPARATION.md
-├── TOOLS-AND-TECHNOLOGIES.md
-├── LAB-ENVIRONMENT-SETUP.md
-├── ASSESSMENT-AND-CERTIFICATION.md
-├── SOURCE-REPO-MAPPING.md
-├── GLOSSARY.md
-├── CONTRIBUTING.md
-├── LICENSE
-├── day-01/README.md
-├── day-02/README.md
-├── ...
-└── day-90/README.md
-```
+## Daily structure
 
-## The four phases
+Every day has one canonical lesson in `day-XX/README.md`. Where the first repository supplied additional Markdown notes, they are collected in `day-XX/SUPPLEMENTARY-MATERIALS.md`. Original files are preserved under `reference-materials/90DaysOfDevOps-master/`.
 
-| Phase | Days | What you build |
-|---|---|---|
-| 1 — Foundations | 1–28 | Linux server runbook, hardened web server, `healthcheck` tool (Bash + Python), professional Git workflow |
-| 2 — Delivery & Security | 29–49 | Containers, CI/CD (Actions, Jenkins, GitLab), DevSecOps, **Capstone 1: Secure CI/CD Platform** |
-| 3 — Cloud & Infrastructure Automation | 50–70 | AWS + Azure, Terraform, Ansible, **Capstone 2: Cloud Infrastructure Automation** |
-| 4 — Platform, Reliability & Career | 71–90 | Kubernetes, Helm, GitOps, observability, SRE, platform engineering, FinOps/AI, **Capstone 3: Production Kubernetes & GitOps Platform**, final assessment |
+## Four learning phases
 
-## What every daily file contains
+| Phase | Days | Focus |
+|---|---:|---|
+| 1 — Foundations | 1–28 | Linux, networking, Bash/Python, Git and engineering workflow |
+| 2 — Delivery & Security | 29–49 | Docker, CI/CD, deployment strategies and DevSecOps |
+| 3 — Cloud & Infrastructure Automation | 50–70 | AWS/Azure, Terraform, Ansible and infrastructure automation |
+| 4 — Platform, Reliability & Career | 71–90 | Kubernetes, Helm, GitOps, observability, SRE, platform engineering and career readiness |
 
-Objectives · Prerequisites · Learning topics (real explanations) · Practical labs · Real-world scenario · Commands & scripts · Assignments with expected outcomes · Troubleshooting · Security/reliability/cost notes · Completion checklist · Deliverables · Interview preparation · Self-assessment · GitHub submission · Time allocation · Reflection.
+## Important lab safety
 
-## Skills covered (2026 job-market aligned)
+- Use a personal lab, VM, or sandbox; do not run destructive commands on production systems.
+- Never commit credentials, private keys, tokens, kubeconfigs, or cloud secrets.
+- Set cloud budgets and alerts before creating resources.
+- Follow each lab's cleanup/teardown steps to avoid unexpected charges.
+- Tool versions and cloud interfaces change; check official documentation when a command or UI differs.
 
-Linux & systems · Git & code quality · Python/Bash/YAML/JSON/API automation · Docker & container security · GitHub Actions, Jenkins, GitLab CI · AWS & Azure · Terraform · Ansible · Kubernetes & Helm · Argo CD GitOps · Prometheus, Grafana, Loki, OpenTelemetry · DevSecOps (SAST, SCA, DAST, secrets, SBOM, signing, SLSA) · SRE (SLI/SLO, error budgets, incidents, DR, chaos) · Platform engineering · FinOps · responsible AI-assisted operations · career preparation.
+## Folder layout
 
-## Quality standards
-
-- Real content every day; progressive difficulty; hands-on every day.
-- Real-world scenarios and independent assignments with expected outcomes.
-- Security, automation, reliability and cost are integrated throughout, not bolted on.
-- Three substantial capstones and a final career-readiness assessment.
-- **Cost safety:** budgets and teardown steps are part of the cloud days. Always destroy lab resources.
-
-## Time commitment
-
-About 3.5 h/day (Phase 1) and 4 h/day afterwards; capstone days are 5–6 h. Total ≈ 350 hours. If you miss a day, do not skip — extend the schedule. Consistency beats speed.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+- `day-01/` … `day-90/` — merged daily plans and supplements
+- `90-DAY-ROADMAP.md` — topic and phase map
+- `LEARNING-TRACKER.md` — progress and confidence tracking
+- `PROJECTS-AND-CAPSTONES.md` — portfolio projects
+- `ASSESSMENT-AND-CERTIFICATION.md` — final assessment
+- `CAREER-AND-INTERVIEW-PREPARATION.md` — interview and career preparation
+- `reference-materials/` — preserved files from the first supplied repository

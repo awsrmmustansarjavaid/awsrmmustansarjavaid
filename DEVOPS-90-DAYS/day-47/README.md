@@ -193,3 +193,11 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 46](../day-46/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 48 →](../day-48/README.md)
+
+
+## Merged learning path — source integration
+
+- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
+- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-47/` contains the original day's scripts, configs, screenshots references, and other artifacts.
+- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
+- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.
