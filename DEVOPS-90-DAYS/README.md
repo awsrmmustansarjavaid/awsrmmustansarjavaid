@@ -46,3 +46,41 @@ Every day has exactly one file, `day-XX/README.md`, containing the full lesson: 
 - `ASSESSMENT-AND-CERTIFICATION.md` — final assessment
 - `CAREER-AND-INTERVIEW-PREPARATION.md` — interview and career preparation
 - `reference-materials/` — original practice files (scripts, configs, project artifacts) for optional reuse
+
+## Merged content: Personal Journal (Days 1–31)
+
+Days 01–31 contain two layers in the same `day-XX/README.md`: the structured lesson (Sections 1–17) followed by **Section 18 — Personal Learning Journal** with my own notes from the original journal repo. Days 32–90 contain the structured lesson only. See [PERSONAL-JOURNAL-README.md](PERSONAL-JOURNAL-README.md) for the original journal intro.
+
+| Day | Journal topics | Status |
+|---|---|---|
+| Day 01 | DevOps Roadmap & Introduction | ✅ |
+| Day 02 | Linux Architecture & Basic Commands | ✅ |
+| Day 03 | Advanced Linux, SSH, Volume Management & AWS EBS | ✅ |
+| Day 04 | Linux Permissions & Users | ✅ |
+| Day 05 | Shell Scripting Basics | ✅ |
+| Day 06 | Networking, AWS VPC & Shell Scripting Projects | ✅ |
+| Day 07 | Networking Fundamentals, OSI Model & Python Basics | ✅ |
+| Day 08 | Network Security, System Design & Python APIs | ✅ |
+| Day 09 | Git, GitHub & AWS Python Automation | ✅ |
+| Day 10 | Git Advanced, AWS Cloud Fundamentals & Python OOP | ✅ |
+| Day 11 | DevSecOps Fundamentals, OWASP Threat Dragon & GitHub Secrets | ✅ |
+| Day 12 | Advanced Git & AWS EC2, IAM and S3 | ✅ |
+| Day 13 | DevSecOps Pipeline, Security Automation & Python Projects | ✅ |
+| Day 14 | DevOps, Jira Project Management & Python OOP Learning | ✅ |
+| Day 15 | AWS EC2, Auto Scaling, Load Balancer & S3 Static Website Hosting | ✅ |
+| Day 16 | GitOps with Jira, AWS Auto Scaling & Amazon RDS | ✅ |
+| Day 17 | Docker Fundamentals & AWS NoSQL Database (DynamoDB) | ✅ |
+| Day 18 | SAST, SCA & SonarQube (Manual Code Analysis) | ✅ |
+| Day 19 | Advanced Docker: Multi-Stage Builds, Volumes & Networking | ✅ |
+| Day 20 | 3-Tier Microservices with Docker | ✅ |
+| Day 21 | Advanced Containerization: Multi-Stage Builds & Security | ✅ |
+| Day 22 | Docker Compose Orchestration | ✅ |
+| Day 23 | Containerizing Microservices & DevSecOps Best Practices | ✅ |
+| Day 24 | First Steps into CI/CD Automation with GitHub Actions | ✅ |
+| Day 25 | End-to-End Multi-Tier Deployment Pipeline | ✅ |
+| Day 26 | Weekly Revision: Containerization & CI/CD Pipelines | ✅ |
+| Day 27 | Matrix Strategy in GitHub Actions and Cron Job Scheduling | ✅ |
+| Day 28 | DevSecOps and CI/CD Pipeline Integration | ✅ |
+| Day 29 | Production-Oriented CI/CD + DevSecOps Pipeline | ✅ |
+| Day 30 | 30 Days of Building, 30 Days of Learning | ✅ |
+| Day 31 | Automated Jenkins Pipeline & GitHub Integration | ✅ |
