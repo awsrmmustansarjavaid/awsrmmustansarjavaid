@@ -444,8 +444,6 @@ Practical Solution
 
 <div align="center">
 
-  <h2>📊 GitHub Activity & Analytics</h2>
- 
   <!-- GitHub Profile & Repository Analytics -->
 
   <h2>📊 GitHub Profile & Repository Analytics</h2>
