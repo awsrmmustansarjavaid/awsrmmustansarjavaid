@@ -8,7 +8,6 @@
 | **Week** | Week 1 — Linux & Systems Engineering |
 | **Difficulty** | Beginner |
 | **Estimated time** | 3.5 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-07` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -77,7 +76,99 @@ du -sh /var/* 2>/dev/null | sort -h
 sudo grep -rn "Port" /etc/ssh/ 2>/dev/null
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Linux Architecture Notes
+
+#### Core Components of Linux
+
+* **Hardware**: Physical components such as CPU, RAM, storage, and input/output devices.
+* **Kernel**: Heart of linux or Core of Linux that manages hardware resources, memory, processes and system resources.
+* **User Space**: Area where users and applications run.
+* **Shell**: Command-line interface used to communicate with the kernel.
+* **systemd**: The first process started during boot (PID 1).
+
+---
+
+#### Processes in Linux
+
+- A process is a program that is currently running.
+- Every process has a unique PID (Process ID) to identify it.
+- A parent process can start another process called a child process.
+- The kernel decides which process gets to use the CPU and when.
+- A process can run: Foreground – runs on your screen and you interact with it. Background – runs behind the scenes without interrupting your work.
+
+---
+
+#### Process States
+
+| State | Meaning |
+|--------|---------|
+| R | Running (using CPU) |
+| S | Sleeping (waiting for an event) |
+| D |  waiting for disk I/O |
+| T | Stopped |
+| Z | Zombie (finished but waiting for parent process) |
+
+---
+
+#### Understanding systemd
+
+systemd is the init system used in most modern Linux distributions.
+
+Functions:
+- Starts services during boot
+- Manages services
+- Handles service failures
+- Controls boot order
+- Maintains system state
+
+Useful Commands:
+
+```bash
+systemctl status sshd
+systemctl start nginx
+systemctl stop nginx
+systemctl restart nginx
+systemctl enable nginx
+systemctl disable nginx
+
+```
+---
+
+#### 5 Commands Used Daily
+
+* **top** : Monitor system resources in real time.
+* **ps -ef** : Show all running process.
+* **systemctl** : Manage services.
+* **df -h** : Check disk usage.
+* **free -h** : Check memory usage.
+
+---
+
+#### Easy Interview Points
+
+✔ Hardware = Physical devices
+
+✔ Kernel = Brain of Linux
+
+✔ Shell = Command interface
+
+✔ User Space = Runs applications
+
+✔ systemd = Starts and manages services
+
+✔ Process = Running program
+
+✔ Every process has a unique PID
+
+✔ systemd always runs with PID 1
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -87,7 +178,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Recreate a typical web app layout under `/opt/myapp` with releases/current symlink pattern. | You can demonstrate, without notes: *explain the purpose of /etc, /var, /usr, /opt, /home, /tmp, /proc* — with evidence committed to `day-02/`. |
 | 3 | Explain what `/proc/cpuinfo` and `/proc/meminfo` show. | You can demonstrate, without notes: *use absolute/relative paths, links and wildcards* — with evidence committed to `day-02/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -96,13 +187,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Do not run `rm -rf` with variables or wildcards unless you echo the command first. Understand `/` vs `./` before deleting.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -115,7 +206,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -123,7 +214,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -133,7 +224,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. What does `/proc` represent?
 5. **Scenario:** A teammate says 'the config is somewhere in /etc but I can't find which file sets the SSH port. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -148,7 +239,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-02/` in your own repository:
 
@@ -171,7 +262,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -181,7 +272,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 32 |
 | **Total** | **210 (≈ 3.5 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -200,11 +291,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 01](../day-01/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 03 →](../day-03/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-02/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

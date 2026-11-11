@@ -8,7 +8,6 @@
 | **Week** | Week 2 — Networking, SSH, Web Serving & Hardening |
 | **Difficulty** | Beginner |
 | **Estimated time** | 3.5 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-14` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -72,7 +71,224 @@ nc -vz example.com 443
 ss -tulpn
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 08 – Cloud Server Setup: Docker, Nginx & Web Deployment — Challenge Brief
+
+#### Task
+Today's goal is to **deploy a real web server on the cloud** and learn practical server management.
+
+You will:
+- Launch a cloud instance (AWS EC2 or Utho)
+- Connect via SSH
+- Install Nginx
+- Configure security groups for web access (port 80 by default for nginx)
+- Extract and save logs to a file
+- Verify your webpage is accessible from the internet
+
+This is real DevOps work - exactly what you'll do in production.
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+1. A markdown file named: `day-08-cloud-deployment.md`
+2. Screenshots showing:
+   - SSH connection to your server
+   - Nginx welcome page accessible from browser
+   - Log file contents
+3. The log file: `nginx-logs.txt`
+
+---
+
+#### Prerequisites
+- AWS account (Free Tier) OR Utho account
+- Basic understanding of Linux commands (Days 1-7)
+- SSH client (Terminal on Mac/Linux, PuTTY on Windows)
+
+---
+
+#### Guidelines
+
+##### Part 1: Launch Cloud Instance & SSH Access (15 minutes)
+
+**Step 1: Create a Cloud Instance**
+
+
+**Step 2: Connect via SSH**
+
+
+---
+
+##### Part 2: Install Docker & Nginx (20 minutes)
+
+**Step 1: Update System**
+
+
+**Step 3: Install Nginx**
+
+**Verify Nginx is running:**
+
+---
+
+##### Part 3: Security Group Configuration (10 minutes)
+
+**Test Web Access:**
+Open browser and visit: `http://<your-instance-ip>`
+
+You should see the **Nginx welcome page**!
+
+📸 **Screenshot this page** - you'll need it for submission
+
+---
+
+##### Part 4: Extract Nginx Logs (15 minutes)
+
+**Step 1: View Nginx Logs**
+
+**Step 2: Save Logs to File**
+
+**Step 3: Download Log File to Your Local Machine**
+```bash
+# On your local machine (new terminal window)
+# For AWS:
+scp -i your-key.pem ubuntu@<your-instance-ip>:~/nginx-logs.txt .
+
+# For Utho:
+scp root@<your-instance-ip>:~/nginx-logs.txt .
+```
+
+---
+
+
+#### Documentation Template
+
+Create your `day-08-cloud-deployment.md` with this structure:
+
+#### Commands Used
+[List the key commands you used]
+
+#### Challenges Faced
+[Describe any issues and how you solved them]
+
+#### What I Learned
+[3-5 bullet points of key learnings]
+
+---
+
+
+#### Why This Matters for DevOps
+
+This exercise teaches you:
+- **Cloud infrastructure provisioning** - launching and configuring servers
+- **Remote server management** - SSH, security, access control
+- **Service deployment** - installing and running applications
+- **Log management** - accessing and analyzing logs
+- **Security** - configuring firewalls and security groups
+
+These are core skills for any DevOps engineer working in production.
+
+---
+
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository
+2. Navigate to the `2026/day-08/` folder
+3. Add your `day-08-cloud-deployment.md` file
+4. Add your `nginx-logs.txt` file
+5. Add screenshots (name them: `ssh-connection.png`, `nginx-webpage.png`, `docker-nginx.png`)
+6. Commit and push your changes to your fork
+
+---
+
+#### Learn in Public
+Share your Day 08 progress on LinkedIn:
+
+- Post 2-3 lines on deploying your first cloud server
+- Share screenshot of your Nginx webpage
+- Mention one challenge you faced and solved
+- Optional: Share your instance IP (if comfortable)
+
+Use hashtags:
+```
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+```
+
+Happy Learning
+**TrainWithShubham**
+
+---
+
+### 7.2 Day 08 – Cloud Server Setup: Docker, Nginx & Web Deployment — Notes & Solution
+
+#### Part 1: Launch Cloud Instance & SSH Access  
+Step 1: Created a Ubuntu EC2 Instance in AWS account  
+
+Step 2: Connect via SSH  
+- Setup the security group for SSH connection (Port 22)  
+- Access the AWS EC2 instance from local system using Git bash terminal  
+  `ssh -i "private-key.pem" username@public-ip/hostname`
+
+-----
+
+#### Part 2: Install Docker & Nginx  
+Step 1: Update System  
+`sudo apt update && sudo apt upgrade -y`
+
+Step 2: Install Nginx
+```
+sudo apt install nginx
+systemctl start nginx
+systemctl enable nginx
+```
+
+<img width="1919" height="816" alt="Screenshot 2026-07-30 234838" src="https://github.com/user-attachments/assets/b1714345-fbff-45a9-bb50-baa28f9f72d1" />
+
+Step 3: Install docker
+```
+sudo apt install docker.io
+systemctl start dokcer
+systemctl enable docker
+```
+<img width="1708" height="131" alt="Screenshot 2026-07-30 235412" src="https://github.com/user-attachments/assets/c3b9336e-4cb7-4e2f-b715-0234eff688cf" />
+
+---------
+
+#### Part 3: Security Group Configuration
+- Setup the security group fot http traffic (Port 80)  
+- Test Web Access: Open browser and visit: http://<instance-ip>
+
+<img width="1910" height="543" alt="Screenshot 2026-07-31 000711" src="https://github.com/user-attachments/assets/8de59113-d2b9-4727-a2a6-a4f41f55822b" />
+
+------------
+
+#### Part 4: Extract Nginx Logs  
+Step 1: View Nginx Logs
+`journalctl -u nginx`
+
+Step 2: Save Logs to File
+`sudo cat /var/log/nginx/access.log > nginx-logs.txt`
+
+Step 3: Download Log File to Your Local Machine  
+`scp -i "Mylinux-server.pem" ubuntu@13.232.139.224:/home/ubuntu/nginx-logs.txt ./nginx-logs.txt`
+
+--------------
+
+#### Commands Used  
+- ssh -i "private-key.pem" username@public-ip/hostname  
+- sudo apt update && sudo apt upgrade -y  
+- systemctl status <service>  
+- journalctl -u <service>  
+- scp -i "Mylinux-server.pem" ubuntu@13.232.139.224:/home/ubuntu/nginx-logs.txt ./nginx-logs.txt
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -82,7 +298,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Write a one-page 'what happens when I type a URL' explanation. | You can demonstrate, without notes: *calculate CIDR subnets* — with evidence committed to `day-08/`. |
 | 3 | Explain public vs private IP and NAT. | You can demonstrate, without notes: *inspect interfaces, routes and connectivity* — with evidence committed to `day-08/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -91,13 +307,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Segment networks; never expose databases directly to the internet; plan CIDRs so private ranges never overlap.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -110,7 +326,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -118,7 +334,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -128,7 +344,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. What is a default gateway?
 5. **Scenario:** Two environments must be peered later but both use 10. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -143,7 +359,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-08/` in your own repository:
 
@@ -166,7 +382,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -176,7 +392,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 32 |
 | **Total** | **210 (≈ 3.5 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -195,11 +411,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 07](../day-07/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 09 →](../day-09/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-08/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

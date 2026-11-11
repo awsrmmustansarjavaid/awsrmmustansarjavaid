@@ -8,7 +8,6 @@
 | **Week** | Week 2 — Networking, SSH, Web Serving & Hardening |
 | **Difficulty** | Beginner |
 | **Estimated time** | 3.5 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-15` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -72,7 +71,350 @@ curl --resolve app.local:443:127.0.0.1 https://app.local -k
 openssl s_client -connect example.com:443 -servername example.com </dev/null 2>/dev/null | openssl x509 -noout -dates
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 09 – Linux User & Group Management Challenge
+
+#### Task
+Today's goal is to **practice user and group management** by completing hands-on challenges.
+
+Figure out how to:
+- Create users and set passwords
+- Create groups and assign users
+- Set up shared directories with group permissions
+
+Use what you learned from Days 1-7 to find the right commands!
+
+---
+
+#### Expected Output
+- A markdown file: `day-09-user-management.md`
+- Screenshots of command outputs
+- List of commands used
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Create Users (20 minutes)
+
+Create three users with home directories and passwords:
+- `tokyo`
+- `berlin`
+- `professor`
+
+**Verify:** Check `/etc/passwd` and `/home/` directory
+
+---
+
+##### Task 2: Create Groups (10 minutes)
+
+Create two groups:
+- `developers`
+- `admins`
+
+**Verify:** Check `/etc/group`
+
+---
+
+##### Task 3: Assign to Groups (15 minutes)
+
+Assign users:
+- `tokyo` → `developers`
+- `berlin` → `developers` + `admins` (both groups)
+- `professor` → `admins`
+
+**Verify:** Use appropriate command to check group membership
+
+---
+
+##### Task 4: Shared Directory (20 minutes)
+
+1. Create directory: `/opt/dev-project`
+2. Set group owner to `developers`
+3. Set permissions to `775` (rwxrwxr-x)
+4. Test by creating files as `tokyo` and `berlin`
+
+**Verify:** Check permissions and test file creation
+
+---
+
+##### Task 5: Team Workspace (20 minutes)
+
+1. Create user `nairobi` with home directory
+2. Create group `project-team`
+3. Add `nairobi` and `tokyo` to `project-team`
+4. Create `/opt/team-workspace` directory
+5. Set group to `project-team`, permissions to `775`
+6. Test by creating file as `nairobi`
+
+---
+
+#### Hints
+
+**Stuck? Try these commands:**
+- User: `useradd`, `passwd`, `usermod`
+- Group: `groupadd`, `groups`
+- Permissions: `chgrp`, `chmod`
+- Test: `sudo -u username command`
+
+**Tip:** Use `-m` flag with useradd for home directory, `-aG` for adding to groups
+
+---
+
+#### Documentation
+
+Create `day-09-user-management.md`:
+
+```markdown
+# Day 09 Challenge
+
+## Users & Groups Created
+- Users: tokyo, berlin, professor, nairobi
+- Groups: developers, admins, project-team
+
+## Group Assignments
+[List who is in which groups]
+
+## Directories Created
+[List directories with permissions]
+
+## Commands Used
+[Your commands here]
+
+## What I Learned
+[3 key points]
+```
+
+---
+
+
+#### Troubleshooting
+
+**Permission denied?** Use `sudo`
+
+**User can't access directory?**
+- Check group: `groups username`
+- Check permissions: `ls -ld /path`
+
+---
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository
+2. Navigate to `2026/day-09/` folder
+3. Add your `day-09-user-management.md` with screenshots
+4. Commit and push
+
+---
+
+#### Learn in Public
+Share your Day 09 progress on LinkedIn:
+
+- Post about completing the user management challenge
+- Share one thing you figured out
+- Mention real-world DevOps use
+
+Use hashtags:
+```
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+```
+
+Happy Learning
+**TrainWithShubham**
+
+---
+
+### 7.2 Day 09 – Linux User & Group Management
+
+#### 📌 Objective
+
+Learn how to create and manage Linux users and groups, assign permissions, and configure shared directories for team collaboration.
+
+#### 🛠️ Users Created
+
+- Created the following users with home directories:
+
+    `sudo useradd -m tokyo` 
+
+    `sudo useradd -m berlin` 
+
+    `sudo useradd -m professor`
+
+##### Set passwords:
+
+    `sudo passwd tokyo`
+    
+    `sudo passwd berlin`
+    
+    `sudo passwd professor`
+
+<img width="1919" height="463" alt="Screenshot 2026-08-01 140148" src="https://github.com/user-attachments/assets/e84f24c5-50a9-492f-8082-af47ac686c5e" />
+
+##### Verify users:
+
+ `cat /etc/passwd | grep -E "tokyo|berlin|professor"` 
+
+##### List home directories:
+ `ls /home/`
+
+<img width="1919" height="250" alt="Screenshot 2026-08-01 140421" src="https://github.com/user-attachments/assets/d3f22328-4ff1-4317-a601-a2d1559535da" />
+
+#### 👥 Groups Created
+
+##### Created the following groups:
+
+    `sudo groupadd developers` 
+
+    `sudo groupadd admins`
+
+##### Verify groups:
+
+ `cat /etc/group | grep -E "developers|admins"`
+
+<img width="1919" height="164" alt="Screenshot 2026-08-01 140549" src="https://github.com/user-attachments/assets/9b159fa9-6d29-41e8-b88f-07be6f27dc36" />
+---
+
+#### 🔐 Group Assignments
+
+##### Assign users to groups:
+- tokyo → developers
+   `sudo usermod -aG developers tokyo`
+  
+- berlin → developers + admins
+   `sudo usermod -aG developers,admins berlin`
+  
+- professor → admins
+    `sudo usermod -aG admins professor`
+  
+##### Verify memberships:
+
+    `groups tokyo`
+
+    `groups berlin`
+
+    `groups professor`
+
+<img width="1783" height="347" alt="Screenshot 2026-08-01 141018" src="https://github.com/user-attachments/assets/c5389c90-fcee-473c-a0e3-4b0b14927fe1" />
+
+---
+
+#### 📂 Shared Development Directory
+
+##### Create project directory:
+
+ `sudo mkdir /opt/dev-project`
+
+##### Assign group ownership:
+ `sudo chgrp developers /opt/dev-project`
+
+##### Set permissions:
+
+ `sudo chmod 775 /opt/dev-project`
+
+##### Verify:
+
+   `ls -ld /opt/dev-project`
+
+##### Test access:
+
+ `sudo -u tokyo touch /opt/dev-project/tokyo.txt`
+
+ `sudo -u berlin touch /opt/dev-project/berlin.txt`
+
+Verify files:
+
+  `ls -ld /opt/dev-project/`
+
+<img width="931" height="138" alt="Screenshot 2026-08-01 141354" src="https://github.com/user-attachments/assets/4fd0a083-dad5-4bc4-99e7-007e81d6b516" />
+
+---
+
+#### 🤝 Team Workspace
+
+##### Create user:
+
+ `sudo useradd -m nairobi`
+
+ `sudo passwd nairobi`
+
+##### Create group:
+
+ `sudo groupadd project-team`
+
+##### Add users:
+
+ `sudo usermod -aG project-team nairobi`
+
+ `sudo usermod -aG project-team tokyo`
+
+##### Create shared directory:
+
+`sudo mkdir /opt/team-workspace`
+
+##### Assign group ownership:
+
+ `sudo chgrp project-team /opt/team-workspace`
+
+##### Set permissions:
+
+ `sudo chmod 775 /opt/team-workspace`
+
+##### Verify:
+
+ `ls -ld /opt/team-workspace`
+
+<img width="1244" height="421" alt="Screenshot 2026-08-01 142356" src="https://github.com/user-attachments/assets/9db5c40e-0923-4562-99a3-ae8c560f321f" />
+
+##### Test file creation:
+
+ `sudo -u nairobi touch /opt/team-workspace/nairobi.txt`
+
+ `ls -ld /opt/team-workspace/`
+
+<img width="1376" height="296" alt="Screenshot 2026-08-01 142647" src="https://github.com/user-attachments/assets/29a85d9a-b727-4342-b240-d4e5bf36aa10" />
+
+---
+
+#### ✅ Key Commands Used
+useradd
+passwd
+groupadd
+usermod
+groups
+mkdir
+chgrp
+chmod
+touch
+ls
+
+#### 📖 What I Learned
+- Created Linux users with home directories.
+- Set passwords and verified user accounts.
+- Created groups and assigned users to one or more groups.
+- Managed user memberships using usermod.
+- Configured shared directories with group ownership.
+- Applied Linux permissions using chmod 775.
+- Tested collaborative access by creating files as different users.
+- Understood how Linux user, group, and permission management supports secure team collaboration.
+  
+#### 🚀 Skills Practiced
+- Linux User Management
+- Linux Group Management
+- File Permissions
+- Directory Ownership
+- Access Control
+- System Administration
+- Linux Command Line
+  
+#### ⭐ If you found this project helpful, feel free to star the repository!
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -82,7 +424,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Check 5 websites' cert expiry dates with a loop. | You can demonstrate, without notes: *debug HTTP with curl* — with evidence committed to `day-09/`. |
 | 3 | Create a status code cheat sheet with causes for 502, 503, 504. | You can demonstrate, without notes: *explain TLS certificates and chains* — with evidence committed to `day-09/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -91,13 +433,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Always use HTTPS, TLS 1.2+, HSTS; never use `curl -k` outside throwaway tests; automate certificate renewal and expiry alerts.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -110,7 +452,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -118,7 +460,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -128,7 +470,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. How does a TLS handshake work?
 5. **Scenario:** Users in one country see 'certificate expired' while others don't. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -143,7 +485,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-09/` in your own repository:
 
@@ -166,7 +508,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -176,7 +518,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 32 |
 | **Total** | **210 (≈ 3.5 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -195,11 +537,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 08](../day-08/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 10 →](../day-10/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-09/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

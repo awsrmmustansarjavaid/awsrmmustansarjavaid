@@ -1,12 +1,11 @@
 # Merged DevOps 90-Day Master Plan
 
-A unified, day-by-day DevOps learning program merged from the two supplied ZIP repositories.
+A unified, day-by-day DevOps learning program: 90 daily lessons, each in a single `README.md`.
 
-## What was merged
+## What is inside
 
 - **Primary curriculum:** the complete 90-day professional roadmap, with structured daily lessons, objectives, hands-on labs, real-world scenarios, troubleshooting, security/reliability notes, interview preparation, self-assessment, and GitHub deliverables.
-- **Practical companion repository:** the original `90DaysOfDevOps-master` day folders, notes, scripts, configuration files, project artifacts, and supporting resources.
-- **Daily integration:** each `day-XX/README.md` links to its matching original source folder and, where available, a `SUPPLEMENTARY-MATERIALS.md` that brings the extra Markdown notes into that day's workflow.
+- **Practical material:** hands-on exercises, worked solutions, cheat sheets and runbooks are built directly into each day's lesson (Section 7).
 
 ## Start here
 
@@ -19,7 +18,7 @@ A unified, day-by-day DevOps learning program merged from the two supplied ZIP r
 
 ## Daily structure
 
-Every day has one canonical lesson in `day-XX/README.md`. Where the first repository supplied additional Markdown notes, they are collected in `day-XX/SUPPLEMENTARY-MATERIALS.md`. Original files are preserved under `reference-materials/90DaysOfDevOps-master/`.
+Every day has exactly one file, `day-XX/README.md`, containing the full lesson: objectives, theory, labs, extended practice notes, troubleshooting, assessment and GitHub deliverables.
 
 ## Four learning phases
 
@@ -40,10 +39,10 @@ Every day has one canonical lesson in `day-XX/README.md`. Where the first reposi
 
 ## Folder layout
 
-- `day-01/` … `day-90/` — merged daily plans and supplements
+- `day-01/` … `day-90/` — one `README.md` per day
 - `90-DAY-ROADMAP.md` — topic and phase map
 - `LEARNING-TRACKER.md` — progress and confidence tracking
 - `PROJECTS-AND-CAPSTONES.md` — portfolio projects
 - `ASSESSMENT-AND-CERTIFICATION.md` — final assessment
 - `CAREER-AND-INTERVIEW-PREPARATION.md` — interview and career preparation
-- `reference-materials/` — preserved files from the first supplied repository
+- `reference-materials/` — original practice files (scripts, configs, project artifacts) for optional reuse

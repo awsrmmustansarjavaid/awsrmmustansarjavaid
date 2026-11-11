@@ -8,7 +8,6 @@
 | **Week** | Week 6 — CI/CD: GitHub Actions, Jenkins, GitLab CI |
 | **Difficulty** | Intermediate |
 | **Estimated time** | 4.0 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-44` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -74,7 +73,236 @@ steps:
 "token.actions.githubusercontent.com:sub": "repo:USER/REPO:ref:refs/heads/main"
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 38 – YAML Basics — Challenge Brief
+
+#### Task
+Before writing a single CI/CD pipeline, you need to get comfortable with **YAML** — the language every pipeline is written in.
+
+You will:
+- Understand YAML syntax and rules
+- Write YAML files by hand
+- Validate them
+
+---
+
+#### Expected Output
+- A markdown file: `day-38-yaml.md`
+- YAML files you create during the tasks
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Key-Value Pairs
+Create `person.yaml` that describes yourself with:
+- `name`
+- `role`
+- `experience_years`
+- `learning` (a boolean)
+
+**Verify:** Run `cat person.yaml` — does it look clean? No tabs?
+
+---
+
+##### Task 2: Lists
+Add to `person.yaml`:
+- `tools` — a list of 5 DevOps tools you know or are learning
+- `hobbies` — a list using the inline format `[item1, item2]`
+
+Write in your notes: What are the two ways to write a list in YAML?
+
+---
+
+##### Task 3: Nested Objects
+Create `server.yaml` that describes a server:
+- `server` with nested keys: `name`, `ip`, `port`
+- `database` with nested keys: `host`, `name`, `credentials` (nested further: `user`, `password`)
+
+**Verify:** Try adding a tab instead of spaces — what happens when you validate it?
+
+---
+
+##### Task 4: Multi-line Strings
+In `server.yaml`, add a `startup_script` field using:
+1. The `|` block style (preserves newlines)
+2. The `>` fold style (folds into one line)
+
+Write in your notes: When would you use `|` vs `>`?
+
+---
+
+##### Task 5: Validate Your YAML
+1. Install `yamllint` or use an online validator
+2. Validate both your YAML files
+3. Intentionally break the indentation — what error do you get?
+4. Fix it and validate again
+
+---
+
+##### Task 6: Spot the Difference
+Read both blocks and write what's wrong with the second one:
+
+```yaml
+# Block 1 - correct
+name: devops
+tools:
+  - docker
+  - kubernetes
+```
+
+```yaml
+# Block 2 - broken
+name: devops
+tools:
+- docker
+  - kubernetes
+```
+
+---
+
+#### Hints
+- YAML uses **spaces only** — never tabs
+- Indentation is everything — 2 spaces is standard
+- Strings don't need quotes unless they contain special characters (`:`, `#`, etc.)
+- `true`/`false` are booleans, `"true"` is a string
+- Validate online: yamllint.com
+
+---
+
+#### Documentation
+Create `day-38-yaml.md` with:
+- Your YAML files
+- What you learned (3 key points)
+
+---
+
+#### Submission
+1. Add your YAML files and `day-38-yaml.md` to `2026/day-38/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your YAML "aha moment" on LinkedIn — the tab vs space mistake gets everyone.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+### 7.2 🚀Day 38 – YAML Basics — Notes & Solution
+
+#### 🎯Task
+Before writing a single CI/CD pipeline, you need to get comfortable with **YAML** — the language every pipeline is written in.
+
+You will:
+- Understand YAML syntax and rules
+- Write YAML files by hand
+- Validate them
+
+---
+
+#### 🔹Challenge Tasks
+
+##### 📝Task 1: Key-Value Pairs
+Create `person.yaml` that describes yourself with:
+- `name`
+- `role`
+- `experience_years`
+- `learning` (a boolean)
+
+
+---
+
+##### 📋Task 2: Lists
+Add to `person.yaml`:
+- `tools` — a list of 5 DevOps tools you know or are learning
+- `hobbies` — a list using the inline format `[item1, item2]`
+
+Write in your notes: What are the two ways to write a list in YAML?
+
+- Using - dash
+
+- Using square brackets [ ] inline format
+- 
+**Verify:** Run `cat person.yaml` — does it look clean? No tabs?
+
+<img width="1264" height="380" alt="Screenshot 2026-09-04 124402" src="https://github.com/user-attachments/assets/fe2d921b-1f84-456c-bcc8-5a0fe7cf4128" />
+
+---
+
+##### 🏗️Task 3: Nested Objects
+Create `server.yaml` that describes a server:
+- `server` with nested keys: `name`, `ip`, `port`
+- `database` with nested keys: `host`, `name`, `credentials` (nested further: `user`, `password`)
+
+**Verify:** Try adding a tab instead of spaces — what happens when you validate it?
+- Gives wrong indentation error
+
+<img width="1326" height="347" alt="Screenshot 2026-09-04 124556" src="https://github.com/user-attachments/assets/03a9c058-6fec-4518-8e6e-d94e723dfaa9" />
+
+
+---
+
+##### 📜Task 4: Multi-line Strings
+In `server.yaml`, add a `startup_script` field using:
+1. The `|` block style (preserves newlines)
+2. The `>` fold style (folds into one line)
+
+Write in your notes: When would you use `|` vs `>`?
+-  `|` - Use when formatting matters (scripts, commands, exact output) &  `>` - Use when you want cleaner, wrapped text without line breaks
+
+<img width="1301" height="518" alt="Screenshot 2026-09-04 124602" src="https://github.com/user-attachments/assets/52784a74-c8aa-4cf7-82a2-c0f0ef44d1ce" />
+
+
+---
+
+##### ✅Task 5: Validate Your YAML
+1. Install `yamllint` or use an online validator
+2. Validate both your YAML files
+3. Intentionally break the indentation — what error do you get?
+4. Fix it and validate again
+
+<img width="1030" height="154" alt="Screenshot 2026-09-04 123533" src="https://github.com/user-attachments/assets/9dcb46fc-d097-4bae-b847-5318e88dae88" />
+<img width="1027" height="140" alt="Screenshot 2026-09-04 123521" src="https://github.com/user-attachments/assets/ae66f944-e319-48ba-8aae-ca2f5272b1c2" />
+
+---
+
+##### 🔍Task 6: Spot the Difference
+Read both blocks and write what's wrong with the second one:
+
+```yaml
+# Block 1 - correct
+database:
+  host: db-server
+  name: devopsdb
+```
+
+```yaml
+# Block 2 - broken
+database:
+  host: db-server
+    name: devopsdb
+```
+- In Block 2 Wrong indentation for the list item kubernetes
+
+
+<img width="1129" height="154" alt="Screenshot 2026-09-04 124748" src="https://github.com/user-attachments/assets/ff47ea4c-ca29-4aa5-b158-2c61e79121d4" />
+
+---
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -84,7 +312,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Compare OIDC vs access keys in a table. | You can demonstrate, without notes: *authenticate to AWS using OIDC (no static keys)* — with evidence committed to `day-38/`. |
 | 3 | Add environment protection to production deploy job. | You can demonstrate, without notes: *upload artifacts and test reports* — with evidence committed to `day-38/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -93,13 +321,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Prefer OIDC; environment-scoped secrets; required approvals for prod; restrict `sub` to protected branches.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -112,7 +340,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -120,7 +348,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -130,7 +358,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. What to do if a secret leaks in logs?
 5. **Scenario:** A former employee still has a long-lived AWS key stored in GitHub. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -145,7 +373,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-38/` in your own repository:
 
@@ -168,7 +396,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -178,7 +406,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 36 |
 | **Total** | **240 (≈ 4.0 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -197,11 +425,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 37](../day-37/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 39 →](../day-39/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-38/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

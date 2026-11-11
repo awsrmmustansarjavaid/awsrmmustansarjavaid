@@ -8,7 +8,6 @@
 | **Week** | Week 3 — Bash & Python Automation |
 | **Difficulty** | Beginner |
 | **Estimated time** | 3.5 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-18` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -75,7 +74,223 @@ EOP
 ruff check . && pytest -q
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 18 – Shell Scripting: Functions & intermediate Concepts — Challenge Brief
+
+#### Task
+Write cleaner, reusable scripts — learn functions, strict mode, and real-world patterns.
+
+You will:
+- Write and call **functions**
+- Use **`set -euo pipefail`** for safer scripts
+- Work with **return values** and **local variables**
+- Build an intermediate script
+
+---
+
+#### Expected Output
+- A markdown file: `day-18-scripting.md`
+- All scripts you write during the tasks
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Basic Functions
+1. Create `functions.sh` with:
+   - A function `greet` that takes a name as argument and prints `Hello, <name>!`
+   - A function `add` that takes two numbers and prints their sum
+   - Call both functions from the script
+
+---
+
+##### Task 2: Functions with Return Values
+1. Create `disk_check.sh` with:
+   - A function `check_disk` that checks disk usage of `/` using `df -h`
+   - A function `check_memory` that checks free memory using `free -h`
+   - A main section that calls both and prints the results
+
+---
+
+##### Task 3: Strict Mode — `set -euo pipefail`
+1. Create `strict_demo.sh` with `set -euo pipefail` at the top
+2. Try using an **undefined variable** — what happens with `set -u`?
+3. Try a command that **fails** — what happens with `set -e`?
+4. Try a **piped command** where one part fails — what happens with `set -o pipefail`?
+
+**Document:** What does each flag do?
+- `set -e` →
+- `set -u` →
+- `set -o pipefail` →
+
+---
+
+##### Task 4: Local Variables
+1. Create `local_demo.sh` with:
+   - A function that uses `local` keyword for variables
+   - Show that `local` variables don't leak outside the function
+   - Compare with a function that uses regular variables
+
+---
+
+##### Task 5: Build a Script — System Info Reporter
+Create `system_info.sh` that uses functions for everything:
+1. A function to print **hostname and OS info**
+2. A function to print **uptime**
+3. A function to print **disk usage** (top 5 by size)
+4. A function to print **memory usage**
+5. A function to print **top 5 CPU-consuming processes**
+6. A `main` function that calls all of the above with section headers
+7. Use `set -euo pipefail` at the top
+
+Output should look clean and readable.
+
+---
+
+#### Hints
+- Function syntax: `function_name() { ... }`
+- Local vars: `local MY_VAR="value"`
+- Strict mode: `set -euo pipefail` as first line after shebang
+- Pass args to functions: `greet "Shubham"` → access as `$1` inside
+- `$?` gives the exit code of last command
+
+---
+
+#### Documentation
+
+Create `day-18-scripting.md` with:
+- Each script's code and output
+- Explanation of `set -euo pipefail`
+- What you learned (3 key points)
+
+---
+
+#### Submission
+1. Add your scripts and `day-18-scripting.md` to `2026/day-18/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+
+Share what you learned about shell functions and strict mode on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+### 7.2 🚀 Day 18 – Shell Scripting: Functions & Intermediate Concepts — Notes & Solution
+
+#### 🎯 Objective
+
+##### Today I learned how to write reusable, cleaner, and safer Bash scripts.
+
+* Topics Covered
+- Bash Functions
+- Function Arguments
+- Local Variables
+- Return Values / Exit Codes
+- set -euo pipefail
+- System Information Automation
+
+---
+
+##### 📝Task 1: Basic Functions
+1. Create `functions.sh` with:
+   - A function `greet` that takes a name as argument and prints `Hello, <name>!`
+   - A function `add` that takes two numbers and prints their sum
+   - Call both functions from the script
+
+<img width="846" height="182" alt="Screenshot 2026-08-10 130150" src="https://github.com/user-attachments/assets/c2b6635c-2f62-4605-942d-166df8905a80" />
+
+---
+
+##### 📝Task 2: Functions with Return Values
+1. Create `disk_check.sh` with:
+   - A function `check_disk` that checks disk usage of `/` using `df -h`
+   - A function `check_memory` that checks free memory using `free -h`
+   - A main section that calls both and prints the results
+     
+<img width="845" height="233" alt="Screenshot 2026-08-10 130406" src="https://github.com/user-attachments/assets/2969bfed-c1a3-436a-89a1-1763cee42335" />
+
+
+---
+
+##### 📝Task 3: Strict Mode — `set -euo pipefail`
+1. Create `strict_demo.sh` with `set -euo pipefail` at the top
+2. Try using an **undefined variable** — what happens with `set -u`?
+3. Try a command that **fails** — what happens with `set -e`?
+4. Try a **piped command** where one part fails — what happens with `set -o pipefail`?
+
+<img width="892" height="185" alt="Screenshot 2026-08-10 130607" src="https://github.com/user-attachments/assets/0919deca-7a1f-45ce-afd1-3d839ae3bbf5" />
+
+**Document:** What does each flag do?
+
+- `set -e` → Exit the script immediately if any command fails.
+- `set -u` → Exit the script if an undefined (unset) variable is used.
+- `set -o pipefail` → Pipeline fails if any command fails.
+
+---
+
+##### 📝Task 4: Local Variables
+1. Create `local_demo.sh` with:
+   - A function that uses `local` keyword for variables
+   - Show that `local` variables don't leak outside the function
+   - Compare with a function that uses regular variables
+     
+<img width="797" height="326" alt="Screenshot 2026-08-10 130724" src="https://github.com/user-attachments/assets/34445dc9-1abf-49b5-87ac-b390cec1b4f6" />
+
+---
+
+##### 📝Task 5: Build a Script — System Info Reporter
+Create `system_info.sh` that uses functions for everything:
+1. A function to print **hostname and OS info**
+2. A function to print **uptime**
+3. A function to print **disk usage** (top 5 by size)
+4. A function to print **memory usage**
+5. A function to print **top 5 CPU-consuming processes**
+6. A `main` function that calls all of the above with section headers
+7. Use `set -euo pipefail` at the top
+
+Output should look clean and readable.
+
+<img width="929" height="645" alt="Screenshot 2026-08-10 130928" src="https://github.com/user-attachments/assets/abce206d-3514-403f-9988-424b706541b9" />
+
+---
+
+#### Hints
+- Function syntax: `function_name() { ... }`
+- Local vars: `local MY_VAR="value"`
+- Strict mode: `set -euo pipefail` as first line after shebang
+- Pass args to functions: `greet "Amit"` → access as `$1` inside
+- `$?` gives the exit code of last command
+
+---
+
+#### 🏆What I Learned
+
+**Functions & Modularity** – Learned to create reusable, organized code blocks.This makes scripts cleaner, easier to read, and simpler to maintain.
+
+**System Monitoring Scripts** – Explored fetching system info like memory,disk usage,and CPU processes.Useful for building quick automation for system health checks.
+
+**Error Handling & Safety** – Using `set -euo pipefail` to catch undefined variables,failing commands,and pipeline errors early,making scripts more reliable.
+
+**Variable Scope** – Understood the difference between local and global variables. Local variables stay inside functions, while global variables affect the wider script.
+
+**Practical Automation** – Using a main function to orchestrate tasks helps make scripts modular,maintainable,and automation-friendly.
+
+**Function Naming Pitfall** – Faced an issue where naming a function the same as a system command (uptime) caused an infinite loop.
+Learned to avoid using system command names for functions.
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -85,7 +300,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Create a `Makefile` with `setup`, `lint`, `test` targets. | You can demonstrate, without notes: *use core data structures, functions and error handling* — with evidence committed to `day-18/`. |
 | 3 | Write README with usage. | You can demonstrate, without notes: *read/write files and run system commands* — with evidence committed to `day-18/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -94,13 +309,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Pin dependency versions, scan with `pip-audit`, never print secrets, use `subprocess` with list arguments (no `shell=True` on user input).
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -113,7 +328,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -121,7 +336,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -131,7 +346,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. How do you handle exceptions?
 5. **Scenario:** Operations needs a cross-platform script that checks disk usage thresholds and returns exit code 2 for warning. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -146,7 +361,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-18/` in your own repository:
 
@@ -169,7 +384,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -179,7 +394,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 32 |
 | **Total** | **210 (≈ 3.5 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -198,11 +413,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 17](../day-17/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 19 →](../day-19/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-18/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

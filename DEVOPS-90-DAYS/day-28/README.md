@@ -8,7 +8,6 @@
 | **Week** | Week 4 — Git, GitHub & Engineering Workflow |
 | **Difficulty** | Intermediate |
 | **Estimated time** | 3.5 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-28` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -70,7 +69,705 @@ tree -L 2
 gh repo edit --description "..." --add-topic devops
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 28 – Revision Day: Everything from Day 1 to Day 27 — Challenge Brief
+
+#### Task
+
+You've covered a lot of ground in 27 days — DevOps fundamentals, Linux deep dives, Shell scripting, Python basics, Git & GitHub, and even your developer branding. Today, **stop and revise**. No new concepts. Just solidify what you've learned.
+
+The goal is to identify gaps, revisit topics you struggled with, and make sure you can confidently explain and use everything covered so far.
+
+---
+
+#### What You've Covered So Far
+
+| Days | Topic | Key Concepts |
+|------|-------|-------------|
+| 1 | DevOps & Cloud Intro | What is DevOps, SDLC, Cloud basics |
+| 2–7 | Linux Fundamentals | Architecture, commands, processes, systemd, file system hierarchy, troubleshooting, text files |
+| 8 | Cloud Server Setup | Docker, Nginx, web deployment |
+| 9–11 | Users, Permissions & Ownership | User/group management, file permissions, chown/chgrp |
+| 12 | Revision Day 1 | Days 1–11 recap |
+| 13 | Volume Management | LVM — physical volumes, volume groups, logical volumes |
+| 14–15 | Networking | Fundamentals, DNS, IP, subnets, ports, hands-on checks |
+| 16–18 | Shell Scripting | Basics, loops, arguments, error handling, functions |
+| 19–20 | Shell Scripting Projects | Log rotation, backup, crontab, log analyzer |
+| 21 | Shell Scripting Cheat Sheet | Personal reference guide |
+| 22–25 | Git & GitHub | Init, branching, merge, rebase, stash, cherry pick, reset, revert, branching strategies |
+| 26 | GitHub CLI | Managing GitHub from the terminal |
+| 27 | GitHub Profile | Profile README, repo organization, developer branding |
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Self-Assessment Checklist
+Go through the checklist below. For each item, mark yourself honestly:
+- **Can do confidently**
+- **Need to revisit**
+- **Haven't done yet**
+
+###### Linux
+- [ ] Navigate the file system, create/move/delete files and directories
+- [ ] Manage processes — list, kill, background/foreground
+- [ ] Work with systemd — start, stop, enable, check status of services
+- [ ] Read and edit text files using vi/vim or nano
+- [ ] Troubleshoot CPU, memory, and disk issues using top, free, df, du
+- [ ] Explain the Linux file system hierarchy (/, /etc, /var, /home, /tmp, etc.)
+- [ ] Create users and groups, manage passwords
+- [ ] Set file permissions using chmod (numeric and symbolic)
+- [ ] Change file ownership with chown and chgrp
+- [ ] Create and manage LVM volumes
+- [ ] Check network connectivity — ping, curl, netstat, ss, dig, nslookup
+- [ ] Explain DNS resolution, IP addressing, subnets, and common ports
+
+###### Shell Scripting
+- [ ] Write a script with variables, arguments, and user input
+- [ ] Use if/elif/else and case statements
+- [ ] Write for, while, and until loops
+- [ ] Define and call functions with arguments and return values
+- [ ] Use grep, awk, sed, sort, uniq for text processing
+- [ ] Handle errors with set -e, set -u, set -o pipefail, trap
+- [ ] Schedule scripts with crontab
+
+###### Git & GitHub
+- [ ] Initialize a repo, stage, commit, and view history
+- [ ] Create and switch branches
+- [ ] Push to and pull from GitHub
+- [ ] Explain clone vs fork
+- [ ] Merge branches — understand fast-forward vs merge commit
+- [ ] Rebase a branch and explain when to use it vs merge
+- [ ] Use git stash and git stash pop
+- [ ] Cherry-pick a commit from another branch
+- [ ] Explain squash merge vs regular merge
+- [ ] Use git reset (soft, mixed, hard) and git revert
+- [ ] Explain GitFlow, GitHub Flow, and Trunk-Based Development
+- [ ] Use GitHub CLI to create repos, PRs, and issues
+
+---
+
+##### Task 2: Revisit Your Weak Spots
+1. Pick **3 topics** from the checklist where you marked "Need to revisit"
+2. Go back to that day's challenge and redo the hands-on tasks
+3. Document what you re-learned in `day-28-notes.md`
+
+---
+
+##### Task 3: Quick-Fire Questions
+Answer these from memory (no Googling). Then verify your answers:
+
+1. What does `chmod 755 script.sh` do?
+2. What is the difference between a process and a service?
+3. How do you find which process is using port 8080?
+4. What does `set -euo pipefail` do in a shell script?
+5. What is the difference between `git reset --hard` and `git revert`?
+6. What branching strategy would you recommend for a team of 5 developers shipping weekly?
+7. What does `git stash` do and when would you use it?
+8. How do you schedule a script to run every day at 3 AM?
+9. What is the difference between `git fetch` and `git pull`?
+10. What is LVM and why would you use it instead of regular partitions?
+
+---
+
+##### Task 4: Organize Your Work
+1. Make sure all your daily submissions (day-1 through day-27) are committed and pushed
+2. Check that your `git-commands.md` is up to date
+3. Check that your shell scripting cheat sheet is complete
+4. Verify your GitHub profile and repos are clean (from Day 27)
+
+---
+
+##### Task 5: Teach It Back
+Pick **one topic** you've learned and write a short explanation (5-10 lines) as if you're teaching it to someone who has never heard of it. Add it to your `day-28-notes.md`.
+
+Examples:
+- Explain Git branching to a non-developer
+- Explain file permissions to a new Linux user
+- Explain what a crontab is and why sysadmins use it
+
+Teaching is the best test of understanding.
+
+---
+
+#### Submission
+1. Add your `day-28-notes.md` to `2026/day-28/`
+2. Push to your fork
+3. Make sure all previous days are pushed and up to date
+
+---
+
+#### Learn in Public
+
+Share your self-assessment results or your "teach it back" explanation on LinkedIn. Be honest about what you found easy and what you need to work on.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+### 7.2 🚀Day 28 – Revision Day: Everything from Day 1 to Day 27 — Notes & Solution
+
+> 📚 **Revision is not about learning something new. It is about making sure the concepts we already learned are strong enough to explain, troubleshoot, and use in real situations.**
+
+#### 🎯 Day 28 Goal
+
+During the first 27 days, I covered DevOps & Cloud fundamentals, Linux administration, LVM, networking, shell scripting, cron automation, Git & GitHub, GitHub CLI, and GitHub profile branding.
+
+Today I reviewed these topics, identified areas that need more practice, answered quick-fire questions, and documented what I learned.
+
+---
+
+#### 1. 📊 My Learning Journey – Day 1 to Day 27
+
+| Days | Topic | What I Learned |
+|---|---|---|
+| **Day 1** | DevOps & Cloud | DevOps culture, SDLC, automation, cloud fundamentals |
+| **Days 2–7** | Linux Fundamentals | Architecture, commands, processes, systemd, filesystem, troubleshooting |
+| **Day 8** | Cloud Server Setup | Docker, Nginx and web deployment |
+| **Days 9–11** | Users & Permissions | Users, groups, passwords, `chmod`, `chown`, `chgrp` |
+| **Day 12** | Revision | Reviewed Days 1–11 |
+| **Day 13** | LVM | PV, VG, LV and storage management |
+| **Days 14–15** | Networking | IP, DNS, ports, subnets and connectivity troubleshooting |
+| **Days 16–18** | Shell Scripting | Variables, conditions, loops, arguments, functions and error handling |
+| **Days 19–20** | Shell Projects | Log rotation, backups, cron and log analysis |
+| **Day 21** | Shell Cheat Sheet | Created a personal scripting reference |
+| **Days 22–25** | Git & GitHub | Branching, merge, rebase, stash, cherry-pick, reset, revert |
+| **Day 26** | GitHub CLI | Managing GitHub repositories, issues, PRs and workflows from terminal |
+| **Day 27** | GitHub Profile | README, repository organization and developer branding |
+
+---
+
+#### 2. ✅ Self-Assessment Checklist
+
+##### Legend
+
+- 🟢 **Can do confidently**
+- 🟡 **Need to revisit**
+- 🔴 **Haven't done yet**
+
+#### 🐧 Linux
+
+| Skill | Status | Notes |
+|---|:---:|---|
+| Navigate filesystem, create/move/delete files | 🟢 | Comfortable with common commands |
+| Manage processes | 🟢 | `ps`, `top`, `kill`, background/foreground |
+| Work with systemd | 🟢 | `systemctl status/start/stop/enable` |
+| Read/edit files with Vim/Nano | 🟢 | Used for configuration and scripts |
+| Troubleshoot CPU, memory and disk | 🟢 | `top`, `free`, `df`, `du` |
+| Explain Linux filesystem hierarchy | 🟢 | Understand `/etc`, `/var`, `/home`, `/tmp`, `/` |
+| Create users and groups | 🟢 | Understand user/group administration |
+| Set permissions with `chmod` | 🟢 | Numeric and symbolic permissions |
+| Change ownership | 🟢 | `chown` and `chgrp` |
+| Create/manage LVM | 🟡 | Understand PV → VG → LV; need continued practice |
+| Check network connectivity | 🟢 | `ping`, `curl`, `ss`, `dig`, `nslookup` |
+| Explain DNS, IP, subnets and ports | 🟡 | Fundamentals are clear; need more troubleshooting |
+
+#### 🐚 Shell Scripting
+
+| Skill | Status | Notes |
+|---|:---:|---|
+| Variables, arguments and user input | 🟢 | Practiced through scripts |
+| `if/elif/else` and `case` | 🟢 | Comfortable with conditions |
+| `for`, `while`, `until` loops | 🟢 | Practiced loops |
+| Functions and arguments | 🟢 | Practiced reusable functions |
+| `grep`, `awk`, `sed`, `sort`, `uniq` | 🟡 | Need more complex examples |
+| `set -euo pipefail` and `trap` | 🟡 | Understand purpose; need deeper practice |
+| Schedule scripts with crontab | 🟢 | Practiced scheduled scripts |
+
+#### 🔀 Git & GitHub
+
+| Skill | Status | Notes |
+|---|:---:|---|
+| Initialize, stage, commit and history | 🟢 | Comfortable |
+| Create and switch branches | 🟢 | Practiced repeatedly |
+| Push and pull from GitHub | 🟢 | Hands-on |
+| Explain clone vs fork | 🟢 | Understand the difference |
+| Merge branches | 🟢 | Practiced fast-forward and merge commits |
+| Rebase and explain merge vs rebase | 🟡 | Concept clear; need more practice |
+| `git stash` / `stash pop` | 🟢 | Practiced with conflicts |
+| Cherry-pick commits | 🟡 | Practiced including conflict resolution |
+| Squash merge vs regular merge | 🟡 | Understand concept; need practice |
+| `git reset` soft/mixed/hard | 🟡 | Need repeated hands-on practice |
+| `git revert` | 🟢 | Understand safe undoing of shared history |
+| GitFlow / GitHub Flow / Trunk-Based | 🟡 | Need more real-world examples |
+| GitHub CLI | 🟢 | Practiced repository, issue and PR workflows |
+
+---
+
+#### 3. 🔎 My Three Main Weak Spots
+
+#### 1️⃣ Git Reset vs Revert / Rebase
+
+- `git reset` moves the branch pointer and can rewrite local history.
+- `git revert` creates a new commit that reverses an earlier commit.
+- `git rebase` replays commits on top of another base.
+- Rebase can create cleaner history but rewrites history.
+
+##### Practical rule
+
+```text
+Local/private work
+      ↓
+reset / rebase can be useful
+
+Shared/public history
+      ↓
+prefer revert / merge
+```
+
+My goal is to become faster at deciding **when to reset, revert, merge, or rebase**.
+
+---
+
+#### 2️⃣ Networking Troubleshooting
+
+A useful troubleshooting flow is:
+
+```text
+Application
+    ↓
+Port
+    ↓
+IP connectivity
+    ↓
+Routing
+    ↓
+DNS
+    ↓
+Network interface
+```
+
+Useful commands:
+
+```bash
+ping <ip>
+curl http://<ip>:<port>
+ss -tulpn
+ip addr
+ip route
+dig example.com
+nslookup example.com
+```
+
+I want more practice with closed ports, DNS failures, firewall/security-group issues, wrong routes and services that are running but unreachable.
+
+---
+
+#### 3️⃣ Shell Script Error Handling
+
+A safer script can begin with:
+
+```bash
+set -euo pipefail
+```
+
+This helps with:
+
+- failed commands
+- unset variables
+- failed commands inside pipelines
+
+I want more practice with `trap`, exit codes, cleanup, error messages and safe variable handling.
+
+> ⚠️ These options are useful safeguards, but they are not a replacement for thoughtful error handling.
+
+---
+
+#### 4. ⚡ Quick-Fire Questions
+
+#### Q1. What does `chmod 755 script.sh` do?
+
+```text
+755 = rwx r-x r-x
+```
+
+- Owner → read, write, execute
+- Group → read, execute
+- Others → read, execute
+
+---
+
+#### Q2. Process vs service?
+
+A **process** is a running instance of a program.
+
+A **service** is typically a long-running/background program managed by something such as `systemd`.
+
+```bash
+ps aux
+systemctl status nginx
+```
+
+---
+
+#### Q3. How do you find which process is using port 8080?
+
+```bash
+sudo ss -ltnp | grep :8080
+```
+
+or:
+
+```bash
+sudo lsof -i :8080
+```
+
+---
+
+#### Q4. What does `set -euo pipefail` do?
+
+- `-e` → exit when a command fails
+- `-u` → treat unset variables as errors
+- `pipefail` → a pipeline fails when a command inside it fails
+
+```bash
+set -euo pipefail
+```
+
+---
+
+#### Q5. `git reset --hard` vs `git revert`?
+
+##### Reset
+
+```bash
+git reset --hard HEAD~1
+```
+
+Moves the branch pointer and discards working-tree/index changes.
+
+##### Revert
+
+```bash
+git revert <commit>
+```
+
+Creates a new commit that reverses an earlier commit.
+
+##### Easy memory trick
+
+```text
+reset  → move/remove history
+revert → add an undo commit
+```
+
+---
+
+#### Q6. Recommended branching strategy for a team of 5 shipping weekly?
+
+I would generally recommend **GitHub Flow** for a small team with frequent delivery:
+
+```text
+main
+  │
+  ├── feature/login
+  ├── feature/payment
+  └── fix/api-timeout
+```
+
+Create a short-lived branch → make changes → push → Pull Request → review/CI → merge to `main`.
+
+It is simpler than a heavy GitFlow model and works well with CI/CD.
+
+---
+
+#### Q7. What does `git stash` do?
+
+It temporarily saves uncommitted changes so the working directory becomes clean.
+
+```bash
+git stash
+git stash pop
+```
+
+Useful when I need to switch context without creating an unfinished commit.
+
+---
+
+#### Q8. How do you schedule a script every day at 3 AM?
+
+```bash
+crontab -e
+```
+
+Add:
+
+```cron
+0 3 * * * /path/to/script.sh
+```
+
+Cron format:
+
+```text
+minute hour day month weekday
+  0     3    *    *      *
+```
+
+---
+
+#### Q9. `git fetch` vs `git pull`?
+
+##### Fetch
+
+```bash
+git fetch origin
+```
+
+Downloads remote changes without integrating them into the current branch.
+
+##### Pull
+
+```bash
+git pull
+```
+
+Usually performs fetch followed by merge/rebase according to configuration/options.
+
+```text
+fetch → download + inspect
+pull  → download + integrate
+```
+
+---
+
+#### Q10. What is LVM?
+
+**LVM (Logical Volume Manager)** provides a flexible layer for managing storage.
+
+```text
+Physical Disk
+     ↓
+Physical Volume (PV)
+     ↓
+Volume Group (VG)
+     ↓
+Logical Volume (LV)
+     ↓
+Filesystem
+```
+
+LVM makes storage management more flexible because logical volumes can often be resized and managed independently from the underlying physical disks.
+
+---
+
+#### 5. 👩‍🏫 Teach It Back – Git Branching
+
+Imagine five developers working on the same project.
+
+If everyone changes the same code at the same time, their work can easily conflict.
+
+Git branches provide separate workspaces for features and fixes.
+
+For example:
+
+```bash
+git switch -c feature-login
+```
+
+I can now develop the login feature without directly changing `main`.
+
+When finished:
+
+```bash
+git push -u origin feature-login
+```
+
+Then I create a Pull Request for review.
+
+After review and successful CI checks, the branch can be merged into `main`.
+
+```text
+main
+ │
+ ├── feature-login
+ │       └── changes
+ │
+ └── feature-payment
+         └── changes
+```
+
+**Git branching allows developers to work independently while keeping the main codebase stable.**
+
+---
+
+#### 6. 🛠️ Commands I Want to Keep Fresh
+
+#### Linux
+
+```bash
+pwd
+ls -la
+cd
+mkdir
+touch
+cp
+mv
+rm
+find
+grep
+cat
+less
+ps
+top
+kill
+df -h
+du -sh
+free -h
+systemctl status
+journalctl
+```
+
+#### Networking
+
+```bash
+ip addr
+ip route
+ping
+curl
+ss
+dig
+nslookup
+```
+
+#### Shell
+
+```bash
+chmod +x script.sh
+./script.sh
+bash -x script.sh
+crontab -e
+```
+
+#### Git
+
+```bash
+git status
+git log --oneline --graph
+git branch
+git switch
+git add
+git commit
+git push
+git pull
+git fetch
+git merge
+git rebase
+git stash
+git stash pop
+git cherry-pick
+git reset
+git revert
+```
+
+#### GitHub CLI
+
+```bash
+gh auth status
+gh repo list
+gh repo view
+gh repo clone
+gh issue list
+gh issue create
+gh issue view
+gh issue close
+gh pr list
+gh pr create
+gh pr view
+gh pr merge
+gh run list
+gh run view
+```
+
+---
+
+#### 7. 🧠 Key Lessons From Days 1–27
+
+##### 🐧 Linux
+Linux is the foundation for many DevOps environments. Understanding processes, services, storage, permissions and troubleshooting is essential.
+
+##### 🌐 Networking
+A DevOps engineer needs to understand how systems communicate through IP addresses, DNS, ports, routing and connectivity.
+
+##### 🐚 Shell Scripting
+Automation starts with small scripts. Shell scripting can remove repetitive manual work and build operational automation.
+
+##### 🔀 Git
+Git is more than `add`, `commit`, and `push`. Branching, merge, rebase, stash, cherry-pick, reset and revert are important for real workflows.
+
+##### 🐙 GitHub
+GitHub adds collaboration around Git through repositories, Pull Requests, Issues, Actions and reviews.
+
+##### 🖥️ GitHub CLI
+`gh` brings many GitHub operations directly into the terminal and makes them easier to automate.
+
+##### 👩‍💻 Developer Branding
+Technical skills matter, but presenting projects clearly matters too. A clean GitHub profile makes my work easier to understand.
+
+---
+
+#### 8. 📁 Submission Checklist
+
+- [ ] `day-28-notes.md` created
+- [ ] Days 1–27 are committed
+- [ ] Days 1–27 are pushed to GitHub
+- [ ] `git-commands.md` is updated
+- [ ] Shell scripting cheat sheet is complete
+- [ ] Repository descriptions are meaningful
+- [ ] Important repositories are pinned
+- [ ] GitHub profile README is updated
+- [ ] All changes are pushed to my fork
+
+---
+
+#### 9. 🎯 My Next Focus
+
+The biggest lesson from this revision is:
+
+> **Knowing a command is different from being able to troubleshoot with it.**
+
+My next focus areas are:
+
+1. 🔀 Become more confident with advanced Git workflows.
+2. 🌐 Practice networking troubleshooting scenarios.
+3. 🐚 Write safer, production-oriented shell scripts.
+4. ☁️ Continue building hands-on AWS and DevOps projects.
+5. 🤖 Connect these fundamentals with CI/CD and automation.
+
+---
+
+#### 📝 Final Reflection
+
+The first 27 days helped me build a strong foundation across Linux, networking, shell scripting, Git, GitHub and DevOps fundamentals.
+
+This revision showed me that some topics need repeated hands-on practice rather than simply reading commands.
+
+The most important takeaway is:
+
+> **Learning DevOps is not about memorizing commands. It is about understanding why a tool is used, knowing how to troubleshoot problems, and being able to automate repetitive work.**
+
+I'm continuing the journey one day at a time — **learning, practicing, troubleshooting, documenting, and improving.** 🚀
+
+---
+
+<div align="center">
+
+##### 🚀 Day 28 Complete
+
+**Learn → Practice → Break → Troubleshoot → Understand → Improve**
+
+`#90DaysOfDevOps` • `#DevOpsKaJosh` • `#TrainWithShubham`
+
+</div>
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -80,7 +777,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | List 5 weakest topics and a plan to revise them. | You can demonstrate, without notes: *create a professional GitHub profile and repo conventions* — with evidence committed to `day-28/`. |
 | 3 | Add architecture diagram (Mermaid) to one repo. | You can demonstrate, without notes: *prepare a Phase-1 knowledge check* — with evidence committed to `day-28/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -89,13 +786,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Audit your public footprint: no secrets, no personal data, no internal company info.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -108,7 +805,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -116,7 +813,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -126,7 +823,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. What are your 3 strongest skills so far?
 5. **Scenario:** A recruiter opens your GitHub for 90 seconds. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -141,7 +838,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-28/` in your own repository:
 
@@ -166,7 +863,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -176,7 +873,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 32 |
 | **Total** | **210 (≈ 3.5 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -195,11 +892,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 27](../day-27/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 29 →](../day-29/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-28/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

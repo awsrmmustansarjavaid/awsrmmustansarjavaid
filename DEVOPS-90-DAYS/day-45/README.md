@@ -71,7 +71,220 @@ vault kv put secret/app db_password=s3cr3t && vault kv get secret/app
 vault policy write app-ro - <<< 'path "secret/data/app" { capabilities=["read"] }'
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 45 – Docker Build & Push in GitHub Actions — Challenge Brief
+
+#### Task
+Today you build a **complete CI/CD pipeline** — code pushed to GitHub automatically builds a Docker image and ships it to Docker Hub. No manual steps.
+
+This is exactly what happens in real production pipelines.
+
+---
+
+#### Expected Output
+- A complete workflow: `.github/workflows/docker-publish.yml`
+- Your Docker image live on Docker Hub
+- A status badge in your repo README
+- A markdown file: `day-45-docker-cicd.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Prepare
+1. Use the app you Dockerized on Day 36 (or any simple Dockerfile)
+2. Add the Dockerfile to your `github-actions-practice` repo (or create a minimal one)
+3. Make sure `DOCKER_USERNAME` and `DOCKER_TOKEN` secrets are set from Day 44
+
+---
+
+##### Task 2: Build the Docker Image in CI
+Create `.github/workflows/docker-publish.yml` that:
+1. Triggers on push to `main`
+2. Checks out the code
+3. Builds the Docker image and tags it
+
+**Verify:** Check the build step logs — does the image build successfully?
+
+---
+
+##### Task 3: Push to Docker Hub
+Add steps to:
+1. Log in to Docker Hub using your secrets
+2. Tag the image as `username/repo:latest` and also `username/repo:sha-<short-commit-hash>`
+3. Push both tags
+
+**Verify:** Go to Docker Hub — is your image there with both tags?
+
+---
+
+##### Task 4: Only Push on Main
+Add a condition so the push step only runs on the `main` branch — not on feature branches or PRs.
+
+Test it: push to a feature branch and verify the image is built but NOT pushed.
+
+---
+
+##### Task 5: Add a Status Badge
+1. Get the badge URL for your `docker-publish` workflow from the Actions tab
+2. Add it to your `README.md`
+3. Push — the badge should show green
+
+---
+
+##### Task 6: Pull and Run It
+1. On your local machine (or a cloud server), pull the image you just pushed
+2. Run it
+3. Confirm it works
+
+Write in your notes: What is the full journey from `git push` to a running container?
+
+---
+
+#### Hints
+- Docker login: `uses: docker/login-action@v3`
+- Build and push: `uses: docker/build-push-action@v5`
+- Short SHA: `${{ github.sha }}` (use `cut` or `slice` to get first 7 chars)
+- Badge URL format: `https://github.com/<user>/<repo>/actions/workflows/<file>.yml/badge.svg`
+
+---
+
+#### Documentation
+Create `day-45-docker-cicd.md` with:
+- Your complete workflow YAML
+- Docker Hub link to your image
+- Screenshot of the pipeline run
+- The full journey described in Task 6
+
+---
+
+#### Submission
+1. Add `day-45-docker-cicd.md` to `2026/day-45/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your Docker Hub image link and the green badge on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+### 7.2 Day 45 – Docker Build & Push in GitHub Actions — Notes & Solution
+
+#### Task
+Today you build a **complete CI/CD pipeline** — code pushed to GitHub automatically builds a Docker image and ships it to Docker Hub. No manual steps.
+
+This is exactly what happens in real production pipelines.
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Prepare
+1. Use the app you Dockerized on Day 36 (or any simple Dockerfile)
+2. Add the Dockerfile to your `github-actions-practice` repo (or create a minimal one)
+3. Make sure `DOCKER_USERNAME` and `DOCKER_TOKEN` secrets are set from Day 44
+
+<img width="1919" height="741" alt="Screenshot 2026-09-18 213810" src="https://github.com/user-attachments/assets/fefcbf89-cc9a-432c-86a7-8615a4ff1aed" />
+
+
+---
+
+##### Task 2: Build the Docker Image in CI
+Create `.github/workflows/docker-publish.yml` that:
+1. Triggers on push to `main`
+2. Checks out the code
+3. Builds the Docker image and tags it
+
+**Verify:** Check the build step logs — does the image build successfully?
+
+- Yes,image build successfully
+[docker-yaml-file](https://github.com/tejswini-maingade/GitHub-Action-Practice/blob/main/.github/workflows/docker-publish.yml)
+
+<img width="1917" height="874" alt="Screenshot 2026-09-18 212239" src="https://github.com/user-attachments/assets/017946c1-840e-4e41-a96d-5a36f6ea60e7" />
+
+---
+
+##### Task 3: Push to Docker Hub
+Add steps to:
+1. Log in to Docker Hub using your secrets
+2. Tag the image as `username/repo:latest` and also `username/repo:sha-<short-commit-hash>`
+3. Push both tags
+
+**Verify:** Go to Docker Hub — is your image there with both tags?
+
+- Yes, both tags are in Dockerhub
+
+<img width="1919" height="873" alt="Screenshot 2026-09-18 211919" src="https://github.com/user-attachments/assets/abde4d16-ca62-41e1-a93e-4ac7703aa0a6" />
+
+
+---
+
+##### Task 4: Only Push on Main
+Add a condition so the push step only runs on the `main` branch — not on feature branches or PRs.
+
+Test it: push to a feature branch and verify the image is built but NOT pushed.
+
+<img width="1919" height="879" alt="Screenshot 2026-09-18 212223" src="https://github.com/user-attachments/assets/4ced4261-76ae-4da0-92be-bb3b3f2d9599" />
+
+
+---
+
+##### Task 5: Add a Status Badge
+1. Get the badge URL for your `docker-publish` workflow from the Actions tab
+2. Add it to your `README.md`
+3. Push — the badge should show green
+   
+<img width="1727" height="304" alt="Screenshot 2026-09-18 212449" src="https://github.com/user-attachments/assets/16f8b42a-d399-46d4-b272-d685bec26ff0" />
+
+
+---
+
+##### Task 6: Pull and Run It
+1. On your local machine (or a cloud server), pull the image you just pushed
+2. Run it
+3. Confirm it works
+
+Write in your notes: What is the full journey from `git push` to a running container?
+
+[Dockerhub](https://hub.docker.com/repository/docker/tejswinim/day-45-github-practice/general)
+
+- Yes,its woking
+
+<img width="1602" height="470" alt="Screenshot 2026-09-18 213615" src="https://github.com/user-attachments/assets/9b5970f6-a3f2-4a5c-b702-1ecb9e02deb4" />
+<img width="1919" height="974" alt="Screenshot 2026-09-18 204305" src="https://github.com/user-attachments/assets/420efec4-e89b-4ee3-85a7-983e6d881a8a" />
+
+
+1. git push – Code is pushed to GitHub.
+
+2. GitHub Actions triggers – The CI/CD workflow starts and Copleted all task or jobs.
+
+3. Checkout code: `uses: actions/checkout@v4`
+
+4. Login to Docker Hub: `uses: docker/login-action@v3`
+
+5. Build Docker image using the Dockerfile.
+    - If code is pushed to main: Docker image is built, tagged, and pushed to Docker Hub.
+    - If pushed to other branches or PRs:Docker image is only built for testing. It is not pushed to Docker Hub.
+
+6. Run the container: `docker run -d --name web -p 80:80 tejswinim/day-45-github-practice:sha-21a287c`
+
+---
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -81,7 +294,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Compare Vault, AWS Secrets Manager, SOPS. | You can demonstrate, without notes: *encrypt secrets in git with SOPS/age* — with evidence committed to `day-45/`. |
 | 3 | Add gitleaks to CI. | You can demonstrate, without notes: *run HashiCorp Vault in dev mode and read secrets from an app* — with evidence committed to `day-45/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -90,13 +303,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Never use Vault dev mode in production; rotate any exposed secret immediately; short TTLs.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -109,7 +322,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -117,7 +330,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -127,7 +340,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. How do you respond to a leaked key?
 5. **Scenario:** Pen test found a DB password in a Docker image layer. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -142,7 +355,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-45/` in your own repository:
 
@@ -165,7 +378,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -175,7 +388,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 36 |
 | **Total** | **240 (≈ 4.0 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -194,11 +407,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 44](../day-44/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 46 →](../day-46/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-45/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

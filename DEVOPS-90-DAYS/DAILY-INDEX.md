@@ -1,94 +1,94 @@
 # 90-Day Daily Index
 
-| Day | Main plan | Supplement |
-|---:|---|---|
-| 01 | [Open daily plan](day-01/README.md) | [Supplement](day-01/SUPPLEMENTARY-MATERIALS.md) |
-| 02 | [Open daily plan](day-02/README.md) | [Supplement](day-02/SUPPLEMENTARY-MATERIALS.md) |
-| 03 | [Open daily plan](day-03/README.md) | [Supplement](day-03/SUPPLEMENTARY-MATERIALS.md) |
-| 04 | [Open daily plan](day-04/README.md) | [Supplement](day-04/SUPPLEMENTARY-MATERIALS.md) |
-| 05 | [Open daily plan](day-05/README.md) | [Supplement](day-05/SUPPLEMENTARY-MATERIALS.md) |
-| 06 | [Open daily plan](day-06/README.md) | [Supplement](day-06/SUPPLEMENTARY-MATERIALS.md) |
-| 07 | [Open daily plan](day-07/README.md) | [Supplement](day-07/SUPPLEMENTARY-MATERIALS.md) |
-| 08 | [Open daily plan](day-08/README.md) | [Supplement](day-08/SUPPLEMENTARY-MATERIALS.md) |
-| 09 | [Open daily plan](day-09/README.md) | [Supplement](day-09/SUPPLEMENTARY-MATERIALS.md) |
-| 10 | [Open daily plan](day-10/README.md) | [Supplement](day-10/SUPPLEMENTARY-MATERIALS.md) |
-| 11 | [Open daily plan](day-11/README.md) | [Supplement](day-11/SUPPLEMENTARY-MATERIALS.md) |
-| 12 | [Open daily plan](day-12/README.md) | [Supplement](day-12/SUPPLEMENTARY-MATERIALS.md) |
-| 13 | [Open daily plan](day-13/README.md) | [Supplement](day-13/SUPPLEMENTARY-MATERIALS.md) |
-| 14 | [Open daily plan](day-14/README.md) | [Supplement](day-14/SUPPLEMENTARY-MATERIALS.md) |
-| 15 | [Open daily plan](day-15/README.md) | [Supplement](day-15/SUPPLEMENTARY-MATERIALS.md) |
-| 16 | [Open daily plan](day-16/README.md) | [Supplement](day-16/SUPPLEMENTARY-MATERIALS.md) |
-| 17 | [Open daily plan](day-17/README.md) | [Supplement](day-17/SUPPLEMENTARY-MATERIALS.md) |
-| 18 | [Open daily plan](day-18/README.md) | [Supplement](day-18/SUPPLEMENTARY-MATERIALS.md) |
-| 19 | [Open daily plan](day-19/README.md) | [Supplement](day-19/SUPPLEMENTARY-MATERIALS.md) |
-| 20 | [Open daily plan](day-20/README.md) | [Supplement](day-20/SUPPLEMENTARY-MATERIALS.md) |
-| 21 | [Open daily plan](day-21/README.md) | [Supplement](day-21/SUPPLEMENTARY-MATERIALS.md) |
-| 22 | [Open daily plan](day-22/README.md) | [Supplement](day-22/SUPPLEMENTARY-MATERIALS.md) |
-| 23 | [Open daily plan](day-23/README.md) | [Supplement](day-23/SUPPLEMENTARY-MATERIALS.md) |
-| 24 | [Open daily plan](day-24/README.md) | [Supplement](day-24/SUPPLEMENTARY-MATERIALS.md) |
-| 25 | [Open daily plan](day-25/README.md) | [Supplement](day-25/SUPPLEMENTARY-MATERIALS.md) |
-| 26 | [Open daily plan](day-26/README.md) | [Supplement](day-26/SUPPLEMENTARY-MATERIALS.md) |
-| 27 | [Open daily plan](day-27/README.md) | [Supplement](day-27/SUPPLEMENTARY-MATERIALS.md) |
-| 28 | [Open daily plan](day-28/README.md) | [Supplement](day-28/SUPPLEMENTARY-MATERIALS.md) |
-| 29 | [Open daily plan](day-29/README.md) | [Supplement](day-29/SUPPLEMENTARY-MATERIALS.md) |
-| 30 | [Open daily plan](day-30/README.md) | [Supplement](day-30/SUPPLEMENTARY-MATERIALS.md) |
-| 31 | [Open daily plan](day-31/README.md) | [Supplement](day-31/SUPPLEMENTARY-MATERIALS.md) |
-| 32 | [Open daily plan](day-32/README.md) | [Supplement](day-32/SUPPLEMENTARY-MATERIALS.md) |
-| 33 | [Open daily plan](day-33/README.md) | [Supplement](day-33/SUPPLEMENTARY-MATERIALS.md) |
-| 34 | [Open daily plan](day-34/README.md) | [Supplement](day-34/SUPPLEMENTARY-MATERIALS.md) |
-| 35 | [Open daily plan](day-35/README.md) | [Supplement](day-35/SUPPLEMENTARY-MATERIALS.md) |
-| 36 | [Open daily plan](day-36/README.md) | [Supplement](day-36/SUPPLEMENTARY-MATERIALS.md) |
-| 37 | [Open daily plan](day-37/README.md) | [Supplement](day-37/SUPPLEMENTARY-MATERIALS.md) |
-| 38 | [Open daily plan](day-38/README.md) | [Supplement](day-38/SUPPLEMENTARY-MATERIALS.md) |
-| 39 | [Open daily plan](day-39/README.md) | [Supplement](day-39/SUPPLEMENTARY-MATERIALS.md) |
-| 40 | [Open daily plan](day-40/README.md) | [Supplement](day-40/SUPPLEMENTARY-MATERIALS.md) |
-| 41 | [Open daily plan](day-41/README.md) | [Supplement](day-41/SUPPLEMENTARY-MATERIALS.md) |
-| 42 | [Open daily plan](day-42/README.md) | [Supplement](day-42/SUPPLEMENTARY-MATERIALS.md) |
-| 43 | [Open daily plan](day-43/README.md) | [Supplement](day-43/SUPPLEMENTARY-MATERIALS.md) |
-| 44 | [Open daily plan](day-44/README.md) | [Supplement](day-44/SUPPLEMENTARY-MATERIALS.md) |
-| 45 | [Open daily plan](day-45/README.md) | [Supplement](day-45/SUPPLEMENTARY-MATERIALS.md) |
-| 46 | [Open daily plan](day-46/README.md) | [Supplement](day-46/SUPPLEMENTARY-MATERIALS.md) |
-| 47 | [Open daily plan](day-47/README.md) | [Supplement](day-47/SUPPLEMENTARY-MATERIALS.md) |
-| 48 | [Open daily plan](day-48/README.md) | [Supplement](day-48/SUPPLEMENTARY-MATERIALS.md) |
-| 49 | [Open daily plan](day-49/README.md) | [Supplement](day-49/SUPPLEMENTARY-MATERIALS.md) |
-| 50 | [Open daily plan](day-50/README.md) | [Supplement](day-50/SUPPLEMENTARY-MATERIALS.md) |
-| 51 | [Open daily plan](day-51/README.md) | [Supplement](day-51/SUPPLEMENTARY-MATERIALS.md) |
-| 52 | [Open daily plan](day-52/README.md) | [Supplement](day-52/SUPPLEMENTARY-MATERIALS.md) |
-| 53 | [Open daily plan](day-53/README.md) | [Supplement](day-53/SUPPLEMENTARY-MATERIALS.md) |
-| 54 | [Open daily plan](day-54/README.md) | [Supplement](day-54/SUPPLEMENTARY-MATERIALS.md) |
-| 55 | [Open daily plan](day-55/README.md) | [Supplement](day-55/SUPPLEMENTARY-MATERIALS.md) |
-| 56 | [Open daily plan](day-56/README.md) | [Supplement](day-56/SUPPLEMENTARY-MATERIALS.md) |
-| 57 | [Open daily plan](day-57/README.md) | [Supplement](day-57/SUPPLEMENTARY-MATERIALS.md) |
-| 58 | [Open daily plan](day-58/README.md) | [Supplement](day-58/SUPPLEMENTARY-MATERIALS.md) |
-| 59 | [Open daily plan](day-59/README.md) | [Supplement](day-59/SUPPLEMENTARY-MATERIALS.md) |
-| 60 | [Open daily plan](day-60/README.md) | [Supplement](day-60/SUPPLEMENTARY-MATERIALS.md) |
-| 61 | [Open daily plan](day-61/README.md) | [Supplement](day-61/SUPPLEMENTARY-MATERIALS.md) |
-| 62 | [Open daily plan](day-62/README.md) | [Supplement](day-62/SUPPLEMENTARY-MATERIALS.md) |
-| 63 | [Open daily plan](day-63/README.md) | [Supplement](day-63/SUPPLEMENTARY-MATERIALS.md) |
-| 64 | [Open daily plan](day-64/README.md) | [Supplement](day-64/SUPPLEMENTARY-MATERIALS.md) |
-| 65 | [Open daily plan](day-65/README.md) | [Supplement](day-65/SUPPLEMENTARY-MATERIALS.md) |
-| 66 | [Open daily plan](day-66/README.md) | [Supplement](day-66/SUPPLEMENTARY-MATERIALS.md) |
-| 67 | [Open daily plan](day-67/README.md) | [Supplement](day-67/SUPPLEMENTARY-MATERIALS.md) |
-| 68 | [Open daily plan](day-68/README.md) | [Supplement](day-68/SUPPLEMENTARY-MATERIALS.md) |
-| 69 | [Open daily plan](day-69/README.md) | [Supplement](day-69/SUPPLEMENTARY-MATERIALS.md) |
-| 70 | [Open daily plan](day-70/README.md) | [Supplement](day-70/SUPPLEMENTARY-MATERIALS.md) |
-| 71 | [Open daily plan](day-71/README.md) | [Supplement](day-71/SUPPLEMENTARY-MATERIALS.md) |
-| 72 | [Open daily plan](day-72/README.md) | [Supplement](day-72/SUPPLEMENTARY-MATERIALS.md) |
-| 73 | [Open daily plan](day-73/README.md) | [Supplement](day-73/SUPPLEMENTARY-MATERIALS.md) |
-| 74 | [Open daily plan](day-74/README.md) | [Supplement](day-74/SUPPLEMENTARY-MATERIALS.md) |
-| 75 | [Open daily plan](day-75/README.md) | [Supplement](day-75/SUPPLEMENTARY-MATERIALS.md) |
-| 76 | [Open daily plan](day-76/README.md) | [Supplement](day-76/SUPPLEMENTARY-MATERIALS.md) |
-| 77 | [Open daily plan](day-77/README.md) | [Supplement](day-77/SUPPLEMENTARY-MATERIALS.md) |
-| 78 | [Open daily plan](day-78/README.md) | [Supplement](day-78/SUPPLEMENTARY-MATERIALS.md) |
-| 79 | [Open daily plan](day-79/README.md) | [Supplement](day-79/SUPPLEMENTARY-MATERIALS.md) |
-| 80 | [Open daily plan](day-80/README.md) | [Supplement](day-80/SUPPLEMENTARY-MATERIALS.md) |
-| 81 | [Open daily plan](day-81/README.md) | [Supplement](day-81/SUPPLEMENTARY-MATERIALS.md) |
-| 82 | [Open daily plan](day-82/README.md) | [Supplement](day-82/SUPPLEMENTARY-MATERIALS.md) |
-| 83 | [Open daily plan](day-83/README.md) | [Supplement](day-83/SUPPLEMENTARY-MATERIALS.md) |
-| 84 | [Open daily plan](day-84/README.md) | [Supplement](day-84/SUPPLEMENTARY-MATERIALS.md) |
-| 85 | [Open daily plan](day-85/README.md) | [Supplement](day-85/SUPPLEMENTARY-MATERIALS.md) |
-| 86 | [Open daily plan](day-86/README.md) | [Supplement](day-86/SUPPLEMENTARY-MATERIALS.md) |
-| 87 | [Open daily plan](day-87/README.md) | [Supplement](day-87/SUPPLEMENTARY-MATERIALS.md) |
-| 88 | [Open daily plan](day-88/README.md) | [Supplement](day-88/SUPPLEMENTARY-MATERIALS.md) |
-| 89 | [Open daily plan](day-89/README.md) | [Supplement](day-89/SUPPLEMENTARY-MATERIALS.md) |
-| 90 | [Open daily plan](day-90/README.md) | [Supplement](day-90/SUPPLEMENTARY-MATERIALS.md) |
+| Day | Daily lesson |
+|---:|---|
+| 01 | [Open daily plan](day-01/README.md) |
+| 02 | [Open daily plan](day-02/README.md) |
+| 03 | [Open daily plan](day-03/README.md) |
+| 04 | [Open daily plan](day-04/README.md) |
+| 05 | [Open daily plan](day-05/README.md) |
+| 06 | [Open daily plan](day-06/README.md) |
+| 07 | [Open daily plan](day-07/README.md) |
+| 08 | [Open daily plan](day-08/README.md) |
+| 09 | [Open daily plan](day-09/README.md) |
+| 10 | [Open daily plan](day-10/README.md) |
+| 11 | [Open daily plan](day-11/README.md) |
+| 12 | [Open daily plan](day-12/README.md) |
+| 13 | [Open daily plan](day-13/README.md) |
+| 14 | [Open daily plan](day-14/README.md) |
+| 15 | [Open daily plan](day-15/README.md) |
+| 16 | [Open daily plan](day-16/README.md) |
+| 17 | [Open daily plan](day-17/README.md) |
+| 18 | [Open daily plan](day-18/README.md) |
+| 19 | [Open daily plan](day-19/README.md) |
+| 20 | [Open daily plan](day-20/README.md) |
+| 21 | [Open daily plan](day-21/README.md) |
+| 22 | [Open daily plan](day-22/README.md) |
+| 23 | [Open daily plan](day-23/README.md) |
+| 24 | [Open daily plan](day-24/README.md) |
+| 25 | [Open daily plan](day-25/README.md) |
+| 26 | [Open daily plan](day-26/README.md) |
+| 27 | [Open daily plan](day-27/README.md) |
+| 28 | [Open daily plan](day-28/README.md) |
+| 29 | [Open daily plan](day-29/README.md) |
+| 30 | [Open daily plan](day-30/README.md) |
+| 31 | [Open daily plan](day-31/README.md) |
+| 32 | [Open daily plan](day-32/README.md) |
+| 33 | [Open daily plan](day-33/README.md) |
+| 34 | [Open daily plan](day-34/README.md) |
+| 35 | [Open daily plan](day-35/README.md) |
+| 36 | [Open daily plan](day-36/README.md) |
+| 37 | [Open daily plan](day-37/README.md) |
+| 38 | [Open daily plan](day-38/README.md) |
+| 39 | [Open daily plan](day-39/README.md) |
+| 40 | [Open daily plan](day-40/README.md) |
+| 41 | [Open daily plan](day-41/README.md) |
+| 42 | [Open daily plan](day-42/README.md) |
+| 43 | [Open daily plan](day-43/README.md) |
+| 44 | [Open daily plan](day-44/README.md) |
+| 45 | [Open daily plan](day-45/README.md) |
+| 46 | [Open daily plan](day-46/README.md) |
+| 47 | [Open daily plan](day-47/README.md) |
+| 48 | [Open daily plan](day-48/README.md) |
+| 49 | [Open daily plan](day-49/README.md) |
+| 50 | [Open daily plan](day-50/README.md) |
+| 51 | [Open daily plan](day-51/README.md) |
+| 52 | [Open daily plan](day-52/README.md) |
+| 53 | [Open daily plan](day-53/README.md) |
+| 54 | [Open daily plan](day-54/README.md) |
+| 55 | [Open daily plan](day-55/README.md) |
+| 56 | [Open daily plan](day-56/README.md) |
+| 57 | [Open daily plan](day-57/README.md) |
+| 58 | [Open daily plan](day-58/README.md) |
+| 59 | [Open daily plan](day-59/README.md) |
+| 60 | [Open daily plan](day-60/README.md) |
+| 61 | [Open daily plan](day-61/README.md) |
+| 62 | [Open daily plan](day-62/README.md) |
+| 63 | [Open daily plan](day-63/README.md) |
+| 64 | [Open daily plan](day-64/README.md) |
+| 65 | [Open daily plan](day-65/README.md) |
+| 66 | [Open daily plan](day-66/README.md) |
+| 67 | [Open daily plan](day-67/README.md) |
+| 68 | [Open daily plan](day-68/README.md) |
+| 69 | [Open daily plan](day-69/README.md) |
+| 70 | [Open daily plan](day-70/README.md) |
+| 71 | [Open daily plan](day-71/README.md) |
+| 72 | [Open daily plan](day-72/README.md) |
+| 73 | [Open daily plan](day-73/README.md) |
+| 74 | [Open daily plan](day-74/README.md) |
+| 75 | [Open daily plan](day-75/README.md) |
+| 76 | [Open daily plan](day-76/README.md) |
+| 77 | [Open daily plan](day-77/README.md) |
+| 78 | [Open daily plan](day-78/README.md) |
+| 79 | [Open daily plan](day-79/README.md) |
+| 80 | [Open daily plan](day-80/README.md) |
+| 81 | [Open daily plan](day-81/README.md) |
+| 82 | [Open daily plan](day-82/README.md) |
+| 83 | [Open daily plan](day-83/README.md) |
+| 84 | [Open daily plan](day-84/README.md) |
+| 85 | [Open daily plan](day-85/README.md) |
+| 86 | [Open daily plan](day-86/README.md) |
+| 87 | [Open daily plan](day-87/README.md) |
+| 88 | [Open daily plan](day-88/README.md) |
+| 89 | [Open daily plan](day-89/README.md) |
+| 90 | [Open daily plan](day-90/README.md) |

@@ -8,7 +8,6 @@
 | **Week** | Week 5 — Containers & Container Security |
 | **Difficulty** | Intermediate |
 | **Estimated time** | 4.0 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-35` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -76,7 +75,317 @@ docker tag app ghcr.io/USER/app:1.0.0 && docker push ghcr.io/USER/app:1.0.0
 docker buildx imagetools inspect ghcr.io/USER/app:1.0.0
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 34 – Docker Compose: Real-World Multi-Container Apps — Challenge Brief
+
+#### Task
+Today's goal is to **build more complex, production-like setups with Docker Compose**.
+
+Yesterday was basics. Today you handle real scenarios — app + database + cache, healthchecks, restart policies, and service dependencies.
+
+---
+
+#### Expected Output
+- A markdown file: `day-34-compose-advanced.md`
+- All compose files and Dockerfiles you create
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Build Your Own App Stack
+Create a `docker-compose.yml` for a 3-service stack:
+- A **web app** (use Python Flask, Node.js, or any language you know)
+- A **database** (Postgres or MySQL)
+- A **cache** (Redis)
+
+Write a simple Dockerfile for the web app. The app doesn't need to be complex — even a "Hello World" that connects to the database is enough.
+
+---
+
+##### Task 2: depends_on & Healthchecks
+1. Add `depends_on` to your compose file so the app starts **after** the database
+2. Add a **healthcheck** on the database service
+3. Use `depends_on` with `condition: service_healthy` so the app waits for the database to be truly ready, not just started
+
+**Test:** Bring everything down and up — does the app wait for the DB?
+
+---
+
+##### Task 3: Restart Policies
+1. Add `restart: always` to your database service
+2. Manually kill the database container — does it come back?
+3. Try `restart: on-failure` — how is it different?
+4. Write in your notes: When would you use each restart policy?
+
+---
+
+##### Task 4: Custom Dockerfiles in Compose
+1. Instead of using a pre-built image for your app, use `build:` in your compose file to build from a Dockerfile
+2. Make a code change in your app
+3. Rebuild and restart with one command
+
+---
+
+##### Task 5: Named Networks & Volumes
+1. Define **explicit networks** in your compose file instead of relying on the default
+2. Define **named volumes** for database data
+3. Add **labels** to your services for better organization
+
+---
+
+##### Task 6: Scaling (Bonus)
+1. Try scaling your web app to 3 replicas using `docker compose up --scale`
+2. What happens? What breaks?
+3. Write in your notes: Why doesn't simple scaling work with port mapping?
+
+---
+
+#### Hints
+- Build from Dockerfile: `build: ./app`
+- Healthcheck: `healthcheck:` with `test`, `interval`, `timeout`
+- Rebuild: `docker compose up --build`
+- Scale: `docker compose up --scale web=3`
+
+---
+
+#### Submission
+1. Add your compose files, Dockerfiles, and `day-34-compose-advanced.md` to `2026/day-34/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your 3-service app stack running via Compose on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+### 7.2 🐳 Day 34 – Docker Compose: Real-World Multi-Container Apps — Notes & Solution
+
+##### 90 Days of DevOps – Day 34
+
+Today I moved beyond basic Docker Compose and built a more production-like multi-container application using Docker Compose.
+
+#### The application consists of:
+
+- 🐍 Flask Web Application
+- 🗄️ MySQL Database
+-⚡ Redis Cache
+- ❤️ Database Healthcheck
+- 🔄 Restart Policies
+- 🌐 Custom Docker Network
+- 💾 Named Docker Volume
+- 🏷️ Docker Labels
+- 📈 Container Scaling
+
+##### 📌 What I Built
+
+##### I created a 3-tier application using Docker Compose.
+
+                    🌐 User
+                       │
+                       ▼
+              ┌─────────────────┐
+              │   Flask Web App │
+              │     Port 5000   │
+              └────────┬────────┘
+                       │
+              ┌────────┴─────────┐
+              │                  │
+              ▼                  ▼
+       ┌─────────────┐    ┌─────────────┐
+       │    MySQL    │    │    Redis    │
+       │    :3306    │    │    :6379    │
+       └──────┬──────┘    └─────────────┘
+              │
+              ▼
+       ┌─────────────┐
+       │ mysql-data  │
+       │ NamedVolume │
+       └─────────────┘
+
+The Flask application connects to both MySQL and Redis through a custom Docker network.
+
+#### Challenge Tasks
+
+##### 🎯Task 1: Build Your Own App Stack
+Create a `docker-compose.yml` for a 3-service stack:
+- A **web app** (use Python Flask, Node.js, or any language you know)
+- A **database** (Postgres or MySQL)
+- A **cache** (Redis)
+
+- Run and build all images - ```docker compose up -d```
+
+<img width="1919" height="239" alt="Screenshot 2026-08-27 130610" src="https://github.com/user-attachments/assets/f0fe60cc-4ec2-412c-8d0c-5ba6f81c9e8a" />
+<img width="1918" height="966" alt="Screenshot 2026-08-27 134010" src="https://github.com/user-attachments/assets/7086d9dd-4409-446c-952b-044d555c7569" />
+
+---
+
+##### 🐳Task 2: depends_on & Healthchecks
+1. Add `depends_on` to your compose file so the app starts **after** the database
+2. Add a **healthcheck** on the database service
+3. Use `depends_on` with `condition: service_healthy` so the app waits for the database to be truly ready, not just started
+
+**Test**: checking everything on docker compose **UP** & **DOWN** — does the app wait for the DB?
+- **Yes**
+<img width="1313" height="231" alt="Screenshot 2026-08-27 134146" src="https://github.com/user-attachments/assets/f45b7624-e9f0-4b16-bf74-d3e2f15fe7ad" />
+
+
+- Postgres container starts first.
+- Healthcheck waits until DB is ready.
+- App container starts only after DB is healthy
+
+---
+
+##### 🔄Task 3: Restart Policies
+1. Add `restart: always` to your database service
+2. Manually kill the database container — does it come back?
+- **Yes** - It is back.
+<img width="1296" height="241" alt="Screenshot 2026-08-27 141304" src="https://github.com/user-attachments/assets/30fe5ecf-594e-4974-9dad-feea3a764a59" />
+
+
+3. Try `restart: on-failure` — how is it different?
+- Did't Restart But showing like healthy.
+<img width="1919" height="441" alt="Screenshot 2026-08-27 130647" src="https://github.com/user-attachments/assets/ede40aba-c57a-4032-a198-f9f54d1f1817" />
+
+
+4. Write in your notes: When would you use each restart policy?
+
+    - `restart:always` `Use When:`
+         Databases,
+         Backend APIs,
+         Production services,
+         Anything that must always run,
+
+    - `restart:on-failure` `Use When`:
+         Data processing jobs
+         One-time migration scripts
+
+---
+
+##### 🛠️Task 4: Custom Dockerfiles in Compose
+1. Instead of using a pre-built image for your app, use `build:` in your compose file to build from a Dockerfile
+2. Make a code change in your app
+3. Rebuild and restart with one command
+
+<img width="1919" height="239" alt="Screenshot 2026-08-27 130610" src="https://github.com/user-attachments/assets/019da5d7-e2fe-4ab9-9b46-b7f2cfb7f4e6" />
+<img width="1919" height="441" alt="Screenshot 2026-08-27 130647" src="https://github.com/user-attachments/assets/478ac0c3-d8a2-4b68-b6ae-fdd0c6f9a634" />
+<img width="1918" height="966" alt="Screenshot 2026-08-27 134010" src="https://github.com/user-attachments/assets/15a5bac5-b41a-45df-bb02-7cb0ca37132d" />
+
+
+---
+
+##### 🌐Task 5: Named Networks & Volumes
+1. Define **explicit networks** in your compose file instead of relying on the default
+2. Define **named volumes** for database data
+3. Add **labels** to your services for better organization
+<img width="1919" height="251" alt="Screenshot 2026-08-27 134408" src="https://github.com/user-attachments/assets/396ae92e-bdcb-4760-b88d-fddb00131364" />
+<img width="1096" height="183" alt="Screenshot 2026-08-27 134531" src="https://github.com/user-attachments/assets/654cada3-68d0-421f-bbca-23c3fbb826cd" />
+
+
+---
+
+##### 📈Task 6: Scaling (Bonus)
+1. Try scaling your web app to 3 replicas using `docker compose up --scale`
+
+2. What happens? What breaks?
+
+3. Write in your notes: Why doesn't simple scaling work with port mapping?
+<img width="1919" height="335" alt="Screenshot 2026-08-27 141217" src="https://github.com/user-attachments/assets/11a90ee6-2d30-4a09-b921-6f716fd394b7" />
+
+
+- First container started
+
+- It binds host port 3000 = container port 3000.
+
+- Second and third containers failed
+
+- Status Created means Docker couldn’t start them, port-3000 - **Showing**- Like this - Bind for 0.0.0.0:3000 failed: port is already allocated.
+
+- Docker can’t bind multiple containers to the same host port.
+
+---
+
+##### 🧠 What I Learned
+1. Docker Compose can manage complete application stacks
+
+Instead of manually starting every container, Docker Compose allows multiple services to be defined in one file.
+
+2. Container startup does not mean application readiness
+
+Healthchecks help determine whether a service is actually ready.
+
+3. depends_on controls startup order
+
+Using:
+
+condition: service_healthy
+
+allows the application to wait for a healthy dependency.
+
+4. Restart policies improve reliability
+
+Different restart policies are useful for different types of services.
+
+5. Named volumes provide persistence
+
+Database data can survive container recreation.
+
+6. Docker networks enable service discovery
+
+Containers can communicate using service names such as:
+
+db
+redis
+7. Scaling requires proper traffic routing
+
+Simply increasing container replicas isn't enough when every replica uses the same host port.
+
+---
+
+##### 🚀 Final Result
+
+I successfully built a real-world multi-container application using Docker Compose with:
+
+- ✅ Flask Web Application
+- ✅ MySQL Database
+- ✅ Redis Cache
+- ✅ Custom Dockerfile
+- ✅ Healthcheck
+- ✅ depends_on
+- ✅ Restart Policies
+- ✅ Named Network
+- ✅ Named Volume
+- ✅ Docker Labels
+- ✅ Application Health API
+- ✅ Rebuild Workflow
+- ✅ Scaling Experiment
+
+This exercise helped me understand how Docker Compose moves from running individual containers to managing a complete application stack.
+
+---
+
+---
+
+### 7.3 Application requirements.txt
+
+```
+Flask==3.1.3
+mysql-connector-python==9.4.0
+redis==6.4.0
+```
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -86,7 +395,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Document tag conventions. | You can demonstrate, without notes: *push/pull images to Docker Hub, GHCR and ECR* — with evidence committed to `day-34/`. |
 | 3 | Set up a registry cleanup rule. | You can demonstrate, without notes: *design a tagging and retention strategy* — with evidence committed to `day-34/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -95,13 +404,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Use scoped tokens, enable vulnerability scanning on the registry, avoid public images with secrets, prefer minimal runtime images.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -114,7 +423,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -122,7 +431,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -132,7 +441,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. How do you secure registry access?
 5. **Scenario:** Prod is running `app:latest` and nobody knows what version that is. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -147,7 +456,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-34/` in your own repository:
 
@@ -170,7 +479,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -180,7 +489,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 36 |
 | **Total** | **240 (≈ 4.0 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -199,11 +508,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 33](../day-33/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 35 →](../day-35/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-34/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

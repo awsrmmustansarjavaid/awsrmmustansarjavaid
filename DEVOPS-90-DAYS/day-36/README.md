@@ -8,7 +8,6 @@
 | **Week** | Week 6 — CI/CD: GitHub Actions, Jenkins, GitLab CI |
 | **Difficulty** | Intermediate |
 | **Estimated time** | 4.0 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-39`, `90DaysOfDevOps-master/2026/day-40` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -79,7 +78,109 @@ jobs:
 gh run list; gh run watch; gh run view --log-failed
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 36 – Docker Project: Dockerize a Full Application
+
+#### Task
+Today's goal is to **take a real application and Dockerize it end-to-end**.
+
+No tutorials. No hand-holding. Pick an app, write the Dockerfile, set up Compose, and ship it. This is what you'll do on the job.
+
+---
+
+#### Expected Output
+- A markdown file: `day-36-docker-project.md`
+- Complete project with Dockerfile, docker-compose.yml, and app code
+- Image pushed to Docker Hub
+
+---
+
+
+#### Challenge Tasks
+
+##### Task 1: Pick Your App
+Choose **one** of these (or use your own project):
+- A **Python Flask/Django** app with a database
+- A **Node.js Express** app with MongoDB
+- A **static website** served by Nginx with a backend API
+- Any app from your GitHub that doesn't have Docker yet
+
+If you don't have an app, clone a simple open-source one and Dockerize it.
+
+---
+
+##### Task 2: Write the Dockerfile
+1. Create a Dockerfile for your application
+2. Use a **multi-stage build** if applicable
+3. Use a **non-root user**
+4. Keep the image **small** — use alpine or slim base images
+5. Add a `.dockerignore` file
+
+Build and test it locally.
+
+---
+
+##### Task 3: Add Docker Compose
+Write a `docker-compose.yml` that includes:
+1. Your **app** service (built from Dockerfile)
+2. A **database** service (Postgres, MySQL, MongoDB — whatever your app needs)
+3. **Volumes** for database persistence
+4. A **custom network**
+5. **Environment variables** for configuration (use `.env` file)
+6. **Healthchecks** on the database
+
+Run `docker compose up` and verify everything works together.
+
+---
+
+##### Task 4: Ship It
+1. Tag your app image
+2. Push it to Docker Hub
+3. Share the Docker Hub link
+4. Write a `README.md` in your project with:
+   - What the app does
+   - How to run it with Docker Compose
+   - Any environment variables needed
+
+---
+
+##### Task 5: Test the Whole Flow
+1. Remove all local images and containers
+2. Pull from Docker Hub and run using only your compose file
+3. Does it work fresh? If not — fix it until it does
+
+---
+
+#### Documentation
+Create `day-36-docker-project.md` with:
+- What app you chose and why
+- Your Dockerfile (with comments explaining each line)
+- Challenges you faced and how you solved them
+- Final image size
+- Docker Hub link
+
+---
+
+#### Submission
+1. Add all project files and `day-36-docker-project.md` to `2026/day-36/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your Dockerized project on LinkedIn — include the Docker Hub link so others can pull and run it.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -89,7 +190,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Draw your pipeline diagram. | You can demonstrate, without notes: *design a basic pipeline* — with evidence committed to `day-36/`. |
 | 3 | Measure pipeline duration and list 3 speed-ups. | You can demonstrate, without notes: *write and run your first Actions workflow* — with evidence committed to `day-36/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -98,13 +199,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Set minimal `permissions:` at workflow top; pin actions by SHA; never echo secrets.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -117,7 +218,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -125,7 +226,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -135,7 +236,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. Why fail fast?
 5. **Scenario:** Developers merge broken code to main weekly. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -150,7 +251,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-36/` in your own repository:
 
@@ -173,7 +274,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -183,7 +284,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 36 |
 | **Total** | **240 (≈ 4.0 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -202,11 +303,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 35](../day-35/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 37 →](../day-37/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-36/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

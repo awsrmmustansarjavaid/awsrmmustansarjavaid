@@ -8,7 +8,6 @@
 | **Week** | Week 1 — Linux & Systems Engineering |
 | **Difficulty** | Beginner |
 | **Estimated time** | 3.5 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-06` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -78,7 +77,90 @@ find . -name "*.tmp" -print0 | xargs -0 rm -v
 tail -f /var/log/syslog | grep -i error
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Linux Commands Cheat Sheet
+
+#### #90DaysOfDevOps – Day 03
+---
+
+#### 📁 File System Commands
+
+| Command | Usage |
+|---------|-------|
+| `pwd` | Show the current working directory. |
+| `ls` | List files and directories. |
+| `ls -la` | Display detailed information including hidden files. |
+| `cd <directory>` | Change the current directory. |
+| `mkdir <name>` | Create a new directory. |
+| `rmdir <name>` | Remove an empty directory. |
+| `touch <file>` | Create a new empty file. |
+| `cp source destination` | Copy files or directories. |
+| `mv source destination` | Move or rename files/directories. |
+| `rm <file>` | Delete a file. |
+| `rm -r <directory>` | Delete a directory and its contents. |
+| `cat <file>` | Display file contents. |
+| `less <file>` | View large files page by page. |
+| `head <file>` | Show the first 10 lines of a file. |
+| `tail <file>` | Show the last 10 lines of a file. |
+| `find . -name "<file>"` | Search for a file by name. |
+
+---
+
+#### ⚙️ Process Management Commands
+
+| Command | Usage |
+|---------|-------|
+| `ps` | Show running processes. |
+| `ps -ef` | Display all running processes. |
+| `top` | Monitor system processes in real time. |
+| `kill <PID>` | Terminate a process using its Process ID. |
+| `kill -9 <PID>` | Forcefully stop a process. |
+| `jobs` | List background jobs. |
+| `bg` | Resume a stopped job in the background. |
+| `fg` | Bring a background job to the foreground. |
+
+---
+
+#### 🌐 Networking Troubleshooting Commands
+
+| Command | Usage |
+|---------|-------|
+| `ping google.com` | Check network connectivity. |
+| `ip addr` | Display IP address information. |
+| `curl https://example.com` | Test website or API response. |
+| `dig google.com` | Perform DNS lookup. |
+
+---
+
+#### 💾 System Information
+
+| Command | Description |
+|---------|-------------|
+| `hostname` | Display the system hostname. |
+| `uname -a` | Show kernel and OS details. |
+| `uptime` | Display system uptime and load. |
+| `free -h` | Show memory usage. |
+| `lscpu` | Display CPU information. |
+| `lsblk` | List block devices. |
+| `whoami` | Display the current user. |
+| `id` | Show user and group IDs. |
+
+---
+
+#### 📌 Quick Tips
+
+- Use `man <command>` to read the manual page.
+- Use `command --help` for quick help.
+- Press **Ctrl + C** to stop a running command.
+- Press **Ctrl + R** to search command history.
+- Use `history` to view previously executed commands.
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -88,7 +170,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Create `text-toolbox.md` with each command, an example and the output. | You can demonstrate, without notes: *compose commands with pipes and redirection* — with evidence committed to `day-03/`. |
 | 3 | Extract unique status codes and their counts. | You can demonstrate, without notes: *use find, grep, sed, awk, cut, sort, uniq, xargs* — with evidence committed to `day-03/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -97,13 +179,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Logs may contain tokens and personal data. Never paste raw production logs into public tools; mask with `sed 's/[0-9]\{16\}/****/g'`.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -116,7 +198,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -124,7 +206,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -134,7 +216,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. What does `xargs` do?
 5. **Scenario:** Production is slow. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -149,7 +231,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-03/` in your own repository:
 
@@ -172,7 +254,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -182,7 +264,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 32 |
 | **Total** | **210 (≈ 3.5 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -201,11 +283,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 02](../day-02/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 04 →](../day-04/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-03/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

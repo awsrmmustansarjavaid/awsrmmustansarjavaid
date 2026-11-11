@@ -8,7 +8,6 @@
 | **Week** | Week 1 — Linux & Systems Engineering |
 | **Difficulty** | Beginner |
 | **Estimated time** | 3.5 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-05` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -73,7 +72,128 @@ dmesg -T | grep -i -E "oom|error"
 ss -tulpn
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 06 – Linux Fundamentals: Read and Write Text Files
+
+#### Task
+This is a **continuation of Day 05**, but much simpler.
+
+Today’s goal is to **practice basic file read/write** using only fundamental commands.
+
+You will create a small text file and practice:
+- Creating a file
+- Writing text to a file
+- Appending new lines
+- Reading the file back
+
+Keep it basic and repeatable.
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+- the new created files
+- A markdown file named:  
+  `file-io-practice.md`
+
+or
+
+- A hand written practice note (Recommended)
+
+Your note should include the commands you ran and what they did.
+
+---
+
+#### Guidelines
+Follow these rules while creating your practice note:
+
+- Create a file named `notes.txt`
+- Write 3 lines into the file using **redirection** (`>` and `>>`)
+- Use **`cat`** to read the full file
+- Use **`head`** and **`tail`** to read parts of the file
+- Use **`tee`** once to write and display at the same time
+- Keep it short (8–12 lines total in the file)
+
+Suggested command flow:
+1. `touch notes.txt`
+2. `echo "Line 1" > notes.txt`
+3. `echo "Line 2" >> notes.txt`
+4. `echo "Line 3" | tee -a notes.txt`
+5. `cat notes.txt`
+6. `head -n 2 notes.txt`
+7. `tail -n 2 notes.txt`
+
+---
+
+#### Resources
+Use these docs to understand the commands:
+
+- `touch` (create an empty file) 
+- `cat` (read full file) 
+- `head` and `tail` (read parts of a file) 
+- `tee` (write and display at the same time)
+
+---
+
+#### Why This Matters for DevOps
+Reading and writing files is a daily task in DevOps.
+
+Logs, configs, and scripts are all text files.  
+If you can handle files quickly, you can debug and automate faster.
+
+---
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository  
+2. Navigate to the `2026/day-06/` folder  
+3. Add your `file-io-practice.md` file  
+4. Commit and push your changes to your fork  
+
+---
+
+#### Learn in Public
+Share your Day 06 progress on LinkedIn:
+
+- Post 2–3 lines on what you learned about file read/write
+- Share one command you will use often
+- Optional: screenshot of your notes
+
+Use hashtags:  
+#90DaysOfDevOps  
+#DevOpsKaJosh  
+#TrainWithShubham
+
+Happy Learning  
+**TrainWithShubham**
+
+---
+
+### 7.2 📘 Day 06 – Linux File Operations Practice
+
+#### 🎯 Objective
+
+Practice basic Linux file operations using `touch`, `echo`, `cat`, `head`, `tail`, and `tee`.
+
+---
+
+<img width="1919" height="875" alt="Screenshot 2026-07-28 235747" src="https://github.com/user-attachments/assets/b3994329-7d35-4aaa-b416-b044ffa9787b" />
+
+---
+
+#### Key Learnings
+
+- Created a file using `touch`.
+- Used `>` and `>>` for writing and appending.
+- Used `tee` to write and display output.
+- Read file contents with `cat`, `head`, and `tail`.
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -83,7 +203,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Create a Bash script `health.sh` that prints load, memory, disk and top 3 processes. | You can demonstrate, without notes: *diagnose CPU, memory, disk and I/O issues* — with evidence committed to `day-06/`. |
 | 3 | Rotate a log with logrotate config. | You can demonstrate, without notes: *read journald and /var/log effectively* — with evidence committed to `day-06/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -92,13 +212,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Never wipe logs blindly (`> file` is OK for rotation, but keep audit logs). Set up log rotation and limits to avoid disk-fill DoS.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -111,7 +231,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -119,7 +239,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -129,7 +249,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. What does the OOM killer do?
 5. **Scenario:** Alert: 'Disk 98% on web-01'. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -144,7 +264,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-06/` in your own repository:
 
@@ -167,7 +287,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -177,7 +297,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 32 |
 | **Total** | **210 (≈ 3.5 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -196,11 +316,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 05](../day-05/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 07 →](../day-07/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-06/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

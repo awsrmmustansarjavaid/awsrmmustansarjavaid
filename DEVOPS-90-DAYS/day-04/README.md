@@ -8,7 +8,6 @@
 | **Week** | Week 1 — Linux & Systems Engineering |
 | **Difficulty** | Beginner |
 | **Estimated time** | 3.5 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-09`, `90DaysOfDevOps-master/2026/day-10`, `90DaysOfDevOps-master/2026/day-11` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -79,7 +78,172 @@ sudo visudo -cf /etc/sudoers.d/alice
 id alice
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 04 – Linux Practice: Processes and Services — Challenge Brief
+
+#### Task
+Today’s goal is to **practice Linux fundamentals with real commands**.
+
+You will create a short practice note by actually running basic commands and capturing what you see:
+- Check running processes
+- Inspect one systemd service
+- Capture a small troubleshooting flow
+
+This is hands-on. Keep it simple and focused on fundamentals.
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+- A markdown file named:  
+  `linux-practice.md`
+
+or
+
+- A hand written practice log (Recommended)
+
+Your note should show what you actually ran on your system.
+
+---
+
+#### Guidelines
+Follow these rules while creating your practice note:
+
+- Run and record output for **at least 6 commands**
+- Include **2 process commands** (`ps`, `top`, `pgrep`, etc.)
+- Include **2 service commands** (`systemctl status`, `systemctl list-units`, etc.)
+- Include **2 log commands** (`journalctl -u <service>`, `tail -n 50`, etc.)
+- Pick **one service on your system** (example: `ssh`, `cron`, `docker`) and inspect it
+- Keep it **simple and actionable**
+
+Suggested structure for `linux-practice.md`:
+- Process checks
+- Service checks
+- Log checks
+- Mini troubleshooting steps
+
+---
+
+#### Resources
+You may refer to:
+
+- Your notes from Day 02 and Day 03
+- Linux `man` pages
+- Your class notes
+
+---
+
+#### Why This Matters for DevOps
+Hands‑on practice builds speed and confidence.
+
+When issues happen in production, you won’t have time to search for basic commands.  
+This day helps you build muscle memory with Linux fundamentals.
+
+---
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository  
+2. Navigate to the `2026/day-04/` folder  
+3. Add your `linux-practice.md` file  
+4. Commit and push your changes to your fork  
+
+---
+
+#### Learn in Public
+Share your Day 04 progress on LinkedIn:
+
+- Post 2–3 lines on the Linux commands you practiced
+- Share one service you inspected and what you learned
+- Optional: screenshot of your practice note
+
+Use hashtags:
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+
+Happy Learning
+**TrainWithShubham**
+
+---
+
+### 7.2 Day 04 – Linux Practice: Processes and Services — Notes & Solution
+
+#### Process Checks
+
+Command 1:
+ps -ef  
+- Shows all running processes with CPU and memory usage.
+  <img width="1900" height="960" alt="Screenshot 2026-07-27 215806" src="https://github.com/user-attachments/assets/852f0d77-7d7b-4315-b1bf-f0837aa2a337" />
+
+
+Command 2:
+top  
+- Live monitoring of system performance.
+  <img width="1909" height="955" alt="Screenshot 2026-07-27 220113" src="https://github.com/user-attachments/assets/3288b5f1-c08f-49bb-acae-fc837bc6cdb8" />
+
+
+Command 3:
+pgrep ssh  
+- Shows PID of ssh process.
+  <img width="1238" height="118" alt="Screenshot 2026-07-27 220221" src="https://github.com/user-attachments/assets/8698434f-a45e-450c-b7bf-950164dfb061" />
+
+---
+
+#### Service Checks (ssh service)
+
+Command 4:
+systemctl status sshd
+- Checked whether ssh service is active or failed.
+  <img width="1813" height="650" alt="Screenshot 2026-07-27 220528" src="https://github.com/user-attachments/assets/7fe4a088-415a-4dd0-9112-afa4714c9968" />
+
+Command 5:
+systemctl list-units 
+- Listed all running services.
+  <img width="1913" height="818" alt="Screenshot 2026-07-27 221037" src="https://github.com/user-attachments/assets/2e20bbae-17e2-443d-a84e-9758fa1e6199" />
+
+---
+
+#### Log Checks
+
+Command 6:
+journalctl -u sshd
+- Viewed logs related to ssh service.
+  <img width="1908" height="290" alt="Screenshot 2026-07-27 221224" src="https://github.com/user-attachments/assets/fe802362-9608-49be-919b-6a5502528fce" />
+
+Command 7:
+tail -n 50 filename
+- Display the last 50 lines of the file.
+  <img width="1914" height="520" alt="Screenshot 2026-07-27 222244" src="https://github.com/user-attachments/assets/a66dfbd6-ace9-4aa2-b877-f72cb759628f" />
+
+---
+
+#### Mini Troubleshooting Flow
+
+Step 1: Check if service is running  
+→ systemctl status ssh  
+
+Step 2: If failed, check logs  
+→ journalctl -u ssh  
+
+Step 3: If needed, restart service  
+→ systemctl restart ssh  
+
+---
+
+#### What I Learned
+
+- How to check running processes
+- How to inspect service health
+- How logs help in debugging
+- Linux troubleshooting is mostly about checking processes, services, and logs
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -89,7 +253,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Write a script that creates a user, a home dir and adds SSH key. | You can demonstrate, without notes: *read and set permissions with chmod/chown/umask* — with evidence committed to `day-04/`. |
 | 3 | Explain why `chmod 777` is a smell. | You can demonstrate, without notes: *configure least-privilege sudo* — with evidence committed to `day-04/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -98,13 +262,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Principle of least privilege: avoid `NOPASSWD: ALL`; disable direct root SSH; lock unused accounts with `usermod -L`.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -117,7 +281,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -125,7 +289,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -135,7 +299,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. How do you give a user a single privileged command?
 5. **Scenario:** A new developer joins and needs access to deploy to `/srv/project` and restart one service, but must not have full root. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -150,7 +314,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-04/` in your own repository:
 
@@ -173,7 +337,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -183,7 +347,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 32 |
 | **Total** | **210 (≈ 3.5 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -202,11 +366,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 03](../day-03/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 05 →](../day-05/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-04/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

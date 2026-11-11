@@ -8,7 +8,6 @@
 | **Week** | Week 5 — Containers & Container Security |
 | **Difficulty** | Intermediate |
 | **Estimated time** | 4.0 hours |
-| **Your existing repo reference** | `90DaysOfDevOps-master/2026/day-37` |
 
 > **Rule for today:** do not just read. Type every command yourself, break things on purpose, fix them, and write down what you learned.
 
@@ -71,7 +70,190 @@ docker run --read-only --cap-drop ALL --security-opt no-new-privileges --tmpfs /
 cosign sign --yes ghcr.io/USER/app@sha256:<digest>
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 35 – Multi-Stage Builds & Docker Hub — Challenge Brief
+
+#### Task
+Today's goal is to **build optimized images and share them with the world**.
+
+Multi-stage builds are how real teams ship small, secure images. Docker Hub is how you distribute them. Both are interview favourites.
+
+---
+
+#### Expected Output
+- A markdown file: `day-35-multistage-hub.md`
+- Dockerfiles demonstrating multi-stage builds
+- An image pushed to your Docker Hub account
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: The Problem with Large Images
+1. Write a simple Go, Java, or Node.js app (even a "Hello World" is fine)
+2. Create a Dockerfile that builds and runs it in a **single stage**
+3. Build the image and check its **size**
+
+Note down the size — you'll compare it later.
+
+---
+
+##### Task 2: Multi-Stage Build
+1. Rewrite the Dockerfile using **multi-stage build**:
+   - Stage 1: Build the app (install dependencies, compile)
+   - Stage 2: Copy only the built artifact into a minimal base image (`alpine`, `distroless`, or `scratch`)
+2. Build the image and check its size again
+3. Compare the two sizes
+
+Write in your notes: Why is the multi-stage image so much smaller?
+
+---
+
+##### Task 3: Push to Docker Hub
+1. Create a free account on [Docker Hub](https://hub.docker.com) (if you don't have one)
+2. Log in from your terminal
+3. Tag your image properly: `yourusername/image-name:tag`
+4. Push it to Docker Hub
+5. Pull it on a different machine (or after removing locally) to verify
+
+---
+
+##### Task 4: Docker Hub Repository
+1. Go to Docker Hub and check your pushed image
+2. Add a **description** to the repository
+3. Explore the **tags** tab — understand how versioning works
+4. Pull a specific tag vs `latest` — what happens?
+
+---
+
+##### Task 5: Image Best Practices
+Apply these to one of your images and rebuild:
+1. Use a **minimal base image** (alpine vs ubuntu — compare sizes)
+2. **Don't run as root** — add a non-root USER in your Dockerfile
+3. Combine `RUN` commands to **reduce layers**
+4. Use **specific tags** for base images (not `latest`)
+
+Check the size before and after.
+
+---
+
+#### Hints
+- Multi-stage: use `FROM ... AS builder` then `COPY --from=builder`
+- Login: `docker login`
+- Tag: `docker tag local-image:tag username/repo:tag`
+- Push: `docker push username/repo:tag`
+- Non-root user: `RUN adduser` + `USER`
+
+---
+
+#### Submission
+1. Add your Dockerfiles and `day-35-multistage-hub.md` to `2026/day-35/`
+2. Include the link to your Docker Hub repo
+3. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your before/after image sizes on LinkedIn — the difference is always impressive.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+### 7.2 Day 35 – Multi-Stage Builds & Docker Hub — Notes & Solution
+
+#### Challenge Tasks
+
+##### Task 1: The Problem with Large Images
+1. Write a simple Go, Java, or Node.js app (even a "Hello World" is fine)
+2. Create a Dockerfile that builds and runs it in a **single stage**
+3. Build the image and check its **size**
+
+Note down the size — you'll compare it later.
+
+```docker build -t java-single-stage .```
+
+<img width="1900" height="563" alt="image" src="https://github.com/user-attachments/assets/6c65ec0c-4fac-4462-bcec-a04a8240c059" />
+
+`java-app/Dockerfile`
+
+---
+
+##### Task 2: Multi-Stage Build
+1. Rewrite the Dockerfile using **multi-stage build**:
+   - Stage 1: Build the app (install dependencies, compile)
+   - Stage 2: Copy only the built artifact into a minimal base image (`alpine`, `distroless`, or `scratch`)
+
+2. Build the image and check its size again
+
+3. Compare the two sizes
+
+- First image size is 638 MB
+- Multi-stage image size is 256 MB
+
+`java-app/Dockerfile.multistage`
+
+```docker build -f Dockerfile.multistage -t java-multi-stage:v1 .```
+
+<img width="1612" height="783" alt="image" src="https://github.com/user-attachments/assets/c2802928-e76c-4021-9952-ea00799439bd" />
+
+Write in your notes: Why is the multi-stage image so much smaller?
+
+- Multi-stage builds smaller images because they separate “build” from “runtime”, copying only what’s necessary into the final image.
+
+---
+
+##### Task 3: Push to Docker Hub
+1. Create a free account on  (if you don't have one)
+2. Log in from your terminal
+3. Tag your image properly: `yourusername/image-name:tag`
+4. Push it to Docker Hub
+5. Pull it on a different machine (or after removing locally) to verify
+
+
+
+
+---
+
+##### Task 4: Docker Hub Repository
+1. Go to Docker Hub and check your pushed image
+2. Add a **description** to the repository
+3. Explore the **tags** tab — understand how versioning works
+4. Pull a specific tag vs `latest` — what happens?
+
+- Specific tag (e.g., 1.0) = pulls that exact version of the image.
+- latest = pulls whatever image is currently marked latest, which can change.
+
+
+
+---
+
+##### Task 5: Image Best Practices
+Apply these to one of your images and rebuild:
+1. Use a **minimal base image** (alpine vs ubuntu — compare sizes)
+2. **Don't run as root** — add a non-root USER in your Dockerfile
+3. Combine `RUN` commands to **reduce layers**
+4. Use **specific tags** for base images (not `latest`)
+
+
+
+
+
+
+---
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -81,7 +263,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Search the SBOM for a package using `jq`. | You can demonstrate, without notes: *generate an SBOM* — with evidence committed to `day-35/`. |
 | 3 | Document your exception process for unfixable CVEs. | You can demonstrate, without notes: *apply runtime hardening flags* — with evidence committed to `day-35/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -90,13 +272,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Shift-left: scan in CI, not only in prod. Sign images and verify signatures at deploy time. Keep an SBOM per release.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -109,7 +291,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -117,7 +299,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -127,7 +309,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. How do you handle CVEs without fixes?
 5. **Scenario:** A new CVE (log4shell-style) hits. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -142,7 +324,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-35/` in your own repository:
 
@@ -167,7 +349,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -177,7 +359,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 36 |
 | **Total** | **240 (≈ 4.0 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -196,11 +378,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 34](../day-34/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 36 →](../day-36/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-35/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

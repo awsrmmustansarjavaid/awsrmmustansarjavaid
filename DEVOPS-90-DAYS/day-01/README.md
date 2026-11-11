@@ -76,7 +76,56 @@ man ls; ls --help | head
 history | tail -20
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 🚀 My 90 Days DevOps Learning Plan
+
+#### 👨‍💻 Current Level
+- Beginner in DevOps
+- Learning Linux, Git, AWS, Docker, Kubernetes, and CI/CD
+- Completed Graduation and currently building my career in DevOps
+
+#### 💡 My Understanding of DevOps and Cloud
+- DevOps is a combination of developers and operations teams. it helps them to work togeter to build, test, and deploy applications faster and more reliably.
+
+- Cloud computing provides servers, storage, networking, and other services over the internet, allowing applications to run without managing physical hardware.
+
+#### 🎯 Why I Am Learning DevOps & Cloud
+I want to build expertise in DevOps, solve real-world challenges, and create a successful career in the IT field.
+
+#### 🏆 My Goals for the Next 90 Days
+* Improve Linux and troubleshooting skills
+* Learn Docker and Kubernetes fundamentals
+* Understand CI/CD pipelines and automation
+* Build real DevOps projects
+* Stay consistent with daily hands-on practice
+
+
+#### 🛠️ Core DevOps Skills I Want to Build
+- Linux Administration and Troubleshooting
+- Docker and Kubernetes
+- CI/CD using Jenkins and GitHub Actions
+- Basics of python
+
+#### ⏰ Weekly Time Budget
+- Monday to Friday: 3-4 hours per day
+- Saturday & Sunday: 5-6 hours per day
+
+#### 📈 How I Will Stay Consistent
+- Study every day without skipping.
+- Complete one task each day.
+- Push my work to GitHub daily.
+- Share my learning journey on LinkedIn.
+- Focus on consistency instead of perfection.
+
+#### 🤝 My Commitment
+I commit to learning, practicing, and improving every day for the next 90 days. My goal is not just to complete this challenge but to become a confident DevOps Engineer.
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -86,7 +135,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Write a one-page 'My DevOps goals for 2026' document. | You can demonstrate, without notes: *build a working Linux lab (WSL2, VM or cloud VM)* — with evidence committed to `day-01/`. |
 | 3 | Explain the difference between Linux distribution, kernel and shell. | You can demonstrate, without notes: *run your first 20 Linux commands confidently* — with evidence committed to `day-01/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -95,13 +144,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Never work as root by default. Use a normal user plus `sudo`. Keep a private GitHub repo until you've checked nothing sensitive is committed.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -114,7 +163,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -122,7 +171,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -132,7 +181,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. What does `man` do and why is it important?
 5. **Scenario:** Your manager asks: 'We deploy once a month and each release breaks something. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -147,7 +196,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-01/` in your own repository:
 
@@ -170,7 +219,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -180,7 +229,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 32 |
 | **Total** | **210 (≈ 3.5 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -199,11 +248,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 — | [Roadmap](../90-DAY-ROADMAP.md) | [Day 02 →](../day-02/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-01/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.

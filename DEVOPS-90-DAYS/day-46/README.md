@@ -68,7 +68,273 @@ cosign verify ghcr.io/USER/app@sha256:<digest> --certificate-identity-regexp 'ht
 cosign attest --yes --predicate sbom.json --type spdxjson ghcr.io/USER/app@sha256:<digest>
 ```
 
-## 7. Assignments (independent work)
+## 7. Extended Hands-On Practice & Reference Notes
+
+Extra exercises, worked solutions, cheat sheets and runbooks for today's topic. Work through them after the core labs in Section 4 and the commands in Section 6.
+
+### 7.1 Day 46 – Reusable Workflows & Composite Actions — Challenge Brief
+
+#### Task
+You've been writing workflows from scratch every time. In the real world, teams **don't repeat themselves** — they create reusable workflows that any repo can call like a function. Today you learn `workflow_call` and composite actions.
+
+---
+
+#### Expected Output
+- A reusable workflow and a caller workflow in your `github-actions-practice` repo
+- A custom composite action
+- A markdown file: `day-46-reusable-workflows.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Understand `workflow_call`
+Before writing any code, research and answer in your notes:
+1. What is a **reusable workflow**?
+2. What is the `workflow_call` trigger?
+3. How is calling a reusable workflow different from using a regular action (`uses:`)?
+4. Where must a reusable workflow file live?
+
+---
+
+##### Task 2: Create Your First Reusable Workflow
+Create `.github/workflows/reusable-build.yml`:
+1. Set the trigger to `workflow_call`
+2. Add an `inputs:` section with:
+   - `app_name` (string, required)
+   - `environment` (string, required, default: `staging`)
+3. Add a `secrets:` section with:
+   - `docker_token` (required)
+4. Create a job that:
+   - Checks out the code
+   - Prints `Building <app_name> for <environment>`
+   - Prints `Docker token is set: true` (never print the actual secret)
+
+**Verify:** This file alone won't run — it needs a caller. That's next.
+
+---
+
+##### Task 3: Create a Caller Workflow
+Create `.github/workflows/call-build.yml`:
+1. Trigger on push to `main`
+2. Add a job that uses your reusable workflow:
+   ```yaml
+   jobs:
+     build:
+       uses: ./.github/workflows/reusable-build.yml
+       with:
+         app_name: "my-web-app"
+         environment: "production"
+       secrets:
+         docker_token: ${{ secrets.DOCKER_TOKEN }}
+   ```
+3. Push to `main` and watch it run
+
+**Verify:** In the Actions tab, do you see the caller triggering the reusable workflow? Click into the job — can you see the inputs printed?
+
+---
+
+##### Task 4: Add Outputs to the Reusable Workflow
+Extend `reusable-build.yml`:
+1. Add an `outputs:` section that exposes a `build_version` value
+2. Inside the job, generate a version string (e.g., `v1.0-<short-sha>`) and set it as output
+3. In your caller workflow, add a second job that:
+   - Depends on the build job (`needs:`)
+   - Reads and prints the `build_version` output
+
+**Verify:** Does the second job print the version from the reusable workflow?
+
+---
+
+##### Task 5: Create a Composite Action
+Create a **custom composite action** in your repo at `.github/actions/setup-and-greet/action.yml`:
+1. Define inputs: `name` and `language` (default: `en`)
+2. Add steps that:
+   - Print a greeting in the specified language
+   - Print the current date and runner OS
+   - Set an output called `greeted` with value `true`
+3. Use the composite action in a new workflow with `uses: ./.github/actions/setup-and-greet`
+
+**Verify:** Does your custom action run and print the greeting?
+
+---
+
+##### Task 6: Reusable Workflow vs Composite Action
+Fill this in your notes:
+
+| | Reusable Workflow | Composite Action |
+|---|---|---|
+| Triggered by | `workflow_call` | `uses:` in a step |
+| Can contain jobs? | ? | ? |
+| Can contain multiple steps? | ? | ? |
+| Lives where? | ? | ? |
+| Can accept secrets directly? | ? | ? |
+| Best for | ? | ? |
+
+---
+
+#### Hints
+- Reusable workflows must be in `.github/workflows/` directory
+- Caller syntax: `uses: ./.github/workflows/file.yml` (same repo) or `uses: org/repo/.github/workflows/file.yml@main` (cross-repo)
+- Composite action: `action.yml` with `runs: using: "composite"`
+- Reusable workflow outputs: `on: workflow_call: outputs: name: value: ${{ jobs.job-id.outputs.name }}`
+- A reusable workflow can be called by at most 20 unique caller workflows in a single run
+
+---
+
+#### Documentation
+Create `day-46-reusable-workflows.md` with:
+- Your reusable workflow and caller workflow YAML
+- Your composite action YAML
+- The comparison table from Task 6
+- Screenshot of the caller workflow triggering the reusable one
+
+---
+
+#### Submission
+1. Add `day-46-reusable-workflows.md` to `2026/day-46/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share how you built your first reusable workflow on LinkedIn — this is a real production skill.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+### 7.2 Day 46 – Reusable Workflows & Composite Actions — Notes & Solution
+
+#### Task
+You've been writing workflows from scratch every time. In the real world, teams **don't repeat themselves** — they create reusable workflows that any repo can call like a function. Today you learn `workflow_call` and composite actions.
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Understand `workflow_call`
+Before writing any code, research and answer in your notes:
+1. What is a **reusable workflow**?
+- A `reusable workflow` is a GitHub Actions workflow that can be called from another workflow, allowing you to REUSE the same automation logic across multiple workflows.
+
+2. What is the `workflow_call` trigger?
+- `workflow_call` is a GitHub Actions trigger that allows a workflow to be executed by another workflow instead of events like push or pull_request.
+
+3. How is calling a reusable workflow different from using a regular action (`uses:`)?
+- `Reusable Workflow` is used at the workflow level and written inside `jobs.<job_id>.uses.` It is used to reuse a complete workflow with jobs and steps,for example calling a build pipeline.
+- `Regular Action` is used at the `step level` and written inside `steps.uses`. It is used to reuse a single task,for example checking out code or running Docker.
+
+4. Where must a reusable workflow file live?
+- It must be inside the folder: `.github/workflows/`
+
+---
+
+##### Task 2: Create Your First Reusable Workflow
+Create `.github/workflows/reusable-build.yml`:
+1. Set the trigger to `workflow_call`
+2. Add an `inputs:` section with:
+   - `app_name` (string, required)
+   - `environment` (string, required, default: `staging`)
+3. Add a `secrets:` section with:
+   - `docker_token` (required)
+4. Create a job that:
+   - Checks out the code
+   - Prints `Building <app_name> for <environment>`
+   - Prints `Docker token is set: true` (never print the actual secret)
+
+**Verify:** This file alone won't run — it needs a caller. That's next.
+
+[reusable-yaml file](https://github.com/tejswini-maingade/GitHub-Action-Practice/blob/main/.github/workflows/reusable-build.yml)
+
+<img width="1919" height="739" alt="Screenshot 2026-09-18 215613" src="https://github.com/user-attachments/assets/f62bbfd7-d99c-4c20-abc4-8691c9274e1c" />
+
+
+---
+
+##### Task 3: Create a Caller Workflow
+Create `.github/workflows/call-build.yml`:
+1. Trigger on push to `main`
+2. Add a job that uses your reusable workflow:
+   ```yaml
+   jobs:
+     build:
+       uses: ./.github/workflows/reusable-build.yml
+       with:
+         app_name: "my-web-app"
+         environment: "production"
+       secrets:
+         docker_token: ${{ secrets.DOCKER_TOKEN }}
+   ```
+3. Push to `main` and watch it run
+
+**Verify:** In the Actions tab, do you see the caller triggering the reusable workflow? Click into the job — can you see the inputs printed?
+
+[call-build-file](https://github.com/tejswini-maingade/GitHub-Action-Practice/blob/main/.github/workflows/call-build.yml)
+
+<img width="1919" height="701" alt="Screenshot 2026-09-18 215806" src="https://github.com/user-attachments/assets/226de82d-01c4-4825-b5f6-fffe327f1b7f" />
+<img width="1919" height="868" alt="Screenshot 2026-09-18 215850" src="https://github.com/user-attachments/assets/c90c99bc-0cb6-4b0d-8156-0419dd2cd973" />
+
+---
+
+##### Task 4: Add Outputs to the Reusable Workflow
+Extend `reusable-build.yml`:
+1. Add an `outputs:` section that exposes a `build_version` value
+2. Inside the job, generate a version string (e.g., `v1.0-<short-sha>`) and set it as output
+3. In your caller workflow, add a second job that:
+   - Depends on the build job (`needs:`)
+   - Reads and prints the `build_version` output
+
+**Verify:** Does the second job print the version from the reusable workflow?
+- yes
+  
+
+---
+
+##### Task 5: Create a Composite Action
+Create a **custom composite action** in your repo at `.github/actions/setup-and-greet/action.yml`:
+1. Define inputs: `name` and `language` (default: `en`)
+2. Add steps that:
+   - Print a greeting in the specified language
+   - Print the current date and runner OS
+   - Set an output called `greeted` with value `true`
+3. Use the composite action in a new workflow with `uses: ./.github/actions/setup-and-greet`
+
+**Verify:** Does your custom action run and print the greeting?
+
+- Yes,custom action run and print the greeting
+
+[greet-file](https://github.com/tejswini-maingade/GitHub-Action-Practice/blob/main/.github/workflows/composite-test.yml)
+
+<img width="1919" height="862" alt="Screenshot 2026-09-18 221659" src="https://github.com/user-attachments/assets/2ee11ffe-4b47-4d07-b685-b3610f277e2a" />
+
+---
+
+##### Task 6: Reusable Workflow vs Composite Action
+Fill this in your notes:
+
+| | Reusable Workflow | Composite Action |
+|---|---|---|
+| Triggered by | `workflow_call` | `uses:` in a step |
+| Can contain jobs? | Yes | No |
+| Can contain multiple steps? | Yes | Yes |
+| Lives where? | .github/workflows/ | .github/actions/ |
+| Can accept secrets directly? | Yes | No |
+| Best for | Reusing full workflows| Reusing small step groups |
+
+---
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+---
+
+## 8. Assignments (independent work)
 
 Complete without copying from the lesson. Look things up in official documentation when needed.
 
@@ -78,7 +344,7 @@ Complete without copying from the lesson. Look things up in official documentati
 | 2 | Add DAST scheduled job. | You can demonstrate, without notes: *sign and verify container images* — with evidence committed to `day-46/`. |
 | 3 | Summarise SLSA levels. | You can demonstrate, without notes: *explain SLSA, provenance and SBOM attestations* — with evidence committed to `day-46/`. |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Likely cause and fix |
 |---|---|
@@ -87,13 +353,13 @@ Complete without copying from the lesson. Look things up in official documentati
 
 **Troubleshooting challenge:** deliberately break one thing from today's lab, then diagnose and fix it using only logs, status commands and documentation. Write the symptom -> cause -> fix in `lab-notes.md`.
 
-## 9. Security, Reliability & Cost Considerations
+## 10. Security, Reliability & Cost Considerations
 
 - **Security:** Sign by digest not tag; verify at deployment; only scan systems you are authorised to test.
 - **Reliability:** What fails first here? How would you detect it and recover?
 - **Cost:** Which resources from today keep costing money or time if left running? Clean them up and note it.
 
-## 10. Daily Completion Checklist
+## 11. Daily Completion Checklist
 
 - [ ] Read and understand the learning material.
 - [ ] Complete all practical exercises.
@@ -106,7 +372,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] Push work to GitHub.
 - [ ] Complete the self-assessment.
 
-## 11. Daily Deliverables
+## 12. Daily Deliverables
 
 - [ ] Practical lab completed.
 - [ ] Screenshots or terminal evidence saved (`evidence/`).
@@ -114,7 +380,7 @@ Complete without copying from the lesson. Look things up in official documentati
 - [ ] GitHub repository updated.
 - [ ] Day-specific: scenario write-up and assignment outputs committed.
 
-## 12. Interview Preparation
+## 13. Interview Preparation
 
 Answer each question aloud in 60–90 seconds, then write a 3-line answer in `interview.md`.
 
@@ -124,7 +390,7 @@ Answer each question aloud in 60–90 seconds, then write a 3-line answer in `in
 4. What does provenance prove?
 5. **Scenario:** A customer asks: 'Prove this image was built from this commit by your CI and not tampered with. Explain how you would approach it, what you would check first, and how you would prevent recurrence.
 
-## 13. Self-Assessment
+## 14. Self-Assessment
 
 Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) · **3** (alone, confidently, can teach it).
 
@@ -139,7 +405,7 @@ Rate yourself **0** (cannot do) · **1** (with help) · **2** (alone, slowly) ·
 
 > Any item below **2** goes onto your revision list in [LEARNING-TRACKER.md](../LEARNING-TRACKER.md).
 
-## 14. GitHub Submission
+## 15. GitHub Submission
 
 Commit today's work under `day-46/` in your own repository:
 
@@ -164,7 +430,7 @@ gh pr create --fill   # review your own PR, then merge
 
 **Before you push:** run `gitleaks detect` (or check manually) — no tokens, keys, passwords or real account IDs in files or screenshots.
 
-## 15. Time Allocation
+## 16. Time Allocation
 
 | Activity | Minutes |
 |---|---|
@@ -174,7 +440,7 @@ gh pr create --fill   # review your own PR, then merge
 | Interview practice, documentation, Git push (Sections 11–14) | 36 |
 | **Total** | **240 (≈ 4.0 h)** |
 
-## 16. Daily Reflection
+## 17. Daily Reflection
 
 **What did I learn?**
 
@@ -193,11 +459,3 @@ gh pr create --fill   # review your own PR, then merge
 ---
 
 [← Day 45](../day-45/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 47 →](../day-47/README.md)
-
-
-## Merged learning path — source integration
-
-- **Primary daily plan:** this `README.md` is the structured lesson, labs, scenario, troubleshooting, assessment, and deliverables for the day.
-- **Practical source repository:** `../reference-materials/90DaysOfDevOps-master/2026/day-46/` contains the original day's scripts, configs, screenshots references, and other artifacts.
-- **Additional merged notes:** [SUPPLEMENTARY-MATERIALS.md](SUPPLEMENTARY-MATERIALS.md)
-- **Daily finish:** commit your work, update `../LEARNING-TRACKER.md`, and record one issue you solved and one concept to revise.
