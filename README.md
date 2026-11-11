@@ -446,8 +446,25 @@ Practical Solution
 
   <h2>📊 GitHub Activity & Analytics</h2>
 
-  <img src="https://raw.githubusercontent.com/awsrmmustansarjavaid/awsrmmustansarjavaid/main/profile-summary-card-output/radical/0-profile-details.svg" alt="Profile Details" width="49%" />
-  <img src="https://raw.githubusercontent.com/awsrmmustansarjavaid/awsrmmustansarjavaid/main/profile-summary-card-output/radical/3-stats.svg" alt="GitHub Stats" width="49%" />  
+  <img
+    src="./profile-summary-card-output/radical/0-profile-details.svg"
+    alt="GitHub Profile Details"
+    width="100%"
+  />
+
+  <br/><br/>
+
+  <img
+    src="./profile-summary-card-output/radical/3-stats.svg"
+    alt="GitHub Statistics"
+    width="49%"
+  />
+
+  <img
+    src="./profile-summary-card-output/radical/1-repos-per-language.svg"
+    alt="Repositories Per Language"
+    width="49%"
+  />
   
 
   <br/><br/>
