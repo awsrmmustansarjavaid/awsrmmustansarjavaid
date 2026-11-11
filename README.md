@@ -446,28 +446,25 @@ Practical Solution
 
   <h2>📊 GitHub Activity & Analytics</h2>
 
-  
-  <!-- GitHub Activity Graph -->
-  <p align="center">
-    <a href="https://github.com/awsrmmustansarjavaid">
-      <img
-        src="https://github-readme-activity-graph.vercel.app/graph?username=awsrmmustansarjavaid&theme=react-dark"
-        alt="GitHub Activity Graph"
-        width="100%"
-      />
-    </a>
-  </p>
+  <!-- Contribution Graph -->
+  <a href="https://github.com/awsrmmustansarjavaid">
+    <img
+      src="https://github-readme-activity-graph.vercel.app/graph?username=awsrmmustansarjavaid&theme=react-dark&hide_border=true"
+      alt="GitHub Activity Graph"
+      width="100%"
+    />
+  </a>
 
   <br/><br/>
 
-  <!-- GitHub Stats Cards -->
-  <img src="https://github-readme-stats.shion.dev/api?username=awsrmmustansarjavaid&theme=dark&hide_border=false&include_all_commits=true&count_private=true" alt="GitHub Stats" width="49%" />
-  <img src="https://github-readme-stats.shion.dev/api/top-langs/?username=awsrmmustansarjavaid&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact" alt="Top Languages" width="49%" />
+  <!-- Stats Cards -->
+  <img src="https://github-readme-stats.vercel.app/api?username=awsrmmustansarjavaid&show_icons=true&theme=dark&include_all_commits=true&count_private=true" alt="GitHub Stats" width="49%" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=awsrmmustansarjavaid&theme=dark&layout=compact" alt="Top Languages" width="49%" />
 
   <br/><br/>
 
-  <!-- Developer Quote Card -->
-  <img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=radical" alt="Random Developer Quote" />
+  <!-- Streak -->
+  <img src="https://streak-stats.demolab.com/?user=awsrmmustansarjavaid&theme=dark&hide_border=false" alt="GitHub Streak" />
 
 </div>
 
