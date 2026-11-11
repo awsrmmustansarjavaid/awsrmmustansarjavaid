@@ -1,4 +1,4 @@
-# Merged DevOps 90-Day Master Plan
+# DevOps 90-Day Master Plan
 
 A unified, day-by-day DevOps learning program: 90 daily lessons, each in a single `README.md`.
 
