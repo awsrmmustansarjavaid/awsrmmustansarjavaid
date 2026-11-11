@@ -442,44 +442,7 @@ Practical Solution
 ---
 
 
-<div align="center">
-
-  <!-- GitHub Profile & Repository Analytics -->
-
-  <h2>📊 GitHub Profile & Repository Analytics</h2>
-
-  <table align="center">
-    <tr>
-      <th>📈 Analytics</th>
-      <th>📊 Statistics</th>
-    </tr>
-    <tr>
-      <td>👀 Profile Visitors</td>
-      <td>
-        <img src="https://komarev.com/ghpvc/?username=awsrmmustansarjavaid&label=Profile+Views&color=blue&style=flat-square" />
-      </td>
-    </tr>
-    <tr>
-      <td>📦 Public Repositories</td>
-      <td>
-        <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Fusers%2Fawsrmmustansarjavaid&query=%24.public_repos&label=Public%20Repositories&color=blue&style=flat-square" />
-      </td>
-    </tr>
-    <tr>
-      <td>⭐ GitHub Stars</td>
-      <td>
-        <img src="https://img.shields.io/github/stars/awsrmmustansarjavaid?style=flat-square&label=Total%20Stars" />
-      </td>
-    </tr>
-    <tr>
-      <td>👥 Followers</td>
-      <td>
-        <img src="https://img.shields.io/github/followers/awsrmmustansarjavaid?style=flat-square&label=Followers" />
-      </td>
-    </tr>
-  </table>
-
-  
+<div align="center">  
   
   <!-- GitHub Activity Statistics -->
   <h2 align="center">📈 GitHub Activity & Statistics</h2>
