@@ -447,17 +447,8 @@ Practical Solution
   <h2>📊 GitHub Activity & Analytics</h2>  
 
   <img src="./profile-summary-card-output/radical/0-profile-details.svg" alt="Profile Details" width="49%" />
-  <img src="./profile-summary-card-output/radical/3-stats.svg" alt="GitHub Stats" width="49%" />
-
+  <img src="./profile-summary-card-output/radical/3-stats.svg" alt="GitHub Stats" width="49%" />  
   
-  <!-- Contribution Graph -->
-  <a href="https://github.com/awsrmmustansarjavaid">
-    <img
-      src="https://github-readme-activity-graph.vercel.app/graph?username=awsrmmustansarjavaid&theme=react-dark&hide_border=true"
-      alt="GitHub Activity Graph"
-      width="100%"
-    />
-  </a>
 
   <br/><br/>
 
