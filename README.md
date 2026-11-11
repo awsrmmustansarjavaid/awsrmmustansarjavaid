@@ -441,6 +441,31 @@ Practical Solution
 
 ---
 
+
+<div align="center">
+
+  <h2>📊 GitHub Activity & Analytics</h2>
+
+  <!-- Animated Activity Graph Widget -->
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=awsrmmustansarjavaid&theme=react-dark&hide_border=true&area=true" alt="GitHub Activity Graph" width="100%" />
+
+  <br/><br/>
+
+  <!-- GitHub Stats Cards -->
+  <img src="https://github-readme-stats.shion.dev/api?username=awsrmmustansarjavaid&theme=dark&hide_border=false&include_all_commits=true&count_private=true" alt="GitHub Stats" width="49%" />
+  <img src="https://github-readme-stats.shion.dev/api/top-langs/?username=awsrmmustansarjavaid&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact" alt="Top Languages" width="49%" />
+
+  <br/><br/>
+
+  <!-- Developer Quote Card -->
+  <img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=radical" alt="Random Developer Quote" />
+
+</div>
+
+
+
+---
+
 <!-- ========================================================= -->
 
 <!--                  DEVOPS ENGINEERING FOOTER                -->
