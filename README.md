@@ -446,26 +446,8 @@ Practical Solution
 
   <h2>📊 GitHub Activity & Analytics</h2>
 
-  <img
-    src="./profile-summary-card-output/radical/0-profile-details.svg"
-    alt="GitHub Profile Details"
-    width="100%"
-  />
-
-  <br/><br/>
-
-  <img
-    src="./profile-summary-card-output/radical/3-stats.svg"
-    alt="GitHub Statistics"
-    width="49%"
-  />
-
-  <img
-    src="./profile-summary-card-output/radical/1-repos-per-language.svg"
-    alt="Repositories Per Language"
-    width="49%"
-  />
-  
+  <!-- Animated Activity Graph Widget -->
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=awsrmmustansarjavaid&theme=react-dark&hide_border=true&area=true" alt="GitHub Activity Graph" width="100%" />
 
   <br/><br/>
 
