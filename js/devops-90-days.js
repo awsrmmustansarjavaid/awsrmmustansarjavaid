@@ -1,903 +1,687 @@
 /**
- * devops-90-days.js
+ * 90 Days of DevOps — local application controller
  * ---------------------------------------------------------------------------
- * Portal behaviour (vanilla JavaScript, no build step).
+ * Vanilla JavaScript only. No GitHub API, raw GitHub URLs, Jekyll, Liquid,
+ * server-side runtime, build step, or remote Markdown requests.
  *
- * Every page declares what it is through its <body> attributes:
- *   <body data-page="portal|day|doc|articles" data-nav="..." data-doc="...">
- * and this file runs the matching page function on DOMContentLoaded.
+ * Curriculum metadata: js/devops-90-days-data.js
+ * Learner data: browser localStorage (key prefix: d90:)
  *
- * Sections in this file:
- *   1. Setup and URL helpers
- *   2. Browser storage and progress tracking
- *   3. Small UI helpers (toast, download, theme)
- *   4. Shared header and footer
- *   5. Card builders and article loading
- *   6. Pages: portal, day, document (with tracker dashboard), articles
- *   7. Bootstrap
+ * Features:
+ * - 90-day curriculum and four learning phases
+ * - Local lesson pages with objectives, practice tasks and checklists
+ * - Search and filters on the roadmap
+ * - Completion tracking, bookmarks, notes and resume-where-you-left-off
+ * - Local progress dashboard, theme preference and JSON export/import
+ * - Local article catalogue from data/devops-articles.json
  * ---------------------------------------------------------------------------
  */
 (function () {
   'use strict';
 
-  /* ==========================================================================
-     1. SETUP AND URL HELPERS
-     ========================================================================== */
+  var D = window.D90;
+  if (!D || !Array.isArray(D.DAYS)) {
+    console.error('D90 curriculum data is missing. Check script order.');
+    return;
+  }
 
-  var D = window.D90;          // data and configuration (devops-90-days-data.js)
-  var C = D.CONFIG;            // editable configuration block
-  var MD = window.D90MD;       // Markdown loader and renderer
-  var ROOT = D.SITE_ROOT;      // absolute URL of the site root
-
-  /** Shorthand for querySelector / querySelectorAll (the latter returns a real array). */
-  var $ = function (selector, root) { return (root || document).querySelector(selector); };
-  var $$ = function (selector, root) {
-    return Array.prototype.slice.call((root || document).querySelectorAll(selector));
-  };
-
-  /** Zero-pad a number to two digits (7 -> "07"). */
-  var pad = function (n) { return String(n).padStart(2, '0'); };
-
-  /** Escape text before inserting it into an HTML string. */
-  var ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-  var esc = function (s) {
-    return String(s).replace(/[&<>"']/g, function (c) { return ESCAPES[c]; });
-  };
-
-  /** Page locations inside the portal. */
+  var C = D.CONFIG || {};
+  var ROOT = D.SITE_ROOT || '../';
   var PORTAL = ROOT + 'pages/90-days-devops.html';
   var SUB = ROOT + 'pages/devops-90-days/';
-
-  /** URL builders and data lookups. */
-  var dayUrl = function (n) { return SUB + 'day.html?day=' + n; };
-  var docBy = function (key) { return D.DOCS.find(function (d) { return d.key === key; }); };
-  var docUrl = function (key) { return SUB + docBy(key).page; };
-  var dayBy = function (n) { return D.DAYS[n - 1]; };
-  var phaseOf = function (n) {
-    return D.PHASES.find(function (p) { return n >= p.from && n <= p.to; });
+  var $ = function (selector, root) { return (root || document).querySelector(selector); };
+  var $$ = function (selector, root) { return Array.prototype.slice.call((root || document).querySelectorAll(selector)); };
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var esc = function (value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
   };
 
-  /** Only http(s) URLs that are not "YOUR-..." placeholders are treated as real links. */
-  var safeUrl = function (url) {
-    return /^https?:\/\//i.test(url || '') && url.indexOf('YOUR-') === -1;
-  };
-
-  /* ==========================================================================
-     2. BROWSER STORAGE AND PROGRESS TRACKING
-     ========================================================================== */
-
-  /**
-   * Thin wrapper around localStorage. Every call is guarded because storage can
-   * be blocked (private mode, strict browser settings). All keys use the "d90:" prefix.
-   */
+  /* ------------------------------------------------------------------------
+     Local browser storage
+     ------------------------------------------------------------------------ */
   var Store = {
-    ok: true, // flips to false the first time a write fails
-
     get: function (key, fallback) {
       try {
-        var value = localStorage.getItem('d90:' + key);
-        return value === null ? fallback : JSON.parse(value);
-      } catch (e) {
+        var raw = localStorage.getItem('d90:' + key);
+        return raw === null ? fallback : JSON.parse(raw);
+      } catch (error) {
         return fallback;
       }
     },
-
     set: function (key, value) {
       try {
         localStorage.setItem('d90:' + key, JSON.stringify(value));
         return true;
-      } catch (e) {
-        Store.ok = false;
+      } catch (error) {
+        toast('Browser storage is unavailable. Your change may not persist.');
         return false;
       }
     },
-
-    del: function (key) {
-      try { localStorage.removeItem('d90:' + key); } catch (e) { /* ignore */ }
+    remove: function (key) {
+      try { localStorage.removeItem('d90:' + key); } catch (error) { /* Storage is optional. */ }
     }
   };
 
-  /** Learner progress: completed days, bookmarks and per-day checklist state. */
   var Progress = {
-    /** Sorted list of completed day numbers. */
     done: function () {
-      var list = Store.get('done', []);
-      return Array.isArray(list) ? list : [];
+      var value = Store.get('done', []);
+      return Array.isArray(value) ? value : [];
     },
-
-    isDone: function (n) {
-      return Progress.done().indexOf(n) !== -1;
-    },
-
-    /** Mark day n complete (value = true) or not complete (value = false). */
-    setDone: function (n, value) {
-      var list = Progress.done().filter(function (x) { return x !== n; });
-      if (value) list.push(n);
+    isDone: function (day) { return this.done().indexOf(day) !== -1; },
+    setDone: function (day, completed) {
+      var list = this.done().filter(function (item) { return item !== day; });
+      if (completed) list.push(day);
       list.sort(function (a, b) { return a - b; });
       Store.set('done', list);
+      Store.set('lastDay', day);
     },
-
-    /** List of bookmarked day numbers. */
     bookmarks: function () {
-      var list = Store.get('bookmarks', []);
-      return Array.isArray(list) ? list : [];
+      var value = Store.get('bookmarks', []);
+      return Array.isArray(value) ? value : [];
     },
-
-    isBm: function (n) {
-      return Progress.bookmarks().indexOf(n) !== -1;
-    },
-
-    /** Add or remove a bookmark. Returns true when the day is now bookmarked. */
-    toggleBm: function (n) {
-      var list = Progress.bookmarks();
-      var index = list.indexOf(n);
-      if (index === -1) list.push(n); else list.splice(index, 1);
+    isBookmarked: function (day) { return this.bookmarks().indexOf(day) !== -1; },
+    toggleBookmark: function (day) {
+      var list = this.bookmarks();
+      var index = list.indexOf(day);
+      if (index === -1) list.push(day); else list.splice(index, 1);
       Store.set('bookmarks', list);
       return index === -1;
     },
-
-    /** Ticked state (array of 0/1) of the checklist on day n. */
-    checks: function (n) {
-      var list = Store.get('checks:' + pad(n), []);
-      return Array.isArray(list) ? list : [];
+    checks: function (day) {
+      var value = Store.get('checks:' + day, []);
+      return Array.isArray(value) ? value : [];
     },
-
-    /** Completion summary for one phase: { done, total, pct }. */
-    phasePct: function (phase) {
-      var done = Progress.done();
-      var total = phase.to - phase.from + 1;
-      var count = done.filter(function (n) { return n >= phase.from && n <= phase.to; }).length;
+    setChecks: function (day, checks) { Store.set('checks:' + day, checks); },
+    notes: function (day) { return Store.get('notes:' + day, ''); },
+    setNotes: function (day, notes) { Store.set('notes:' + day, notes); },
+    percent: function (from, to) {
+      var total = to - from + 1;
+      var count = this.done().filter(function (day) { return day >= from && day <= to; }).length;
       return { done: count, total: total, pct: Math.round(count * 100 / total) };
     }
   };
 
-  /* ==========================================================================
-     3. SMALL UI HELPERS
-     ========================================================================== */
-
-  /** Show a short message at the bottom of the screen for about two seconds. */
+  /* ------------------------------------------------------------------------
+     General UI helpers
+     ------------------------------------------------------------------------ */
   function toast(message) {
-    var el = $('#toast');
-    if (!el) {
-      el = document.createElement('div');
-      el.id = 'toast';
-      el.className = 'toast';
-      el.setAttribute('role', 'status');
-      document.body.appendChild(el);
+    var node = $('#toast');
+    if (!node) {
+      node = document.createElement('div');
+      node.id = 'toast';
+      node.className = 'toast';
+      node.setAttribute('role', 'status');
+      document.body.appendChild(node);
     }
-    el.textContent = message;
-    el.classList.add('show');
-    clearTimeout(toast._timer);
-    toast._timer = setTimeout(function () { el.classList.remove('show'); }, 2200);
+    node.textContent = message;
+    node.classList.add('show');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(function () { node.classList.remove('show'); }, 2400);
   }
 
-  /** Offer text as a file download in the browser. */
-  function download(filename, text, mimeType) {
-    var blob = new Blob([text], { type: mimeType || 'text/plain' });
-    var link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
+  function downloadFile(filename, content, type) {
+    var blob = new Blob([content], { type: type || 'application/octet-stream' });
+    var url = URL.createObjectURL(blob);
+    var anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
-  /** Apply and remember the colour theme ("dark" or "light"). */
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     Store.set('theme', theme);
   }
 
-  // Restore the saved theme immediately to avoid a flash of the wrong theme.
-  (function initTheme() {
-    var saved = Store.get('theme', null);
-    document.documentElement.setAttribute('data-theme', saved || 'dark');
-  })();
+  function dayUrl(day) { return SUB + 'day.html?day=' + day; }
+  function docUrl(doc) { return SUB + doc.page; }
+  function phaseFor(day) {
+    return D.PHASES.find(function (phase) { return day >= phase.from && day <= phase.to; }) || D.PHASES[0];
+  }
+  function weekFor(day) {
+    return D.WEEKS.find(function (week) { return day >= week.from && day <= week.to; }) || D.WEEKS[0];
+  }
+  function docFor(key) {
+    return (D.DOCS || []).find(function (doc) { return doc.key === key; });
+  }
 
-  /* ==========================================================================
-     4. SHARED HEADER AND FOOTER
-     ========================================================================== */
-
-  /** Build the site header, footer and the "back to top" button. */
+  /* ------------------------------------------------------------------------
+     Shared header and footer — all links are local pages or external profiles.
+     ------------------------------------------------------------------------ */
   function buildChrome() {
-    var currentNav = document.body.dataset.nav || '';
-
-    // Main navigation: [key, label, url]. The key matches <body data-nav="...">.
+    var current = document.body.dataset.nav || '';
     var links = [
-      ['home', 'Home', ROOT + C.homePage],
-      ['portal', '90 Days', PORTAL],
-      ['roadmap', 'Roadmap', docUrl('roadmap')],
-      ['tracker', 'Tracker', docUrl('tracker')],
+      ['portal', 'Overview', PORTAL],
+      ['roadmap', 'Roadmap', docUrl(docFor('roadmap'))],
+      ['tracker', 'Progress tracker', docUrl(docFor('tracker'))],
       ['articles', 'Articles', SUB + 'articles.html']
     ];
 
-    // ----- Header -----
     var header = $('#site-header');
     if (header) {
       header.className = 'site-header';
-
-      var navLinks = links.map(function (link) {
-        var current = link[0] === currentNav ? ' aria-current="page"' : '';
-        return '<a href="' + link[2] + '"' + current + '>' + link[1] + '</a>';
-      }).join('');
-
-      var githubHref = 'https://github.com/' + C.owner + '/' + C.repo + '/tree/' + C.branch + '/' + C.contentDir;
-
       header.innerHTML =
         '<div class="container header-inner">' +
-          '<a class="brand" href="' + ROOT + C.homePage + '">' +
-            '<span class="brand-badge">MJ</span><span>' + esc(C.siteName) + '</span>' +
+          '<a class="brand" href="' + PORTAL + '">' +
+            '<span class="brand-badge">MJ</span><span>' + esc(C.siteName || 'DevOps Learning') + '</span>' +
           '</a>' +
-          '<nav class="nav" id="nav" aria-label="Main navigation">' + navLinks +
-            '<a href="' + githubHref + '" target="_blank" rel="noopener noreferrer">GitHub ↗</a>' +
+          '<nav class="nav" id="nav" aria-label="Main navigation">' +
+            links.map(function (link) {
+              return '<a href="' + link[2] + '"' + (link[0] === current ? ' aria-current="page"' : '') + '>' + link[1] + '</a>';
+            }).join('') +
           '</nav>' +
-          '<button class="icon-btn" id="theme-btn" type="button" aria-label="Toggle dark or light theme" title="Toggle theme">◐</button>' +
+          '<button class="icon-btn" id="theme-btn" type="button" aria-label="Toggle colour theme" title="Toggle theme">◐</button>' +
           '<button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>' +
         '</div>';
 
-      // Theme toggle
       $('#theme-btn').addEventListener('click', function () {
-        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        setTheme(isDark ? 'light' : 'dark');
+        setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
       });
-
-      // Mobile menu toggle
       $('#menu-btn').addEventListener('click', function (event) {
-        var isOpen = $('#nav').classList.toggle('open');
-        event.currentTarget.setAttribute('aria-expanded', isOpen);
+        var opened = $('#nav').classList.toggle('open');
+        event.currentTarget.setAttribute('aria-expanded', String(opened));
       });
     }
 
-    // ----- Footer -----
     var footer = $('#site-footer');
     if (footer) {
       footer.className = 'site-footer';
-
-      var profiles = C.profiles;
-      // Profile links are only shown when they hold a real URL.
-      var external = function (url, label) {
-        return safeUrl(url)
-          ? '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + label + '</a>'
-          : '';
-      };
-
       footer.innerHTML =
         '<div class="container footer-inner">' +
-          '<span>© ' + new Date().getFullYear() + ' ' + esc(C.siteName) + ' · 90 Days of DevOps</span>' +
-          '<nav aria-label="Footer">' +
-            '<a href="' + ROOT + C.homePage + '">← Back to Home</a>' +
-            '<a href="' + ROOT + C.challengesPage + '">Challenges</a>' +
-            external(profiles.github, 'GitHub') +
-            external(profiles.linkedin, 'LinkedIn') +
-            external(profiles.medium, 'Medium') +
+          '<span>© ' + new Date().getFullYear() + ' ' + esc(C.siteName || 'Mustansar Javaid') + ' · 90 Days of DevOps</span>' +
+          '<nav aria-label="Footer navigation">' +
+            '<a href="' + ROOT + (C.homePage || 'index.html') + '">Main website</a>' +
+            '<a href="' + ROOT + (C.challengesPage || 'pages/challenges.html') + '">Challenges</a>' +
+            '<a href="' + PORTAL + '">90 Days of DevOps</a>' +
           '</nav>' +
         '</div>';
     }
 
-    // ----- "Back to top" button (appears after scrolling 600px) -----
-    var topButton = document.createElement('button');
-    topButton.className = 'btn small to-top';
-    topButton.type = 'button';
-    topButton.textContent = '↑ Top';
-    topButton.setAttribute('aria-label', 'Back to top');
-    topButton.addEventListener('click', function () { window.scrollTo({ top: 0 }); });
-    document.body.appendChild(topButton);
+    var top = document.createElement('button');
+    top.className = 'btn small to-top';
+    top.type = 'button';
+    top.textContent = '↑ Top';
+    top.setAttribute('aria-label', 'Back to top');
+    top.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    document.body.appendChild(top);
     window.addEventListener('scroll', function () {
-      topButton.classList.toggle('show', window.scrollY > 600);
+      top.classList.toggle('show', window.scrollY > 500);
     }, { passive: true });
   }
 
-  /* ==========================================================================
-     5. CARD BUILDERS AND ARTICLE LOADING
-     ========================================================================== */
-
-  /** HTML for one phase card, linking to the roadmap and showing completion progress. */
+  /* ------------------------------------------------------------------------
+     Reusable card renderers
+     ------------------------------------------------------------------------ */
   function phaseCard(phase) {
-    var progress = Progress.phasePct(phase);
-
-    return '<a class="card phase-card phase-' + phase.id + '" href="' + docUrl('roadmap') + '" style="color:inherit">' +
+    var p = Progress.percent(phase.from, phase.to);
+    return '<a class="card phase-card phase-' + phase.id + '" href="' + docUrl(docFor('roadmap')) + '">' +
       '<span class="range">PHASE ' + pad(phase.id) + ' · DAYS ' + pad(phase.from) + '–' + pad(phase.to) + '</span>' +
-      '<h3>' + esc(phase.name) + '</h3>' +
-      '<p>' + esc(phase.blurb) + '</p>' +
-      '<div class="progress" role="progressbar" aria-valuenow="' + progress.pct + '" aria-valuemin="0" aria-valuemax="100" aria-label="Phase ' + phase.id + ' progress">' +
-        '<i style="width:' + progress.pct + '%"></i>' +
-      '</div>' +
-      '<span class="muted" style="font-size:.82rem">' + progress.done + ' / ' + progress.total + ' days completed</span>' +
-    '</a>';
+      '<h3>' + esc(phase.name) + '</h3><p>' + esc(phase.blurb) + '</p>' +
+      progressBar(p.pct, p.done + ' of ' + p.total + ' days complete') +
+      '<span class="muted small">' + p.pct + '% complete</span></a>';
   }
 
-  var articlesCache = null; // loaded once, then reused
-
-  /** Load the article list from data/devops-articles.json (empty list on any error). */
-  async function loadArticles() {
-    if (articlesCache) return articlesCache;
-    try {
-      var response = await fetch(ROOT + 'data/devops-articles.json', { cache: 'no-cache' });
-      if (!response.ok) throw new Error(response.status);
-      var json = await response.json();
-      articlesCache = Array.isArray(json) ? json : [];
-    } catch (e) {
-      articlesCache = [];
-    }
-    return articlesCache;
+  function progressBar(percent, label) {
+    return '<div class="progress" role="progressbar" aria-valuenow="' + percent + '" aria-valuemin="0" aria-valuemax="100" aria-label="' + esc(label || 'Progress') + '">' +
+      '<i style="width:' + percent + '%"></i></div>';
   }
 
-  /** HTML for one article card. */
-  function articleCard(article) {
-    var hasUrl = safeUrl(article.url);
-
-    var relatedChip = article.relatedDay
-      ? '<a class="chip" href="' + dayUrl(article.relatedDay) + '">Day ' + pad(article.relatedDay) + '</a>'
-      : '';
-
-    var title = hasUrl
-      ? '<a href="' + esc(article.url) + '" target="_blank" rel="noopener noreferrer">' + esc(article.title) + '</a>'
-      : esc(article.title);
-
-    var sampleBadge = (article.sample || !hasUrl) ? '<span class="chip badge-sample">Sample</span>' : '';
-
-    var tags = (article.tags || []).map(function (tag) {
-      return '<span class="chip">' + esc(tag) + '</span>';
-    }).join('');
-
-    var footerLink = hasUrl
-      ? '<a class="more" href="' + esc(article.url) + '" target="_blank" rel="noopener noreferrer">Read article ↗</a>'
-      : '<span class="more muted">Add the real URL in devops-articles.json</span>';
-
-    return '<article class="card">' +
-      '<div class="meta-row">' +
-        '<span class="chip accent">' + esc(article.platform) + '</span>' + sampleBadge +
-        '<span class="chip">' + esc(article.date || '') + '</span>' + relatedChip +
-      '</div>' +
-      '<h3>' + title + '</h3>' +
-      '<p>' + esc(article.summary || '') + '</p>' +
-      '<div class="meta-row">' + tags + '</div>' +
-      footerLink +
-    '</article>';
+  function docCard(doc) {
+    return '<a class="card" href="' + docUrl(doc) + '">' +
+      '<span class="card-icon">' + esc(doc.icon) + '</span><h3>' + esc(doc.title) + '</h3>' +
+      '<p>' + esc(doc.blurb) + '</p><span class="card-link">Open resource →</span></a>';
   }
 
-  /** Show an error box when a Markdown file cannot be loaded. */
-  function errorBox(el, what, err) {
-    var folderUrl = 'https://github.com/' + C.owner + '/' + C.repo + '/tree/' + C.branch + '/' + C.contentDir;
-
-    el.innerHTML = '<div class="error-box">' +
-      '<strong>Could not load ' + esc(what) + '.</strong><br>' + esc((err && err.message) || err) +
-      '<br><span class="muted">Check that the file exists in <code>' + esc(C.contentDir) + '/</code> on branch <code>' +
-      esc(C.branch) + '</code>, then reload. ' +
-      '<a href="' + folderUrl + '" target="_blank" rel="noopener noreferrer">Open the folder on GitHub ↗</a></span>' +
-    '</div>';
+  function dayCard(day) {
+    var completed = Progress.isDone(day.n);
+    var bookmarked = Progress.isBookmarked(day.n);
+    return '<article class="card day-card' + (completed ? ' is-done' : '') + '">' +
+      '<div class="day-card-top"><span class="range">DAY ' + pad(day.n) + ' · WEEK ' + pad(day.week) + '</span>' +
+      '<span class="status">' + (completed ? '✓ Completed' : (day.capstone ? '★ Capstone' : day.diff)) + '</span></div>' +
+      '<h3><a href="' + dayUrl(day.n) + '">' + esc(day.title) + '</a></h3>' +
+      '<p>' + esc(day.summary) + '</p><div class="tags">' + (day.tags || []).slice(0, 4).map(function (tag) {
+        return '<span class="chip">' + esc(tag) + '</span>';
+      }).join('') + '</div>' +
+      '<div class="day-card-bottom"><span>' + esc(day.tech) + ' · ' + day.mins + ' min</span>' +
+      '<span>' + (bookmarked ? '🔖 Saved' : '') + '</span></div></article>';
   }
 
-  /* ==========================================================================
-     6. PAGES
-     ========================================================================== */
-
-  /* --------------------------------------------------------------------------
-     6a. Portal landing page (data-page="portal")
-     -------------------------------------------------------------------------- */
+  /* ------------------------------------------------------------------------
+     Portal landing page
+     ------------------------------------------------------------------------ */
   function pagePortal() {
-    var completed = Progress.done().length;
-    var lastDay = Store.get('last', null);
+    var done = Progress.done().length;
+    var pct = Math.round(done / D.DAYS.length * 100);
+    var last = Store.get('lastDay', null);
+    var next = D.DAYS.find(function (day) { return !Progress.isDone(day.n); }) || D.DAYS[89];
 
-    // Statistic tiles
     $('#live-stats').innerHTML =
-      '<div class="stat"><b>90</b><span>Daily lessons</span></div>' +
-      '<div class="stat"><b>3</b><span>Capstone projects</span></div>' +
-      '<div class="stat"><b>15+</b><span>Skill areas</span></div>' +
-      '<div class="stat"><b>' + completed + ' / 90</b><span>Days you completed*</span></div>';
+      '<div class="stat"><strong>' + D.DAYS.length + '</strong><span>Learning days</span></div>' +
+      '<div class="stat"><strong>' + done + '</strong><span>Completed</span></div>' +
+      '<div class="stat"><strong>' + pct + '%</strong><span>Overall progress</span></div>' +
+      '<div class="stat"><strong>' + D.PHASES.length + '</strong><span>Learning phases</span></div>';
 
-    // "Resume lesson" card, only when a previously opened day is remembered
-    if (lastDay && lastDay >= 1 && lastDay <= 90) {
-      var day = dayBy(lastDay);
-      $('#continue').innerHTML =
-        '<article class="card continue">' +
-          '<div><span class="day-no">CONTINUE · DAY ' + pad(day.n) + '</span>' +
-          '<h3 style="margin-top:4px">' + esc(day.title) + '</h3></div>' +
-          '<a class="btn primary" href="' + dayUrl(day.n) + '">Resume lesson →</a>' +
-        '</article>';
+    $('#phases').innerHTML = D.PHASES.map(phaseCard).join('');
+    $('#resources').innerHTML = D.DOCS.map(docCard).join('');
+
+    var capstones = D.DAYS.filter(function (day) { return day.capstone; });
+    $('#capstones').innerHTML = capstones.map(dayCard).join('');
+
+    var continueBox = $('#continue');
+    if (continueBox) {
+      var resumeDay = last && D.DAYS[last - 1] ? D.DAYS[last - 1] : next;
+      continueBox.innerHTML =
+        '<div class="card continue-card"><div><span class="eyebrow">YOUR NEXT STEP</span>' +
+        '<h3>' + (Progress.isDone(resumeDay.n) ? 'Continue your learning journey' : 'Pick up where you left off') + '</h3>' +
+        '<p>Day ' + pad(resumeDay.n) + ': ' + esc(resumeDay.title) + '</p></div>' +
+        '<a class="btn primary" href="' + dayUrl(resumeDay.n) + '">Open lesson →</a></div>';
     }
 
-    // Four phase cards
-    $('#phases').innerHTML = D.PHASES.map(phaseCard).join('');
-
-    // Resource cards: every document except the overview and source mapping,
-    // followed by the overview card.
-    var resourceDocs = D.DOCS
-      .filter(function (doc) { return doc.key !== 'overview' && doc.key !== 'mapping'; })
-      .concat(D.DOCS.filter(function (doc) { return doc.key === 'overview'; }));
-
-    $('#resources').innerHTML = resourceDocs.map(function (doc) {
-      return '<a class="card" href="' + SUB + doc.page + '" style="color:inherit">' +
-        '<span class="card-icon" aria-hidden="true">' + doc.icon + '</span>' +
-        '<h3>' + esc(doc.title) + '</h3>' +
-        '<p>' + esc(doc.blurb) + '</p>' +
-        '<span class="more">Open →</span>' +
-      '</a>';
-    }).join('');
-
-    // Capstone cards: [label, title, day range, description, first day of the capstone]
-    var capstones = [
-      ['Capstone 1', 'Secure CI/CD Platform', 'Days 47–49',
-        'Lint → test → SAST/SCA → build → image scan → SBOM → sign → deploy → smoke test → approval → automatic rollback.', 47],
-      ['Capstone 2', 'Cloud Infrastructure Automation', 'Days 63, 69–70',
-        'Terraform modules, remote state, Ansible roles, multi-AZ AWS, DR drill, cost report and security review.', 63],
-      ['Capstone 3', 'Production Kubernetes & GitOps Platform', 'Days 87–89',
-        'Argo CD app-of-apps, canary rollouts, Kyverno policies, observability, SLOs, game day and Velero backups.', 87]
-    ];
-
-    $('#capstones').innerHTML = capstones.map(function (cap) {
-      return '<a class="card" href="' + dayUrl(cap[4]) + '" style="color:inherit">' +
-        '<span class="chip accent">' + cap[0] + '</span>' +
-        '<h3>' + cap[1] + '</h3>' +
-        '<p>' + cap[3] + '</p>' +
-        '<div class="meta-row"><span class="chip">' + cap[2] + '</span></div>' +
-        '<span class="more">Start capstone →</span>' +
-      '</a>';
-    }).join('');
-
-    // Three most recent articles
     loadArticles().then(function (articles) {
-      var container = $('#latest-articles');
-      if (!container) return;
-
-      var latest = articles.slice()
-        .sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); })
-        .slice(0, 3);
-
-      container.innerHTML = latest.length
-        ? latest.map(articleCard).join('')
-        : '<div class="empty">Articles will appear here. Add them to <code>data/devops-articles.json</code>.</div>';
+      var target = $('#latest-articles');
+      if (!target) return;
+      var real = articles.filter(function (article) { return !article.sample; }).slice(0, 3);
+      target.innerHTML = real.length ? real.map(articleCard).join('') :
+        '<div class="card"><h3>Articles coming soon</h3><p>Add your published articles to <code>data/devops-articles.json</code>.</p></div>';
     });
   }
 
-  /* --------------------------------------------------------------------------
-     6b. Single lesson page (data-page="day", URL: day.html?day=N)
-     -------------------------------------------------------------------------- */
-  async function pageDay() {
-    var query = new URLSearchParams(location.search).get('day');
+  /* ------------------------------------------------------------------------
+     Roadmap document — searchable, filterable 90-day catalogue
+     ------------------------------------------------------------------------ */
+  function pageRoadmap() {
     var el = $('#md');
-    var n = /^\d{1,2}$/.test(query || '') ? parseInt(query, 10) : NaN;
+    if (!el) return;
+    el.innerHTML =
+      '<div class="toolbar roadmap-toolbar">' +
+        '<div class="toolbar-row"><input class="field search" id="day-search" type="search" placeholder="Search day, topic or technology" aria-label="Search lessons">' +
+        '<select class="field" id="phase-filter" aria-label="Filter by phase"><option value="">All phases</option>' +
+        D.PHASES.map(function (phase) { return '<option value="' + phase.id + '">Phase ' + phase.id + ' — ' + esc(phase.name) + '</option>'; }).join('') +
+        '</select><select class="field" id="status-filter" aria-label="Filter by completion"><option value="">All progress</option><option value="done">Completed</option><option value="todo">Not completed</option><option value="saved">Bookmarked</option></select></div>' +
+        '<p id="roadmap-count" class="muted"></p></div>' +
+      '<div id="roadmap-list"></div>';
 
-    // Reject missing or out-of-range day numbers.
-    if (!(n >= 1 && n <= 90)) {
-      $('#day-title').textContent = 'Day not found';
-      el.innerHTML = '<div class="empty">Choose a day from the <a href="' + docUrl('roadmap') + '">Roadmap</a>. Valid days are 1–90.</div>';
+    function render() {
+      var q = ($('#day-search').value || '').toLowerCase().trim();
+      var phase = $('#phase-filter').value;
+      var status = $('#status-filter').value;
+      var matches = D.DAYS.filter(function (day) {
+        var haystack = [day.title, day.summary, day.tech, (day.tags || []).join(' ')].join(' ').toLowerCase();
+        if (q && haystack.indexOf(q) === -1) return false;
+        if (phase && String(day.phase) !== phase) return false;
+        if (status === 'done' && !Progress.isDone(day.n)) return false;
+        if (status === 'todo' && Progress.isDone(day.n)) return false;
+        if (status === 'saved' && !Progress.isBookmarked(day.n)) return false;
+        return true;
+      });
+      $('#roadmap-count').textContent = 'Showing ' + matches.length + ' of ' + D.DAYS.length + ' learning days';
+      $('#roadmap-list').innerHTML = matches.length ? matches.map(dayCard).join('') :
+        '<div class="empty"><h3>No lessons match</h3><p>Try changing your search or filters.</p></div>';
+    }
+    ['day-search', 'phase-filter', 'status-filter'].forEach(function (id) {
+      $('#' + id).addEventListener(id === 'day-search' ? 'input' : 'change', render);
+    });
+    render();
+  }
+
+  /* ------------------------------------------------------------------------
+     Locally generated lesson content
+     The uploaded project contained the day index, not the original 90 README
+     lesson files. These pages use the original day metadata and provide a
+     consistent editable lesson framework without pretending to reproduce
+     missing repository Markdown.
+     ------------------------------------------------------------------------ */
+  function lessonTasks(day) {
+    var tech = day.tech.toLowerCase();
+    if (tech.indexOf('linux') !== -1) return [
+      'Create a dedicated practice directory and record the commands you use.',
+      'Perform the task using the terminal; capture the command and its output.',
+      'Introduce one controlled failure and document how you diagnosed it.',
+      'Write a short runbook with verification and rollback steps.'
+    ];
+    if (tech.indexOf('network') !== -1) return [
+      'Draw the request path and identify the relevant protocols, ports and components.',
+      'Run at least two diagnostic commands and save their outputs.',
+      'Test a successful path and a deliberately failing path.',
+      'Document the likely root cause and the next diagnostic step.'
+    ];
+    if (tech.indexOf('script') !== -1) return [
+      'Create a small script in a dedicated project folder.',
+      'Add input validation, useful messages and meaningful exit codes.',
+      'Test normal input, invalid input and a failure scenario.',
+      'Add a README with usage examples and expected output.'
+    ];
+    if (tech.indexOf('docker') !== -1 || tech.indexOf('container') !== -1) return [
+      'Build or run a containerised example and inspect its configuration.',
+      'Check logs, health, networking, storage and resource usage.',
+      'Test a failure or restart scenario and explain the observed behaviour.',
+      'Record image, container and security best practices demonstrated.'
+    ];
+    if (tech.indexOf('ci/cd') !== -1 || tech.indexOf('delivery') !== -1) return [
+      'Design the pipeline stages from source change to deployment.',
+      'Implement or diagram build, test, security and release gates.',
+      'Demonstrate a failed stage and confirm that promotion is blocked.',
+      'Document secrets handling, artifacts and rollback strategy.'
+    ];
+    if (tech.indexOf('cloud') !== -1 || tech.indexOf('aws') !== -1 || tech.indexOf('azure') !== -1) return [
+      'Draw the target architecture and identify trust boundaries.',
+      'Deploy or model the smallest safe version of the required resources.',
+      'Apply least privilege, tagging, logging and cost controls.',
+      'Document cleanup steps so practice resources do not incur unwanted cost.'
+    ];
+    if (tech.indexOf('terraform') !== -1 || tech.indexOf('infrastructure') !== -1) return [
+      'Create a small declarative configuration and validate its syntax.',
+      'Review the plan before applying any infrastructure changes.',
+      'Test variable, output and state handling in a safe environment.',
+      'Document drift detection, state protection and destroy/cleanup steps.'
+    ];
+    if (tech.indexOf('ansible') !== -1 || tech.indexOf('configuration') !== -1) return [
+      'Create an inventory and a small repeatable playbook.',
+      'Run syntax checks and execute against a disposable target.',
+      'Run the playbook a second time and inspect idempotency.',
+      'Document variables, secrets handling and rollback considerations.'
+    ];
+    if (tech.indexOf('kubernetes') !== -1 || tech.indexOf('platform') !== -1) return [
+      'Create or inspect the relevant Kubernetes resources in a safe cluster.',
+      'Use kubectl to inspect status, events, logs and resource configuration.',
+      'Test scheduling, rollout, recovery or access behaviour as appropriate.',
+      'Document health checks, resource limits and operational considerations.'
+    ];
+    if (tech.indexOf('observability') !== -1 || tech.indexOf('sre') !== -1 || tech.indexOf('monitor') !== -1) return [
+      'Identify the service signals and define what healthy behaviour looks like.',
+      'Create a dashboard, query or operational measurement.',
+      'Trigger a controlled failure and observe the signal change.',
+      'Write an alert or incident response note with an actionable threshold.'
+    ];
+    return [
+      'Summarise the key concepts in your own words.',
+      'Build a small practical example related to the topic.',
+      'Validate the result and record evidence such as commands, screenshots or output.',
+      'Write down one failure mode, one mitigation and one improvement.'
+    ];
+  }
+
+  function pageDay() {
+    var query = new URLSearchParams(location.search).get('day');
+    var dayNumber = /^\d{1,2}$/.test(query || '') ? Number(query) : NaN;
+    var day = D.DAYS[dayNumber - 1];
+    var target = $('#md');
+    if (!day || !target) {
+      if (target) target.innerHTML = '<div class="empty"><h2>Lesson not found</h2><a href="' + docUrl(docFor('roadmap')) + '">Return to roadmap</a></div>';
       return;
     }
 
-    var day = dayBy(n);
-    var phase = phaseOf(n);
-    var week = D.WEEKS.find(function (w) { return n >= w.from && n <= w.to; });
-    var rel = 'day-' + pad(n) + '/README.md'; // lesson file inside the repository
+    var phase = phaseFor(day.n);
+    var week = weekFor(day.n);
+    var tasks = lessonTasks(day);
+    var savedChecks = Progress.checks(day.n);
+    var done = Progress.isDone(day.n);
+    var bookmarked = Progress.isBookmarked(day.n);
 
-    document.title = 'Day ' + pad(n) + ' — ' + day.title + ' | 90 Days of DevOps';
-    Store.set('last', n); // remembered for the "Resume lesson" card
+    $('#day-title').textContent = 'Day ' + pad(day.n) + ' — ' + day.title;
+    $('#day-subtitle').textContent = day.summary;
+    $('#day-meta').innerHTML = '<span class="chip">Phase ' + phase.id + ': ' + esc(phase.name) + '</span>' +
+      '<span class="chip">Week ' + week.id + ': ' + esc(week.name) + '</span>' +
+      '<span class="chip">' + esc(day.tech) + '</span><span class="chip">' + esc(day.diff) + '</span>' +
+      '<span class="chip">~' + day.mins + ' minutes</span>';
 
-    // ----- Lesson header -----
-    $('#day-hero').className = 'page-hero phase-' + day.phase;
-    $('#day-crumbs').innerHTML =
-      '<a href="' + PORTAL + '">90 Days</a> › ' +
-      '<a href="' + docUrl('roadmap') + '">Phase ' + phase.id + ' · ' + esc(phase.name) + '</a> › Day ' + pad(n);
-    $('#day-no').textContent = 'DAY ' + pad(n) + ' OF 90';
-    $('#day-title').textContent = day.title;
-    $('#day-summary').textContent = day.summary;
+    target.innerHTML =
+      '<section class="lesson-section"><h2>Learning objective</h2><p>' + esc(day.summary) + '</p>' +
+      '<p>By the end of this session, you should be able to explain the topic, demonstrate it in a safe lab, verify the result and document what you learned.</p></section>' +
+      '<section class="lesson-section"><h2>Topics to cover</h2><div class="tags">' + (day.tags || []).map(function (tag) { return '<span class="chip">' + esc(tag) + '</span>'; }).join('') + '</div>' +
+      '<p>Focus on the purpose of each component, how it fits into a production workflow, common failure modes, security implications and how to verify that it works.</p></section>' +
+      '<section class="lesson-section"><h2>Hands-on practice</h2><ol class="lesson-task-list">' + tasks.map(function (task) { return '<li>' + esc(task) + '</li>'; }).join('') + '</ol></section>' +
+      '<section class="lesson-section"><h2>Completion checklist</h2><p class="muted">Tick each item as you complete it. Your checklist is saved in this browser.</p>' +
+      '<div class="checklist">' + [
+        'I reviewed the concepts and can explain them without copying notes.',
+        'I completed the practical exercise in a safe environment.',
+        'I verified the result and captured useful evidence.',
+        'I documented troubleshooting, security and cleanup considerations.'
+      ].map(function (label, index) {
+        return '<label class="check-row"><input type="checkbox" data-check="' + index + '"' + (savedChecks[index] ? ' checked' : '') + '> <span>' + label + '</span></label>';
+      }).join('') + '</div></section>' +
+      '<section class="lesson-section"><h2>My learning notes</h2><textarea id="day-notes" class="field notes-field" rows="7" placeholder="Record commands, observations, mistakes, solutions and questions...">' + esc(Progress.notes(day.n)) + '</textarea>' +
+      '<p class="muted">Notes are stored locally in this browser and are not uploaded.</p></section>' +
+      '<div class="lesson-actions"><button class="btn primary" id="complete-btn" type="button">' + (done ? '✓ Completed — mark incomplete' : 'Mark day complete') + '</button>' +
+      '<button class="btn" id="bookmark-btn" type="button">' + (bookmarked ? '🔖 Remove bookmark' : '☆ Bookmark day') + '</button>' +
+      '<button class="btn" id="print-btn" type="button">Print / Save PDF</button>' +
+      '<a class="btn" href="' + docUrl(docFor('roadmap')) + '">Back to roadmap</a></div>' +
+      '<nav class="lesson-pager" aria-label="Lesson navigation">' +
+      (day.n > 1 ? '<a class="btn small" href="' + dayUrl(day.n - 1) + '">← Previous day</a>' : '<span></span>') +
+      (day.n < 90 ? '<a class="btn small" href="' + dayUrl(day.n + 1) + '">Next day →</a>' : '<a class="btn small" href="' + PORTAL + '">Finish journey →</a>') +
+      '</nav>';
 
-    // Metadata tiles: [label, value]
-    $('#day-meta').innerHTML = [
-      ['Phase', 'Phase ' + phase.id],
-      ['Week', 'Week ' + week.id],
-      ['Difficulty', day.diff],
-      ['Study time', (day.mins / 60).toFixed(1) + ' h'],
-      ['Focus', day.tech]
-    ].map(function (item) {
-      return '<div><small>' + item[0] + '</small><b>' + esc(item[1]) + '</b></div>';
-    }).join('');
-
-    // ----- Action buttons -----
-    $('#day-actions').innerHTML =
-      '<button class="btn primary small" id="complete-btn" type="button"></button>' +
-      '<button class="btn small" id="bm-btn" type="button"></button>' +
-      '<a class="btn small" href="' + MD.githubUrl(rel, 'blob') + '" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>' +
-      '<button class="btn small" id="dl-btn" type="button">Download .md</button>' +
-      '<button class="btn small" id="print-btn" type="button">Print / PDF</button>';
-
-    // Update the complete and bookmark button labels to match the saved state.
-    function paintButtons() {
-      $('#complete-btn').textContent = Progress.isDone(n) ? '✓ Completed (undo)' : 'Mark day complete';
-      $('#bm-btn').textContent = Progress.isBm(n) ? '★ Bookmarked' : '☆ Bookmark';
-    }
-    paintButtons();
-
-    $('#complete-btn').addEventListener('click', function () {
-      var nowDone = !Progress.isDone(n);
-      Progress.setDone(n, nowDone);
-      paintButtons();
-      toast(nowDone ? 'Day ' + pad(n) + ' marked complete 🎉' : 'Marked as not complete');
+    $$('[data-check]', target).forEach(function (box) {
+      box.addEventListener('change', function () {
+        var checks = [0, 1, 2, 3].map(function (index) {
+          var input = $('[data-check="' + index + '"]', target);
+          return !!(input && input.checked);
+        });
+        Progress.setChecks(day.n, checks);
+      });
     });
-    $('#bm-btn').addEventListener('click', function () {
-      Progress.toggleBm(n);
-      paintButtons();
+    $('#day-notes').addEventListener('input', function (event) { Progress.setNotes(day.n, event.target.value); });
+    $('#complete-btn').addEventListener('click', function () {
+      Progress.setDone(day.n, !Progress.isDone(day.n));
+      toast(Progress.isDone(day.n) ? 'Day marked complete.' : 'Completion status updated.');
+      pageDay();
+    });
+    $('#bookmark-btn').addEventListener('click', function () {
+      Progress.toggleBookmark(day.n);
+      toast(Progress.isBookmarked(day.n) ? 'Day bookmarked.' : 'Bookmark removed.');
+      pageDay();
     });
     $('#print-btn').addEventListener('click', function () { window.print(); });
-
-    // ----- Previous / next navigation (buttons and arrow keys) -----
-    var prev = n > 1 ? dayBy(n - 1) : null;
-    var next = n < 90 ? dayBy(n + 1) : null;
-
-    var prevHtml = prev
-      ? '<a class="btn" href="' + dayUrl(prev.n) + '">← Day ' + pad(prev.n) + ': ' + esc(prev.title) + '</a>'
-      : '<span></span>';
-    var nextHtml = next
-      ? '<a class="btn primary" href="' + dayUrl(next.n) + '">Day ' + pad(next.n) + ': ' + esc(next.title) + ' →</a>'
-      : '<a class="btn primary" href="' + docUrl('assessments') + '">Final assessment →</a>';
-    $('#pager').innerHTML = prevHtml + nextHtml;
-
-    document.addEventListener('keydown', function (event) {
-      var typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
-      if (typing || event.ctrlKey || event.metaKey || event.altKey) return;
-      if (event.key === 'ArrowLeft' && prev) location.href = dayUrl(prev.n);
-      if (event.key === 'ArrowRight' && next) location.href = dayUrl(next.n);
-    });
-
-    // ----- Private notes (auto-saved to this browser, 400 ms after typing stops) -----
-    var notes = $('#notes');
-    var noteTimer;
-    notes.value = Store.get('notes:' + pad(n), '');
-    notes.addEventListener('input', function () {
-      clearTimeout(noteTimer);
-      noteTimer = setTimeout(function () {
-        Store.set('notes:' + pad(n), notes.value.slice(0, 20000));
-        $('#notes-state').textContent = 'Saved in this browser';
-      }, 400);
-    });
-
-    // ----- Lesson content -----
-    el.innerHTML = '<p class="loading">Loading lesson from GitHub…</p>';
-
-    var result;
-    try {
-      result = await MD.load(rel);
-    } catch (err) {
-      errorBox(el, rel, err);
-      return;
-    }
-
-    MD.renderInto(el, result.text, { dir: 'day-' + pad(n) });
-
-    // The page header already shows the title, so drop the Markdown's own H1.
-    var heading = $('h1', el);
-    if (heading) heading.remove();
-
-    $('#dl-btn').addEventListener('click', function () {
-      download('day-' + pad(n) + '.md', result.text, 'text/markdown');
-    });
-    $('#reading').textContent = '≈ ' + MD.readingMinutes(result.text) + ' min read';
-
-    // ----- Interactive checklist, persisted per day -----
-    var boxes = $$('input[type=checkbox]', el);
-    var saved = Progress.checks(n);
-
-    // Refresh the progress bar and strike through finished items.
-    function paintChecklist() {
-      var ticked = boxes.filter(function (b) { return b.checked; }).length;
-      var pct = boxes.length ? Math.round(ticked * 100 / boxes.length) : 0;
-      $('#check-bar').style.width = pct + '%';
-      $('#check-text').textContent = ticked + ' / ' + boxes.length + ' tasks ticked (' + pct + '%)';
-      boxes.forEach(function (b) { b.parentNode.classList.toggle('done-item', b.checked); });
-    }
-
-    boxes.forEach(function (box, index) {
-      box.disabled = false;
-      box.checked = !!saved[index];
-      box.setAttribute('aria-label', (box.parentNode.textContent || 'task').trim().slice(0, 90));
-      box.addEventListener('change', function () {
-        Store.set('checks:' + pad(n), boxes.map(function (b) { return b.checked ? 1 : 0; }));
-        paintChecklist();
-      });
-    });
-    paintChecklist();
-
-    // ----- Table of contents with scroll-spy highlighting -----
-    var headings = $$('h2', el);
-    var toc = $('#toc');
-
-    toc.innerHTML = headings.map(function (h) {
-      return '<li><a href="#' + h.id + '">' + esc(h.textContent.replace(/^\d+\.\s*/, '')) + '</a></li>';
-    }).join('');
-
-    if ('IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          $$('a', toc).forEach(function (link) {
-            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
-          });
-        });
-      }, { rootMargin: '-80px 0px -70% 0px' });
-      headings.forEach(function (h) { observer.observe(h); });
-    }
-
-    // ----- Related articles (matched by relatedDay / relatedDays) -----
-    loadArticles().then(function (articles) {
-      var related = articles.filter(function (a) {
-        return a.relatedDay === n || (a.relatedDays || []).indexOf(n) !== -1;
-      });
-      if (!related.length) return;
-
-      $('#related-wrap').classList.remove('hidden');
-      $('#related').innerHTML = related.map(function (a) {
-        return safeUrl(a.url)
-          ? '<li><a href="' + esc(a.url) + '" target="_blank" rel="noopener noreferrer">' + esc(a.title) + '</a> ' +
-            '<span class="muted">· ' + esc(a.platform) + '</span></li>'
-          : '';
-      }).join('');
-    });
-
-    // Jump to the section named in the URL hash, if any.
-    if (location.hash) {
-      var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-      if (target) target.scrollIntoView();
-    }
   }
 
-  /* --------------------------------------------------------------------------
-     6c. Document pages (data-page="doc"), including the tracker dashboard
-     -------------------------------------------------------------------------- */
+  /* ------------------------------------------------------------------------
+     Local resource pages — generated from the bundled curriculum metadata.
+     ------------------------------------------------------------------------ */
+  function pageDoc() {
+    var key = document.body.dataset.doc || 'overview';
+    var doc = docFor(key) || docFor('overview');
+    var title = $('#doc-title');
+    var blurb = $('#doc-blurb');
+    var crumbs = $('#doc-crumbs');
+    var actions = $('#doc-actions');
+    var content = $('#md');
+    if (title) title.textContent = doc.title;
+    if (blurb) blurb.textContent = doc.blurb;
+    if (crumbs) crumbs.innerHTML = '<a href="' + PORTAL + '">90 Days</a> › ' + esc(doc.title);
+    if (actions) actions.innerHTML = '<button class="btn small" id="print-btn" type="button">Print / Save PDF</button>';
+    if ($('#print-btn')) $('#print-btn').addEventListener('click', function () { window.print(); });
 
-  /**
-   * Render the personal progress dashboard (used on the Tracker page):
-   * statistics, per-phase bars, bookmarks, and export / import / reset tools.
-   */
-  function dashboard(host) {
-    var done = Progress.done();
+    if (key === 'tracker') renderDashboard($('#dashboard'));
+    if (!content) return;
+
+    if (key === 'roadmap') { pageRoadmap(); return; }
+    var html = '';
+    if (key === 'overview') {
+      html = '<h2>How to use this learning journey</h2><p>Work through the 90 days in order. Each day contains a learning objective, a practical exercise, a completion checklist and a personal notes area. Adapt the time estimate to your experience and available lab resources.</p>' +
+        '<h2>Four learning phases</h2>' + D.PHASES.map(function (phase) { return '<h3>Phase ' + phase.id + ': ' + esc(phase.name) + ' (Days ' + phase.from + '–' + phase.to + ')</h3><p>' + esc(phase.blurb) + '</p>'; }).join('') +
+        '<h2>Study rhythm</h2><ul><li>Learn the core concepts.</li><li>Practice in a disposable lab.</li><li>Verify behaviour and test a failure case.</li><li>Write notes and capture evidence.</li><li>Review progress at the end of each week.</li></ul>';
+    } else if (key === 'tracker') {
+      html = '<h2>Your progress is private to this browser</h2><p>The dashboard above uses localStorage. It is not sent to a server and will not automatically sync between browsers or devices.</p><p>Use Export progress to back up your learning record. Use Import progress to restore it on another browser.</p>';
+    } else if (key === 'technologies') {
+      var techs = {};
+      D.DAYS.forEach(function (day) { (day.tags || []).concat([day.tech]).forEach(function (tag) { techs[tag] = techs[tag] || []; techs[tag].push(day.n); }); });
+      html = '<h2>Technology index</h2><p>Topics below are taken from the bundled 90-day curriculum index.</p><div class="table-wrap"><table><thead><tr><th>Technology / topic</th><th>Days</th></tr></thead><tbody>' +
+        Object.keys(techs).sort().map(function (name) { return '<tr><td>' + esc(name) + '</td><td>' + techs[name].map(pad).join(', ') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    } else if (key === 'lab') {
+      html = '<h2>Recommended lab approach</h2><ul><li>Use a dedicated Linux VM or disposable cloud environment.</li><li>Keep source code and notes in a local working directory.</li><li>Use non-production accounts and least-privilege credentials.</li><li>Set budgets and alerts before creating cloud resources.</li><li>Never commit credentials, private keys or tokens.</li><li>Destroy temporary infrastructure after each exercise.</li></ul><h2>Suggested workstation</h2><p>A modern Windows, macOS or Linux computer with 8–16 GB RAM, a terminal, Git, a code editor, Docker where supported, and access to a Linux environment is a practical starting point. Some Kubernetes and cloud exercises may need additional resources.</p>';
+    } else if (key === 'assessments') {
+      html = '<h2>Assessment method</h2><p>Do not measure progress only by watching tutorials. For each topic, produce evidence that you can explain, implement, troubleshoot and document the work.</p><ol><li>Concept explanation in your own words.</li><li>Working practical demonstration.</li><li>Verification and troubleshooting evidence.</li><li>Security, cost and operational considerations.</li><li>Clear documentation and repeatable steps.</li></ol><h2>Capstone review</h2><p>Review the three capstone groups in the roadmap and keep architecture diagrams, source code, deployment evidence, test results and runbooks together in a portfolio.</p>';
+    } else if (key === 'mapping') {
+      html = '<h2>Curriculum structure</h2><p>This portal now uses its own bundled JavaScript curriculum index and local browser storage. It does not fetch Markdown files from a repository at runtime.</p><p>The original source repository can remain your version-control and backup location, but it is not a runtime dependency of this learning portal.</p><h2>Local application files</h2><ul><li><code>js/devops-90-days-data.js</code> — 90-day curriculum metadata.</li><li><code>js/devops-90-days.js</code> — interface and application logic.</li><li><code>css/devops-90-days.css</code> — shared responsive theme.</li><li><code>data/devops-articles.json</code> — optional local article catalogue.</li><li><code>localStorage</code> — learner progress, bookmarks and notes.</li></ul>';
+    } else if (key === 'glossary') {
+      var glossary = [
+        ['CI/CD','Continuous Integration and Continuous Delivery/Deployment.'],
+        ['IaC','Infrastructure as Code: provisioning and managing infrastructure through declarative or programmable definitions.'],
+        ['SLO','Service Level Objective: a target for a measured service-level indicator.'],
+        ['SLI','Service Level Indicator: a quantitative measure of service behaviour.'],
+        ['DORA','A research programme and set of software delivery performance measures.'],
+        ['GitOps','An operating model that uses version-controlled desired state to drive system changes.'],
+        ['SBOM','Software Bill of Materials: an inventory of software components.'],
+        ['SRE','Site Reliability Engineering: applying software engineering practices to operations and reliability.'],
+        ['MTTR','Mean Time to Restore/Recover: a measure of incident recovery time.'],
+        ['RTO','Recovery Time Objective: target time to restore a service after disruption.'],
+        ['RPO','Recovery Point Objective: acceptable data-loss window measured in time.'],
+        ['RBAC','Role-Based Access Control: permissions assigned through roles.'],
+        ['TLS','Transport Layer Security: protocol used to protect data in transit.'],
+        ['HPA','Kubernetes Horizontal Pod Autoscaler.'],
+        ['FinOps','A collaborative practice for managing and optimising technology spend.']
+      ];
+      html = '<h2>DevOps glossary</h2><div class="table-wrap"><table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>' +
+        glossary.map(function (item) { return '<tr><th>' + esc(item[0]) + '</th><td>' + esc(item[1]) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    }
+    content.innerHTML = '<div class="local-doc-content">' + html + '</div>';
+  }
+
+  function renderDashboard(target) {
+    if (!target) return;
+    var done = Progress.done().length;
+    var pct = Math.round(done / D.DAYS.length * 100);
     var bookmarks = Progress.bookmarks();
+    target.innerHTML =
+      '<section class="dashboard card"><div class="section-head"><div><h2>Your learning progress</h2><p>Saved only in this browser.</p></div>' +
+      '<div class="actions"><button class="btn small" id="export-progress" type="button">Export progress</button><label class="btn small import-label">Import progress<input id="import-progress" type="file" accept="application/json" hidden></label></div></div>' +
+      '<div class="stats"><div class="stat"><strong>' + done + '/90</strong><span>Days completed</span></div><div class="stat"><strong>' + pct + '%</strong><span>Overall progress</span></div><div class="stat"><strong>' + bookmarks.length + '</strong><span>Bookmarks</span></div></div>' +
+      progressBar(pct, 'Overall learning progress') + '<p class="muted">' + pct + '% of the 90-day journey completed.</p>' +
+      '<div class="phase-progress">' + D.PHASES.map(function (phase) {
+        var p = Progress.percent(phase.from, phase.to);
+        return '<div><div class="phase-progress-label"><strong>' + esc(phase.name) + '</strong><span>' + p.done + '/' + p.total + '</span></div>' + progressBar(p.pct, phase.name) + '</div>';
+      }).join('') + '</div>' +
+      '<h3>Bookmarked lessons</h3><div class="tags">' + (bookmarks.length ? bookmarks.sort(function (a,b) { return a-b; }).map(function (n) {
+        var day = D.DAYS[n - 1]; return '<a class="chip" href="' + dayUrl(n) + '">Day ' + pad(n) + ': ' + esc(day.title) + '</a>';
+      }).join('') : '<span class="muted">No bookmarked lessons yet.</span>') + '</div></section>';
 
-    // Total number of ticked checklist items across all lessons.
-    var tasksTicked = 0;
-    D.DAYS.forEach(function (d) {
-      tasksTicked += Progress.checks(d.n).filter(Boolean).length;
+    $('#export-progress').addEventListener('click', function () {
+      var backup = {};
+      Object.keys(localStorage).forEach(function (key) {
+        if (key.indexOf('d90:') === 0) backup[key] = localStorage.getItem(key);
+      });
+      downloadFile('devops-90-days-progress.json', JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), data: backup }, null, 2), 'application/json');
     });
-
-    // One progress bar per phase.
-    var phaseBars = D.PHASES.map(function (phase) {
-      var r = Progress.phasePct(phase);
-      return '<div class="phase-bar-row phase-' + phase.id + '">' +
-        '<span>Phase ' + phase.id + ' · ' + esc(phase.name) + '</span>' +
-        '<div class="progress"><i style="width:' + r.pct + '%"></i></div>' +
-        '<span>' + r.done + '/' + r.total + '</span>' +
-      '</div>';
-    }).join('');
-
-    // Bookmark chips, sorted by day.
-    var bookmarkChips = bookmarks.length
-      ? bookmarks.slice().sort(function (a, b) { return a - b; }).map(function (n) {
-          return '<a class="chip accent" href="' + dayUrl(n) + '">Day ' + pad(n) + ' · ' + esc(dayBy(n).title) + '</a> ';
-        }).join('')
-      : '<span class="muted">No bookmarks yet — use ☆ on any day.</span>';
-
-    host.innerHTML =
-      '<div class="dash-wrap">' +
-        '<h2 style="margin-top:0">My DevOps Learning Progress</h2>' +
-        '<div class="dash-grid">' +
-          '<div class="stat"><b>' + done.length + ' / 90</b><span>Days completed</span></div>' +
-          '<div class="stat"><b>' + Math.round(done.length * 100 / 90) + '%</b><span>Overall progress</span></div>' +
-          '<div class="stat"><b>' + tasksTicked + '</b><span>Tasks ticked across lessons</span></div>' +
-          '<div class="stat"><b>' + bookmarks.length + '</b><span>Bookmarked days</span></div>' +
-        '</div>' +
-        '<div class="panel"><h4>Progress by phase</h4><div class="phase-bars">' + phaseBars + '</div></div>' +
-        '<div class="panel" style="margin-top:14px"><h4>Bookmarks</h4>' + bookmarkChips + '</div>' +
-        '<p class="note">Progress is stored only in <strong>this browser</strong> (localStorage). ' +
-          'Clearing site data deletes it, and it does not sync between devices — use Export to back it up.' +
-          (Store.ok ? '' : ' <strong>Storage is blocked in this browser, so progress cannot be saved.</strong>') + '</p>' +
-        '<div class="dash-actions">' +
-          '<button class="btn small" id="exp" type="button">Export progress (JSON)</button>' +
-          '<label class="btn small" for="imp" style="cursor:pointer">Import progress</label>' +
-          '<input id="imp" type="file" accept="application/json" class="hidden">' +
-          '<button class="btn small" id="rst" type="button">Reset all progress</button>' +
-        '</div>' +
-      '</div>';
-
-    // ----- Export: save every "d90:" key (except the Markdown cache) to a JSON file -----
-    $('#exp').addEventListener('click', function () {
-      var data = { version: 1, exported: new Date().toISOString(), items: {} };
-      try {
-        for (var i = 0; i < localStorage.length; i++) {
-          var key = localStorage.key(i);
-          if (key.indexOf('d90:') === 0 && key.indexOf('d90:md:') !== 0) {
-            data.items[key] = localStorage.getItem(key);
-          }
-        }
-      } catch (e) { /* storage blocked: export an empty file */ }
-      download('devops-90-progress.json', JSON.stringify(data, null, 2), 'application/json');
-    });
-
-    // ----- Import: validate the file, then restore only whitelisted keys -----
-    $('#imp').addEventListener('change', function (event) {
-      var file = event.target.files[0];
+    $('#import-progress').addEventListener('change', function (event) {
+      var file = event.target.files && event.target.files[0];
       if (!file) return;
-      if (file.size > 2000000) { toast('File too large'); return; }
-
       var reader = new FileReader();
       reader.onload = function () {
         try {
-          var json = JSON.parse(reader.result);
-          if (!json || json.version !== 1 || typeof json.items !== 'object') throw new Error('bad format');
-
-          var allowedKey = /^d90:(done|bookmarks|last|theme|checks:\d\d|notes:\d\d)$/;
-          var imported = 0;
-
-          Object.keys(json.items).forEach(function (key) {
-            var value = json.items[key];
-            if (allowedKey.test(key) && typeof value === 'string' && value.length < 200000) {
-              try {
-                JSON.parse(value); // each stored value must itself be valid JSON
-                localStorage.setItem(key, value);
-                imported++;
-              } catch (e) { /* skip invalid entries */ }
-            }
+          var payload = JSON.parse(reader.result);
+          if (!payload.data || typeof payload.data !== 'object') throw new Error('Invalid backup');
+          Object.keys(payload.data).forEach(function (key) {
+            if (key.indexOf('d90:') === 0) localStorage.setItem(key, payload.data[key]);
           });
-
-          toast('Imported ' + imported + ' items');
-          dashboard(host);
-        } catch (e) {
-          toast('Not a valid progress file');
+          toast('Progress imported. Reloading dashboard…');
+          setTimeout(function () { location.reload(); }, 700);
+        } catch (error) {
+          toast('Could not import this progress file.');
         }
       };
       reader.readAsText(file);
     });
+  }
 
-    // ----- Reset: delete all saved progress (the theme is kept) -----
-    $('#rst').addEventListener('click', function () {
-      if (!confirm('Delete ALL saved progress, bookmarks and notes in this browser?')) return;
-      try {
-        Object.keys(localStorage)
-          .filter(function (key) { return key.indexOf('d90:') === 0 && key !== 'd90:theme'; })
-          .forEach(function (key) { localStorage.removeItem(key); });
-      } catch (e) { /* ignore */ }
-      dashboard(host);
-      toast('Progress reset');
+  /* ------------------------------------------------------------------------
+     Local article list
+     ------------------------------------------------------------------------ */
+  var articleCache = null;
+  function loadArticles() {
+    if (articleCache) return Promise.resolve(articleCache);
+    return fetch(ROOT + 'data/devops-articles.json').then(function (response) {
+      if (!response.ok) throw new Error('Article catalogue unavailable');
+      return response.json();
+    }).then(function (items) {
+      articleCache = Array.isArray(items) ? items : [];
+      return articleCache;
+    }).catch(function () {
+      articleCache = [];
+      return articleCache;
     });
   }
 
-  /** Load and render one repository document (data-doc selects which one). */
-  async function pageDoc() {
-    var key = document.body.dataset.doc;
-    var doc = docBy(key);
-    var el = $('#md');
-
-    if (!doc) {
-      el.innerHTML = '<div class="empty">Unknown document.</div>';
-      return;
-    }
-
-    // Page header
-    document.title = doc.title + ' | 90 Days of DevOps';
-    $('#doc-title').textContent = doc.title;
-    $('#doc-blurb').textContent = doc.blurb;
-    $('#doc-crumbs').innerHTML = '<a href="' + PORTAL + '">90 Days</a> › ' + esc(doc.title);
-    $('#doc-actions').innerHTML =
-      '<a class="btn small" href="' + MD.githubUrl(doc.file, 'blob') + '" target="_blank" rel="noopener noreferrer">View source on GitHub ↗</a>' +
-      '<button class="btn small" id="print-btn" type="button">Print / PDF</button>';
-    $('#print-btn').addEventListener('click', function () { window.print(); });
-
-    // The tracker page also shows the personal progress dashboard.
-    if (key === 'tracker') dashboard($('#dashboard'));
-
-    // Document body
-    el.innerHTML = '<p class="loading">Loading from GitHub…</p>';
-    try {
-      var result = await MD.load(doc.file);
-      MD.renderInto(el, result.text, { dir: '' });
-
-      var heading = $('h1', el); // title is already in the page header
-      if (heading) heading.remove();
-
-      if (location.hash) {
-        var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-        if (target) target.scrollIntoView();
-      }
-    } catch (err) {
-      errorBox(el, doc.file, err);
-    }
+  function articleCard(article) {
+    var validUrl = /^https?:\/\//i.test(article.url || '');
+    return '<article class="card"><span class="range">' + esc(article.platform || 'Article') + ' · ' + esc(article.date || '') + '</span>' +
+      '<h3>' + esc(article.title) + '</h3><p>' + esc(article.summary || '') + '</p>' +
+      '<div class="tags">' + (article.tags || []).map(function (tag) { return '<span class="chip">' + esc(tag) + '</span>'; }).join('') + '</div>' +
+      (validUrl ? '<a class="card-link" href="' + esc(article.url) + '" target="_blank" rel="noopener noreferrer">Read article ↗</a>' : '<span class="muted">Link not added yet</span>') +
+      '</article>';
   }
 
-  /* --------------------------------------------------------------------------
-     6d. Articles page (data-page="articles")
-     -------------------------------------------------------------------------- */
-  async function pageArticles() {
-    var grid = $('#articles');
-    var articles = await loadArticles();
-    var filter = { q: '', platform: '', tag: '' }; // current search text, platform and topic
+  function pageArticles() {
+    var linkedin = $('#p-linkedin');
+    var medium = $('#p-medium');
+    if (linkedin && C.profiles && C.profiles.linkedin) {
+      linkedin.href = C.profiles.linkedin;
+      linkedin.target = '_blank';
+      linkedin.rel = 'noopener noreferrer';
+    } else if (linkedin) { linkedin.hidden = true; }
+    if (medium && C.profiles && C.profiles.medium) {
+      medium.href = C.profiles.medium;
+      medium.target = '_blank';
+      medium.rel = 'noopener noreferrer';
+    } else if (medium) { medium.hidden = true; }
 
-    // Distinct, sorted platform and topic names for the filter chips.
-    var platforms = Array.from(new Set(articles.map(function (a) { return a.platform; }))).sort();
-    var tags = Array.from(new Set([].concat.apply([], articles.map(function (a) { return a.tags || []; })))).sort();
-
-    /** Draw the platform and topic chips, highlighting the active ones. */
-    function renderChips() {
-      $('#plat-chips').innerHTML = ['All'].concat(platforms).map(function (name) {
-        var value = name === 'All' ? '' : name;
-        return '<button class="chip button" type="button" data-plat="' + esc(value) + '" aria-pressed="' + (filter.platform === value) + '">' + esc(name) + '</button>';
+    var search = $('#a-q');
+    var platform = '';
+    var tag = '';
+    var articlesEl = $('#articles');
+    loadArticles().then(function (articles) {
+      var published = articles.filter(function (item) { return !item.sample; });
+      var platforms = ['All platforms'].concat(Array.from(new Set(published.map(function (item) { return item.platform; }).filter(Boolean))));
+      var tags = Array.from(new Set([].concat.apply([], published.map(function (item) { return item.tags || []; })))).sort();
+      $('#plat-chips').innerHTML = platforms.map(function (item, index) {
+        return '<button class="chip filter-chip' + (index === 0 ? ' active' : '') + '" data-platform="' + (index ? esc(item) : '') + '">' + esc(item) + '</button>';
       }).join('');
-
-      $('#tag-chips').innerHTML = tags.map(function (tag) {
-        return '<button class="chip button" type="button" data-tag="' + esc(tag) + '" aria-pressed="' + (filter.tag === tag) + '">' + esc(tag) + '</button>';
+      $('#tag-chips').innerHTML = '<button class="chip filter-chip active" data-tag="">All topics</button>' + tags.map(function (item) {
+        return '<button class="chip filter-chip" data-tag="' + esc(item) + '">' + esc(item) + '</button>';
       }).join('');
-    }
-
-    /** Apply the filters and redraw the article grid (newest first). */
-    function render() {
-      var list = articles.filter(function (a) {
-        if (filter.platform && a.platform !== filter.platform) return false;
-        if (filter.tag && (a.tags || []).indexOf(filter.tag) === -1) return false;
-        if (!filter.q) return true;
-        var haystack = (a.title + ' ' + a.summary + ' ' + (a.tags || []).join(' ')).toLowerCase();
-        return haystack.indexOf(filter.q.toLowerCase()) !== -1;
-      }).sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
-
-      var emptyText = articles.length
-        ? 'No articles match.'
-        : 'No articles yet. Add records to <code>data/devops-articles.json</code>.';
-      grid.innerHTML = list.length ? list.map(articleCard).join('') : '<div class="empty">' + emptyText + '</div>';
-
-      renderChips();
-    }
-
-    // Search box
-    $('#a-q').addEventListener('input', function (event) {
-      filter.q = event.target.value.trim();
+      function render() {
+        var q = (search.value || '').toLowerCase();
+        var list = published.filter(function (item) {
+          var haystack = [item.title, item.summary, item.platform, (item.tags || []).join(' ')].join(' ').toLowerCase();
+          return (!q || haystack.indexOf(q) !== -1) && (!platform || item.platform === platform) && (!tag || (item.tags || []).indexOf(tag) !== -1);
+        });
+        articlesEl.innerHTML = list.length ? list.map(articleCard).join('') : '<div class="empty"><h3>No published articles yet</h3><p>Add real article details to data/devops-articles.json.</p></div>';
+      }
+      search.addEventListener('input', render);
+      $('#plat-chips').addEventListener('click', function (event) {
+        var button = event.target.closest('[data-platform]');
+        if (!button) return;
+        platform = button.dataset.platform;
+        $$('#plat-chips .chip').forEach(function (chip) { chip.classList.toggle('active', chip === button); });
+        render();
+      });
+      $('#tag-chips').addEventListener('click', function (event) {
+        var button = event.target.closest('[data-tag]');
+        if (!button) return;
+        tag = button.dataset.tag;
+        $$('#tag-chips .chip').forEach(function (chip) { chip.classList.toggle('active', chip === button); });
+        render();
+      });
       render();
     });
-
-    // Chip clicks (delegated, because the chips are re-created on every render)
-    document.addEventListener('click', function (event) {
-      var platformChip = event.target.closest('[data-plat]');
-      var tagChip = event.target.closest('[data-tag]');
-      if (platformChip) {
-        filter.platform = platformChip.dataset.plat;
-        render();
-      }
-      if (tagChip) {
-        filter.tag = filter.tag === tagChip.dataset.tag ? '' : tagChip.dataset.tag; // click again to clear
-        render();
-      }
-    });
-
-    // Profile buttons: show a link only when the configured URL is real, otherwise hide the button.
-    function setupProfileLink(url, selector) {
-      var link = $(selector);
-      if (!link) return;
-      if (safeUrl(url)) {
-        link.href = url;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-      } else {
-        link.classList.add('hidden');
-      }
-    }
-    setupProfileLink(C.profiles.linkedin, '#p-linkedin');
-    setupProfileLink(C.profiles.medium, '#p-medium');
-
-    render();
   }
 
-  /* ==========================================================================
-     7. BOOTSTRAP
-     ========================================================================== */
-
+  /* ------------------------------------------------------------------------
+     Application bootstrap
+     ------------------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', function () {
+    var savedTheme = Store.get('theme', 'dark');
+    document.documentElement.setAttribute('data-theme', savedTheme);
     buildChrome();
 
-    // Map each data-page value to the function that builds that page.
-    var pages = {
-      portal: pagePortal,
-      day: pageDay,
-      doc: pageDoc,
-      articles: pageArticles
-    };
-
-    var run = pages[document.body.dataset.page];
-    if (run) run();
+    var page = document.body.dataset.page;
+    if (page === 'portal') pagePortal();
+    else if (page === 'day') pageDay();
+    else if (page === 'doc') pageDoc();
+    else if (page === 'articles') pageArticles();
   });
 })();

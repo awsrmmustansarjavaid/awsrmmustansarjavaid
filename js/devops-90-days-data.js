@@ -29,25 +29,14 @@ window.D90 = window.D90 || {};
     // Name shown in the header brand and footer
     siteName: "Mustansar Javaid",
 
-    // GitHub user (or organisation) and repository that hold the Markdown lessons
-    owner: "awsrmmustansarjavaid",
-    repo: "awsrmmustansarjavaid",
-
-    // Branch to read from, and the folder inside the repository containing the Markdown files
-    branch: "main",
-    contentDir: "DEVOPS-90-DAYS",
-
     // Home page and Challenges page of the main site, relative to the site root
     homePage: "index.html",
     challengesPage: "pages/challenges.html",
 
-    // Profile links shown in the footer and on the Articles page.
-    // The LinkedIn URL is the DevOps-journey account from js/config.js.
-    // TODO: replace the Medium placeholder; entries containing "YOUR-" are hidden automatically.
+    // Optional external author profile links. They are never used to load app data.
     profiles: {
-      github: "https://github.com/awsrmmustansarjavaid",
       linkedin: "https://www.linkedin.com/in/raja-muhammad-mustansar-javaid/",
-      medium: "https://medium.com/@YOUR-MEDIUM-USERNAME"
+      medium: ""
     }
   };
 
@@ -155,7 +144,7 @@ window.D90 = window.D90 || {};
   ];
 
   /* ======================================================================
-     DAYS - index of all 90 lessons (the lesson body lives in the repository)
+     DAYS - local metadata index for all 90 lessons
        n        : day number (1-90)           phase / week : parent groups
        title    : lesson title                 summary      : one-line goal
        tech     : main technology              tags         : topic keywords

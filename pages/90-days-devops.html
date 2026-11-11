@@ -8,9 +8,6 @@
   <meta name="color-scheme" content="dark light">
 
   <!-- Inter font (same as the rest of the site) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Shared portal stylesheet (css/devops-90-days.css) -->
   <link rel="stylesheet" href="../css/devops-90-days.css">
@@ -24,12 +21,7 @@
   <header id="site-header"></header>
 
   <noscript>
-    <div class="container">
-      <p>
-        This portal needs JavaScript to load the lessons. You can read everything directly in the
-        <a href="https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/tree/main/DEVOPS-90-DAYS">GitHub repository</a>.
-      </p>
-    </div>
+    <div class="container"><p>This learning portal requires JavaScript. Enable JavaScript to use the lessons and progress tracker.</p></div>
   </noscript>
 
   <main id="main">
@@ -41,7 +33,7 @@
         <h1>90 Days of <span class="grad">DevOps</span></h1>
         <p class="lead">
           Build practical DevOps engineering skills through structured learning, hands-on labs,
-          real-world projects and daily challenges. Every lesson is loaded live from my GitHub repository.
+          real-world projects and daily challenges. The 90-day learning index runs locally in your browser, with progress saved on this device.
         </p>
 
         <!-- Topic chips -->
@@ -64,7 +56,6 @@
         <div class="hero-actions">
           <a class="btn primary" href="devops-90-days/roadmap.html">Explore Roadmap</a>
           <a class="btn" href="devops-90-days/day.html?day=1">Start Day 01</a>
-          <a class="btn" href="https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/tree/main/DEVOPS-90-DAYS" target="_blank" rel="noopener noreferrer">View GitHub ↗</a>
         </div>
 
         <!-- Statistic tiles (filled by JavaScript) -->
@@ -82,7 +73,7 @@
         <div class="section-head">
           <div>
             <h2>Four learning phases</h2>
-            <p>Follow the same four phases as the GitHub curriculum.</p>
+            <p>Follow the four structured phases of the learning journey.</p>
           </div>
           <a class="btn small" href="devops-90-days/roadmap.html">Browse all days →</a>
         </div>
@@ -96,7 +87,7 @@
         <div class="section-head">
           <div>
             <h2>Learning resources</h2>
-            <p>Every important document in the repository has its own readable page.</p>
+            <p>Explore the roadmap, lab guidance, technology index and other local learning resources.</p>
           </div>
         </div>
         <div class="grid cols-4" id="resources"></div>
@@ -137,14 +128,10 @@
   <!-- Footer is injected by devops-90-days.js -->
   <footer id="site-footer"></footer>
 
-  <!-- Third-party libraries: Markdown parser, HTML sanitiser, syntax highlighter -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- No remote Markdown libraries are required. -->
 
-  <!-- Portal scripts (order matters: data -> renderer -> page logic) -->
+  <!-- Local scripts: curriculum data first, then application logic. -->
   <script src="../js/devops-90-days-data.js"></script>
-  <script src="../js/devops-90-days-markdown-renderer.js"></script>
   <script src="../js/devops-90-days.js"></script>
 </body>
 </html>

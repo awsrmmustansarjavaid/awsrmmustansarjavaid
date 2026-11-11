@@ -8,9 +8,6 @@
   <meta name="color-scheme" content="dark light">
 
   <!-- Inter font (same as the rest of the site) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Shared portal stylesheet (css/devops-90-days.css) -->
   <link rel="stylesheet" href="../../css/devops-90-days.css">
@@ -29,12 +26,7 @@
   <header id="site-header"></header>
 
   <noscript>
-    <div class="container">
-      <p>
-        This portal needs JavaScript to load the lessons. You can read everything directly in the
-        <a href="https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/tree/main/DEVOPS-90-DAYS">GitHub repository</a>.
-      </p>
-    </div>
+    <div class="container"><p>This learning portal requires JavaScript. Enable JavaScript to use the lessons and progress tracker.</p></div>
   </noscript>
 
   <main id="main">
@@ -48,7 +40,7 @@
         <div class="actions" id="doc-actions"></div>
       </div>
 
-      <!-- Markdown content fetched from the GitHub repository -->
+      <!-- Resource content is generated locally from the bundled curriculum metadata. -->
       <article id="md" class="md" aria-live="polite">
         <p class="loading">Loading…</p>
       </article>
@@ -59,14 +51,10 @@
   <!-- Footer is injected by devops-90-days.js -->
   <footer id="site-footer"></footer>
 
-  <!-- Third-party libraries: Markdown parser, HTML sanitiser, syntax highlighter -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- No remote Markdown libraries are required. -->
 
-  <!-- Portal scripts (order matters: data -> renderer -> page logic) -->
+  <!-- Local scripts: curriculum data first, then application logic. -->
   <script src="../../js/devops-90-days-data.js"></script>
-  <script src="../../js/devops-90-days-markdown-renderer.js"></script>
   <script src="../../js/devops-90-days.js"></script>
 </body>
 </html>
