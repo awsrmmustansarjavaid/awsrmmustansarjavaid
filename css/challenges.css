@@ -13,3 +13,330 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.4rem;
 }
+
+
+/* ============================================================
+   90 DAYS OF DEVOPS — FEATURED SECTION
+
+   Styles the dedicated 90 Days of DevOps learning card.
+   Designed to work alongside the existing website theme.
+   ============================================================ */
+
+/* Main section spacing */
+.devops-90-section {
+  padding: 35px 0 45px;
+}
+
+/* Main featured card */
+.devops-90-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 35px;
+  padding: 45px;
+  overflow: hidden;
+
+  border: 1px solid rgba(120, 120, 255, 0.22);
+  border-radius: 22px;
+
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(100, 90, 255, 0.16),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(30, 35, 55, 0.96),
+      rgba(18, 22, 38, 0.98)
+    );
+
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.16);
+}
+
+/* Introduction content */
+.devops-90-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  max-width: 650px;
+}
+
+/* Featured label */
+.devops-90-label {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 8px 14px;
+
+  border: 1px solid rgba(140, 130, 255, 0.3);
+  border-radius: 30px;
+
+  background: rgba(120, 100, 255, 0.12);
+  color: #b9adff;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+/* Main heading */
+.devops-90-content h2 {
+  margin: 0 0 18px;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* Description */
+.devops-90-description {
+  max-width: 620px;
+  margin-bottom: 25px;
+
+  color: var(--text-secondary, #b5b9ca);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* Highlights container */
+.devops-90-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+/* Individual highlight */
+.devops-90-highlight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Highlight icon */
+.highlight-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 11px;
+  background: rgba(125, 110, 255, 0.13);
+
+  font-size: 18px;
+}
+
+/* Highlight text */
+.devops-90-highlight strong,
+.devops-90-highlight small {
+  display: block;
+}
+
+.devops-90-highlight strong {
+  margin-bottom: 4px;
+  color: var(--text-primary, #ffffff);
+  font-size: 13px;
+}
+
+.devops-90-highlight small {
+  color: var(--text-secondary, #a5aabe);
+  font-size: 11px;
+}
+
+/* Explore button */
+.devops-90-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.devops-90-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(110, 95, 255, 0.25);
+}
+
+/* Right-side visual illustration */
+.devops-90-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 260px;
+  width: 260px;
+  height: 260px;
+}
+
+/* Central 90-day circle */
+.devops-90-number {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 155px;
+  height: 155px;
+
+  border: 1px solid rgba(160, 145, 255, 0.4);
+  border-radius: 50%;
+
+  background: linear-gradient(
+    145deg,
+    #6556d9,
+    #302b75
+  );
+
+  box-shadow: 0 0 45px rgba(110, 90, 255, 0.3);
+}
+
+/* Large number */
+.number-value {
+  color: #ffffff;
+  font-size: 65px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Number label */
+.number-label {
+  margin-top: 8px;
+  color: #e3ddff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+/* Decorative orbit circles */
+.devops-90-orbit {
+  position: absolute;
+  border: 1px dashed rgba(150, 135, 255, 0.3);
+  border-radius: 50%;
+}
+
+.orbit-one {
+  width: 205px;
+  height: 205px;
+}
+
+.orbit-two {
+  width: 255px;
+  height: 255px;
+  border-color: rgba(150, 135, 255, 0.17);
+}
+
+/* Floating technology icons */
+.devops-90-floating-icon {
+  position: absolute;
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid rgba(160, 145, 255, 0.25);
+  border-radius: 13px;
+
+  background: #252443;
+  font-size: 19px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.icon-top {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.icon-left {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.icon-right {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.icon-bottom {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Tablet layout */
+@media (max-width: 900px) {
+  .devops-90-card {
+    padding: 35px;
+    gap: 15px;
+  }
+
+  .devops-90-visual {
+    flex-basis: 210px;
+    width: 210px;
+    height: 230px;
+    transform: scale(0.85);
+  }
+
+  .devops-90-highlights {
+    gap: 15px;
+  }
+}
+
+/* Mobile layout */
+@media (max-width: 650px) {
+  .devops-90-section {
+    padding: 25px 0 35px;
+  }
+
+  .devops-90-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 25px 20px;
+    gap: 25px;
+  }
+
+  .devops-90-content {
+    width: 100%;
+  }
+
+  .devops-90-content h2 {
+    font-size: 30px;
+  }
+
+  .devops-90-description {
+    font-size: 14px;
+  }
+
+  .devops-90-highlights {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .devops-90-visual {
+    align-self: center;
+    flex: 0 0 220px;
+    width: 220px;
+    height: 220px;
+    transform: scale(0.9);
+  }
+
+  .devops-90-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
