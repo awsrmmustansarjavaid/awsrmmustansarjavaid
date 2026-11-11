@@ -444,8 +444,12 @@ Practical Solution
 
 <div align="center">
 
-  <h2>📊 GitHub Activity & Analytics</h2>
+  <h2>📊 GitHub Activity & Analytics</h2>  
 
+  <img src="./profile-summary-card-output/radical/0-profile-details.svg" alt="Profile Details" width="49%" />
+  <img src="./profile-summary-card-output/radical/3-stats.svg" alt="GitHub Stats" width="49%" />
+
+  
   <!-- Contribution Graph -->
   <a href="https://github.com/awsrmmustansarjavaid">
     <img
@@ -457,14 +461,17 @@ Practical Solution
 
   <br/><br/>
 
-  <!-- Stats Cards -->
-  <img src="https://github-readme-stats.vercel.app/api?username=awsrmmustansarjavaid&show_icons=true&theme=dark&include_all_commits=true&count_private=true" alt="GitHub Stats" width="49%" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=awsrmmustansarjavaid&theme=dark&layout=compact" alt="Top Languages" width="49%" />
+  <!-- GitHub Stats Cards -->
+  <img src="https://github-readme-stats.shion.dev/api?username=awsrmmustansarjavaid&theme=dark&hide_border=false&include_all_commits=true&count_private=true" alt="GitHub Stats" width="49%" />
+  <img src="https://github-readme-stats.shion.dev/api/top-langs/?username=awsrmmustansarjavaid&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact" alt="Top Languages" width="49%" />
 
   <br/><br/>
 
   <!-- Streak -->
   <img src="https://streak-stats.demolab.com/?user=awsrmmustansarjavaid&theme=dark&hide_border=false" alt="GitHub Streak" />
+
+  <!-- Developer Quote Card -->
+  <img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=radical" alt="Random Developer Quote" />
 
 </div>
 
