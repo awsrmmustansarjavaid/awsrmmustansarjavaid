@@ -1,27 +1,70 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Progress Tracker | 90 Days of DevOps</title>
-<meta name="description" content="Progress Tracker - part of the 90 Days of DevOps portal.">
-<meta name="color-scheme" content="dark light">
-<link rel="stylesheet" href="../css/devops-90-days.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Progress Tracker | 90 Days of DevOps</title>
+  <meta name="description" content="Progress Tracker - part of the 90 Days of DevOps portal.">
+  <meta name="color-scheme" content="dark light">
+
+  <!-- Shared portal stylesheet -->
+  <link rel="stylesheet" href="../css/devops-90-days.css">
 </head>
+
+<!--
+  Document page.
+  data-page : tells devops-90-days.js to run the Markdown "document" renderer.
+  data-nav  : highlights the matching link in the main navigation.
+  data-doc  : key of the document to load (see D90.DOCS in devops-90-days-data.js).
+-->
 <body data-page="doc" data-nav="tracker" data-doc="tracker">
-<a class="skip-link" href="#main">Skip to content</a>
-<header id="site-header"></header>
-<noscript><div class="container"><p>This portal needs JavaScript to load the lessons. You can read everything directly in the <a href="https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/tree/main/DEVOPS-90-DAYS">GitHub repository</a>.</p></div></noscript>
-<main id="main">
-<div class="container"><div class="page-hero"><div id="doc-crumbs" class="crumbs"></div><h1 id="doc-title">Progress Tracker</h1><p id="doc-blurb"></p><div class="actions" id="doc-actions"></div></div>
-<div id="dashboard"></div><article id="md" class="md" aria-live="polite"><p class="loading">Loading…</p></article></div>
-</main>
-<footer id="site-footer"></footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="../js/devops-90-days-data.js"></script>
-<script src="../js/devops-90-days-markdown-renderer.js"></script>
-<script src="../js/devops-90-days.js"></script>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Header is injected by devops-90-days.js -->
+  <header id="site-header"></header>
+
+  <noscript>
+    <div class="container">
+      <p>
+        This portal needs JavaScript to load the lessons. You can read everything directly in the
+        <a href="https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/tree/main/DEVOPS-90-DAYS">GitHub repository</a>.
+      </p>
+    </div>
+  </noscript>
+
+  <main id="main">
+    <div class="container">
+
+      <!-- Page title block: title, blurb, breadcrumbs and action buttons are filled in by JavaScript -->
+      <div class="page-hero">
+        <div id="doc-crumbs" class="crumbs"></div>
+        <h1 id="doc-title">Progress Tracker</h1>
+        <p id="doc-blurb"></p>
+        <div class="actions" id="doc-actions"></div>
+      </div>
+
+      <!-- Personal progress dashboard (rendered from browser localStorage) -->
+      <div id="dashboard"></div>
+
+      <!-- Markdown content fetched from the GitHub repository -->
+      <article id="md" class="md" aria-live="polite">
+        <p class="loading">Loading…</p>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Footer is injected by devops-90-days.js -->
+  <footer id="site-footer"></footer>
+
+  <!-- Third-party libraries: Markdown parser, HTML sanitiser, syntax highlighter -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- Portal scripts (order matters: data -> renderer -> page logic) -->
+  <script src="../js/devops-90-days-data.js"></script>
+  <script src="../js/devops-90-days-markdown-renderer.js"></script>
+  <script src="../js/devops-90-days.js"></script>
 </body>
 </html>

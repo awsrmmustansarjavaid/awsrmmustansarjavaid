@@ -1,31 +1,73 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Articles | 90 Days of DevOps</title>
-<meta name="description" content="LinkedIn and Medium articles connected to the 90 Days of DevOps curriculum.">
-<meta name="color-scheme" content="dark light">
-<link rel="stylesheet" href="../css/devops-90-days.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Articles | 90 Days of DevOps</title>
+  <meta name="description" content="LinkedIn and Medium articles connected to the 90 Days of DevOps curriculum.">
+  <meta name="color-scheme" content="dark light">
+
+  <!-- Shared portal stylesheet -->
+  <link rel="stylesheet" href="../css/devops-90-days.css">
 </head>
+
+<!-- data-page="articles" runs pageArticles() in devops-90-days.js -->
 <body data-page="articles" data-nav="articles">
-<a class="skip-link" href="#main">Skip to content</a>
-<header id="site-header"></header>
-<noscript><div class="container"><p>This portal needs JavaScript to load the lessons. You can read everything directly in the <a href="https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/tree/main/DEVOPS-90-DAYS">GitHub repository</a>.</p></div></noscript>
-<main id="main">
-<div class="container">
-<div class="page-hero"><div class="crumbs"><a href="../90-days-devops.html">90 Days</a> › Articles</div><h1>DevOps Knowledge &amp; Articles</h1><p>Technical tutorials, engineering experiences and lessons learned from the 90 days, published on LinkedIn and Medium.</p>
-<div class="actions"><a class="btn primary small" id="p-linkedin" href="#">LinkedIn profile ↗</a><a class="btn small" id="p-medium" href="#">Medium profile ↗</a></div></div>
-<div class="toolbar"><div class="toolbar-row"><input id="a-q" class="field search" type="search" placeholder="Search articles" aria-label="Search articles"></div>
-<div class="toolbar-row" style="margin-top:10px" id="plat-chips" aria-label="Filter by platform"></div><div class="toolbar-row" style="margin-top:8px" id="tag-chips" aria-label="Filter by topic"></div></div>
-<div class="grid cols-3" id="articles"><p class="loading">Loading articles…</p></div></div>
-</main>
-<footer id="site-footer"></footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="../js/devops-90-days-data.js"></script>
-<script src="..//js/devops-90-days-markdown-renderer.js"></script>
-<script src="../js/devops-90-days.js"></script>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Header is injected by devops-90-days.js -->
+  <header id="site-header"></header>
+
+  <noscript>
+    <div class="container">
+      <p>
+        This portal needs JavaScript to load the lessons. You can read everything directly in the
+        <a href="https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/tree/main/DEVOPS-90-DAYS">GitHub repository</a>.
+      </p>
+    </div>
+  </noscript>
+
+  <main id="main">
+    <div class="container">
+
+      <!-- Page title block with links to the author's article profiles -->
+      <div class="page-hero">
+        <div class="crumbs"><a href="../90-days-devops.html">90 Days</a> › Articles</div>
+        <h1>DevOps Knowledge &amp; Articles</h1>
+        <p>Technical tutorials, engineering experiences and lessons learned from the 90 days, published on LinkedIn and Medium.</p>
+        <div class="actions">
+          <a class="btn primary small" id="p-linkedin" href="#">LinkedIn profile ↗</a>
+          <a class="btn small" id="p-medium" href="#">Medium profile ↗</a>
+        </div>
+      </div>
+
+      <!-- Search box plus platform and topic filter chips -->
+      <div class="toolbar">
+        <div class="toolbar-row">
+          <input id="a-q" class="field search" type="search" placeholder="Search articles" aria-label="Search articles">
+        </div>
+        <div class="toolbar-row" style="margin-top:10px" id="plat-chips" aria-label="Filter by platform"></div>
+        <div class="toolbar-row" style="margin-top:8px" id="tag-chips" aria-label="Filter by topic"></div>
+      </div>
+
+      <!-- Article cards (rendered by JavaScript) -->
+      <div class="grid cols-3" id="articles">
+        <p class="loading">Loading articles…</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer is injected by devops-90-days.js -->
+  <footer id="site-footer"></footer>
+
+  <!-- Third-party libraries: Markdown parser, HTML sanitiser, syntax highlighter -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- Portal scripts (order matters: data -> renderer -> page logic) -->
+  <script src="../js/devops-90-days-data.js"></script>
+  <script src="../js/devops-90-days-markdown-renderer.js"></script>
+  <script src="../js/devops-90-days.js"></script>
 </body>
 </html>
