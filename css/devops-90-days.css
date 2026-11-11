@@ -1327,3 +1327,30 @@ select.field option {
   .roadmap-toolbar .field { width: 100%; }
   .lesson-actions .btn { width: 100%; justify-content: center; }
 }
+
+
+/* Repository-backed lesson cards and Markdown code controls. */
+.day-card > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.md .codeblock {
+  position: relative;
+  margin: 1rem 0;
+}
+.md .copy-btn {
+  display: block;
+  margin: 0.35rem 0 0 auto;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border, rgba(255,255,255,.15));
+  border-radius: 8px;
+  background: var(--surface, #202638);
+  color: var(--text, inherit);
+  cursor: pointer;
+  font: inherit;
+  font-size: .8rem;
+}
+.md .copy-btn:hover { filter: brightness(1.12); }
+.learner-tools { margin-top: 2rem; }

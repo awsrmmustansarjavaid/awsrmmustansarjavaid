@@ -33,7 +33,16 @@ window.D90 = window.D90 || {};
     homePage: "index.html",
     challengesPage: "pages/challenges.html",
 
-    // Optional external author profile links. They are never used to load app data.
+    // Published Markdown source. This is a public static-file URL, not the GitHub API.
+    repository: {
+      owner: "awsrmmustansarjavaid",
+      repo: "awsrmmustansarjavaid",
+      branch: "main",
+      contentDir: "DEVOPS-90-DAYS",
+      cacheMinutes: 2
+    },
+
+    // Optional external author profile links.
     profiles: {
       linkedin: "https://www.linkedin.com/in/raja-muhammad-mustansar-javaid/",
       medium: ""

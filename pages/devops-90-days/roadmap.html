@@ -54,7 +54,13 @@
   <!-- No remote Markdown libraries are required. -->
 
   <!-- Local scripts: curriculum data first, then application logic. -->
-  <script src="../../js/devops-90-days-data.js"></script>
-  <script src="../../js/devops-90-days.js"></script>
+  <!-- Markdown libraries: parser + sanitizer. No Jekyll or GitHub API is used. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+
+  <!-- Application scripts: data/config first, repository Markdown loader second, UI last. -->
+  <script defer src="../../js/devops-90-days-data.js"></script>
+  <script defer src="../../js/devops-90-days-markdown.js"></script>
+  <script defer src="../../js/devops-90-days.js"></script>
 </body>
 </html>

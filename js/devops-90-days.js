@@ -168,7 +168,7 @@
       header.innerHTML =
         '<div class="container header-inner">' +
           '<a class="brand" href="' + PORTAL + '">' +
-            '<span class="brand-badge">☁️</span><span>' + esc(C.siteName || 'DevOps Learning') + '</span>' +
+            '<span class="brand-badge">MJ</span><span>' + esc(C.siteName || 'DevOps Learning') + '</span>' +
           '</a>' +
           '<nav class="nav" id="nav" aria-label="Main navigation">' +
             links.map(function (link) {
@@ -193,7 +193,7 @@
       footer.className = 'site-footer';
       footer.innerHTML =
         '<div class="container footer-inner">' +
-          '<span>© ' + new Date().getFullYear() + ' ' + esc(C.siteName || 'Mustansar Javaid — DevOps Engineering Showcase') + ' · 90 Days of DevOps</span>' +
+          '<span>© ' + new Date().getFullYear() + ' ' + esc(C.siteName || 'Mustansar Javaid') + ' · 90 Days of DevOps</span>' +
           '<nav aria-label="Footer navigation">' +
             '<a href="' + ROOT + (C.homePage || 'index.html') + '">Main website</a>' +
             '<a href="' + ROOT + (C.challengesPage || 'pages/challenges.html') + '">Challenges</a>' +
@@ -240,14 +240,15 @@
   function dayCard(day) {
     var completed = Progress.isDone(day.n);
     var bookmarked = Progress.isBookmarked(day.n);
+    var phase = D.PHASES.find(function (item) { return item.id === day.phase; }) || phaseFor(day.n);
     return '<article class="card day-card' + (completed ? ' is-done' : '') + '">' +
       '<div class="day-card-top"><span class="range">DAY ' + pad(day.n) + ' · WEEK ' + pad(day.week) + '</span>' +
-      '<span class="status">' + (completed ? '✓ Completed' : (day.capstone ? '★ Capstone' : day.diff)) + '</span></div>' +
+      '<span class="status">' + (completed ? '✓ Completed' : (day.capstone ? '★ Capstone' : esc(day.diff || 'Lesson'))) + '</span></div>' +
       '<h3><a href="' + dayUrl(day.n) + '">' + esc(day.title) + '</a></h3>' +
-      '<p>' + esc(day.summary) + '</p><div class="tags">' + (day.tags || []).slice(0, 4).map(function (tag) {
-        return '<span class="chip">' + esc(tag) + '</span>';
-      }).join('') + '</div>' +
-      '<div class="day-card-bottom"><span>' + esc(day.tech) + ' · ' + day.mins + ' min</span>' +
+      '<p>' + esc(day.summary || 'Open the lesson to view the full learning guide.') + '</p>' +
+      '<div class="tags"><span class="chip">Phase ' + phase.id + ': ' + esc(day.phaseName || phase.name) + '</span>' +
+      '<span class="chip">' + esc(day.diff || 'Difficulty not specified') + '</span></div>' +
+      '<div class="day-card-bottom"><span>~' + (day.mins || 0) + ' min · ' + esc(day.weekName || ('Week ' + day.week)) + '</span>' +
       '<span>' + (bookmarked ? '🔖 Saved' : '') + '</span></div></article>';
   }
 
@@ -271,6 +272,14 @@
 
     var capstones = D.DAYS.filter(function (day) { return day.capstone; });
     $('#capstones').innerHTML = capstones.map(dayCard).join('');
+
+    // Refresh featured day cards from the authoritative README.md files.
+    if (window.D90MD) {
+      D90MD.loadDayIndex(D.DAYS).then(function () {
+        var latestCapstones = D.DAYS.filter(function (day) { return day.capstone; });
+        if ($('#capstones')) $('#capstones').innerHTML = latestCapstones.map(dayCard).join('');
+      }).catch(function (error) { console.warn('Could not refresh DevOps day metadata:', error); });
+    }
 
     var continueBox = $('#continue');
     if (continueBox) {
@@ -303,7 +312,7 @@
         '<select class="field" id="phase-filter" aria-label="Filter by phase"><option value="">All phases</option>' +
         D.PHASES.map(function (phase) { return '<option value="' + phase.id + '">Phase ' + phase.id + ' — ' + esc(phase.name) + '</option>'; }).join('') +
         '</select><select class="field" id="status-filter" aria-label="Filter by completion"><option value="">All progress</option><option value="done">Completed</option><option value="todo">Not completed</option><option value="saved">Bookmarked</option></select></div>' +
-        '<p id="roadmap-count" class="muted"></p></div>' +
+        '<p id="roadmap-count" class="muted" role="status">Loading the 90 lesson README files…</p></div>' +
       '<div id="roadmap-list"></div>';
 
     function render() {
@@ -311,7 +320,7 @@
       var phase = $('#phase-filter').value;
       var status = $('#status-filter').value;
       var matches = D.DAYS.filter(function (day) {
-        var haystack = [day.title, day.summary, day.tech, (day.tags || []).join(' ')].join(' ').toLowerCase();
+        var haystack = [day.title, day.summary, day.phaseName, day.weekName, day.diff, day.searchText].join(' ').toLowerCase();
         if (q && haystack.indexOf(q) === -1) return false;
         if (phase && String(day.phase) !== phase) return false;
         if (status === 'done' && !Progress.isDone(day.n)) return false;
@@ -319,14 +328,34 @@
         if (status === 'saved' && !Progress.isBookmarked(day.n)) return false;
         return true;
       });
-      $('#roadmap-count').textContent = 'Showing ' + matches.length + ' of ' + D.DAYS.length + ' learning days';
+      $('#roadmap-count').textContent = 'Showing ' + matches.length + ' of ' + D.DAYS.length + ' learning days · titles and lesson summaries synced from README.md';
       $('#roadmap-list').innerHTML = matches.length ? matches.map(dayCard).join('') :
         '<div class="empty"><h3>No lessons match</h3><p>Try changing your search or filters.</p></div>';
     }
+
     ['day-search', 'phase-filter', 'status-filter'].forEach(function (id) {
       $('#' + id).addEventListener(id === 'day-search' ? 'input' : 'change', render);
     });
-    render();
+
+    // Load all 90 individual lesson files; failed files retain their JS fallback metadata.
+    if (window.D90MD) {
+      D90MD.loadDayIndex(D.DAYS, function (completed, total, failed) {
+        $('#roadmap-count').textContent = 'Reading lesson files: ' + completed + '/' + total +
+          (failed.length ? ' · ' + failed.length + ' unavailable' : '');
+      }).then(function (result) {
+        render();
+        if (result.failed.length) {
+          $('#roadmap-count').textContent += ' · Missing files: ' + result.failed.map(pad).join(', ');
+        }
+      }).catch(function (error) {
+        console.error(error);
+        $('#roadmap-count').textContent = 'Could not load repository lesson files. Showing the saved fallback index.';
+        render();
+      });
+    } else {
+      $('#roadmap-count').textContent = 'Markdown loader is missing. Showing saved fallback index.';
+      render();
+    }
   }
 
   /* ------------------------------------------------------------------------
@@ -411,72 +440,89 @@
     var dayNumber = /^\d{1,2}$/.test(query || '') ? Number(query) : NaN;
     var day = D.DAYS[dayNumber - 1];
     var target = $('#md');
-    if (!day || !target) {
+    if (!day || !target || dayNumber < 1 || dayNumber > 90) {
       if (target) target.innerHTML = '<div class="empty"><h2>Lesson not found</h2><a href="' + docUrl(docFor('roadmap')) + '">Return to roadmap</a></div>';
       return;
     }
 
-    var phase = phaseFor(day.n);
-    var week = weekFor(day.n);
-    var tasks = lessonTasks(day);
-    var savedChecks = Progress.checks(day.n);
-    var done = Progress.isDone(day.n);
-    var bookmarked = Progress.isBookmarked(day.n);
+    target.innerHTML = '<p class="loading">Loading Day ' + pad(day.n) + ' from DEVOPS-90-DAYS/' + 'day-' + pad(day.n) + '/README.md…</p>';
 
-    $('#day-title').textContent = 'Day ' + pad(day.n) + ' — ' + day.title;
-    $('#day-subtitle').textContent = day.summary;
-    $('#day-meta').innerHTML = '<span class="chip">Phase ' + phase.id + ': ' + esc(phase.name) + '</span>' +
-      '<span class="chip">Week ' + week.id + ': ' + esc(week.name) + '</span>' +
-      '<span class="chip">' + esc(day.tech) + '</span><span class="chip">' + esc(day.diff) + '</span>' +
-      '<span class="chip">~' + day.mins + ' minutes</span>';
+    var markdownPromise = window.D90MD ? D90MD.loadDay(day.n) : Promise.reject(new Error('Markdown loader is missing.'));
+    markdownPromise.then(function (lesson) {
+      day = D90MD.parseDayMetadata(lesson.text, day);
+      var phase = D.PHASES.find(function (item) { return item.id === day.phase; }) || phaseFor(day.n);
+      var week = D.WEEKS.find(function (item) { return item.id === day.week; }) || weekFor(day.n);
+      var savedChecks = Progress.checks(day.n);
+      var done = Progress.isDone(day.n);
+      var bookmarked = Progress.isBookmarked(day.n);
 
-    target.innerHTML =
-      '<section class="lesson-section"><h2>Learning objective</h2><p>' + esc(day.summary) + '</p>' +
-      '<p>By the end of this session, you should be able to explain the topic, demonstrate it in a safe lab, verify the result and document what you learned.</p></section>' +
-      '<section class="lesson-section"><h2>Topics to cover</h2><div class="tags">' + (day.tags || []).map(function (tag) { return '<span class="chip">' + esc(tag) + '</span>'; }).join('') + '</div>' +
-      '<p>Focus on the purpose of each component, how it fits into a production workflow, common failure modes, security implications and how to verify that it works.</p></section>' +
-      '<section class="lesson-section"><h2>Hands-on practice</h2><ol class="lesson-task-list">' + tasks.map(function (task) { return '<li>' + esc(task) + '</li>'; }).join('') + '</ol></section>' +
-      '<section class="lesson-section"><h2>Completion checklist</h2><p class="muted">Tick each item as you complete it. Your checklist is saved in this browser.</p>' +
-      '<div class="checklist">' + [
-        'I reviewed the concepts and can explain them without copying notes.',
-        'I completed the practical exercise in a safe environment.',
-        'I verified the result and captured useful evidence.',
-        'I documented troubleshooting, security and cleanup considerations.'
-      ].map(function (label, index) {
-        return '<label class="check-row"><input type="checkbox" data-check="' + index + '"' + (savedChecks[index] ? ' checked' : '') + '> <span>' + label + '</span></label>';
-      }).join('') + '</div></section>' +
-      '<section class="lesson-section"><h2>My learning notes</h2><textarea id="day-notes" class="field notes-field" rows="7" placeholder="Record commands, observations, mistakes, solutions and questions...">' + esc(Progress.notes(day.n)) + '</textarea>' +
-      '<p class="muted">Notes are stored locally in this browser and are not uploaded.</p></section>' +
-      '<div class="lesson-actions"><button class="btn primary" id="complete-btn" type="button">' + (done ? '✓ Completed — mark incomplete' : 'Mark day complete') + '</button>' +
-      '<button class="btn" id="bookmark-btn" type="button">' + (bookmarked ? '🔖 Remove bookmark' : '☆ Bookmark day') + '</button>' +
-      '<button class="btn" id="print-btn" type="button">Print / Save PDF</button>' +
-      '<a class="btn" href="' + docUrl(docFor('roadmap')) + '">Back to roadmap</a></div>' +
-      '<nav class="lesson-pager" aria-label="Lesson navigation">' +
-      (day.n > 1 ? '<a class="btn small" href="' + dayUrl(day.n - 1) + '">← Previous day</a>' : '<span></span>') +
-      (day.n < 90 ? '<a class="btn small" href="' + dayUrl(day.n + 1) + '">Next day →</a>' : '<a class="btn small" href="' + PORTAL + '">Finish journey →</a>') +
-      '</nav>';
+      $('#day-title').textContent = 'Day ' + pad(day.n) + ' — ' + day.title;
+      $('#day-subtitle').textContent = day.summary || 'Daily DevOps learning lesson.';
+      $('#day-meta').innerHTML = '<span class="chip">Phase ' + phase.id + ': ' + esc(day.phaseName || phase.name) + '</span>' +
+        '<span class="chip">Week ' + week.id + ': ' + esc(day.weekName || week.name) + '</span>' +
+        '<span class="chip">' + esc(day.tech || 'DevOps') + '</span><span class="chip">' + esc(day.diff || 'Not specified') + '</span>' +
+        '<span class="chip">~' + (day.mins || 0) + ' minutes</span>';
 
-    $$('[data-check]', target).forEach(function (box) {
-      box.addEventListener('change', function () {
-        var checks = [0, 1, 2, 3].map(function (index) {
-          var input = $('[data-check="' + index + '"]', target);
-          return !!(input && input.checked);
+      // Avoid repeating the README's H1 because the page hero already displays it.
+      var markdownBody = lesson.text.replace(/^#\s+Day\s+0?\d{1,2}[^\n]*\n+/, '');
+      D90MD.renderInto(target, markdownBody, { directory: lesson.directory });
+
+      var controls = document.createElement('section');
+      controls.className = 'lesson-section learner-tools';
+      controls.innerHTML =
+        '<h2>Your learning progress</h2>' +
+        '<p class="muted">Your completion status, personal checklist and notes are saved in this browser only.</p>' +
+        '<div class="checklist">' + [
+          'I completed the practical labs in the README.',
+          'I tested the commands or configuration myself.',
+          'I recorded evidence and troubleshooting notes.',
+          'I can explain the key concepts without copying.'
+        ].map(function (label, index) {
+          return '<label class="check-row"><input type="checkbox" data-check="' + index + '"' + (savedChecks[index] ? ' checked' : '') + '> <span>' + label + '</span></label>';
+        }).join('') + '</div>' +
+        '<h3>My private learning notes</h3>' +
+        '<textarea id="day-notes" class="field notes-field" rows="7" placeholder="Record your commands, observations, mistakes, solutions and questions…">' + esc(Progress.notes(day.n)) + '</textarea>' +
+        '<p class="muted">Notes are not uploaded to GitHub or any server.</p>' +
+        '<div class="lesson-actions">' +
+          '<button class="btn primary" id="complete-btn" type="button">' + (done ? '✓ Completed — mark incomplete' : 'Mark day complete') + '</button>' +
+          '<button class="btn" id="bookmark-btn" type="button">' + (bookmarked ? '🔖 Remove bookmark' : '☆ Bookmark day') + '</button>' +
+          '<button class="btn" id="print-btn" type="button">Print / Save PDF</button>' +
+          '<a class="btn" href="' + docUrl(docFor('roadmap')) + '">Back to roadmap</a>' +
+        '</div>' +
+        '<nav class="lesson-pager" aria-label="Lesson navigation">' +
+          (day.n > 1 ? '<a class="btn small" href="' + dayUrl(day.n - 1) + '">← Previous day</a>' : '<span></span>') +
+          (day.n < 90 ? '<a class="btn small" href="' + dayUrl(day.n + 1) + '">Next day →</a>' : '<a class="btn small" href="' + PORTAL + '">Finish journey →</a>') +
+        '</nav>';
+      target.appendChild(controls);
+
+      $$('[data-check]', controls).forEach(function (box) {
+        box.addEventListener('change', function () {
+          var checks = [0, 1, 2, 3].map(function (index) {
+            var input = $('[data-check="' + index + '"]', controls);
+            return !!(input && input.checked);
+          });
+          Progress.setChecks(day.n, checks);
         });
-        Progress.setChecks(day.n, checks);
       });
+      $('#day-notes', controls).addEventListener('input', function (event) { Progress.setNotes(day.n, event.target.value); });
+      $('#complete-btn', controls).addEventListener('click', function () {
+        Progress.setDone(day.n, !Progress.isDone(day.n));
+        toast(Progress.isDone(day.n) ? 'Day marked complete.' : 'Completion status updated.');
+        pageDay();
+      });
+      $('#bookmark-btn', controls).addEventListener('click', function () {
+        Progress.toggleBookmark(day.n);
+        toast(Progress.isBookmarked(day.n) ? 'Day bookmarked.' : 'Bookmark removed.');
+        pageDay();
+      });
+      $('#print-btn', controls).addEventListener('click', function () { window.print(); });
+    }).catch(function (error) {
+      console.error('Unable to load Day ' + dayNumber + ' README:', error);
+      target.innerHTML = '<div class="empty"><h2>Lesson content unavailable</h2>' +
+        '<p>The README.md file could not be loaded. Check that the file exists and the repository has published the latest commit.</p>' +
+        '<p><a href="' + D90MD.rawUrl(D90MD.dayPath(dayNumber)) + '" target="_blank" rel="noopener noreferrer">Open the source README on GitHub</a></p>' +
+        '<a class="btn" href="' + docUrl(docFor('roadmap')) + '">Return to roadmap</a></div>';
     });
-    $('#day-notes').addEventListener('input', function (event) { Progress.setNotes(day.n, event.target.value); });
-    $('#complete-btn').addEventListener('click', function () {
-      Progress.setDone(day.n, !Progress.isDone(day.n));
-      toast(Progress.isDone(day.n) ? 'Day marked complete.' : 'Completion status updated.');
-      pageDay();
-    });
-    $('#bookmark-btn').addEventListener('click', function () {
-      Progress.toggleBookmark(day.n);
-      toast(Progress.isBookmarked(day.n) ? 'Day bookmarked.' : 'Bookmark removed.');
-      pageDay();
-    });
-    $('#print-btn').addEventListener('click', function () { window.print(); });
   }
 
   /* ------------------------------------------------------------------------
@@ -517,7 +563,7 @@
     } else if (key === 'assessments') {
       html = '<h2>Assessment method</h2><p>Do not measure progress only by watching tutorials. For each topic, produce evidence that you can explain, implement, troubleshoot and document the work.</p><ol><li>Concept explanation in your own words.</li><li>Working practical demonstration.</li><li>Verification and troubleshooting evidence.</li><li>Security, cost and operational considerations.</li><li>Clear documentation and repeatable steps.</li></ol><h2>Capstone review</h2><p>Review the three capstone groups in the roadmap and keep architecture diagrams, source code, deployment evidence, test results and runbooks together in a portfolio.</p>';
     } else if (key === 'mapping') {
-      html = '<h2>Curriculum structure</h2><p>This portal now uses its own bundled JavaScript curriculum index and local browser storage. It does not fetch Markdown files from a repository at runtime.</p><p>The original source repository can remain your version-control and backup location, but it is not a runtime dependency of this learning portal.</p><h2>Local application files</h2><ul><li><code>js/devops-90-days-data.js</code> — 90-day curriculum metadata.</li><li><code>js/devops-90-days.js</code> — interface and application logic.</li><li><code>css/devops-90-days.css</code> — shared responsive theme.</li><li><code>data/devops-articles.json</code> — optional local article catalogue.</li><li><code>localStorage</code> — learner progress, bookmarks and notes.</li></ul>';
+      html = '<h2>Curriculum structure</h2><p>The DEVOPS-90-DAYS directory is the authoritative source for daily lesson content. The portal reads each day README.md directly as a public static file; it does not use the GitHub API or a custom workflow.</p><h2>Application files</h2><ul><li><code>DEVOPS-90-DAYS/day-NN/README.md</code> — daily lesson source and card metadata.</li><li><code>js/devops-90-days-data.js</code> — phase/week grouping and fallback metadata.</li><li><code>js/devops-90-days-markdown.js</code> — repository loader and Markdown renderer.</li><li><code>js/devops-90-days.js</code> — interface and application logic.</li><li><code>css/devops-90-days.css</code> — shared responsive theme.</li><li><code>localStorage</code> — learner progress, bookmarks and notes.</li></ul>';
     } else if (key === 'glossary') {
       var glossary = [
         ['CI/CD','Continuous Integration and Continuous Delivery/Deployment.'],
