@@ -193,7 +193,7 @@
       footer.className = 'site-footer';
       footer.innerHTML =
         '<div class="container footer-inner">' +
-          '<span>© ' + new Date().getFullYear() + ' ' + esc(C.siteName || 'Mustansar Javaid') + ' · 90 Days of DevOps</span>' +
+          '<span>© ' + new Date().getFullYear() + ' ' + esc(C.siteName || 'Mustansar Javaid — DevOps Engineering Showcase') + ' · 90 Days of DevOps</span>' +
           '<nav aria-label="Footer navigation">' +
             '<a href="' + ROOT + (C.homePage || 'index.html') + '">Main website</a>' +
             '<a href="' + ROOT + (C.challengesPage || 'pages/challenges.html') + '">Challenges</a>' +
