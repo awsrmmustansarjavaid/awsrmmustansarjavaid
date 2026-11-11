@@ -5,6 +5,7 @@ location: Islamabad, Pakistan
 linkedin: https://www.linkedin.com/in/rajamuhammadmustansarjavaid/
 linkedin_journey: https://www.linkedin.com/in/raja-muhammad-mustansar-javaid/
 github: https://github.com/awsrmmustansarjavaid
+medium: https://medium.com/@mjitalki  
 focus: Cloud | DevOps | Automation
 avatar: assets/images/avatar.jpg
 quote: Automate. Deploy. Scale.
