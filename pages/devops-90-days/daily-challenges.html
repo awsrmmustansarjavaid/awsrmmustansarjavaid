@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Challenges | 90 Days of DevOps</title>
+<meta name="description" content="Search and filter all 90 daily DevOps lessons.">
+<meta name="color-scheme" content="dark light">
+<link rel="stylesheet" href="../css/devops-90-days.css">
+</head>
+<body data-page="daily" data-nav="daily">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<noscript><div class="container"><p>This portal needs JavaScript to load the lessons. You can read everything directly in the <a href="https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/tree/main/DEVOPS-90-DAYS">GitHub repository</a>.</p></div></noscript>
+<main id="main">
+<div class="container">
+<div class="page-hero"><div class="crumbs"><a href="../90-days-devops.html">90 Days</a> › Daily Challenges</div><h1>Daily Challenges</h1><p>Ninety lessons, each with objectives, labs, a real-world scenario, troubleshooting, interview questions and a GitHub checklist. Press <kbd>/</kbd> to search.</p></div>
+<div class="toolbar" role="search" aria-label="Filter daily lessons"><div class="toolbar-row">
+<input id="f-q" class="field search" type="search" placeholder="Search by day, topic or tool (e.g. 42, terraform, vpc)" aria-label="Search lessons">
+<select id="f-phase" class="field" aria-label="Phase"></select><select id="f-tech" class="field" aria-label="Technology"></select><select id="f-diff" class="field" aria-label="Difficulty"></select>
+<select id="f-status" class="field" aria-label="Status"><option value="">Any status</option><option value="todo">Not started</option><option value="progress">In progress</option><option value="done">Completed</option></select>
+<button id="f-bm" class="chip button" type="button" aria-pressed="false">★ Bookmarked</button><button id="f-reset" class="btn small" type="button">Reset</button><span id="count" class="result-count" aria-live="polite"></span></div></div>
+<div id="days"><p class="loading">Loading…</p></div></div>
+</main>
+<footer id="site-footer"></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="../js/devops-90-days-data.js"></script>
+<script src="../js/devops-90-days-markdown-renderer.js"></script>
+<script src="../js/devops-90-days.js"></script>
+</body>
+</html>
