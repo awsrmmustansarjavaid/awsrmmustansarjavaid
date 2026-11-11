@@ -664,16 +664,51 @@
   function pageArticles() {
     var linkedin = $('#p-linkedin');
     var medium = $('#p-medium');
-    if (linkedin && C.profiles && C.profiles.linkedin) {
-      linkedin.href = C.profiles.linkedin;
-      linkedin.target = '_blank';
-      linkedin.rel = 'noopener noreferrer';
-    } else if (linkedin) { linkedin.hidden = true; }
-    if (medium && C.profiles && C.profiles.medium) {
-      medium.href = C.profiles.medium;
-      medium.target = '_blank';
-      medium.rel = 'noopener noreferrer';
-    } else if (medium) { medium.hidden = true; }
+    // Read profile links from the central about.md file.
+    loadAboutProfile()
+      .then(function (profile) {
+        var linkedinUrl = profile.linkedin;
+        var mediumUrl = profile.medium;
+
+        // Preserve existing configuration as a fallback.
+        if (!linkedinUrl && C.profiles) {
+          linkedinUrl = C.profiles.linkedin;
+        }
+
+        if (!mediumUrl && C.profiles) {
+          mediumUrl = C.profiles.medium;
+        }
+
+        if (linkedin && linkedinUrl) {
+          linkedin.href = linkedinUrl;
+          linkedin.target = '_blank';
+          linkedin.rel = 'noopener noreferrer';
+          linkedin.hidden = false;
+        }
+
+        if (medium && mediumUrl) {
+          medium.href = mediumUrl;
+          medium.target = '_blank';
+          medium.rel = 'noopener noreferrer';
+          medium.hidden = false;
+        }
+      })
+      .catch(function (error) {
+        console.error('Profile loading failed:', error);
+
+        // Keep the existing configuration as a fallback.
+        if (linkedin && C.profiles && C.profiles.linkedin) {
+          linkedin.href = C.profiles.linkedin;
+          linkedin.target = '_blank';
+          linkedin.rel = 'noopener noreferrer';
+        }
+
+        if (medium && C.profiles && C.profiles.medium) {
+          medium.href = C.profiles.medium;
+          medium.target = '_blank';
+          medium.rel = 'noopener noreferrer';
+        }
+      });
 
     var search = $('#a-q');
     var platform = '';
@@ -715,6 +750,56 @@
       render();
     });
   }
+
+
+  /**
+   * Load public profile information from activity/profile/about.md.
+   * Supports simple YAML front matter without requiring a Markdown library.
+   */
+  function loadAboutProfile() {
+    var profileUrl = new URL(
+      '../../activity/profile/about.md',
+      window.location.href
+    );
+
+    return fetch(profileUrl.href, { cache: 'no-cache' })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error(
+            'Unable to load about.md: HTTP ' + response.status
+          );
+        }
+
+        return response.text();
+      })
+      .then(function (markdown) {
+        var match = markdown.match(
+          /^---\s*\r?\n([\s\S]*?)\r?\n---/
+        );
+
+        if (!match) {
+          throw new Error('YAML front matter not found in about.md');
+        }
+
+        var profile = {};
+
+        match[1].split(/\r?\n/).forEach(function (line) {
+          var field = line.match(/^([a-zA-Z0-9_-]+):\s*(.*?)\s*$/);
+
+          if (!field) return;
+
+          var value = field[2].trim();
+
+          // Remove optional surrounding quotes.
+          value = value.replace(/^(['"])(.*)\1$/, '$2');
+
+          profile[field[1]] = value;
+        });
+
+        return profile;
+      });
+  }
+
 
   /* ------------------------------------------------------------------------
      Application bootstrap
