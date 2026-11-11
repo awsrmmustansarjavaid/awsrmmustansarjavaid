@@ -15,11 +15,12 @@ window.D90 = window.D90 || {};
   'use strict';
 
   /*
-   * Site root: two directories above this script's own URL. Resolving it from
-   * the script tag keeps links working under any GitHub Pages base path.
+   * Site root: this file lives in /js/, so the root is one directory above the
+   * script's own URL. Resolving it from the script tag keeps every link working
+   * under any GitHub Pages base path (user site or project site).
    */
   var script = document.currentScript;
-  D.SITE_ROOT = script && script.src ? new URL('../../', script.src).href : '/';
+  D.SITE_ROOT = script && script.src ? new URL('../', script.src).href : '/';
 
   /* ======================================================================
      CONFIG - the only block you normally need to edit
@@ -36,14 +37,16 @@ window.D90 = window.D90 || {};
     branch: "main",
     contentDir: "DEVOPS-90-DAYS",
 
-    // Home page of the main site, relative to the site root
+    // Home page and Challenges page of the main site, relative to the site root
     homePage: "index.html",
+    challengesPage: "pages/challenges.html",
 
-    // TODO: replace the placeholder values with your real profile URLs.
-    // Entries that still contain "YOUR-" are hidden automatically.
+    // Profile links shown in the footer and on the Articles page.
+    // The LinkedIn URL is the DevOps-journey account from js/config.js.
+    // TODO: replace the Medium placeholder; entries containing "YOUR-" are hidden automatically.
     profiles: {
       github: "https://github.com/awsrmmustansarjavaid",
-      linkedin: "https://www.linkedin.com/in/YOUR-LINKEDIN-USERNAME/",
+      linkedin: "https://www.linkedin.com/in/raja-muhammad-mustansar-javaid/",
       medium: "https://medium.com/@YOUR-MEDIUM-USERNAME"
     }
   };

@@ -267,6 +267,7 @@
           '<span>© ' + new Date().getFullYear() + ' ' + esc(C.siteName) + ' · 90 Days of DevOps</span>' +
           '<nav aria-label="Footer">' +
             '<a href="' + ROOT + C.homePage + '">← Back to Home</a>' +
+            '<a href="' + ROOT + C.challengesPage + '">Challenges</a>' +
             external(profiles.github, 'GitHub') +
             external(profiles.linkedin, 'LinkedIn') +
             external(profiles.medium, 'Medium') +
@@ -308,11 +309,11 @@
 
   var articlesCache = null; // loaded once, then reused
 
-  /** Load the article list from assets/data/devops-articles.json (empty list on any error). */
+  /** Load the article list from data/devops-articles.json (empty list on any error). */
   async function loadArticles() {
     if (articlesCache) return articlesCache;
     try {
-      var response = await fetch(ROOT + 'assets/data/devops-articles.json', { cache: 'no-cache' });
+      var response = await fetch(ROOT + 'data/devops-articles.json', { cache: 'no-cache' });
       if (!response.ok) throw new Error(response.status);
       var json = await response.json();
       articlesCache = Array.isArray(json) ? json : [];
@@ -446,7 +447,7 @@
 
       container.innerHTML = latest.length
         ? latest.map(articleCard).join('')
-        : '<div class="empty">Articles will appear here. Add them to <code>assets/data/devops-articles.json</code>.</div>';
+        : '<div class="empty">Articles will appear here. Add them to <code>data/devops-articles.json</code>.</div>';
     });
   }
 
@@ -837,7 +838,7 @@
 
       var emptyText = articles.length
         ? 'No articles match.'
-        : 'No articles yet. Add records to <code>assets/data/devops-articles.json</code>.';
+        : 'No articles yet. Add records to <code>data/devops-articles.json</code>.';
       grid.innerHTML = list.length ? list.map(articleCard).join('') : '<div class="empty">' + emptyText + '</div>';
 
       renderChips();
