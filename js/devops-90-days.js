@@ -168,7 +168,7 @@
       header.innerHTML =
         '<div class="container header-inner">' +
           '<a class="brand" href="' + PORTAL + '">' +
-            '<span class="brand-badge">MJ</span><span>' + esc(C.siteName || 'DevOps Learning') + '</span>' +
+            '<span class="brand-badge">☁️</span><span>' + esc(C.siteName || 'DevOps Learning') + '</span>' +
           '</a>' +
           '<nav class="nav" id="nav" aria-label="Main navigation">' +
             links.map(function (link) {
