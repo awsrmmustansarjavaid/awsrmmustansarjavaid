@@ -44,6 +44,10 @@
   <a href="https://awsrmmustansarjavaid.github.io/awsrmmustansarjavaid/">
     <img src="https://img.shields.io/badge/DevOps-Showcase-0f172a?style=flat&logo=googlechrome&logoColor=white" alt="DevOps Showcase"/>
   </a>
+  &nbsp;
+  <p align="center">
+    <img src="https://komarev.com/ghpvc/?username=awsrmmustansarjavaid&label=⚡%20Profile%20Views&color=00d2ff&style=for-the-badge" alt="Profile Views" />    
+  </p>
 </p>
 
 ---
@@ -58,53 +62,146 @@ My current focus is on building practical DevOps environments around:
 
 ---
 
+<div align="center">
+
+<table width="100%">
+  <thead>
+    <tr>
+      <th width="50%"><h3>⚡ Core Competencies</h3></th>
+      <th width="50%"><h3>🚀 Engineering Highlights</h3></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td valign="top" align="left">
+        <br/>
+        🔹 <b>Linux Administration</b> & Scripting<br/><br/>
+        🔹 <b>Git & GitHub Automation</b> Workflows<br/><br/>
+        🔹 <b>Docker & Containerization</b><br/><br/>
+        🔹 <b>AWS & Multi-Cloud</b> Architecture<br/><br/>
+        🔹 <b>CI/CD Pipelines</b> (GitHub Actions)<br/><br/>
+        🔹 <b>DevSecOps</b> & Vulnerability Scanning<br/><br/>
+        🔹 <b>Bash & Python</b> Automation<br/><br/>
+        🔹 <b>Infrastructure as Code</b> (Terraform)<br/><br/>
+        🔹 <b>Observability</b> (Prometheus & Grafana)<br/><br/>
+        🔹 <b>Networking</b> & Web Servers (Nginx / Apache)<br/>
+        <br/>
+      </td>
+      <td valign="top" align="left">
+        <br/>
+        🏗️ <b>Production-Ready Infrastructure:</b><br/>Architecting resilient & high-availability cloud systems.<br/><br/>
+        ☸️ <b>Container Orchestration:</b><br/>Managing workloads with Docker & Kubernetes.<br/><br/>
+        🛡️ <b>Shift-Left Security:</b><br/>Embedding SAST & vulnerability scans in CI/CD workflows.<br/><br/>
+        📜 <b>Automation & IaC:</b><br/>Deploying reproducible environments using Terraform & Ansible.<br/><br/>
+        🤝 <b>Open for Opportunities:</b><br/>Available for DevOps, DevSecOps, SRE, and Cloud Engineering roles.<br/>
+        <br/>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+---
+
 ## 🛠️ DevOps Technology Stack
 
-### ☁️ Cloud & Infrastructure
+<div align="center">
 
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=aws,azure,terraform" />
-</p>
+  <h2>💻 Tech Stack & Ecosystem</h2>
 
-<p align="center">
-  <strong>AWS • Azure • Terraform • CloudFormation • VPC • EC2 • S3 • RDS • IAM • Secrets Manager</strong>
-</p>
+  <!-- Animated Skill Icons Grid -->
+  <p align="center">
+    <a href="https://skillicons.dev">
+      <img src="https://skillicons.dev/icons?i=aws,azure,gcp,cloudflare,vercel,docker,kubernetes,terraform,ansible,githubactions,nginx,linux,py,bash,nodejs,express,fastapi,flutter,postgres,mongodb,mysql,supabase,firebase,git,github,gitlab,postman,figma,prometheus,grafana&theme=dark" alt="Rayyan's Tech Stack Icons" />
+    </a>
+  </p>
 
-### 🐳 Containers & Orchestration
+  <br/>
 
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=docker,kubernetes,helm" />
-</p>
+  <h3>☁️ Cloud & Hosting Platform</h3>
+  <p align="center">
+    <img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS" />
+    <img src="https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white" alt="Azure" />
+    <img src="https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white" alt="GCP" />
+    <img src="https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white" alt="Cloudflare" />
+    <img src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+    <img src="https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white" alt="Render" />
+    <img src="https://img.shields.io/badge/netlify-%23000000.svg?style=for-the-badge&logo=netlify&logoColor=#00C7B7" alt="Netlify" />
+  </p>
 
-<p align="center">
-  <strong>Docker • Kubernetes • Helm • Containerization • Kubernetes Workloads • Amazon EKS</strong>
-</p>
+  <br/>
 
-### 🔄 CI/CD & Automation
+  <h3>🐳 DevOps, Containers & IaC</h3>
+  <p align="center">
+    <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+    <img src="https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes" />
+    <img src="https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white" alt="Terraform" />
+    <img src="https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white" alt="Ansible" />
+    <img src="https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions" />
+    <img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white" alt="Nginx" />
+    <img src="https://img.shields.io/badge/apache-%23D42029.svg?style=for-the-badge&logo=apache&logoColor=white" alt="Apache" />
+  </p>
 
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=githubactions,jenkins,ansible,bash" />
-</p>
+  <br/>
 
-<p align="center">
-  <strong>GitHub Actions • Jenkins • Ansible • Bash • CI/CD Pipelines • Deployment Automation</strong>
-</p>
+  <h3>🛡️ DevSecOps & Security Tools</h3>
+  <p align="center">
+    <img src="https://img.shields.io/badge/Trivy-007ACC?style=for-the-badge&logo=aquasecurity&logoColor=white" alt="Trivy" />
+    <img src="https://img.shields.io/badge/Semgrep-000000?style=for-the-badge&logo=semgrep&logoColor=white" alt="Semgrep" />
+    <img src="https://img.shields.io/badge/CodeQL-181717?style=for-the-badge&logo=github&logoColor=white" alt="CodeQL" />
+    <img src="https://img.shields.io/badge/Gitleaks-202020?style=for-the-badge&logo=shield&logoColor=white" alt="Gitleaks" />
+    <img src="https://img.shields.io/badge/TruffleHog-FF5722?style=for-the-badge&logo=security&logoColor=white" alt="TruffleHog" />
+    <img src="https://img.shields.io/badge/Checkov-5A29E4?style=for-the-badge&logo=bridgecrew&logoColor=white" alt="Checkov" />
+    <img src="https://img.shields.io/badge/SonarQube-4E9BCD?style=for-the-badge&logo=sonarqube&logoColor=white" alt="SonarQube" />
+  </p>
 
-### 🔐 DevSecOps
+  <br/>
 
-<p align="center">
-  <strong>SonarQube • OWASP Dependency-Check • Trivy • Container Security • Secrets Management</strong>
-</p>
+  <h3>📊 Monitoring & Observability</h3>
+  <p align="center">
+    <img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white" alt="Prometheus" />
+    <img src="https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white" alt="Grafana" />
+  </p>
 
-### 📊 Monitoring & Observability
+  <br/>
 
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=prometheus,grafana" />
-</p>
+  <h3>📜 Languages & Frameworks</h3>
+  <p align="center">
+    <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+    <img src="https://img.shields.io/badge/GNU%20Bash-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white" alt="Bash" />
+    <img src="https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white" alt="NodeJS" />
+    <img src="https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB" alt="Express.js" />
+    <img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
+    <img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white" alt="Flutter" />
+  </p>
 
-<p align="center">
-  <strong>Prometheus • Grafana • Metrics • Dashboards • Infrastructure Monitoring</strong>
-</p>
+  <br/>
+
+  <h3>🗄️ Databases & BaaS</h3>
+  <p align="center">
+    <img src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+    <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+    <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+    <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+    <img src="https://img.shields.io/badge/firebase-a08021?style=for-the-badge&logo=firebase&logoColor=ffcd34" alt="Firebase" />
+  </p>
+
+  <br/>
+
+  <h3>🛠️ OS, Tools & Collaboration</h3>
+  <p align="center">
+    <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux" />
+    <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
+    <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
+    <img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white" alt="GitLab" />
+    <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" alt="Postman" />
+    <img src="https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white" alt="Jira" />
+    <img src="https://img.shields.io/badge/Figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" alt="Figma" />
+    <img src="https://img.shields.io/badge/Canva-%2300C4CC.svg?style=for-the-badge&logo=Canva&logoColor=white" alt="Canva" />
+  </p>
+
+</div>
 
 ---
 
