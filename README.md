@@ -479,10 +479,60 @@ Practical Solution
     </tr>
   </table>
 
-  <!-- Animated Activity Graph Widget -->
-  <h2>📈 GitHub Activity Graph</h2>
+  
+  
+  <!-- GitHub Activity Statistics -->
+  <h2 align="center">📈 GitHub Activity & Statistics</h2>
 
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=awsrmmustansarjavaid&theme=react-dark&hide_border=true&area=true" alt="GitHub Activity Graph" width="100%" />
+  <table align="center">
+    <tr>
+      <th>📊 Activity</th>
+      <th>📌 Statistics</th>
+      <th>📈 Status</th>
+    </tr>
+    <tr>
+      <td>👀 Profile Visitors</td>
+      <td>
+        <img src="https://komarev.com/ghpvc/?username=awsrmmustansarjavaid&style=flat-square&color=blue" />
+      </td>
+      <td>🔵 Tracking</td>
+    </tr>
+    <tr>
+      <td>📦 Public Repositories</td>
+      <td>
+        <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Fusers%2Fawsrmmustansarjavaid&query=%24.public_repos&label=Repositories&color=blue&style=flat-square" />
+      </td>
+      <td>🟢 Active</td>
+    </tr>
+    <tr>
+      <td>⭐ Total Stars</td>
+      <td>
+        <img src="https://img.shields.io/github/stars/awsrmmustansarjavaid?style=flat-square" />
+      </td>
+      <td>⭐ Growing</td>
+    </tr>
+    <tr>
+      <td>👥 Followers</td>
+      <td>
+        <img src="https://img.shields.io/github/followers/awsrmmustansarjavaid?style=flat-square" />
+      </td>
+      <td>🌐 Community</td>
+    </tr>
+    <tr>
+      <td>💻 Contributions</td>
+      <td>GitHub Contribution History</td>
+      <td>🔥 Active</td>
+    </tr>
+  </table>
+
+  <p align="center">
+    <img src="https://github-readme-stats.vercel.app/api?username=awsrmmustansarjavaid&show_icons=true&theme=radical&hide_border=true" width="100%" />
+  </p>
+
+  <p align="center">
+    <img src="https://github-readme-streak-stats.herokuapp.com/?user=awsrmmustansarjavaid&theme=radical&hide_border=true" width="100%" />
+  </p>
+
 
 
   <br/><br/>
