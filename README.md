@@ -19,6 +19,16 @@
   Raja Muhammad Mustansar Javaid 👋
 </h1>
 
+
+<!-- Dynamic Typing SVG - DevOps Engineer -->
+<p align="center">
+  <a href="https://git.io/typing-svg">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=22&pause=1000&color=EC4899&center=true&vCenter=true&width=800&lines=DevOps+Engineer+%7C+Cloud+Infrastructure;CI%2FCD+%7C+Automation+%7C+Infrastructure+as+Code;Docker+%7C+Kubernetes+%7C+Terraform;AWS+%7C+Azure+%7C+Google+Cloud;Linux+%7C+Jenkins+%7C+GitHub+Actions;DevSecOps+%7C+Monitoring+%7C+Observability;Automate+%E2%80%A2+Deploy+%E2%80%A2+Scale+%E2%80%A2+Secure" 
+         alt="DevOps Engineer Typing SVG" />
+  </a>
+</p>
+
+
 <h3 align="center">
   DevOps Engineer — Cloud Infrastructure & Automation
 </h3>
