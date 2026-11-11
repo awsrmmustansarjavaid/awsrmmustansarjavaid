@@ -1,0 +1,32 @@
+[
+  {
+    "title": "SAMPLE: My 90 Days of DevOps Engineering Journey",
+    "platform": "LinkedIn",
+    "date": "2026-11-10",
+    "category": "DevOps",
+    "tags": [
+      "DevOps",
+      "Learning",
+      "AWS"
+    ],
+    "summary": "Sample record - replace with your real LinkedIn article.",
+    "url": "https://www.linkedin.com/pulse/YOUR-ARTICLE-URL",
+    "relatedDay": 1,
+    "sample": true
+  },
+  {
+    "title": "SAMPLE: Building a Secure CI/CD Pipeline",
+    "platform": "Medium",
+    "date": "2026-11-10",
+    "category": "CI/CD",
+    "tags": [
+      "CI/CD",
+      "Docker",
+      "DevSecOps"
+    ],
+    "summary": "Sample record - replace with your real Medium article.",
+    "url": "https://medium.com/@YOUR-MEDIUM-USERNAME/YOUR-ARTICLE-URL",
+    "relatedDay": 47,
+    "sample": true
+  }
+]
