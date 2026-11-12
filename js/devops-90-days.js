@@ -181,7 +181,7 @@
       ['challenge', 'Challenge', ROOT + (C.challengesPage || 'pages/challenges.html'), '🚀'],
 
       // DevOps notes page (NEW) - set C.notesPage in the data file to change the path
-      ['notes', 'Notes', ROOT + (C.notesPage || 'pages/devops-notes.html'), '📝']
+      ['notes', 'Notes', ROOT + (C.notesPage || 'pages/devops-90-days/devops-notes.html'), '📝']
     ];
 
     var header = $('#site-header');
