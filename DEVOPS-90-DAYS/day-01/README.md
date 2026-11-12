@@ -247,7 +247,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🚀 Day 01 - Beginning My #90DaysOfDevOps Journey
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -401,6 +401,229 @@ I will be documenting my learning journey every day.
 Let's grow together! 🚀
 
 #90DaysOfDevOps #DevOps #Linux #Cloud #Docker #Kubernetes #AWS #LearningInPublic
+
+## 19. Challenge Notes — Day 1: Introduction to DevOps and Cloud Computing
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### What is DevOps?
+- DevOps is a set of practices that combines software development (Dev) and IT operations (Ops).
+- It aims to shorten the development lifecycle and deliver high-quality software continuously.
+- Key principles: Collaboration, Automation, Continuous Integration (CI), Continuous Deployment (CD), Monitoring.
+
+#### Why DevOps?
+- Faster software delivery.
+- Improved collaboration between teams.
+- Increased deployment frequency and reliability.
+- Enhanced security and compliance.
+
+#### Understanding Cloud Computing
+- Cloud computing delivers computing services over the internet.
+- Types of Cloud:
+  - **Public Cloud** (AWS, Azure, GCP)
+  - **Private Cloud** (On-premise, VMware, OpenStack)
+  - **Hybrid Cloud** (Combination of both)
+
+#### Benefits of Cloud Computing
+- Scalability: Resources can be scaled up/down as needed.
+- Cost Efficiency: Pay for what you use.
+- Security: Cloud providers ensure high security.
+- Disaster Recovery: Cloud backups improve business continuity.
+
+#### DevOps vs Traditional IT
+| Feature        | Traditional IT | DevOps |
+|--------------|--------------|--------|
+| Development & Ops Team | Separate | Integrated |
+| Deployment Frequency | Low | High |
+| Automation | Minimal | Extensive |
+| Collaboration | Siloed | Continuous |
+
+#### Hands-on Activities
+- Install Git and setup a GitHub repository.
+- Create and push a simple project to GitHub.
+
+#### Homework
+- Research about CI/CD and its importance in DevOps.
+- Read about different cloud service models (IaaS, PaaS, SaaS).
+
+## 20. Cohort Practice — Day 1: Introduction to DevOps and Cloud
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today’s goal is to **set the foundation for your DevOps journey**.
+
+You will create a **90-day personal DevOps learning plan** that clearly defines:
+- What is your understanding of DevOps and Cloud Engineering?
+- Why you are starting learning DevOps & Cloud?
+- Where do you want to reach?
+- How you will stay consistent every single day
+
+This is not a generic plan.  
+This is your **career execution blueprint** for the next 90 days.
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+
+- A markdown file named:  
+  `learning-plan.md`
+
+or
+
+- A hand written plan for the next 90 Days (Recommended)
+
+
+The file/note should clearly reflect your intent, discipline, and seriousness toward becoming a DevOps engineer.
+
+---
+
+#### Guidelines
+Follow these rules while creating your plan:
+
+- Mention your **current level**  
+  (student / fresher / working professional / non-IT background, etc.)
+- Define **3 clear goals** for the next 90 days  
+  (example: deploy a production-grade application on Kubernetes)
+- Define **3 core DevOps skills** you want to build  
+  (example: Linux troubleshooting, CI/CD pipelines, Kubernetes debugging)
+- Allocate a **weekly time budget**  
+  (example: 2–2.5 hours per day on weekdays, 4-6 hours weekends)
+- Keep the document **under 1 page**
+- Be honest and realistic; consistency matters more than perfection
+
+---
+
+#### Resources
+You may refer to:
+
+- TrainWithShubham [course curriculum](https://drive.google.com/file/d/1gfSBMsqwHR1xx0biWhGE-o8gGNdpVnhB/view?usp=sharing)
+- TrainWithShubham DevOps [roadmap](https://docs.google.com/spreadsheets/d/1eE-NhZQFr545LkP4QNhTgXcZTtkMFeEPNyVXAflXia0/edit?gid=2091219672#gid=2091219672)
+- Your own past experience and career aspirations
+
+Avoid over-researching today. The focus is **clarity**, not depth.
+
+---
+
+#### Why This Matters for DevOps
+DevOps engineers succeed not just because of tools, but because of:
+
+- Discipline
+- Ownership
+- Long-term thinking
+- Ability to execute consistently
+
+In real jobs, no one tells you exactly what to do every day.  
+This task trains you to **take ownership of your own growth**, just like a real DevOps engineer.
+
+A clear plan:
+- Reduces confusion
+- Prevents burnout
+- Keeps you focused during tough days
+
+---
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository  
+2. Navigate to the `2026/day-01/` folder  
+3. Add your `learning-plan.md` file  
+4. Commit and push your changes to your fork  
+
+---
+
+#### Learn in Public
+Share your Day 01 progress on LinkedIn:
+
+- Post 2–3 lines on why you’re starting **#90DaysOfDevOps**
+- Share one goal from your learning plan
+- Optional: screenshot of your markdown file or a professional picture
+
+Use hashtags:
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+
+
+
+
+Happy Learning  
+**TrainWithShubham**
+
+## 21. Hands-on Project — Day 1: Linux Files & Permissions
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Linux Files & Permissions**.  
+We’ll learn how to manage ownership, permissions, `chmod`, `umask`, sticky bit, setgid, and even ACLs.
+
+---
+
+#### 🎯 Learning Goals
+- Understand Linux file types and permission bits.
+- Explore symbolic vs numeric modes with `chmod`.
+- See how `umask` influences defaults.
+- Learn about special modes (`sticky bit`, `setgid`).
+- Get a taste of ACLs for fine-grained access.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1. Create sandbox
+   bash create_lab.sh
+   ✔ Creates lab-perms/ with files and directories to experiment safely.
+
+2. Explore permissions
+   bash explore_perms.sh
+   ✔ Use ls -l and stat to read permissions.
+   ✔ Understand r, w, x for files vs directories.
+
+3. Apply permissions
+   bash apply_perms.sh
+   ✔ Practice chmod (numeric & symbolic).
+   ✔ Secure files to 600/644.
+   ✔ Add/remove execute bits.
+   ✔ Recursively set defaults (755 dirs, 644 files).
+
+4. Understand umask
+   bash umask_demo.sh
+   ✔ See how new files differ with umask 022, 027, 077.
+   ✔ Learn why your files often default to 644.
+
+5. Sticky bit
+   bash stickybit_demo.sh
+   ✔ Apply chmod 1777 to world-writable dirs.
+   ✔ Understand why /tmp works this way.
+
+6. Setgid directories
+   bash setgid_dir_demo.sh
+   ✔ Apply chmod 2775 to team dirs.
+   ✔ Observe group inheritance for collaboration.
+
+7. (Optional) ACLs
+   bash acl_demo.sh
+   ✔ If setfacl is installed, test ACLs for specific users.
+   ✔ Learn how ACLs extend beyond the classic ugo model.
+'''
+## Challenge
+- Make private.txt readable only by the file owner.
+- Configure team.txt so it’s group-readable, but not others.
+- Create a new directory where all team members can drop files, but cannot delete each other’s files.
+```
+
+### Files
+
+- [acl_demo.sh](files/hands-on-projects/acl_demo.sh)
+- [apply_perms.sh](files/hands-on-projects/apply_perms.sh)
+- [create_lab.sh](files/hands-on-projects/create_lab.sh)
+- [explore_perms.sh](files/hands-on-projects/explore_perms.sh)
+- [setgid_dir_demo.sh](files/hands-on-projects/setgid_dir_demo.sh)
+- [stickybit_demo.sh](files/hands-on-projects/stickybit_demo.sh)
+- [umask_demo.sh](files/hands-on-projects/umask_demo.sh)
 
 
 ---

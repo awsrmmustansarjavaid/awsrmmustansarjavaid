@@ -557,6 +557,270 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 62: Security IAM Best Practices
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 62** of the DevOps 90-Day Challenge!
+Today, we shift focus to **Security**. In the cloud, **Identity is the new Perimeter**. We will master AWS IAM (Identity and Access Management) to secure our environment.
+
+[![](https://img.youtube.com/vi/placeholder/0.jpg)](https://www.youtube.com)
+
+[Watch the video (Link Pending)]()
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand the **Principle of Least Privilege**.
+* Differentiate between **Users, Groups, Roles, and Policies**.
+* Secure the **Root Account** (MFA).
+* Use **IAM Access Analyzer** to find unintended public access.
+* Rotate access keys safely.
+
+---
+
+#### Tools Used
+
+* **AWS IAM**
+* **AWS CLI**
+* **MFA Device** (Google Authenticator/Authy)
+
+---
+
+#### Key Concepts
+
+##### 1. Users vs. Roles
+*   **IAM User**: A person or long-term service. Has permanent credentials (password/access keys). *Avoid using these for applications.*
+*   **IAM Role**: A temporary identity. Has no password. Anyone who assumes the role gets temporary credentials. *Use this for EC2, Lambda, and cross-account access.*
+
+##### 2. Policies
+JSON documents that define permissions.
+```json
+{
+    "Effect": "Allow",
+    "Action": "s3:ListBucket",
+    "Resource": "arn:aws:s3:::my-bucket"
+}
+```
+
+##### 3. The Root Account
+The email you used to sign up. It has unlimited power. **Never use it for daily tasks.**
+1.  Enable MFA.
+2.  Create an Admin IAM User.
+3.  Lock away the Root credentials.
+
+---
+
+#### Key Concepts Applied
+
+| Concept | Application |
+| :--- | :--- |
+| **Groups** | Putting all developers in a `Developers` group and attaching policies to the group, not the user. |
+| **Inline vs Managed** | Using **Customer Managed Policies** for reusability across multiple roles. |
+| **Credential Report** | downloading a CSV to audit who has MFA enabled and when keys were last rotated. |
+
+---
+
+#### Bonus (Extra Learning)
+
+*   Set up a **Password Policy** (e.g., minimum 12 chars, requires symbol).
+*   Create a policy with a **Condition** (e.g., Allow access only if MFA is present: `aws:MultiFactorAuthPresent: "true"`).
+
+---
+
+#### Congratulations!
+
+You’ve hardened your AWS account! Security isn't a feature; it's a mindset. Always start with zero permissions and add only what is strictly necessary.
+
+---
+
+#### Try These Next
+
+*   Create a **Cross-Account Role** to allow a user in Account A to manage S3 in Account B.
+*   Use **IAM Policy Simulator** to debug why a user is getting "Access Denied".
+
+## 19. Cohort Practice — Day 62: Providers, Resources and Dependencies
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Yesterday you created standalone resources. But real infrastructure is connected -- a server lives inside a subnet, a subnet lives inside a VPC, a security group controls what traffic gets in. Today you build a complete networking stack on AWS and learn how Terraform figures out what to create first.
+
+Understanding dependencies is what separates a Terraform beginner from someone who can build production infrastructure.
+
+---
+
+#### Expected Output
+- A VPC with subnet, internet gateway, route table, security group, and an EC2 instance -- all created via Terraform
+- A dependency graph visualized with `terraform graph`
+- A markdown file: `day-62-providers-resources.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Explore the AWS Provider
+1. Create a new project directory: `terraform-aws-infra`
+2. Write a `providers.tf` file:
+   - Define the `terraform` block with `required_providers` pinning the AWS provider to version `~> 5.0`
+   - Define the `provider "aws"` block with your region
+3. Run `terraform init` and check the output -- what version was installed?
+4. Read the provider lock file `.terraform.lock.hcl` -- what does it do?
+
+**Document:** What does `~> 5.0` mean? How is it different from `>= 5.0` and `= 5.0.0`?
+
+---
+
+##### Task 2: Build a VPC from Scratch
+Create a `main.tf` and define these resources one by one:
+
+1. `aws_vpc` -- CIDR block `10.0.0.0/16`, tag it `"TerraWeek-VPC"`
+2. `aws_subnet` -- CIDR block `10.0.1.0/24`, reference the VPC ID from step 1, enable public IP on launch, tag it `"TerraWeek-Public-Subnet"`
+3. `aws_internet_gateway` -- attach it to the VPC
+4. `aws_route_table` -- create it in the VPC, add a route for `0.0.0.0/0` pointing to the internet gateway
+5. `aws_route_table_association` -- associate the route table with the subnet
+
+Run `terraform plan` -- you should see 5 resources to create.
+
+**Verify:** Apply and check the AWS VPC console. Can you see all five resources connected?
+
+---
+
+##### Task 3: Understand Implicit Dependencies
+Look at your `main.tf` carefully:
+
+1. The subnet references `aws_vpc.main.id` -- this is an implicit dependency
+2. The internet gateway references the VPC ID -- another implicit dependency
+3. The route table association references both the route table and the subnet
+
+Answer these questions:
+- How does Terraform know to create the VPC before the subnet?
+- What would happen if you tried to create the subnet before the VPC existed?
+- Find all implicit dependencies in your config and list them
+
+---
+
+##### Task 4: Add a Security Group and EC2 Instance
+Add to your config:
+
+1. `aws_security_group` in the VPC:
+   - Ingress rule: allow SSH (port 22) from `0.0.0.0/0`
+   - Ingress rule: allow HTTP (port 80) from `0.0.0.0/0`
+   - Egress rule: allow all outbound traffic
+   - Tag: `"TerraWeek-SG"`
+
+2. `aws_instance` in the subnet:
+   - Use Amazon Linux 2 AMI for your region
+   - Instance type: `t2.micro`
+   - Associate the security group
+   - Set `associate_public_ip_address = true`
+   - Tag: `"TerraWeek-Server"`
+
+Apply and verify -- your EC2 instance should have a public IP and be reachable.
+
+---
+
+##### Task 5: Explicit Dependencies with depends_on
+Sometimes Terraform cannot detect a dependency automatically.
+
+1. Add a second `aws_s3_bucket` resource for application logs
+2. Add `depends_on = [aws_instance.main]` to the S3 bucket -- even though there is no direct reference, you want the bucket created only after the instance
+3. Run `terraform plan` and observe the order
+
+Now visualize the entire dependency tree:
+```bash
+terraform graph | dot -Tpng > graph.png
+```
+If you don't have `dot` (Graphviz) installed, use:
+```bash
+terraform graph
+```
+and paste the output into an online Graphviz viewer.
+
+**Document:** When would you use `depends_on` in real projects? Give two examples.
+
+---
+
+##### Task 6: Lifecycle Rules and Destroy
+1. Add a `lifecycle` block to your EC2 instance:
+```hcl
+lifecycle {
+  create_before_destroy = true
+}
+```
+2. Change the AMI ID to a different one and run `terraform plan` -- observe that Terraform plans to create the new instance before destroying the old one
+
+3. Destroy everything:
+```bash
+terraform destroy
+```
+4. Watch the destroy order -- Terraform destroys in reverse dependency order. Verify in the AWS console that everything is cleaned up.
+
+**Document:** What are the three lifecycle arguments (`create_before_destroy`, `prevent_destroy`, `ignore_changes`) and when would you use each?
+
+---
+
+#### Hints
+- `aws_vpc.main.id` syntax: `<resource_type>.<resource_name>.<attribute>`
+- Use `terraform fmt` to keep your HCL clean
+- CIDR `10.0.0.0/16` gives you 65,536 IPs, `10.0.1.0/24` gives you 256
+- If you cannot SSH into the instance, check: security group rules, public IP, route table, internet gateway
+- `terraform graph` outputs DOT format -- paste it into webgraphviz.com if you don't have Graphviz
+- Always destroy resources when done to avoid AWS charges
+
+---
+
+#### Documentation
+Create `day-62-providers-resources.md` with:
+- Your full `main.tf` with comments explaining each resource
+- Screenshot of `terraform apply` output
+- Screenshot of the VPC and its resources in the AWS console
+- The dependency graph (image or text)
+- Explanation of implicit vs explicit dependencies in your own words
+
+---
+
+#### Submission
+1. Add `day-62-providers-resources.md` to `2026/day-62/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share on LinkedIn: "Built a complete AWS networking stack with Terraform today -- VPC, subnets, internet gateway, route tables, security groups, and an EC2 instance. All connected through dependency graphs. Terraform decides the order, you define the desired state."
+
+`#90DaysOfDevOps` `#TerraWeek` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 62: OPA/Conftest Policies for Terraform & Kubernetes
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Quickstart:
+  bash scripts/test.sh
+  bash scripts/gate.sh
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [examples/k8s/bad-deployment.yaml](files/hands-on-projects/examples/k8s/bad-deployment.yaml)
+- [examples/k8s/good-deployment.yaml](files/hands-on-projects/examples/k8s/good-deployment.yaml)
+- [examples/terraform/main.tf](files/hands-on-projects/examples/terraform/main.tf)
+- [policies/kubernetes/disallow_privileged.rego](files/hands-on-projects/policies/kubernetes/disallow_privileged.rego)
+- [policies/kubernetes/no_latest_tag.rego](files/hands-on-projects/policies/kubernetes/no_latest_tag.rego)
+- [policies/kubernetes/require_limits.rego](files/hands-on-projects/policies/kubernetes/require_limits.rego)
+- [policies/terraform/s3_no_public_read.rego](files/hands-on-projects/policies/terraform/s3_no_public_read.rego)
+- [policies/terraform/sg_no_0_0_0_0_22.rego](files/hands-on-projects/policies/terraform/sg_no_0_0_0_0_22.rego)
+- [policies/terraform/tags_required.rego](files/hands-on-projects/policies/terraform/tags_required.rego)
+- [scripts/gate.sh](files/hands-on-projects/scripts/gate.sh)
+- [scripts/test.sh](files/hands-on-projects/scripts/test.sh)
+
+
 ---
 
 [← Day 61](../day-61/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 63 →](../day-63/README.md)

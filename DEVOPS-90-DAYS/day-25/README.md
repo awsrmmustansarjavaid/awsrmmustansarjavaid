@@ -615,7 +615,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🚀 Day 25 - End-to-End Multi-Tier Deployment Pipeline
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -724,6 +724,500 @@ Building a pipeline isn't just about making it work; it's about making it resili
 Looking forward to expanding this setup with SSL/TLS configurations, reverse proxy setups, and monitoring tools in the next phase!
 
 #90DaysOfDevOps #GitHubActions #Docker #DockerCompose #AWS #EC2 #CI #CD #DevOps #Automation #ReactJS #Golang #SoftwareEngineering #CloudComputing #LearningInPublic #TrainWithShubham
+
+## 19. Challenge Notes — Day 25: Kubernetes Services, Ingress, and Load Balancing
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to Day 25 of the 90 Days of DevOps Challenge! Today we’re diving into how networking works in Kubernetes with **Services**, **Ingress**, and **Load Balancing**.
+
+
+[![](https://img.youtube.com/vi/AWHPZrwjUeU/0.jpg)](https://www.youtube.com/watch?v=AWHPZrwjUeU)
+
+[Watch the video](https://www.youtube.com/watch?v=AWHPZrwjUeU)
+
+
+
+---
+
+#### 🧩 Why Do We Need Services?
+
+Pods in Kubernetes are **ephemeral** — they can be destroyed and recreated at any time, leading to changes in their IP addresses. To ensure **stable access** to Pods, Kubernetes introduces **Services**.
+
+---
+
+#### 🚪 Kubernetes Services – Overview
+
+A **Service** is an abstraction that defines a **logical set of Pods** and a policy by which to access them.
+
+##### 🔧 Types of Services
+
+| Type           | Description                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| **ClusterIP**  | Default. Exposes service on an internal IP (within the cluster).           |
+| **NodePort**   | Exposes the service on a static port on each node's IP.                    |
+| **LoadBalancer** | Uses external load balancer (cloud environments).                        |
+| **ExternalName** | Maps service to a DNS name.                                               |
+| **Headless**   | No cluster IP, allows direct access to Pods via DNS.                       |
+
+---
+
+#### 🧪 Example: NodePort Service
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx-service
+spec:
+  type: NodePort
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+````
+
+```bash
+kubectl apply -f service.yaml
+minikube service my-nginx-service
+```
+
+---
+
+#### 🌍 Ingress in Kubernetes
+
+An **Ingress** is an API object that manages **external access** to services, typically HTTP.
+
+It acts as a **reverse proxy** and **routes traffic** based on host/path.
+
+##### 🔧 Ingress Controller
+
+To use Ingress, an **Ingress Controller** must be deployed (e.g., `nginx-ingress`, `traefik`, etc.).
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
+```
+
+---
+
+##### 🧪 Ingress Resource Example
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+spec:
+  rules:
+    - host: myapp.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-nginx-service
+                port:
+                  number: 80
+```
+
+**Update /etc/hosts**:
+
+```
+127.0.0.1 myapp.local
+```
+
+---
+
+#### ⚖️ Load Balancing in Kubernetes
+
+Kubernetes supports multiple load balancing strategies:
+
+##### 🔸 Internal (Service-level)
+
+* Round-robin traffic to Pods via Services.
+
+##### 🔸 External
+
+* Cloud Load Balancers via `type: LoadBalancer`.
+
+##### 🔸 Ingress Controller
+
+* Provides HTTP layer 7 routing and balancing.
+
+---
+
+#### 🧠 Flow Recap
+
+1. **Pod** is deployed.
+2. **Service** groups Pods and provides stable access.
+3. **Ingress** routes external HTTP(S) traffic to Services.
+4. **LoadBalancer/Ingress Controller** enables internet access.
+
+---
+
+#### ✅ Summary
+
+* Services enable stable access to dynamic Pods.
+* NodePort and LoadBalancer expose apps externally.
+* Ingress simplifies HTTP/S routing with hostname and path rules.
+* Ingress Controllers must be installed separately.
+
+### Attachments
+
+- [Kubernetes Services, Ingress & Load Balancing.pdf](Kubernetes%20Services%2C%20Ingress%20%26%20Load%20Balancing.pdf)
+
+## 20. Cohort Practice — Day 25: Git Reset vs Revert & Branching Strategies
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+
+You'll learn how to **undo mistakes** safely — one of the most important skills in Git. You'll also explore **branching strategies** used by real engineering teams to manage code at scale.
+
+---
+
+#### Expected Output
+- A markdown file: `day-25-notes.md` with your observations and answers
+- Continue updating `git-commands.md` in your `devops-git-practice` repo
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Git Reset — Hands-On
+1. Make 3 commits in your practice repo (commit A, B, C)
+2. Use `git reset --soft` to go back one commit — what happens to the changes?
+3. Re-commit, then use `git reset --mixed` to go back one commit — what happens now?
+4. Re-commit, then use `git reset --hard` to go back one commit — what happens this time?
+5. Answer in your notes:
+   - What is the difference between `--soft`, `--mixed`, and `--hard`?
+   - Which one is destructive and why?
+   - When would you use each one?
+   - Should you ever use `git reset` on commits that are already pushed?
+
+---
+
+##### Task 2: Git Revert — Hands-On
+1. Make 3 commits (commit X, Y, Z)
+2. Revert commit Y (the middle one) — what happens?
+3. Check `git log` — is commit Y still in the history?
+4. Answer in your notes:
+   - How is `git revert` different from `git reset`?
+   - Why is revert considered **safer** than reset for shared branches?
+   - When would you use revert vs reset?
+
+---
+
+
+##### Task 3: Reset vs Revert — Summary
+Create a comparison in your notes:
+
+| | `git reset` | `git revert` |
+|---|---|---|
+| What it does | ? | ? |
+| Removes commit from history? | ? | ? |
+| Safe for shared/pushed branches? | ? | ? |
+| When to use | ? | ? |
+
+---
+
+##### Task 4: Branching Strategies
+Research the following branching strategies and document each in your notes with:
+- How it works (short description)
+- A simple diagram or flow (text-based is fine)
+- When/where it's used
+- Pros and cons
+
+1. **GitFlow** — develop, feature, release, hotfix branches
+2. **GitHub Flow** — simple, single main branch + feature branches
+3. **Trunk-Based Development** — everyone commits to main, short-lived branches
+4. Answer:
+   - Which strategy would you use for a startup shipping fast?
+   - Which strategy would you use for a large team with scheduled releases?
+   - Which one does your favorite open-source project use? (check any repo on GitHub)
+
+---
+
+##### Task 5: Git Commands Reference Update
+Update your `git-commands.md` to cover everything from Days 22–25:
+- Setup & Config
+- Basic Workflow (add, commit, status, log, diff)
+- Branching (branch, checkout, switch)
+- Remote (push, pull, fetch, clone, fork)
+- Merging & Rebasing
+- Stash & Cherry Pick
+- Reset & Revert
+
+---
+
+#### Hints
+- `git reflog` is your safety net — it shows everything Git has done, even after a hard reset
+- For branching strategies, look at how projects like Kubernetes, React, or Linux kernel manage branches
+
+---
+
+#### Submission
+1. Add your `day-25-notes.md` to `2026/day-25/`
+2. Update `git-commands.md` — commit and push
+3. Push to your fork
+
+---
+
+#### Learn in Public
+
+Share your Reset vs Revert comparison or your branching strategy notes on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-25-notes
+
+##### Task 1: Git Reset — Hands-On
+1. Make 3 commits in your practice repo (commit A, B, C)
+2. Use `git reset --soft` to go back one commit — what happens to the changes?
+3. Re-commit, then use `git reset --mixed` to go back one commit — what happens now?
+4. Re-commit, then use `git reset --hard` to go back one commit — what happens this time?
+5. Answer in your notes:
+   - What is the difference between `--soft`, `--mixed`, and `--hard`?
+   - Which one is destructive and why?
+   - When would you use each one?
+   - Should you ever use `git reset` on commits that are already pushed?
+
+
+
+changes for commit A
+
+
+
+commit B
+
+
+
+
+commit C
+
+1. Make 3 commits (commit X, Y, Z)
+2. Revert commit Y (the middle one) — what happens?
+3. Check `git log` — is commit Y still in the history?
+4. Answer in your notes:
+   - How is `git revert` different from `git reset`?
+   - Why is revert considered **safer** than reset for shared branches?
+   - When would you use revert vs reset?
+
+---
+
+
+git reset
+=========
+moves the current branch (Head) to a previous commit . can remove commits and optionally kepp ot discard changes.
+
+remove commit from history
+
+it is not safe for shared and pushed branch avoid using it on push /shared branches becauses it rewrite history.
+
+wheen you want tpo undo local commits that haven't been pushed yet or clean up commit history
+
+git revert
+==========
+create a new commit that reverses the changes made by a previous commit.
+
+it not remove commit from history 
+
+it is safe for share and pushed branch. is preserved history and safely undoes changes.
+
+when you need to undo changes in a share repository of after commits have already been pushed.
+
+
+
+
+
+
+
+
+
+task 5
+=======
+git flow use multiple long lived branches
+
+main -> production ready code
+develop - integrate branch
+feature/* - new features
+release/* - prepare releases
+hotfix/* - emergency production fixes
+
+
+
+
+used for
+========
+- large enterprises project
+- teams with scheduled releases
+- traditional software developement
+
+pros
+====
+clear workflow
+stable production branch
+supports planning
+easy hotfix management
+
+cons
+====
+many branches
+more merge conflict
+slower development
+not idea; for ci/cd pipelines
+
+
+
+task 5
+======
+git --version -> setup and configuration
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+
+git config --list -> view configuration
+git config user.name --> check specific config
+git config user.email --> check specific config
+
+git inti - to initialise empty git repo
+git status - to check the status 
+git add filename -to add everty thinf
+git commit -m "message" - git commit track to stage
+git commit -am "update file"
+
+git log --oneline - to show the log in oneline
+git log - details log
+git log --oneline --graph --all - graph log
+
+git diff - working directory and staged
+
+git diff --staged 
+ 
+
+git branch 
+git bracch feature
+git switch feature
+git checkout feature
+git checkout -b login
+git branch -d feature
+git branch -D feature
+
+git remote -v
+git remote add origin <url>
+git clone <repo url>
+
+git fetch branch
+git pull origin main
+git push origin main
+git push origin -u origin main
+git clone <url>
+
+
+git merge feature
+git merge --abort
+
+
+git rebase main
+git rebase --continue
+git rebase --abort
+
+git stach
+git stach list
+git stach apply
+
+##### Notes: git-commands
+
+git reset --soft -> moves HEAD - Keeps staged
+git reset --mixed -> unstage
+git reset --hard -> moves head clear
+g
+
+### Files
+
+- [devops-git-practice](files/cohort-2026/devops-git-practice)
+
+## 21. Hands-on Project — Day 25: CloudFront Static Site with S3 (+ OAC, HTTPS)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **S3 + CloudFront** with **Origin Access Control (OAC)** so the bucket stays **private** and is only readable by CloudFront. We’ll enable **HTTPS**, optional **custom domain (ACM)**, sensible **caching policies**, and optional **access logs**.
+
+**Why OAC?** It signs origin requests with SigV4 and lets your **S3 bucket deny all public access** while still serving through CloudFront.
+
+---
+
+#### 🎯 Learning Goals
+- Provision an **S3 bucket** for static content with **all public access blocked**.
+- Create a **CloudFront distribution** with **OAC** and **least-privilege bucket policy**.
+- (Optional) Wire a **custom domain + ACM cert** and enable **access logging**.
+- Ship a sample `index.html` to verify everything works.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```bash
+# 1) Initialize
+terraform -chdir=terraform init
+
+# 2) Plan (update variables as needed)
+terraform -chdir=terraform plan   -var='name_prefix=day25'   -var='bucket_name=day25-static-<uniq>'   -var='default_root_object="index.html"'
+
+# 3) Apply
+terraform -chdir=terraform apply -auto-approve
+
+# 4) Upload site content (sample index included)
+aws s3 cp ../site/index.html s3://$(terraform -chdir=terraform output -raw site_bucket_name)/index.html
+
+# 5) Test
+echo "Open CloudFront URL:"
+terraform -chdir=terraform output distribution_domain_name
+```
+
+**Custom domain (optional)**
+- Create/validate an **ACM certificate in us-east-1** for your `domain_name` (and `alternate_domains` if any).
+- Pass `-var='domain_name=dev.example.com' -var='certificate_arn=arn:aws:acm:us-east-1:...:certificate/...'`
+
+**Logs (optional)**
+- Set `enable_logging=true` to create a separate S3 log bucket and enable CloudFront access logs.
+
+---
+
+#### 💡 Challenge
+- Add a **Cache Policy** tuned for immutable assets (`/assets/*`) vs HTML (`/index.html`).  
+- Attach a **Response Headers Policy** for security headers (CSP, HSTS).  
+- Use **Lambda@Edge** or **CloudFront Functions** to enforce redirects or add headers.
+
+---
+
+#### ✅ Checklist
+- [ ] S3 bucket is **private** and **only** CloudFront can read it  
+- [ ] Distribution serves **HTTPS** with the default certificate or your ACM cert  
+- [ ] `index.html` loads via the **CloudFront domain**  
+- [ ] (Optional) Access logs delivered to the **log bucket**
+
+---
+
+#### 📌 Commit
+```bash
+git add day25-cloudfront-static-site
+git commit -m "day25: CloudFront + S3 with OAC (private bucket), HTTPS, optional domain/logging"
+git push
+```
+
+### Files
+
+- [site/index.html](files/hands-on-projects/site/index.html)
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

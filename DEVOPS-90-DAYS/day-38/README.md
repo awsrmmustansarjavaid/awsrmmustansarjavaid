@@ -422,6 +422,384 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 38: Advanced GitHub Actions with Secrets and Artifacts
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 38** of the DevOps 90-Day Challenge!
+Yesterday, you built multi-job workflows with GitHub Actions.
+Today, we’ll dive into **advanced features**: managing **secrets** and using **artifacts** for sharing files between jobs.
+
+[![](https://img.youtube.com/vi/L3tYdqmvQw0/0.jpg)](https://www.youtube.com/watch?v=L3tYdqmvQw0)
+
+[Watch the video](https://www.youtube.com/watch?v=L3tYdqmvQw0)
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Store and use **GitHub Secrets** securely.
+* Upload and download **artifacts** between jobs.
+* Automate end-to-end CI/CD with sensitive data handling.
+
+---
+
+#### Tools Used
+
+* **GitHub Actions**
+* **GitHub Secrets**
+* **Artifacts (actions/upload-artifact, actions/download-artifact)**
+
+---
+
+#### Project Structure
+
+```bash
+myapp/
+ ├── .github/
+ │    └── workflows/
+ │         └── ci.yml
+ ├── app.py
+ ├── requirements.txt
+ └── tests/
+      └── test_app.py
+```
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Add Secrets in GitHub
+
+* Go to **Repo → Settings → Secrets → Actions → New repository secret**
+* Example:
+
+  * `DOCKER_USERNAME`
+  * `DOCKER_PASSWORD`
+  * `API_KEY`
+
+---
+
+##### 2. Using Secrets in Workflow
+
+```yaml
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Build & Push Docker Image
+        run: docker build -t myapp:latest .
+```
+
+---
+
+##### 3. Upload Artifacts Between Jobs
+
+* Save test results or build outputs as artifacts:
+
+```yaml
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Tests
+        run: pytest --junitxml=result.xml
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: result.xml
+
+  analyze:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: test-results
+          path: ./results
+      - name: Show Test Results
+        run: cat ./results/result.xml
+```
+
+---
+
+##### 4. Full Workflow Example
+
+```yaml
+name: CI with Secrets and Artifacts
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Tests
+        run: pytest --junitxml=result.xml
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: result.xml
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Build & Push Docker Image
+        run: docker build -t myapp:latest .
+      - name: Download Test Results
+        uses: actions/download-artifact@v3
+        with:
+          name: test-results
+```
+
+---
+
+#### Verification
+
+* Secrets used securely, not printed in logs.
+* Artifacts available in downstream jobs.
+* Docker image built only after tests pass.
+
+---
+
+#### Bonus (Advanced)
+
+* Use **environment secrets** for multi-environment pipelines.
+* Encrypt additional sensitive files with GitHub Actions.
+* Integrate **Slack notifications** for artifact uploads.
+
+---
+
+#### 🧠 Key Concepts Applied
+
+| Concept          | Example Used                                  |
+| ---------------- | --------------------------------------------- |
+| Secrets          | `DOCKER_USERNAME`, `DOCKER_PASSWORD`          |
+| Artifacts        | `actions/upload-artifact` & download-artifact |
+| Job Dependencies | `needs: test`                                 |
+| Secure CI/CD     | Sensitive info handled safely                 |
+
+---
+
+#### Congratulations!
+
+You’ve mastered **advanced GitHub Actions** features!
+Now your workflows can safely handle secrets and share artifacts between jobs, just like production pipelines.
+
+---
+
+#### Try These Next
+
+* Add **multi-environment secrets** (dev/staging/prod).
+* Store build logs or coverage reports as artifacts.
+* Trigger deploy jobs only on **successful artifact upload**.
+
+## 19. Cohort Practice — Day 38: YAML Basics
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Before writing a single CI/CD pipeline, you need to get comfortable with **YAML** — the language every pipeline is written in.
+
+You will:
+- Understand YAML syntax and rules
+- Write YAML files by hand
+
+- Validate them
+
+---
+
+#### Expected Output
+
+- A markdown file: `day-38-yaml.md`
+- YAML files you create during the tasks
+
+
+---
+
+
+#### Challenge Tasks
+
+##### Task 1: Key-Value Pairs
+Create `person.yaml` that describes yourself with:
+- `name`
+- `role`
+- `experience_years`
+- `learning` (a boolean)
+
+**Verify:** Run `cat person.yaml` — does it look clean? No tabs?
+
+---
+
+##### Task 2: Lists
+Add to `person.yaml`:
+- `tools` — a list of 5 DevOps tools you know or are learning
+- `hobbies` — a list using the inline format `[item1, item2]`
+
+Write in your notes: What are the two ways to write a list in YAML?
+
+---
+
+##### Task 3: Nested Objects
+Create `server.yaml` that describes a server:
+- `server` with nested keys: `name`, `ip`, `port`
+- `database` with nested keys: `host`, `name`, `credentials` (nested further: `user`, `password`)
+
+**Verify:** Try adding a tab instead of spaces — what happens when you validate it?
+
+---
+
+##### Task 4: Multi-line Strings
+In `server.yaml`, add a `startup_script` field using:
+1. The `|` block style (preserves newlines)
+2. The `>` fold style (folds into one line)
+
+Write in your notes: When would you use `|` vs `>`?
+
+---
+
+##### Task 5: Validate Your YAML
+1. Install `yamllint` or use an online validator
+2. Validate both your YAML files
+3. Intentionally break the indentation — what error do you get?
+4. Fix it and validate again
+
+---
+
+##### Task 6: Spot the Difference
+Read both blocks and write what's wrong with the second one:
+
+```yaml
+# Block 1 - correct
+name: devops
+tools:
+  - docker
+  - kubernetes
+```
+
+```yaml
+# Block 2 - broken
+name: devops
+tools:
+- docker
+  - kubernetes
+```
+
+---
+
+#### Hints
+- YAML uses **spaces only** — never tabs
+- Indentation is everything — 2 spaces is standard
+- Strings don't need quotes unless they contain special characters (`:`, `#`, etc.)
+- `true`/`false` are booleans, `"true"` is a string
+- Validate online: yamllint.com
+
+---
+
+#### Documentation
+Create `day-38-yaml.md` with:
+- Your YAML files
+- What you learned (3 key points)
+
+---
+
+#### Submission
+1. Add your YAML files and `day-38-yaml.md` to `2026/day-38/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your YAML "aha moment" on LinkedIn — the tab vs space mistake gets everyone.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-38-yaml
+
+name: Bijaya Kumar Jena
+role: Software Developer
+experience_years: 2
+learning: true
+
+
+
+
+tools — a list of 5 DevOps tools you know or are learning
+
+tools:
+  - Docker
+  - Kubernetes
+  - Linux
+  - Terraform
+  - Ansible
+  - Git & GitHub
+  - Grafana
+hobbies — [Shell Scripting, Docker Scripting, Linux Command]
+
+
+server: 
+  - name: Production-server
+  - ip: 123.142.0.1 
+  - port: 8000
+database:
+  - host: localhost
+  - name: erp_db
+  - credentials
+      - user: admin
+      - password: admin
+
+  startup_script: |
+  echo "Starting server..."
+  python manage.py migrate
+  python manage.py runserver 0.0.0.0:8000
+  echo "Server started"
+
+  startup_description: >
+  This server starts the Django application
+  after applying the required database migrations
+  and then listens for incoming requests
+  on port 8000.
+### Block 1 - correct
+name: devops
+tools:
+  - docker
+  - kubernetes
+
+## 20. Hands-on Project — Day 38: Approval Gates
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Focus: add tfsec/checkov scans, OPA/Conftest policy checks, and manual approvals before promotion.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [k8s/deployment.yaml](files/hands-on-projects/k8s/deployment.yaml)
+- [policies/k8s/deployment.rego](files/hands-on-projects/policies/k8s/deployment.rego)
+- [policies/terraform/s3_public.rego](files/hands-on-projects/policies/terraform/s3_public.rego)
+- [scripts/conftest_test.sh](files/hands-on-projects/scripts/conftest_test.sh)
+- [scripts/notify.sh](files/hands-on-projects/scripts/notify.sh)
+- [scripts/promote.sh](files/hands-on-projects/scripts/promote.sh)
+- [scripts/quality_tf.sh](files/hands-on-projects/scripts/quality_tf.sh)
+
+
 ---
 
 [← Day 37](../day-37/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 39 →](../day-39/README.md)

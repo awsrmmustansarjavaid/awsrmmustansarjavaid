@@ -460,6 +460,231 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 54: Monitoring Serverless Applications
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 54** of the DevOps 90-Day Challenge!
+Today, we focus on **Operational Visibility**: Monitoring. Since you cannot SSH into a Lambda function, you need robust tools to know if your application is healthy.
+
+[![](https://img.youtube.com/vi/-GljcEP5PgM/0.jpg)](https://www.youtube.com/watch?v=-GljcEP5PgM)
+
+[Watch the video](https://www.youtube.com/watch?v=-GljcEP5PgM)
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Monitor Lambda functions using **Amazon CloudWatch**.
+* Analyze logs to debug errors.
+* Use **AWS X-Ray** to trace requests through your distributed application.
+
+---
+
+#### Tools Used
+
+* **Amazon CloudWatch** (Logs & Metrics)
+* **AWS X-Ray** (Distributed Tracing)
+* **AWS Lambda**
+
+---
+
+#### Key Concepts
+
+##### 1. CloudWatch Logs
+
+Every time your Lambda prints something (`print("hello")`), it goes to a **CloudWatch Log Group**. This is where you look when things go wrong.
+
+##### 2. CloudWatch Metrics
+
+* **Invocations**: How many times was it run?
+* **Duration**: How long did it take? (Money!)
+* **Errors**: How many times did it crash?
+* **Throttles**: Did you hit the concurrency limit?
+
+##### 3. AWS X-Ray
+
+X-Ray provides a "Service Map". It shows you a visual graph of your application.
+User -> API Gateway -> Lambda -> DynamoDB
+It helps you spot **Latency** (where is it slow?) and **Errors** (where is it failing?).
+
+---
+
+#### Key Concepts Applied
+
+| Concept | Example Used |
+| :--- | :--- |
+| **Observability** | Understanding the internal state based on outputs (logs/metrics). |
+| **Tracing** | Following a single request across multiple services. |
+| **Alarms** | Setting up a notification if `Errors > 0`. |
+
+---
+
+#### Bonus (Extra Learning)
+
+* Create a **CloudWatch Alarm** that sends an email (SNS) if your function errors out.
+* specific **Structured Logging** (JSON) for easier searching.
+
+---
+
+#### Congratulations!
+
+You’ve successfully learned how to **Monitor and Debug** Serverless applications!
+You have now completed the Serverless section of the challenge.
+
+---
+
+#### Try These Next
+
+* Build a custom **CloudWatch Dashboard** for your Serverless App.
+* Look into third-party monitoring tools like **Datadog** or **New Relic** for Serverless.
+
+## 19. Cohort Practice — Day 54: Kubernetes ConfigMaps and Secrets
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Your application needs configuration — database URLs, feature flags, API keys. Hardcoding these into container images means rebuilding every time a value changes. Kubernetes solves this with ConfigMaps for non-sensitive config and Secrets for sensitive data.
+
+---
+
+#### Expected Output
+- ConfigMaps created from literals and from a file
+- Secrets created and consumed in a Pod
+- A markdown file: `day-54-configmaps-secrets.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Create a ConfigMap from Literals
+1. Use `kubectl create configmap` with `--from-literal` to create a ConfigMap called `app-config` with keys `APP_ENV=production`, `APP_DEBUG=false`, and `APP_PORT=8080`
+2. Inspect it with `kubectl describe configmap app-config` and `kubectl get configmap app-config -o yaml`
+3. Notice the data is stored as plain text — no encoding, no encryption
+
+**Verify:** Can you see all three key-value pairs?
+
+---
+
+##### Task 2: Create a ConfigMap from a File
+1. Write a custom Nginx config file that adds a `/health` endpoint returning "healthy"
+2. Create a ConfigMap from this file using `kubectl create configmap nginx-config --from-file=default.conf=<your-file>`
+3. The key name (`default.conf`) becomes the filename when mounted into a Pod
+
+**Verify:** Does `kubectl get configmap nginx-config -o yaml` show the file contents?
+
+---
+
+##### Task 3: Use ConfigMaps in a Pod
+1. Write a Pod manifest that uses `envFrom` with `configMapRef` to inject all keys from `app-config` as environment variables. Use a busybox container that prints the values.
+2. Write a second Pod manifest that mounts `nginx-config` as a volume at `/etc/nginx/conf.d`. Use the nginx image.
+3. Test that the mounted config works: `kubectl exec <pod> -- curl -s http://localhost/health`
+
+Use environment variables for simple key-value settings. Use volume mounts for full config files.
+
+**Verify:** Does the `/health` endpoint respond?
+
+---
+
+##### Task 4: Create a Secret
+1. Use `kubectl create secret generic db-credentials` with `--from-literal` to store `DB_USER=admin` and `DB_PASSWORD=s3cureP@ssw0rd`
+2. Inspect with `kubectl get secret db-credentials -o yaml` — the values are base64-encoded
+3. Decode a value: `echo '<base64-value>' | base64 --decode`
+
+**base64 is encoding, not encryption.** Anyone with cluster access can decode Secrets. The real advantages are RBAC separation, tmpfs storage on nodes, and optional encryption at rest.
+
+**Verify:** Can you decode the password back to plaintext?
+
+---
+
+##### Task 5: Use Secrets in a Pod
+1. Write a Pod manifest that injects `DB_USER` as an environment variable using `secretKeyRef`
+2. In the same Pod, mount the entire `db-credentials` Secret as a volume at `/etc/db-credentials` with `readOnly: true`
+3. Verify: each Secret key becomes a file, and the content is the decoded plaintext value
+
+**Verify:** Are the mounted file values plaintext or base64?
+
+---
+
+##### Task 6: Update a ConfigMap and Observe Propagation
+1. Create a ConfigMap `live-config` with a key `message=hello`
+2. Write a Pod that mounts this ConfigMap as a volume and reads the file in a loop every 5 seconds
+3. Update the ConfigMap: `kubectl patch configmap live-config --type merge -p '{"data":{"message":"world"}}'`
+4. Wait 30-60 seconds — the volume-mounted value updates automatically
+5. Environment variables from earlier tasks do NOT update — they are set at pod startup only
+
+**Verify:** Did the volume-mounted value change without a pod restart?
+
+---
+
+##### Task 7: Clean Up
+Delete all pods, ConfigMaps, and Secrets you created.
+
+---
+
+#### Hints
+- `--from-literal=KEY=VALUE` for command-line values, `--from-file=key=filename` for file contents
+- `envFrom` injects all keys; `env` with `valueFrom` injects individual keys
+- `echo -n 'value' | base64` — always use `-n` to avoid encoding a trailing newline
+- Volume-mounted ConfigMaps/Secrets auto-update; environment variables do not
+- `kubectl get secret <name> -o jsonpath='{.data.KEY}' | base64 --decode` extracts and decodes a value
+
+---
+
+#### Documentation
+Create `day-54-configmaps-secrets.md` with:
+- What ConfigMaps and Secrets are and when to use each
+- The difference between environment variables and volume mounts
+- Why base64 is encoding, not encryption
+- How ConfigMap updates propagate to volumes but not env vars
+
+---
+
+#### Submission
+1. Add `day-54-configmaps-secrets.md` to `2026/day-54/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share on LinkedIn: "Learned Kubernetes ConfigMaps and Secrets today. Injected config as environment variables and volume mounts, and discovered that base64 encoding is not encryption."
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-54-configmaps-secrets
+
+## 20. Hands-on Project — Day 54: Helm Chart for API Service
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Helm chart with Deployment/Service/Ingress/HPA, env values files, scripts, and Jenkinsfile.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [charts/demo-api/.helmignore](files/hands-on-projects/charts/demo-api/.helmignore)
+- [charts/demo-api/Chart.yaml](files/hands-on-projects/charts/demo-api/Chart.yaml)
+- [charts/demo-api/templates/_helpers.tpl](files/hands-on-projects/charts/demo-api/templates/_helpers.tpl)
+- [charts/demo-api/templates/configmap.yaml](files/hands-on-projects/charts/demo-api/templates/configmap.yaml)
+- [charts/demo-api/templates/deployment.yaml](files/hands-on-projects/charts/demo-api/templates/deployment.yaml)
+- [charts/demo-api/templates/hpa.yaml](files/hands-on-projects/charts/demo-api/templates/hpa.yaml)
+- [charts/demo-api/templates/ingress.yaml](files/hands-on-projects/charts/demo-api/templates/ingress.yaml)
+- [charts/demo-api/templates/service.yaml](files/hands-on-projects/charts/demo-api/templates/service.yaml)
+- [charts/demo-api/templates/serviceaccount.yaml](files/hands-on-projects/charts/demo-api/templates/serviceaccount.yaml)
+- [charts/demo-api/values-prod.yaml](files/hands-on-projects/charts/demo-api/values-prod.yaml)
+- [charts/demo-api/values-staging.yaml](files/hands-on-projects/charts/demo-api/values-staging.yaml)
+- [charts/demo-api/values.yaml](files/hands-on-projects/charts/demo-api/values.yaml)
+- [scripts/helm_deploy.sh](files/hands-on-projects/scripts/helm_deploy.sh)
+- [scripts/helm_lint.sh](files/hands-on-projects/scripts/helm_lint.sh)
+- [scripts/helm_rollback.sh](files/hands-on-projects/scripts/helm_rollback.sh)
+- [scripts/helm_template.sh](files/hands-on-projects/scripts/helm_template.sh)
+
+
 ---
 
 [← Day 53](../day-53/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 55 →](../day-55/README.md)

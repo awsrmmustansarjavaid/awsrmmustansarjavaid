@@ -392,6 +392,256 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 41: Terraform State Management and Workspaces
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 41** of the DevOps 90-Day Challenge!
+Yesterday, you provisioned AWS resources using Terraform.
+Today, we’ll focus on **state management** and **workspaces**, crucial for collaboration and multi-environment setups.
+
+[![](https://img.youtube.com/vi/Vo2K0Wqxb6E/0.jpg)](https://www.youtube.com/watch?v=Vo2K0Wqxb6E)
+[Watch the video](https://www.youtube.com/watch?v=Vo2K0Wqxb6E)
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand **Terraform state files** and their purpose.
+* Learn **local vs remote state**.
+* Create and use **Terraform workspaces** for multiple environments.
+
+---
+
+#### Tools Used
+
+* **Terraform CLI**
+* **AWS S3 & DynamoDB** (for remote state locking)
+* **VS Code**
+
+---
+
+#### Key Concepts
+
+##### 1. Terraform State
+
+* Terraform keeps track of your infrastructure using a **state file** (`terraform.tfstate`).
+* Contains:
+
+  * Resource IDs
+  * Metadata
+  * Dependency graph
+* **Important:** Never manually edit this file.
+
+---
+
+##### 2. Local vs Remote State
+
+* **Local State**: Stored on your machine (`terraform.tfstate`)
+* **Remote State**: Stored in a remote backend (S3, GCS, Azure Blob)
+* **Benefits of Remote State:**
+
+  * Collaboration across team members
+  * Locking to prevent concurrent changes
+
+**Example Remote Backend (`main.tf`):**
+
+```hcl
+terraform {
+  backend "s3" {
+    bucket         = "terraform-state-demo"
+    key            = "project/terraform.tfstate"
+    region         = "ap-south-1"
+    dynamodb_table = "terraform-lock"
+    encrypt        = true
+  }
+}
+```
+
+---
+
+##### 3. Terraform Workspaces
+
+* Workspaces allow **multiple states for same configuration**.
+* Useful for environments like **dev, staging, prod**.
+
+**Create and Switch Workspace**
+
+```bash
+terraform workspace list          # list existing workspaces
+terraform workspace new dev       # create new workspace
+terraform workspace select dev    # switch to workspace
+```
+
+* Each workspace maintains a **separate state file**.
+
+---
+
+##### 4. Apply Terraform in Different Workspaces
+
+```bash
+terraform init
+terraform workspace select dev
+terraform plan
+terraform apply
+```
+
+* Repeat for `staging` or `prod` workspace
+
+---
+
+##### 5. Verify
+
+* Remote state stored in **S3**
+* DynamoDB table provides **locking mechanism**
+* Separate environments isolated with **workspaces**
+
+---
+
+#### Key Concepts Applied
+
+| Concept               | Example Used                          |
+| --------------------- | ------------------------------------- |
+| State File            | `terraform.tfstate` (local or remote) |
+| Remote Backend        | S3 + DynamoDB for locking             |
+| Workspaces            | dev, staging, prod                    |
+| Environment Isolation | Multiple states for same config       |
+
+---
+
+#### Bonus (Extra Learning)
+
+* Enable **state versioning** in S3
+* Automate workspace creation in CI/CD pipelines
+* Use **Terraform Cloud** for managed remote state
+
+---
+
+#### Congratulations!
+
+You now understand **Terraform state management** and **workspaces**, essential for safe multi-environment infrastructure deployments
+
+---
+
+#### Try These Next
+
+* Create **staging** workspace and deploy same infrastructure
+* Test **concurrent changes** and observe locking mechanism
+* Use remote backend with **encryption enabled**
+
+## 19. Cohort Practice — Day 41: Triggers & Matrix Builds
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Your pipeline runs on push. Today you learn **every way to trigger a workflow** and how to run jobs across multiple environments at once.
+
+---
+
+#### Expected Output
+- New workflow files in your `github-actions-practice` repo
+- A markdown file: `day-41-triggers.md`
+  
+---
+
+
+
+
+#### Challenge Tasks
+
+##### Task 1: Trigger on Pull Request
+1. Create `.github/workflows/pr-check.yml`
+2. Trigger it only when a pull request is **opened or updated** against `main`
+3. Add a step that prints: `PR check running for branch: <branch name>`
+4. Create a new branch, push a commit, and open a PR
+5. Watch the workflow run automatically
+
+**Verify:** Does it show up on the PR page?
+
+---
+
+##### Task 2: Scheduled Trigger
+1. Add a `schedule:` trigger to any workflow using cron syntax
+2. Set it to run every day at midnight UTC
+3. Write in your notes: What is the cron expression for every Monday at 9 AM?
+
+---
+
+##### Task 3: Manual Trigger
+1. Create `.github/workflows/manual.yml` with a `workflow_dispatch:` trigger
+2. Add an **input** that asks for an `environment` name (staging/production)
+3. Print the input value in a step
+4. Go to the **Actions** tab → find the workflow → click **Run workflow**
+
+**Verify:** Can you trigger it manually and see your input printed?
+
+---
+
+##### Task 4: Matrix Builds
+Create `.github/workflows/matrix.yml` that:
+1. Uses a matrix strategy to run the same job across:
+   - Python versions: `3.10`, `3.11`, `3.12`
+2. Each job installs Python and prints the version
+3. Watch all 3 run in parallel
+
+Then extend the matrix to also include 2 operating systems — how many total jobs run now?
+
+---
+
+##### Task 5: Exclude & Fail-Fast
+1. In your matrix, **exclude** one specific combination (e.g., Python 3.10 on Windows)
+2. Set `fail-fast: false` — trigger a failure in one job and observe what happens to the rest
+3. Write in your notes: What does `fail-fast: true` (the default) do vs `false`?
+
+---
+
+#### Hints
+- PR trigger: `on: pull_request: branches: [main]`
+- Cron trigger: `on: schedule: - cron: '0 0 * * *'`
+- Manual trigger: `on: workflow_dispatch: inputs:`
+- Matrix: `strategy: matrix: python-version: [...]`
+- Exclude: `exclude: - os: windows-latest python-version: "3.10"`
+
+---
+
+#### Documentation
+Create `day-41-triggers.md` with:
+- Each workflow YAML
+- Screenshots of runs
+- The cron expression answer from Task 2
+
+---
+
+#### Submission
+1. Add `day-41-triggers.md` to `2026/day-41/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your matrix build screenshot — seeing multiple jobs run in parallel for the first time is a great moment.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 41: Secrets & Credentials Binding (Jenkins)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Focus: safe credentials usage via withCredentials (string, usernamePassword, ssh key, file). Avoid leaking in logs.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [scripts/aws_whoami.sh](files/hands-on-projects/scripts/aws_whoami.sh)
+- [scripts/docker_login.sh](files/hands-on-projects/scripts/docker_login.sh)
+- [scripts/scan_secrets.sh](files/hands-on-projects/scripts/scan_secrets.sh)
+- [scripts/use_kube.sh](files/hands-on-projects/scripts/use_kube.sh)
+
+
 ---
 
 [← Day 40](../day-40/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 42 →](../day-42/README.md)

@@ -500,7 +500,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🐳 Day 20 - 3-Tier Microservices with Docker
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -617,6 +617,379 @@ Today, I worked on a 3-tier microservices application using Docker and focused o
 Today's hands-on session gave me practical experience in containerizing applications and understanding how security fits into the container lifecycle.
 
 #90DaysOfDevOps #Docker #DevOps #DockerScout #ContainerSecurity #Microservices #CloudComputing #LearningInPublic #TrainWithShubham
+
+## 19. Challenge Notes — Day 20: Building and Running Docker Containers
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### Objective:
+Understand how to create your own Docker images using Dockerfiles, build them, run containers, and manage images effectively.
+
+[![](https://img.youtube.com/vi/97Hdg4V4EPA/0.jpg)](https://www.youtube.com/watch?v=97Hdg4V4EPA)
+
+[Watch the video](https://www.youtube.com/watch?v=97Hdg4V4EPA)
+---
+
+#### What is a Dockerfile?
+
+A `Dockerfile` is a script that contains a set of instructions to assemble a Docker image. It's the blueprint for your Docker image and defines what goes inside your container.
+
+##### Common Dockerfile Instructions:
+
+- `FROM`: Specifies the base image.
+- `RUN`: Executes commands in the container during build.
+- `COPY` or `ADD`: Copies files into the image.
+- `WORKDIR`: Sets the working directory inside the container.
+- `CMD`: Specifies the command to run when the container starts.
+- `EXPOSE`: Documents the port the container listens on.
+
+---
+
+#### Docker Image & Container Commands
+
+| Command | Description |
+|--------|-------------|
+| `docker build` | Builds a Docker image from a Dockerfile |
+| `docker run` | Runs a Docker container from an image |
+| `docker images` | Lists all local Docker images |
+| `docker ps` | Lists running containers |
+| `docker ps -a` | Lists all containers (including stopped) |
+| `docker stop <container>` | Stops a running container |
+| `docker rm <container>` | Removes a container |
+| `docker rmi <image>` | Removes a Docker image |
+| `docker tag` | Tags a Docker image |
+| `docker push` | Pushes an image to Docker Hub |
+| `docker pull` | Pulls an image from Docker Hub |
+| `docker commit` | Creates an image from container changes |
+
+---
+
+#### Lab: Build and Run Your First Docker Container
+
+##### Step 1: Create a Simple Python Flask App
+
+```bash
+mkdir docker-python-app
+cd docker-python-app
+````
+
+**app.py**
+
+```python
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return "Hello from Docker!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+```
+
+**requirements.txt**
+
+```
+flask
+```
+
+---
+
+##### Step 2: Create a Dockerfile
+
+```Dockerfile
+FROM python:3.9
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+EXPOSE 5000
+CMD ["python", "app.py"]
+```
+
+---
+
+##### Step 3: Build Docker Image
+
+```bash
+docker build -t flask-docker-app .
+```
+
+---
+
+##### Step 4: Run Docker Container
+
+```bash
+docker run -d -p 5000:5000 flask-docker-app
+```
+
+Visit: `http://localhost:5000` (or your EC2 public IP if deployed remotely)
+
+---
+
+#### Docker Hub Operations
+
+##### Tag Your Image
+
+```bash
+docker tag flask-docker-app your_dockerhub_username/flask-docker-app:v1
+```
+
+##### Login to Docker Hub
+
+```bash
+docker login
+```
+
+##### Push Image to Docker Hub
+
+```bash
+docker push your_dockerhub_username/flask-docker-app:v1
+```
+
+##### Pull Image from Docker Hub
+
+```bash
+docker pull nginx
+```
+
+##### Commit Container to Image
+
+```bash
+docker ps
+docker commit <container_id> custom-nginx:v1
+```
+
+---
+
+##### Cleanup Commands
+
+```bash
+docker ps
+docker stop <container_id>
+docker rm <container_id>
+docker rmi flask-docker-app
+```
+
+---
+
+#### Summary
+
+* You learned how to write a Dockerfile
+* Built and ran a custom Docker container
+* Tagged, pushed, pulled images with Docker Hub
+* Used `docker commit` to save container changes
+
+---
+
+### Attachments
+
+- [Day 20 Building and Running Docker Containers.pdf](Day%2020%20Building%20and%20Running%20Docker%20Containers.pdf)
+
+## 20. Cohort Practice — Day 20: Bash Scripting Challenge: Log Analyzer and Report Generator
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+
+You are a system administrator responsible for managing a network of servers. Every day, a log file is generated on each server containing important system events and error messages. Your job is to analyze these log files, identify specific events, and generate a summary report.
+
+Write a Bash script (`log_analyzer.sh`) that automates the process of analyzing log files and generating a daily summary report.
+
+---
+
+#### Expected Output
+- A Bash script: `log_analyzer.sh`
+- A generated summary report: `log_report_<date>.txt`
+- A markdown file: `day-20-solution.md` documenting your approach
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Input and Validation
+Your script should:
+1. Accept the path to a log file as a command-line argument
+2. Exit with a clear error message if no argument is provided
+3. Exit with a clear error message if the file doesn't exist
+
+---
+
+##### Task 2: Error Count
+1. Count the total number of lines containing the keyword `ERROR` or `Failed`
+2. Print the total error count to the console
+
+---
+
+##### Task 3: Critical Events
+1. Search for lines containing the keyword `CRITICAL`
+2. Print those lines along with their line number
+
+Example output:
+```
+--- Critical Events ---
+Line 84: 2025-07-29 10:15:23 CRITICAL Disk space below threshold
+Line 217: 2025-07-29 14:32:01 CRITICAL Database connection lost
+```
+
+---
+
+##### Task 4: Top Error Messages
+1. Extract all lines containing `ERROR`
+2. Identify the **top 5 most common** error messages
+3. Display them with their occurrence count, sorted in descending order
+
+Example output:
+```
+--- Top 5 Error Messages ---
+45 Connection timed out
+32 File not found
+28 Permission denied
+15 Disk I/O error
+9  Out of memory
+```
+
+---
+
+##### Task 5: Summary Report
+Generate a summary report to a text file named `log_report_<date>.txt` (e.g., `log_report_2026-02-11.txt`). The report should include:
+1. Date of analysis
+2. Log file name
+3. Total lines processed
+4. Total error count
+5. Top 5 error messages with their occurrence count
+6. List of critical events with line numbers
+
+---
+
+##### Task 6 (Optional): Archive Processed Logs
+Add a feature to:
+1. Create an `archive/` directory if it doesn't exist
+2. Move the processed log file into `archive/` after analysis
+3. Print a confirmation message
+
+---
+
+#### Sample Log File
+
+A sample log file is available in this directory: `sample_log.log`
+
+You can also pick real-world log datasets from the [LogHub repository](https://github.com/logpai/loghub) to test your script against production-like logs (e.g., ZooKeeper, HDFS, Apache, Linux syslogs).
+
+---
+
+#### Hints
+- Count errors: `grep -c "ERROR" logfile.log`
+- Print with line numbers: `grep -n "CRITICAL" logfile.log`
+- Top occurrences: `grep "ERROR" logfile.log | awk '{$1=$2=$3=""; print}' | sort | uniq -c | sort -rn | head -5`
+- Associative arrays: `declare -A error_map`
+- Date for filename: `date +%Y-%m-%d`
+- Move files: `mv logfile.log archive/`
+
+---
+
+#### Documentation
+
+Create `day-20-solution.md` with:
+- Your script's code
+- Sample output from running against the sample log
+- What commands/tools you used (`grep`, `awk`, `sort`, `uniq`, etc.)
+- What you learned (3 key points)
+
+---
+
+#### Submission
+1. Add your scripts and `day-20-solution.md` to `2026/day-20/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+
+Share your log analyzer project on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+### Files
+
+- [sample_logs_generator.sh](files/cohort-2026/sample_logs_generator.sh)
+
+## 21. Hands-on Project — Day 20: CloudWatch Alarms (ALB + Target Group + ASG) with SNS Notifications
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **CloudWatch alarms** for your **ALB**, **Target Group**, and **ASG**, wired to **SNS notifications** (email optional).  
+We’ll alert on:
+- **ALB 5xx errors** (ELB-generated 5xx)
+- **ALB target response time** (latency)
+- **Target Group unhealthy hosts**
+- **ASG InService instances below threshold**
+
+This module plugs into **Day 18 (ALB)** and **Day 19 (ASG)**.
+
+---
+
+#### 🎯 Learning Goals
+- Use **AWS/ApplicationELB** & **AWS/AutoScaling** metrics with dimensions.  
+- Configure **alarm thresholds**, **evaluation periods**, and **treat missing data** policy.  
+- Send notifications via **SNS** (email) and/or forward to other **alarm actions** (e.g., Ops tools).
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1) Collect inputs from previous days
+   - lb_arn_suffix           (Day 18 ALB → ARN suffix, looks like: app/<alb-name>/<id>)
+   - tg_arn_suffix           (Day 18 TG  → ARN suffix, looks like: targetgroup/<tg-name>/<id>)
+   - asg_name                (Day 19 ASG name)
+   - (optional) alarm_email  (to subscribe an email to SNS)
+
+2) Initialize & Plan
+   terraform -chdir=terraform init
+   terraform -chdir=terraform plan      -var='lb_arn_suffix=app/day18-alb/1234567890abcdef'      -var='tg_arn_suffix=targetgroup/day18-tg/abcdef1234567890'      -var='asg_name=day19-asg'      -var='alarm_email=you@example.com'
+
+3) Apply (you'll receive an SNS confirmation email if provided)
+   terraform -chdir=terraform apply -auto-approve ...
+
+4) Test ideas
+   - Stop one instance in the ASG → **Unhealthy/low InService** alarms may trigger.
+   - Serve slow responses on targets → **Latency** alarm may trigger.
+   - Force 5xx from app → **ALB 5xx** alarm may trigger.
+```
+
+---
+
+#### 💡 Challenge
+- Add alarms for **HTTPCode_Target_5XX_Count** and **RejectedConnectionCount**.  
+- Enable **OK actions** to post recovery messages.  
+- Wire alarms to a **chat webhook** via Lambda subscription.
+
+---
+
+#### ✅ Checklist
+- [ ] SNS topic created and (optionally) **email subscription confirmed**  
+- [ ] ALB 5xx + latency alarms **in ALARM when thresholds crossed**  
+- [ ] Target Group unhealthy hosts alarm **fires appropriately**  
+- [ ] ASG **InService count** alarm protects capacity
+
+---
+
+#### 📌 Commit
+```bash
+git add day20-cloudwatch-alarms
+git commit -m "day20: CloudWatch alarms for ALB/TG/ASG + SNS notifications"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

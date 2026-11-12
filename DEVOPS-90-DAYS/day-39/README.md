@@ -744,6 +744,303 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 39: Introduction to Terraform and IaC
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 39** of the DevOps 90-Day Challenge!
+Today, we begin the **Infrastructure as Code (IaC)** section with **Terraform**, a powerful tool to manage cloud infrastructure declaratively.
+
+[![](https://img.youtube.com/vi/MQSO0inK_-k/0.jpg)](https://www.youtube.com/watch?v=MQSO0inK_-k)
+[Watch the video](https://www.youtube.com/watch?v=MQSO0inK_-k)
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand the concept of **IaC**.
+* Learn what **Terraform** is and why it’s useful.
+* Write your first **Terraform configuration**.
+
+---
+
+#### Tools Used
+
+* **Terraform CLI**
+* **AWS Account** (for practical examples)
+* **Text Editor** (VS Code, Vim, etc.)
+
+---
+
+#### Key Concepts
+
+##### 1. Infrastructure as Code (IaC)
+
+* IaC lets you **define infrastructure using code**.
+* Benefits:
+
+  * **Version Control** (track infrastructure changes).
+  * **Consistency** (same config in dev, staging, prod).
+  * **Automation** (deploy infrastructure automatically).
+
+##### 2. Terraform Overview
+
+* **Open-source IaC tool** by HashiCorp.
+* Works with multiple providers (AWS, Azure, GCP, Kubernetes).
+* Core concepts:
+
+  * **Provider**: Specifies which cloud platform (e.g., AWS).
+  * **Resource**: Defines infrastructure components (EC2, S3).
+  * **State**: Keeps track of deployed resources.
+
+---
+
+#### Directory Structure
+
+```bash
+terraform-demo/
+ ├── main.tf
+ ├── variables.tf
+ └── outputs.tf
+```
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Install Terraform
+
+```bash
+# Ubuntu
+sudo apt update
+sudo apt install -y gnupg software-properties-common curl
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+sudo apt-add-repository "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt update && sudo apt install terraform
+terraform -v
+```
+
+---
+
+##### 2. Create a Provider
+
+**`main.tf`**
+
+```hcl
+provider "aws" {
+  region = "ap-south-1"
+}
+```
+
+---
+
+##### 3. Define a Resource (Example: EC2 Instance)
+
+```hcl
+resource "aws_instance" "web" {
+  ami           = "ami-0abcdef1234567890" # replace with valid AMI
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "TerraformDemo"
+  }
+}
+```
+
+---
+
+##### 4. Initialize and Apply Terraform
+
+```bash
+terraform init   # initialize Terraform
+terraform plan   # preview changes
+terraform apply  # create resources
+```
+
+* Type **yes** when prompted
+
+---
+
+##### 5. Verify
+
+* Check AWS console → EC2 → Instance running
+* Terraform tracks state in `terraform.tfstate`
+
+---
+
+#### Key Concepts Applied
+
+| Concept      | Example Used                         |
+| ------------ | ------------------------------------ |
+| Provider     | AWS (`provider "aws"`)               |
+| Resource     | EC2 instance (`aws_instance`)        |
+| State        | `terraform.tfstate` file             |
+| Plan & Apply | `terraform plan` & `terraform apply` |
+
+---
+
+#### Bonus (Extra Learning)
+
+* Add **outputs.tf** to get instance public IP:
+
+```hcl
+output "instance_ip" {
+  value = aws_instance.web.public_ip
+}
+```
+
+* Use **variables.tf** for parameterized configurations.
+* Destroy resources safely: `terraform destroy`
+
+---
+
+#### Congratulations!
+
+You’ve deployed your **first cloud resource using Terraform**!
+This is the foundation for **automating entire cloud environments** using code.
+
+---
+
+#### Try These Next
+
+* Add **S3 bucket** using Terraform.
+* Use **Terraform variables** to make code reusable.
+* Track state using **remote backend** (S3 + DynamoDB).
+
+## 19. Cohort Practice — Day 39: What is CI/CD?
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Before writing a single pipeline, understand **why CI/CD exists** and what it actually does.
+
+
+Today is a research and diagram day — no pipelines yet. Get the concepts right first.
+
+---
+
+#### Expected Output
+
+- A markdown file: `day-39-cicd-concepts.md`
+- A pipeline diagram (hand-drawn or text-based)
+
+
+---
+
+
+
+
+#### Challenge Tasks
+
+##### Task 1: The Problem
+Think about a team of 5 developers all pushing code to the same repo manually deploying to production.
+
+Write in your notes:
+1. What can go wrong?
+2. What does "it works on my machine" mean and why is it a real problem?
+3. How many times a day can a team safely deploy manually?
+
+---
+
+##### Task 2: CI vs CD
+Research and write short definitions (2-3 lines each):
+1. **Continuous Integration** — what happens, how often, what it catches
+2. **Continuous Delivery** — how it's different from CI, what "delivery" means
+3. **Continuous Deployment** — how it differs from Delivery, when teams use it
+
+Write one real-world example for each.
+
+---
+
+
+##### Task 3: Pipeline Anatomy
+A pipeline has these parts — write what each one does:
+- **Trigger** — what starts the pipeline
+- **Stage** — a logical phase (build, test, deploy)
+- **Job** — a unit of work inside a stage
+- **Step** — a single command or action inside a job
+- **Runner** — the machine that executes the job
+- **Artifact** — output produced by a job
+
+---
+
+##### Task 4: Draw a Pipeline
+Draw a CI/CD pipeline for this scenario:
+> A developer pushes code to GitHub. The app is tested, built into a Docker image, and deployed to a staging server.
+
+Include at least 3 stages. Hand-drawn and photographed is perfectly fine.
+
+---
+
+##### Task 5: Explore in the Wild
+1. Open any popular open-source repo on GitHub (Kubernetes, React, FastAPI — pick one you know)
+2. Find their `.github/workflows/` folder
+3. Open one workflow YAML file
+4. Write in your notes:
+   - What triggers it?
+   - How many jobs does it have?
+   - What does it do? (best guess)
+
+---
+
+#### Hints
+- CI/CD is a practice, not just a tool
+- GitHub Actions, Jenkins, GitLab CI, CircleCI — all are tools that implement CI/CD
+- A pipeline failing is not a problem — it's CI/CD doing its job
+
+---
+
+#### Documentation
+Create `day-39-cicd-concepts.md` with:
+- Your CI vs CD vs CD definitions
+- Pipeline anatomy notes
+- Your pipeline diagram
+- What you found in the open-source repo
+
+---
+
+#### Submission
+1. Add your `day-39-cicd-concepts.md` to `2026/day-39/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your pipeline diagram on LinkedIn — even a rough hand-drawn one gets engagement.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 39: Parallel Stages
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Run lint, unit, integration, and e2e tests in **parallel** in a Jenkins Declarative Pipeline. Publish JUnit, stash/unstash workspace, and optionally guard deploy with a **lock**.
+
+#### 🎯 Learning Goals
+- Build parallel branches with `parallel {}`
+- Aggregate JUnit across branches
+- Use `stash/unstash` to share files
+- (Optional) Serialize shared env with `lock`
+
+#### 📌 Commit
+git add day39-parallel-stages
+git commit -m "day39: Jenkins parallel stages with junit aggregation and optional lock"
+git push
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [scripts/e2e.sh](files/hands-on-projects/scripts/e2e.sh)
+- [scripts/integration.sh](files/hands-on-projects/scripts/integration.sh)
+- [scripts/lint.sh](files/hands-on-projects/scripts/lint.sh)
+- [scripts/unit.sh](files/hands-on-projects/scripts/unit.sh)
+
+
 ---
 
 [← Day 38](../day-38/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 40 →](../day-40/README.md)

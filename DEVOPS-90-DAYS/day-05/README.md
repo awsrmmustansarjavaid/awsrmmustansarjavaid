@@ -665,7 +665,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🐧 Day 05 - Python for DevOps, Automation & Cron Jobs
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 18 July 2026
@@ -1127,6 +1127,535 @@ Next, I will continue learning Python for DevOps:
 ---
 
 ⭐ Thank you for following my #90DaysOfDevOps journey!
+
+## 19. Challenge Notes — Day 5: Introduction to Version Control (Git and GitHub)
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### 1. Introduction to Version Control
+
+##### What is Version Control?
+- A system that records changes to files over time.
+- Allows you to recall specific versions later.
+- Keeps track of every modification to a project.
+- Helps manage collaboration and maintain project history.
+
+[![](https://img.youtube.com/vi/cYtF3s-Bk6E/0.jpg)](https://www.youtube.com/watch?v=cYtF3s-Bk6E)
+
+[Watch the video](https://www.youtube.com/watch?v=cYtF3s-Bk6E)
+
+##### Why Use Version Control?
+1. **Collaboration:** Multiple developers can work on the same project without conflicts.
+2. **Version Tracking:** Keeps a detailed history of changes.
+3. **Backup:** Restore any previous version when needed.
+4. **Branching and Merging:** Experiment with new features without affecting the main code.
+5. **Deployment Automation:** Integrate with CI/CD pipelines.
+
+---
+
+#### 2. Git Basics
+
+##### What is Git?
+- A distributed version control system developed by Linus Torvalds.
+- Tracks changes in source code during software development.
+- Operates locally without the need for a central server.
+
+##### What is GitHub?
+- A cloud-based platform for hosting Git repositories.
+- Facilitates collaboration and project management.
+- Provides features like pull requests, issues, and GitHub Actions.
+
+---
+
+#### 3. Setting Up Git
+
+##### Step 1: Install Git
+- **Windows:** Download and install from [Git for Windows](https://git-scm.com/download/win).
+
+- **Linux (Ubuntu):**
+  ```sh
+  sudo apt update
+  sudo apt install git
+  ```
+- **Verify the installation:**
+  ```sh
+  git --version
+  ```
+
+##### Step 2: Configure Git
+- Set up your username and email:
+  ```sh
+  git config --global user.name "Your Name"
+  git config --global user.email "youremail@example.com"
+  ```
+- Check configuration:
+  ```sh
+  git config --list
+  ```
+
+---
+
+#### 4. Initializing a Git Repository
+
+##### Step 1: Create a New Project Folder
+```sh
+mkdir devops-series
+cd devops-series
+```
+
+##### Step 2: Initialize Git
+```sh
+git init
+```
+- Creates a new, empty Git repository.
+
+##### Step 3: Add a README File
+```sh
+echo "# DevOps Series" > README.md
+```
+
+##### Step 4: Track Changes
+```sh
+git add README.md
+```
+- Stages the file for the next commit.
+
+---
+
+#### 5. Committing Changes
+
+##### Step 1: Make Your First Commit
+```sh
+git commit -m "Initial commit: Added README file"
+```
+- Records the changes to the repository.
+
+##### Step 2: Check Commit Log
+```sh
+git log
+```
+- Shows the history of commits.
+
+---
+
+#### 6. Pushing Code to GitHub
+
+##### Step 1: Create a GitHub Repository
+1. Go to GitHub and sign in.
+2. Click "New" to create a new repository.
+3. Set the repository name (e.g., `devops-series`).
+4. Choose Public or Private visibility.
+5. Click "Create repository".
+
+##### Step 2: Link Local Repository to GitHub
+```sh
+git remote add origin https://github.com/username/devops-series.git
+```
+
+##### Step 3: Push Changes
+```sh
+git push -u origin master
+```
+
+---
+
+#### 7. Branching and Merging
+
+##### Step 1: Create a New Branch
+```sh
+git branch feature-branch
+```
+
+##### Step 2: Switch to the New Branch
+```sh
+git checkout feature-branch
+```
+
+##### Step 3: Make Changes and Commit
+```sh
+echo "Feature update" >> README.md
+git add README.md
+git commit -m "Added feature update"
+```
+
+##### Step 4: Merge Branch into Master
+1. Switch back to the master branch:
+   ```sh
+   git checkout master
+   ```
+2. Merge the feature branch:
+   ```sh
+   git merge feature-branch
+   ```
+3. Delete the branch after merging:
+   ```sh
+   git branch -d feature-branch
+   ```
+
+---
+
+#### 8. Collaborating with GitHub
+
+##### Step 1: Forking a Repository
+- Fork a repository to have your own copy to make changes.
+
+##### Step 2: Cloning the Forked Repository
+```sh
+git clone https://github.com/username/devops-series.git
+```
+
+##### Step 3: Creating Pull Requests (PRs)
+1. Make changes on your local repository.
+2. Push the changes to your GitHub fork:
+   ```sh
+   git push origin feature-branch
+   ```
+3. Open a Pull Request from your fork to the original repository.
+4. Add a meaningful title and description.
+5. Submit the PR for review.
+
+---
+
+#### 9. Handling Conflicts
+
+##### Step 1: Identify Conflicts
+- Occurs when changes from different branches affect the same line of code.
+- Git will mark conflicts like this:
+  ```sh
+  <<<<<<< HEAD
+  Code from current branch
+  =======
+  Code from merging branch
+  >>>>>>> feature-branch
+  ```
+
+##### Step 2: Resolve Conflicts
+- Manually edit the file to resolve the differences.
+
+##### Step 3: Add and Commit the Resolved File
+```sh
+git add resolved_file.txt
+git commit -m "Resolved merge conflict"
+```
+
+---
+
+#### 10. Git Best Practices
+
+1. **Meaningful Commit Messages:**
+   - Follow the format: `type(scope): description`
+   - Example: `feat(auth): add login functionality`
+2. **Use Branches for Features and Bug Fixes:**
+   - Keeps the master branch clean.
+3. **Pull Latest Changes Before Pushing:**
+   ```sh
+   git pull origin master
+   ```
+4. **Review Pull Requests Carefully:**
+   - Ensure quality and consistency before merging.
+5. **Backup Your Work:**
+   - Push regularly to avoid losing progress.
+
+---
+
+#### 11. Hands-On Activity
+
+##### Task 1: Version Control with Git
+1. Create a new repository on GitHub.
+2. Clone it to your local machine.
+3. Add a README file and make some changes.
+4. Push the changes to the remote repository.
+
+##### Task 2: Collaboration with GitHub
+1. Fork a public repository.
+2. Make changes and submit a Pull Request.
+3. Resolve any conflicts and merge the PR.
+
+### Git command history
+
+```text
+    1  apt update
+    2  apt install git
+    6  git -v
+    7  clear
+   13  mkdir git
+   14  cd git
+   15  ls
+   16  vi test.txt
+   17  ls
+   18  ls -la
+   19  ls -ll
+   20  git status
+   21  git init
+   22  ls -la
+   23  git config user.name "Mohd Shahid"
+   24  git config user.email "shahid199578@gmail.com"
+   25  git status
+   26  pwd
+   27  touch text1.txt text2.txt
+   28  ls
+   29  ls -la
+   30  git status
+   31  git add text.txt text1.txt
+   32  git add test.txt text1.txt
+   33  git status
+   34  git commit -m "This is initial commit"
+   35  git staus
+   36  git status
+   37  git log
+   38  git log -oneline
+   39  git log -online
+   40  git log --oneline
+   41  git show 5368284
+   42  ls -la
+   43  git status
+   44  vi text1.txt 
+   45  vi text2.txt 
+   46  git status 
+   47  git add .
+   48  git status
+   49  git commit -m "text2.txt added with new line"
+   50  git log
+   51  git log --oneline
+   52  git show 8650cec
+   53  git remote add origin https://github.com/Shahid199578/newrepo.git
+   54  git remote -v
+   55  git fetch origin master
+   56  ls -la
+   57  git push origin master
+   58  git login 
+   59  git push origin master
+   60  git pull origin master
+   61  git push origin master
+   62  git rebase origin master
+   63  git rebase origin
+   64  git rebase master
+   65  git pull origin
+   66  git pull origin master
+   67  git fetch origin 
+   68  git pull origin master
+   69  git checkout master
+   70  git clone https://github.com/Shahid199578/newrepo.git
+   71  ls -la
+   86  touch text1.txt text2.txt text3.txt
+   87  vi text1.txt 
+   88  git add .
+   89  git commit -m "this is initial commit"
+   90  git remote -v
+   91  git push origin master
+   92  git log
+   93  git log --oneline
+   94  clear
+   95  git branch feature1
+   96  git branch feature2
+   97  git baranch
+   98  git baranches
+   99  git branch
+  100  git checkout feature1
+  101  git branch
+  102  vi fike1.txt
+  103  git status
+  104  git add .
+  105  git status
+  106  git commit -m "this is from feature1"
+  107  git log
+  108  git push origin feature1
+  109  git checkout master
+  110  git push origin master
+  112  git remote -v
+  113  git fetch origin master
+  114  git checkout feature2
+  115  vi feature2.txt
+  116  git add .
+  117  git commit -m "this is from feature2"
+  118  git push origin feature2
+  119  git branch
+  120  git checkout master
+  121  git merge feature1
+  122  git status
+  123  git push origin master
+  124  git merge feature1
+  125  git merge feature2
+  126  git status
+  127  git push origin master
+  128  ls -la
+  129  pwd
+  130  git pull origin master
+  131  git status
+  132  git log
+```
+
+## 20. Cohort Practice — Day 5: Linux Troubleshooting Drill: CPU, Memory, and Logs
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today’s goal is to **run a focused troubleshooting drill**.
+
+You will pick a running process/service on your system and:
+- Capture a quick health snapshot (CPU, memory, disk, network)
+- Trace logs for that service
+- Write a **mini runbook** describing what you did and what you’d do next if things were worse
+
+This turns yesterday’s practice into a repeatable troubleshooting routine.
+
+##### What’s a runbook?
+A **runbook** is a short, repeatable checklist you follow during an incident: the exact commands you run, what you observed, and the next actions if the issue persists. Keep it concise so you can reuse it under pressure.
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+- A markdown file named:  
+  `linux-troubleshooting-runbook.md`
+
+or
+
+- A hand written runbook (Recommended)
+
+Your runbook should include both the commands you ran and brief interpretations.
+
+---
+
+#### Guidelines
+Follow these rules while creating your runbook:
+
+- Run and record output for **at least 8 commands** (save snippets in your runbook)  
+  - **Environment basics (2):** `uname -a`, `lsb_release -a` (or `cat /etc/os-release`)  
+  - **Filesystem sanity (2):** create a throwaway folder and file, e.g., `mkdir /tmp/runbook-demo`, `cp /etc/hosts /tmp/runbook-demo/hosts-copy && ls -l /tmp/runbook-demo`  
+  - **CPU / Memory (2):** `top`/`htop`/`ps -o pid,pcpu,pmem,comm -p <pid>`, `free -h`, `vm_stat` (mac)  
+  - **Disk / IO (2):** `df -h`, `du -sh /var/log`, `iostat`/`vmstat`/`dstat`  
+  - **Network (2):** `ss -tulpn`/`netstat -tulpn`, `curl -I <service-endpoint>`/`ping`  
+  - **Logs (2):** `journalctl -u <service> -n 50`, `tail -n 50 /var/log/<file>.log`
+- Choose **one target service/process** (e.g., `ssh`, `cron`, `docker`, your web app) and stick to it for the drill.
+- For each command, add a 1–2 line note on what you observed (e.g., “CPU spikes to 80% when restarting”, “No recent errors in last 50 lines”).
+- End with a **“If this worsens”** section listing 3 next steps you would take (ex: restart strategy, increase log verbosity, collect `strace`).
+- Keep it concise and actionable (aim for ~1 page).
+
+Suggested structure for `linux-troubleshooting-runbook.md`:
+- Target service / process
+- Snapshot: CPU & Memory
+- Snapshot: Disk & IO
+- Snapshot: Network
+- Logs reviewed
+- Quick findings
+- If this worsens (next steps)
+
+---
+
+#### Resources
+You may refer to:
+
+- Notes from Day 02–04
+- Linux `man` pages (`top`, `ps`, `df`, `journalctl`, `ss/netstat`)
+- Your class notes
+
+Avoid generic copy/paste. Use outputs from **your** machine.
+
+---
+
+#### Why This Matters for DevOps
+Incidents rarely come with perfect clues. A fast, repeatable checklist saves minutes when services misbehave.
+
+This drill builds:
+- Habit of capturing evidence before acting
+- Confidence reading resource signals (CPU, memory, disk, network)
+- Log-first mindset before restarts or escalations
+
+These habits reduce downtime and prevent guesswork in production.
+
+---
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository  
+2. Navigate to the `2026/day-05/` folder  
+3. Add your `linux-troubleshooting-runbook.md` file  
+4. Commit and push your changes to your fork  
+
+---
+
+#### Learn in Public
+Share your Day 05 progress on LinkedIn:
+
+- Post 2–3 lines on the checks you ran and one insight
+- Share the service you inspected and one “next step” from your runbook
+- Optional: screenshot of your runbook
+
+Use hashtags:  
+#90DaysOfDevOps  
+#DevOpsKaJosh  
+#TrainWithShubham
+
+Happy Learning  
+**TrainWithShubham**
+
+## 21. Hands-on Project — Day 5: Python + Boto3 S3 Tool
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Python + Boto3 S3 Tool**.  
+We’ll use Python’s `boto3` SDK to interact with Amazon S3 for file management — a core DevOps skill.
+
+---
+
+#### 🎯 Learning Goals
+- Install and configure `boto3` for AWS access.  
+- List, create, and delete S3 buckets.  
+- Upload and download objects.  
+- Manage object metadata and permissions.  
+- Handle errors gracefully.  
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1. Install boto3 and configure AWS credentials
+   pip install boto3
+   aws configure
+
+2. List buckets
+   python s3_list_buckets.py
+
+3. Create a new bucket
+   python s3_create_bucket.py my-devops-bucket-123
+
+4. Upload and download files
+   python s3_upload.py my-devops-bucket-123 ./sample.txt sample.txt
+   python s3_download.py my-devops-bucket-123 sample.txt ./downloaded.txt
+
+5. Delete objects and buckets
+   python s3_delete_object.py my-devops-bucket-123 sample.txt
+   python s3_delete_bucket.py my-devops-bucket-123
+```
+
+---
+
+#### 💡 Challenge
+- Extend the upload script to support **multi-part uploads** for large files.  
+- Add a `--public` flag to upload objects with public-read ACL.  
+- Write a cleanup script to empty and delete multiple buckets at once.  
+
+---
+
+#### 📌 Commit
+Once complete, commit your progress:
+```bash
+git add day05-python-boto3-s3-tool
+git commit -m "day05: Python + Boto3 S3 Tool — manage S3 buckets and objects"
+git push
+```
+
+### Files
+
+- [s3_create_bucket.py](files/hands-on-projects/s3_create_bucket.py)
+- [s3_delete_bucket.py](files/hands-on-projects/s3_delete_bucket.py)
+- [s3_delete_object.py](files/hands-on-projects/s3_delete_object.py)
+- [s3_download.py](files/hands-on-projects/s3_download.py)
+- [s3_list_buckets.py](files/hands-on-projects/s3_list_buckets.py)
+- [s3_upload.py](files/hands-on-projects/s3_upload.py)
 
 
 ---

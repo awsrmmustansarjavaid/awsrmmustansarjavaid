@@ -282,7 +282,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🐧 Day 03 - Advanced Linux, SSH, Volume Management & AWS EBS
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 16 July 2026
@@ -624,6 +624,442 @@ Next, I plan to dive deeper into Linux networking, file permissions, and shell s
 ---
 
 ⭐ Thank you for following my #90DaysOfDevOps journey!
+
+## 19. Challenge Notes — Day 3: Setting Up AWS Free Tier Account and CLI
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### 1. Introduction to AWS Free Tier and CLI
+
+##### Why Use AWS Free Tier?
+AWS Free Tier offers free access to AWS services for 12 months, allowing you to experiment and build without incurring charges. It includes:
+- **Compute Services**: EC2, Lambda, Lightsail.
+- **Storage Services**: S3, EBS.
+- **Database Services**: RDS, DynamoDB.
+- **Monitoring Services**: CloudWatch.
+
+
+[![](https://img.youtube.com/vi/E0hm3tkNqAg/0.jpg)](https://www.youtube.com/watch?v=E0hm3tkNqAg)
+
+[Watch the video](https://www.youtube.com/watch?v=E0hm3tkNqAg)
+
+##### Why Use AWS CLI?
+The AWS Command Line Interface (CLI) allows you to interact with AWS services directly from your terminal or command prompt. It offers:
+- Efficient automation through scripts.
+- Direct access to AWS APIs.
+- The ability to manage and configure AWS resources without using the web console.
+
+#### 2. Setting Up Your AWS Free Tier Account
+
+##### Step 1: Creating an AWS Account
+1. Visit the AWS Free Tier Page.
+2. Click on **Create a Free Account** or **Sign Up**.
+3. Enter your email address, create a strong password, and choose an AWS account name.
+   - **Example:**
+     - Email: `youremail@example.com`
+     - Password: `yourSecurePassword123`
+     - Account Name: `ShahidDevOps`
+
+##### Step 2: Setting Up Account Details
+1. Choose the Account Type:
+   - **Personal**: Suitable for individual use and experimentation.
+   - **Professional**: Suitable for business or team usage.
+2. Enter your Personal Information:
+   - Full Name, Address, Country, Phone Number.
+3. Click **Continue**.
+
+##### Step 3: Adding Payment Information
+- AWS requires a valid credit or debit card for verification.
+- **Important:** AWS will charge a refundable $1 to verify your card.
+- Enter your card details and billing address.
+- Click **Verify and Continue**.
+
+##### Step 4: Verifying Your Identity
+1. Choose your preferred verification method (**SMS** or **voice call**).
+2. Enter your phone number and click **Send SMS**.
+3. Enter the verification code you receive.
+4. Complete the CAPTCHA and click **Continue**.
+
+##### Step 5: Selecting a Support Plan
+- Choose **Basic Support (Free)**.
+- This plan includes:
+  - 24/7 customer service.
+  - Access to AWS documentation and community forums.
+- Click **Complete Sign Up**.
+
+##### Step 6: Accessing the AWS Console
+1. Sign in to the **AWS Management Console**.
+2. Use your registered email and password.
+3. Explore the AWS Console to get familiar with the interface.
+
+#### 3. Installing AWS CLI
+
+##### 📌 Why Use AWS CLI?
+- Easily automate repetitive tasks.
+- Manage multiple AWS accounts using profiles.
+- Gain complete control from your terminal.
+
+##### Step 1: Downloading AWS CLI
+
+###### For Windows
+1. Visit the **AWS CLI Downloads** page.
+2. Download the **Windows 64-bit MSI installer**.
+3. Run the installer and follow the steps.
+
+###### For Linux and Mac
+1. Download the AWS CLI package:
+   ```bash
+   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   ```
+2. Unzip the package:
+   ```bash
+   unzip awscliv2.zip
+   ```
+3. Install AWS CLI:
+   ```bash
+   sudo ./aws/install
+   ```
+4. Verify the installation:
+   ```bash
+   aws --version
+   ```
+
+#### 4. Configuring AWS CLI
+
+##### Step 1: Generate IAM User Access Keys
+1. Open the **AWS Management Console**.
+2. Navigate to **IAM (Identity and Access Management)**.
+3. Select **Users > Add users**.
+4. Enter a username (e.g., `cli-user`).
+5. Choose **Programmatic access** as the access type.
+6. Attach policies:
+   - Select **AdministratorAccess** for full permissions.
+7. Review and click **Create User**.
+8. Download the `.csv` file containing the **Access Key ID** and **Secret Access Key**.
+
+##### Step 2: Configure AWS CLI with Credentials
+Run the following command:
+```bash
+aws configure
+```
+You will be prompted to enter the following details:
+- **AWS Access Key ID**: (from the `.csv` file)
+- **AWS Secret Access Key**: (from the `.csv` file)
+- **Default region name**: (e.g., `us-east-1`)
+- **Default output format**: (e.g., `json`)
+
+#### 5. Verifying AWS CLI Configuration
+
+##### Check AWS Identity
+```bash
+aws sts get-caller-identity
+```
+- The output should display your AWS account ID and user ARN.
+
+##### List Available S3 Buckets
+```bash
+aws s3 ls
+```
+
+##### Create an S3 Bucket
+```bash
+aws s3 mb s3://shahid-devops-bucket
+```
+
+##### Upload a Test File
+```bash
+echo "Hello AWS!" > hello.txt
+aws s3 cp hello.txt s3://shahid-devops-bucket/
+```
+
+#### 6. Troubleshooting Common Issues
+
+| Issue | Solution |
+|--------|----------|
+| `aws: command not found` | Ensure AWS CLI is correctly installed and added to your PATH. |
+| Invalid Access Key or Secret Key | Double-check credentials using `aws configure` or update via IAM console. |
+| Permission denied errors | Make sure your IAM user has the required policies attached. |
+| Network connectivity issues | Check your internet connection and VPC settings. |
+
+#### 7. Best Practices for AWS CLI
+
+- **Secure Access Keys:**
+  Use environment variables instead of hardcoding them:
+  ```bash
+  export AWS_ACCESS_KEY_ID=your-access-key
+  export AWS_SECRET_ACCESS_KEY=your-secret-key
+  ```
+- **Use Named Profiles:**
+  Manage multiple accounts with profiles:
+  ```bash
+  aws configure --profile dev
+  aws s3 ls --profile dev
+  ```
+- **Rotate Keys Regularly:**
+  Periodically update your keys to enhance security.
+- **Limit Permissions:**
+  Follow the **principle of least privilege** when attaching IAM policies.
+
+#### 8. Hands-On Activity
+
+##### Task 1: Create an S3 Bucket via CLI
+```bash
+aws s3 mb s3://my-devops-series-bucket
+```
+
+##### Task 2: Upload a File to the S3 Bucket
+```bash
+aws s3 cp sample.txt s3://my-devops-series-bucket
+```
+
+##### Task 3: List the Uploaded File
+```bash
+aws s3 ls s3://my-devops-series-bucket
+```
+
+##### Task 4: Delete the S3 Bucket
+```bash
+aws s3 rb s3://my-devops-series-bucket --force
+```
+
+## 20. Cohort Practice — Day 3: Linux Commands Practice
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today’s goal is to **build your Linux command confidence**.
+
+You will create a cheat sheet of commands focused on:
+- Process management
+- File system
+- Networking troubleshooting
+
+This is the command toolkit you will reuse for years.
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+- A markdown file named:  
+  `linux-commands-cheatsheet.md`
+
+or
+
+- A hand written cheat sheet (Recommended)
+
+Your cheat sheet should be easy to scan during real troubleshooting.
+
+---
+
+#### Guidelines
+Follow these rules while creating your cheat sheet:
+
+- Include **at least 20 commands** with one‑line usage notes
+- Add **3 networking commands** (`ping`, `ip addr`, `dig`, `curl`, etc.)
+- Group commands by category
+- Keep it concise and readable
+
+---
+
+#### Resources
+You may refer to:
+
+- Linux `man` pages
+- Your class notes
+- Reliable Linux command references
+
+Don’t copy long lists. Focus on commands you understand.
+
+---
+
+#### Why This Matters for DevOps
+Real production issues are solved at the command line.
+
+The faster you can inspect logs and network issues, the faster you can:
+- Restore service
+- Reduce downtime
+- Gain trust as an operator
+
+---
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository  
+2. Navigate to the `2026/day-03/` folder  
+3. Add your `linux-commands-cheatsheet.md` file  
+4. Commit and push your changes to your fork  
+
+---
+
+#### Learn in Public
+Share your Day 03 progress on LinkedIn:
+
+- Post 2–3 lines on your favorite Linux commands
+- Share one log command and one networking command
+- Optional: screenshot of your cheat sheet
+
+Use hashtags:
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+
+
+Happy Learning  
+**TrainWithShubham**
+
+##### Notes: linux_day03
+
+ls -l - list with details
+ls -a - list all with hidden file
+ls -lt - list all detail with latest time 
+ls -la - list with hidden file and details
+
+mkdir - create directory
+touch - create file
+cat - view  file data
+echo -  print in terminal
+echo "text" > file_name - store in file and remove the existing data
+echo "text" >> file_name - keep existing data and add new data
+
+* - wildcard character 
+use in
+rm *.txt - delete all txt file
+ls *.txt - show all the txt file
+
+? - wildcard character
+use in
+
+file?.txt - show all the file in like file1.txt, file2.txt, file3.txt
+
+head -n 3 file_name - file first 3 line of the file data
+tail -n 2 file_name - file last 3 line data
+
+grep - to search the text in the file
+grep "ERROR" in file_name
+find -name "*/log" - show all the log file
+
+wc- word count
+wc -l file_name - print only how many line ot the text in this file
+
+wc file_name - show detail word and line reord in the file
+
+
+chmod 700 file_name - change the pemrision of the file
+4- read
+2- write
+1- execute
+
+700 - 7 is user, 0 is group, 0 is other
+
+chmod +x file_name - assign all member to execute permission
+chmod -w file_name - remove the permision
+
+suod - suuperuser do - this command work without /root administrater priviliges work the permission
+
+##### Notes: linux_practice
+
+grep - to search text
+ls > app.txt - to overwrite the output
+ls >> app.txt to extend to output 
+
+ls wrongfolder 2> app.log overwrite the error message 
+ls wrongfolder 2>> app.log extend the error message
+
+ls wrongfolder &> app.log overwrite the error and success message 
+ls wrongfolder &>> app.log extend the error and success message 
+
+< input redirection
+| pass output from one command to another
+
+tail -f demo.txt - show last message of the file
+df -h - to show to dick usage
+top - memory usage
+
+## 21. Hands-on Project — Day 3: Git Advanced Branching
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Git Advanced Branching**.  
+You’ll practice creating feature branches, fast‑forward vs. no‑fast‑forward merges, rebasing, cherry‑picking, reverting, stashing, tagging, and bisecting.
+
+---
+
+#### 🎯 Learning Goals
+- Use **branching strategies** (feature, release, hotfix).
+- Compare **merge** vs **rebase** and when to prefer each.
+- Apply **no‑FF merges** for history clarity; **FF** merges for simplicity.
+- Use **cherry‑pick**, **revert**, **stash**, **tags**, and **bisect** confidently.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1. Create sandbox repo
+   bash setup_repo.sh
+   ✔ Creates lab-git/ with an initialized repo and a few commits.
+
+2. Explore branch strategies (FF vs --no-ff)
+   bash merge_ff.sh
+   bash merge_noff.sh
+   ✔ See the difference in history graphs and commit messages.
+
+3. Rebase feature branch
+   bash rebase_demo.sh
+   ✔ Rebase feature on top of main and compare linear history.
+
+4. Cherry-pick a specific commit
+   bash cherry_pick.sh
+   ✔ Copy a single commit from feature into main without merging everything.
+
+5. Revert a bad commit
+   bash revert_demo.sh
+   ✔ Safely undo changes that landed on main (without rewriting history).
+
+6. Stash and apply
+   bash stash_demo.sh
+   ✔ Park WIP changes while switching branches; re-apply later.
+
+7. Bisect to find a bug
+   bash bisect_demo.sh
+   ✔ Binary search through history to locate the first bad commit.
+
+8. Tags and releases
+   bash tags_demo.sh
+   ✔ Create annotated tags and list them.
+```
+
+---
+
+#### 💡 Challenge
+- Create `feature/top-5` that adds a function; merge it with `--no-ff` into `main` and a proper message.  
+- Cherry‑pick just the documentation commit from `feature/docs` to `main`.  
+- Tag the result as `v0.2.0` with a release note.
+
+---
+
+
+
+#### 📌 Commit
+Once complete, commit your progress:
+```bash
+git add day03-git-advanced-branching
+git commit -m "day03: Git advanced branching — FF vs no-FF, rebase, cherry-pick, revert, stash, tags, bisect"
+git push
+```
+
+### Files
+
+- [bisect_demo.sh](files/hands-on-projects/bisect_demo.sh)
+- [cherry_pick.sh](files/hands-on-projects/cherry_pick.sh)
+- [merge_ff.sh](files/hands-on-projects/merge_ff.sh)
+- [merge_noff.sh](files/hands-on-projects/merge_noff.sh)
+- [rebase_demo.sh](files/hands-on-projects/rebase_demo.sh)
+- [revert_demo.sh](files/hands-on-projects/revert_demo.sh)
+- [setup_repo.sh](files/hands-on-projects/setup_repo.sh)
+- [stash_demo.sh](files/hands-on-projects/stash_demo.sh)
+- [tags_demo.sh](files/hands-on-projects/tags_demo.sh)
 
 
 ---

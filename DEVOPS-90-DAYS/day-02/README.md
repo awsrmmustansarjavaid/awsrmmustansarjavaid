@@ -290,7 +290,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🐧 Day 02 - Linux Architecture & Basic Linux Commands
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -642,6 +642,242 @@ I'm documenting my **#90DaysOfDevOps** journey publicly to stay consistent, buil
 ⭐ If you found this repository helpful, don't forget to star it!
 
 #90DaysOfDevOps #Linux #DevOps #OpenSource #Cloud #LearningInPublic #GitHub
+
+## 19. Challenge Notes — Day 2: AWS Fundamentals and Services Overview
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### Introduction to AWS
+- Amazon Web Services (AWS) is a leading cloud service provider offering scalable and cost-effective solutions.
+- AWS provides a wide range of services, including computing, storage, networking, security, and databases.
+
+#### AWS Global Infrastructure
+- **Regions**: Geographical locations containing AWS data centers.
+- **Availability Zones (AZs)**: Data centers within a region for redundancy and high availability.
+- **Edge Locations**: Used by AWS CloudFront for content delivery.
+
+#### AWS Services Overview
+
+##### Compute Services
+- **EC2 (Elastic Compute Cloud)**: Virtual servers in the cloud.
+- **Lambda**: Serverless compute service for event-driven applications.
+- **Elastic Beanstalk**: PaaS for deploying web applications.
+
+##### Storage Services
+- **S3 (Simple Storage Service)**: Object storage with scalability and security.
+- **EBS (Elastic Block Store)**: Block storage for EC2 instances.
+- **Glacier**: Low-cost archival storage.
+
+##### Networking Services
+- **VPC (Virtual Private Cloud)**: Isolated network within AWS.
+- **Route 53**: Scalable DNS and domain name management.
+- **CloudFront**: Content delivery network (CDN) for faster content distribution.
+
+##### Database Services
+- **RDS (Relational Database Service)**: Managed databases like MySQL, PostgreSQL, and Aurora.
+- **DynamoDB**: Fully managed NoSQL database.
+- **Redshift**: Data warehousing for analytics.
+
+##### Security and Identity Management
+- **IAM (Identity and Access Management)**: Secure access control.
+- **AWS Shield**: DDoS protection.
+- **KMS (Key Management Service)**: Encryption key management.
+
+#### Hands-on Activities
+- Create an AWS Free Tier account.
+- Launch an EC2 instance and connect via SSH.
+- Create an S3 bucket and upload a file.
+
+#### Homework
+- Explore AWS Pricing Calculator.
+- Research how to set up IAM roles and policies.
+
+## 20. Cohort Practice — Day 2: Linux Architecture, Processes, and systemd
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today’s goal is to **understand how Linux works under the hood**.
+
+You will create a short note that explains:
+- The core components of Linux (kernel, user space, init/systemd)
+- How processes are created and managed
+- What systemd does and why it matters
+
+This is the foundation for all troubleshooting you will do as a DevOps engineer.
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+- A markdown file named:  
+  `linux-architecture-notes.md`
+
+or
+
+- A hand written set of notes (Recommended)
+
+Your notes should be clear enough that someone new to Linux can follow them.
+
+---
+
+#### Guidelines
+Follow these rules while creating your notes:
+
+- Explain **process states** (running, sleeping, zombie, etc.)
+- List **5 commands** you would use daily
+- Keep it **short and practical** (under 1 page)
+- Use bullet points and short headings
+
+---
+
+#### Resources
+You may refer to:
+
+- Linux `man` pages (`ps`, `top`, `systemctl`)
+- Official systemd docs
+- Your class notes
+
+Avoid copying/pasting AI Generated content.
+Focus on understanding.
+
+---
+
+#### Why This Matters for DevOps
+Linux is the base OS for almost every production system.
+
+If you know how processes and systemd work, you can:
+- Debug crashed services faster
+- Fix CPU/memory issues
+- Understand logs and service restarts confidently
+
+This knowledge saves hours during incidents.
+
+---
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository  
+2. Navigate to the `2026/day-02/` folder  
+3. Add your `linux-architecture-notes.md` file  
+4. Commit and push your changes to your fork  
+
+---
+
+#### Learn in Public
+Share your Day 02 progress on LinkedIn:
+
+- Post 2–3 lines on what you learned about Linux internals
+- Share one systemd command you found useful
+- Optional: screenshot of your notes
+
+Use hashtags:
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+
+
+Happy Learning  
+**TrainWithShubham**
+
+##### Notes: linux_practice
+
+ls - list of directory and file
+ls -l - list with all details of the dir and files
+ls -la - list of all file and hidden file with details permission and users
+ls -a - list of all the hidden and normal file
+
+pwd - present working directory
+cd - change directory
+/ -- every thing in linux start with /(forword slash)
+/root - is the room adminstrator
+/bin - is the binary and programs
+mkdir - make the directory or folder
+touch - to create the file
+vim - is the text editor
+vi - is the text editor
+nano - is the simple text editor
+:wq - save and quit the file
+esc - to exit the file
+i, a, I, A - insert into file
+!q: - forcefully exit into file
+q: quit without save the file
+cat - print the file details in terminal
+echo - to print instantly
+echo "write anything" > file_name -> print and write to file
+echo "write anything" >> file_name -> print and write to file do not remote the existing line
+rm - remove the file 
+rm -v - remove and show the file or folder name
+rm -rf - remove the filled file
+
+## 21. Hands-on Project — Day 2: Shell Text Processing (grep/awk/sed)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Shell Text Processing with grep, awk, and sed**.  
+We’ll practice filtering, extracting, transforming, and summarizing text — all critical skills for DevOps engineers when parsing logs, config files, and command outputs.
+
+---
+
+#### 🎯 Learning Goals
+- Master searching and filtering text with `grep`.
+- Use `awk` to extract fields and calculate values.
+- Apply `sed` to transform text in-place.
+- Combine these tools for real-world log parsing.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1. Prepare sample log
+   bash prepare_logs.sh
+   ✔ Creates sample.log with mock Apache access logs.
+
+2. Practice with grep
+   bash grep_examples.sh
+   ✔ Find all lines with status code 404.
+   ✔ Count number of requests from a specific IP.
+   ✔ Highlight matches.
+
+3. Practice with awk
+   bash awk_examples.sh
+   ✔ Extract only IP addresses.
+   ✔ Print request method + URL.
+   ✔ Count requests per status code.
+   ✔ Compute average response size.
+
+4. Practice with sed
+   bash sed_examples.sh
+   ✔ Replace http with https.
+   ✔ Remove lines with favicon.ico.
+   ✔ Mask IP addresses (anonymization).
+```
+
+---
+
+#### 💡 Challenge
+- Combine `grep` and `awk` to find the **top 5 IP addresses** causing `404` errors.  
+- Use `sed` to rewrite URLs from `/old-path/` to `/new-path/`.  
+- Extend the scripts so results are written into `report.txt`.
+
+---
+
+#### 📌 Commit
+Once complete, commit your progress:
+```bash
+git add day02-shell-text-processing
+git commit -m "day02: Shell text processing — grep, awk, sed examples"
+git push
+```
+
+### Files
+
+- [awk_examples.sh](files/hands-on-projects/awk_examples.sh)
+- [grep_examples.sh](files/hands-on-projects/grep_examples.sh)
+- [prepare_logs.sh](files/hands-on-projects/prepare_logs.sh)
+- [sed_examples.sh](files/hands-on-projects/sed_examples.sh)
 
 
 ---

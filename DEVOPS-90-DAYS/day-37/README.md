@@ -2009,6 +2009,312 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 37: Building Workflows with GitHub Actions
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 37** of the DevOps 90-Day Challenge!
+Yesterday, you created your **first GitHub Actions workflow**.
+Today, you’ll go deeper by building **advanced workflows** with:
+
+* Multiple jobs
+* Matrix builds
+* Job dependencies
+
+[![](https://img.youtube.com/vi/7-J8UjY7-Tw/0.jpg)](https://www.youtube.com/watch?v=7-J8UjY7-Tw)
+
+[Watch the video](https://www.youtube.com/watch?v=7-J8UjY7-Tw)
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Write **multi-job workflows**.
+* Create **matrix builds** for testing across environments.
+* Understand **job dependencies** (`needs:`).
+
+---
+
+#### Tools Used
+
+* **GitHub Actions**
+* **YAML workflows**
+* **Python App Example**
+
+---
+
+#### Project Structure
+
+```bash
+myapp/
+ ├── .github/
+ │    └── workflows/
+ │         └── ci.yml
+ ├── app.py
+ ├── requirements.txt
+ └── tests/
+      └── test_app.py
+```
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Multi-Job Workflow
+
+Update `.github/workflows/ci.yml`:
+
+```yaml
+name: Multi-Job CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install flake8
+        run: pip install flake8
+      - name: Run Linter
+        run: flake8 .
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint   # test runs only after lint
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Tests
+        run: pytest
+```
+
+---
+
+##### 2. Matrix Builds
+
+Run tests on **multiple Python versions**:
+
+```yaml
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Tests
+        run: pytest
+```
+
+---
+
+##### 3. Add a Build Job
+
+After tests pass, add a **build job**:
+
+```yaml
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Docker Build
+        run: docker build -t myapp:latest .
+```
+
+---
+
+#### Verification
+
+* Lint → Test → Build runs in sequence.
+* Tests run across **multiple Python versions**.
+* Build job only runs if **previous jobs succeed**.
+
+---
+
+#### Bonus (Extra Learning)
+
+* Use **caching** (`actions/cache`) for faster builds.
+* Add **conditional jobs** (`if:` syntax).
+* Run jobs in **parallel** vs **sequentially**.
+
+---
+
+#### Key Concepts Applied
+
+| Concept              | Example Used                 |
+| -------------------- | ---------------------------- |
+| Multiple Jobs        | lint, test, build            |
+| Dependencies         | `needs: lint`, `needs: test` |
+| Matrix Builds        | Python 3.8, 3.9, 3.10        |
+| Sequential Execution | Lint → Test → Build pipeline |
+
+---
+
+#### Congratulations!
+
+You’ve built an **advanced GitHub Actions workflow** with:
+
+* Multi-job pipelines
+* Dependencies
+* Matrix builds
+
+This is exactly how real-world projects maintain **cross-version compatibility** and enforce **code quality**.
+
+---
+
+#### Try These Next
+
+* Add a **deploy job** after build (to AWS/GCP).
+* Add **scheduled workflows** (run daily).
+* Experiment with **self-hosted runners**.
+
+## 19. Cohort Practice — Day 37: Docker Revision & Cheat Sheet
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Goal
+Take a **one-day pause** to consolidate everything from Days 29–36 so Docker actually sticks.
+
+#### Expected Output
+- A markdown file: `docker-cheatsheet.md`
+- A markdown file: `day-37-revision.md` with self-check answers
+
+
+
+---
+
+
+
+#### Self-Assessment Checklist
+Mark yourself honestly — **can do**, **shaky**, or **haven't done**:
+
+- [ ] Run a container from Docker Hub (interactive + detached)
+- [ ] List, stop, remove containers and images
+- [ ] Explain image layers and how caching works
+- [ ] Write a Dockerfile from scratch with FROM, RUN, COPY, WORKDIR, CMD
+- [ ] Explain CMD vs ENTRYPOINT
+- [ ] Build and tag a custom image
+- [ ] Create and use named volumes
+- [ ] Use bind mounts
+- [ ] Create custom networks and connect containers
+- [ ] Write a docker-compose.yml for a multi-container app
+- [ ] Use environment variables and .env files in Compose
+- [ ] Write a multi-stage Dockerfile
+- [ ] Push an image to Docker Hub
+- [ ] Use healthchecks and depends_on
+
+---
+
+#### Quick-Fire Questions
+Answer from memory, then verify:
+1. What is the difference between an image and a container?
+2. What happens to data inside a container when you remove it?
+3. How do two containers on the same custom network communicate?
+4. What does `docker compose down -v` do differently from `docker compose down`?
+5. Why are multi-stage builds useful?
+6. What is the difference between `COPY` and `ADD`?
+7. What does `-p 8080:80` mean?
+8. How do you check how much disk space Docker is using?
+
+---
+
+#### Build Your Docker Cheat Sheet
+Create `docker-cheatsheet.md` organized by category:
+- **Container commands** — run, ps, stop, rm, exec, logs
+- **Image commands** — build, pull, push, tag, ls, rm
+- **Volume commands** — create, ls, inspect, rm
+- **Network commands** — create, ls, inspect, connect
+- **Compose commands** — up, down, ps, logs, build
+- **Cleanup commands** — prune, system df
+- **Dockerfile instructions** — FROM, RUN, COPY, WORKDIR, EXPOSE, CMD, ENTRYPOINT
+
+Keep it short — one line per command, something you'd actually reference on the job.
+
+---
+
+#### Revisit Weak Spots
+Pick **2 topics** you marked as shaky and redo the hands-on tasks from that day.
+
+---
+
+#### Suggested Flow (45–60 minutes)
+- 10 min: go through the checklist honestly
+- 10 min: answer quick-fire questions
+- 20 min: build your cheat sheet
+- 10 min: redo one weak area
+
+---
+
+#### Submission
+1. Add `docker-cheatsheet.md` and `day-37-revision.md` to `2026/day-37/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your Docker cheat sheet on LinkedIn — help others revise too.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 37: Helm Deploy to EKS
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Deploy a containerized app to **Amazon EKS** using **Helm**. You'll use `helm upgrade --install`, parameterize image/tag/replicas, and practice rollback.
+
+#### 🎯 Learning Goals
+- Understand Helm chart structure and values.
+- Deploy with `helm upgrade --install` and rollback with `helm rollback`.
+- Authenticate to EKS with `aws eks update-kubeconfig`.
+- Use Jenkins to automate deploy.
+
+#### 🛠️ Tasks
+1) Inspect the chart in `chart/myapp/`.
+2) Run Jenkins with your cluster/image params.
+3) Verify rollout and service.
+4) Try rollback.
+
+#### 📌 Commit
+git add day37-helm-deploy-eks
+git commit -m "day37: Helm deploy to EKS (chart + Jenkinsfile + scripts)"
+git push
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [chart/myapp/Chart.yaml](files/hands-on-projects/chart/myapp/Chart.yaml)
+- [chart/myapp/templates/_helpers.tpl](files/hands-on-projects/chart/myapp/templates/_helpers.tpl)
+- [chart/myapp/templates/deployment.yaml](files/hands-on-projects/chart/myapp/templates/deployment.yaml)
+- [chart/myapp/templates/service.yaml](files/hands-on-projects/chart/myapp/templates/service.yaml)
+- [chart/myapp/values.yaml](files/hands-on-projects/chart/myapp/values.yaml)
+- [scripts/helm_deploy.sh](files/hands-on-projects/scripts/helm_deploy.sh)
+- [scripts/helm_rollback.sh](files/hands-on-projects/scripts/helm_rollback.sh)
+- [scripts/login_eks.sh](files/hands-on-projects/scripts/login_eks.sh)
+
+
 ---
 
 [← Day 36](../day-36/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 38 →](../day-38/README.md)

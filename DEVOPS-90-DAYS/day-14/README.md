@@ -611,7 +611,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — Day 14 - DevOps, Jira Project Management & Python OOP Learning
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### Overview
 On Day 14, we explored important concepts related to **DevOps project management, Jira, Confluence documentation, SDLC methodologies, and Python Object-Oriented Programming (OOP)**. We learned how development teams manage projects, track tasks, document knowledge, and write structured Python programs using classes and objects.
@@ -1149,6 +1149,435 @@ By the end of Day 14, I learned:
 #### Conclusion
 
 Day 14 provided practical knowledge of **DevOps project management using Jira, documentation using Confluence, SDLC methodologies, and Python Object-Oriented Programming concepts**. These skills are essential for working in modern software development teams.
+
+## 19. Challenge Notes — Day 14: Deeper into Linux (Permissions, Processes, Services)
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### 1. **File Permissions and Ownership**
+
+
+
+[![](https://img.youtube.com/vi/7MU50J-vYCc/0.jpg)](https://www.youtube.com/watch?v=7MU50J-vYCc)
+
+[Watch the video](https://www.youtube.com/watch?v=7MU50J-vYCc)
+
+##### Viewing Permissions
+- **ls -l**: Displays file permissions in the long listing format.
+
+---
+
+##### 2. **Understanding File Permissions in Linux**
+- **File Permissions** determine who can read, write, or execute a file. 
+- Represented in two formats: **Symbolic** and **Numeric (Octal)**
+
+---
+
+###### **Numeric Format (Octal Representation)**
+- Each permission is assigned a numerical value:
+  - Read (r) = 4
+  - Write (w) = 2
+  - Execute (x) = 1
+
+| Octal | Binary  | Permission | Meaning            |
+|-------|---------|------------|--------------------|
+| 0     | 000     | ---        | No permissions     |
+| 1     | 001     | --x        | Execute only       |
+| 2     | 010     | -w-        | Write only         |
+| 3     | 011     | -wx        | Write and Execute  |
+| 4     | 100     | r--        | Read only          |
+| 5     | 101     | r-x        | Read and Execute   |
+| 6     | 110     | rw-        | Read and Write     |
+| 7     | 111     | rwx        | Full permissions   |
+
+---
+
+###### **Changing File Permissions Using `chmod`**
+
+**Example:**
+```bash
+chmod 755 file.txt
+````
+
+* 7 → Owner: Read (4) + Write (2) + Execute (1)
+* 5 → Group: Read (4) + Execute (1)
+* 5 → Others: Read (4) + Execute (1)
+
+---
+
+###### **Symbolic Format for `chmod`**
+
+* **u** → Owner (User)
+* **g** → Group
+* **o** → Others
+* **a** → All users
+
+**Example Commands:**
+
+```bash
+chmod u+x file.sh   # Adds execute permission for the owner
+chmod g-w file.txt  # Removes write permission from the group
+chmod o+r file.txt  # Adds read permission for others
+chmod a-x script.sh # Removes execute permission for everyone
+```
+
+---
+
+##### 3. **Changing Ownership Using `chown`**
+
+* The `chown` command changes the owner or group of a file.
+
+```bash
+sudo chown john file.txt       # Change owner to 'john'
+sudo chown john:developers file.txt  # Change owner to 'john' and group to 'developers'
+```
+
+* **Recursively change ownership**:
+
+```bash
+sudo chown -R user:group /path   # Changes ownership recursively
+```
+
+---
+
+##### 4. **Special File Permissions (SetUID, SetGID, Sticky Bit)**
+
+| Special Bit | Octal | Description                 |
+| ----------- | ----- | --------------------------- |
+| SetUID      | 4xxx  | Runs as file owner          |
+| SetGID      | 2xxx  | Runs as group               |
+| Sticky Bit  | 1xxx  | Only owner can delete files |
+
+**Example Commands:**
+
+```bash
+chmod 4755 script.sh  # SetUID: Runs as file owner
+chmod 2755 directory/ # SetGID: Inherits group
+chmod 1755 /tmp       # Sticky Bit: Only owner can delete files
+```
+
+---
+
+#### 5. **Disk and Storage Management**
+
+##### Checking Disk Usage
+
+```
+df -h
+```
+
+Displays disk space usage in a human-readable format.
+
+---
+
+##### Checking Directory Size
+
+```
+du -sh /path/to/directory
+```
+
+Shows the size of the specified directory.
+
+---
+
+##### Finding Files and Directories
+
+```
+find / -name "file.txt"
+```
+
+Searches for a file named "file.txt" starting from the root directory.
+
+---
+
+#### 6. **Process and System Monitoring**
+
+##### Viewing Running Processes
+
+```
+ps aux
+```
+
+Displays a list of all running processes.
+
+---
+
+##### Real-Time Process Monitoring
+
+```
+top
+```
+
+Shows a dynamic, real-time view of system processes.
+
+**Alternative:**
+
+```
+htop
+```
+
+Provides an interactive process viewer (requires installation).
+
+---
+
+##### Killing a Process
+
+```bash
+kill 1234
+```
+
+Terminates the process with the given ID (PID).
+
+**Force Kill:**
+
+```bash
+kill -9 1234
+```
+
+Forcefully kills the process.
+
+---
+
+#### 7. **Networking and Connectivity**
+
+##### Display Network Configuration
+
+```bash
+ifconfig
+```
+
+Shows network interfaces and IP addresses.
+
+**Alternative:**
+
+```bash
+ip addr
+```
+
+Displays detailed network interface information.
+
+---
+
+##### Check Network Connectivity
+
+```bash
+ping google.com
+```
+
+Tests connectivity to a remote server.
+
+---
+
+##### View Open Network Ports
+
+```bash
+netstat -tuln
+```
+
+Displays active connections and listening ports.
+
+### Attachments
+
+- [Day 14 Deeper into Linux (Permissions, Processes, Services).pdf](Day%2014%20Deeper%20into%20Linux%20%28Permissions%2C%20Processes%2C%20Services%29.pdf)
+
+## 20. Cohort Practice — Day 14: Networking Fundamentals & Hands-on Checks
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Get comfortable with core networking concepts and the commands you’ll actually run during troubleshooting.
+
+You will:
+- Map the **OSI vs TCP/IP models** in your own words
+- Run essential connectivity commands
+- Capture a mini network check for a target host/service
+
+Keep it short, real, and repeatable.
+
+---
+
+#### Expected Output
+- A markdown file: `day-14-networking.md`
+- Screenshots (optional) of key command outputs
+
+---
+
+#### Quick Concepts (write 1–2 bullets each)
+- OSI layers (L1–L7) vs TCP/IP stack (Link, Internet, Transport, Application)
+- Where **IP**, **TCP/UDP**, **HTTP/HTTPS**, **DNS** sit in the stack
+- One real example: “`curl https://example.com` = App layer over TCP over IP”
+
+---
+
+#### Hands-on Checklist (run these; add 1–2 line observations)
+- **Identity:** `hostname -I` (or `ip addr show`) — note your IP.
+- **Reachability:** `ping <target>` — mention latency and packet loss.
+- **Path:** `traceroute <target>` (or `tracepath`) — note any long hops/timeouts.
+- **Ports:** `ss -tulpn` (or `netstat -tulpn`) — list one listening service and its port.
+- **Name resolution:** `dig <domain>` or `nslookup <domain>` — record the resolved IP.
+- **HTTP check:** `curl -I <http/https-url>` — note the HTTP status code.
+- **Connections snapshot:** `netstat -an | head` — count ESTABLISHED vs LISTEN (rough).
+
+Pick one target service/host (e.g., `google.com`, your lab server, or a local service) and stick to it for ping/traceroute/curl where possible.
+
+---
+
+#### Mini Task: Port Probe & Interpret
+1) Identify one listening port from `ss -tulpn` (e.g., SSH on 22 or a local web app).  
+2) From the same machine, test it: `nc -zv localhost <port>` (or `curl -I http://localhost:<port>`).  
+3) Write one line: is it reachable? If not, what’s the next check? (e.g., service status, firewall).
+
+---
+
+#### Reflection (add to your markdown)
+- Which command gives you the fastest signal when something is broken?
+- What layer (OSI/TCP-IP) would you inspect next if DNS fails? If HTTP 500 shows up?
+- Two follow-up checks you’d run in a real incident.
+
+---
+
+#### Submission
+1. Add `day-14-networking.md` to `2026/day-14/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Post 2–3 lines on the commands you practiced and one interesting traceroute/curl finding.
+
+Use hashtags:  
+#90DaysOfDevOps  
+#DevOpsKaJosh  
+#TrainWithShubham
+
+Happy Learning  
+**TrainWithShubham**
+
+##### Notes: day-14-networking
+
+OSI Model - Layer 1
+===========
+-> osi layer 1 is the physical layer is the foundational bottom  level  of the osi model. it is the  strictly concerned with transmitting  raw, unstructured  bits across physical media.
+
+OSI Model - Layer 2
+===========
+osi model layer 2  is the data link layer. it is responsible for node to node delivery of data across a local physical network. is translate raw bits into structured  chunks called frames  and uses hardware based mac address.
+
+OSi Model - Layer 3
+===========
+osi medel layer 3 is the network layer is reponsible for routing data accross different network. it translate logical address (like ip address ) into physical path and breaks large transport segment into smaller packets.
+
+
+
+OSI Model - Layer 4
+===========
+osi model 4 or transport layer , is the networking layer responsible for reliable, ordered, and error free  end to end devlivery data between application on different devices.
+
+
+OSI Model - Layer 5
+===========
+Osi model layer 5 is the Session layer it act as a dialogue manager, responsible for establishing , maintaining , synchroning and gracefully  terminating communication connections  between  applications on different devices.
+
+
+OSI Model - Layer 6
+===========
+osi model 6 presentation layer acts as the network translater . it formats encrypts and compresses data from the application layer so it can be reliable understood and displayed  by receiving  system , regard less  of the operating system or hardware.
+
+OSI Model - layer 7
+===========
+Layer 7 is the application layer of the osi model . it is the top most layer that serve as  the direct interface between enduser application (like web browser and email clients ) andunder laying network interpreting  application level request and user intent.
+
+
+
+TCP/IP
+======
+
+
+link layer
+----------
+Operate on physical hard ware connecting devices . it moves raw binary data across a raw binary data across a local area network
+
+
+internet layer
+--------------
+connects multiple independent network together establishing the foundation of the internet . it handle the routing and logical address of the data .
+
+
+Transport Layer
+---------------
+acts as a liasion between  the abstract world of the software  application and physical routing of lower layers.
+is provides reliable end to end communication between specific application running on different devices
+
+Application Layer
+-----------------
+the top layer of the stack which interact directly with the end users it allows the user facing software and services to request and send network data .
+
+## 21. Hands-on Project — Day 14: VPC, Subnets, IGW, NAT
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **AWS VPC networking** with Terraform — we’ll build a production-style VPC with **public and private subnets across multiple AZs**, an **Internet Gateway** for egress on public subnets, and **NAT Gateways** for private subnets.
+
+---
+
+#### 🎯 Learning Goals
+- Model a **VPC** with CIDR planning and AZ-aware subnetting.  
+- Configure **public** (IGW) vs **private** (NAT) routing.  
+- Create **route tables** and **associations** per subnet.  
+- Parameterize the design (AZ count, single-NAT vs per-AZ NAT).  
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1) Initialize & plan
+   terraform -chdir=terraform init
+   terraform -chdir=terraform plan -var="vpc_cidr=10.0.0.0/16" -var="az_count=2"
+
+2) Apply
+   terraform -chdir=terraform apply -auto-approve -var="vpc_cidr=10.0.0.0/16" -var="az_count=2"
+
+3) Inspect
+   terraform -chdir=terraform output
+
+4) (Optional) Try single NAT for cost savings
+   terraform -chdir=terraform apply -auto-approve -var="single_nat=true"
+
+5) Destroy when done
+   terraform -chdir=terraform destroy -auto-approve
+```
+
+---
+
+#### 💡 Challenge
+- Switch to **per‑AZ NAT** (set `single_nat=false`) and verify each private subnet routes to its AZ’s NAT.  
+- Add **VPC endpoints** (e.g., S3, DynamoDB) for private subnets.  
+- Add **Network ACLs** with explicit rules for `logs/` ingestion hosts only.  
+
+---
+
+#### ✅ Checklist
+- [ ] VPC + subnets created across AZs  
+- [ ] Public route (0.0.0.0/0) → IGW, Private route(s) → NAT  
+- [ ] NAT choice validated (`single_nat` vs per‑AZ)  
+- [ ] (Optional) Endpoints/NACLs added  
+
+---
+
+#### 📌 Commit
+```bash
+git add day14-vpc-subnets-igw-nat
+git commit -m "day14: VPC with multi-AZ public/private subnets, IGW, and NAT (single/per-AZ)"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

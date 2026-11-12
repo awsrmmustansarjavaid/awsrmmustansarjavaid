@@ -375,6 +375,281 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 35: Jenkinsfile and Declarative Pipelines
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 35** of the DevOps 90-Day Challenge!
+Yesterday, you built a **CI/CD pipeline for Dockerized apps**.
+Today, you’ll learn to write **Jenkinsfiles** using **Declarative Pipelines**, making your automation reusable and version-controlled.
+
+[![](https://img.youtube.com/vi/dz6fwJuwdZQ/0.jpg)](https://www.youtube.com/watch?v=dz6fwJuwdZQ)
+
+[Watch the video](https://www.youtube.com/watch?v=dz6fwJuwdZQ)
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand the structure of a **Declarative Pipeline**.
+* Create a **Jenkinsfile** inside your repository.
+* Automate builds and deployments using **Pipeline as Code**.
+
+---
+
+#### Tools Used
+
+* **Jenkins** (Pipeline plugin)
+* **GitHub** (to store Jenkinsfile with source code)
+* **Docker Hub** (for image push)
+
+---
+
+#### Project Structure
+
+```bash
+dockerized-app/
+ ├── Jenkinsfile
+ ├── Dockerfile
+ ├── app.py
+ └── requirements.txt
+```
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Create Jenkinsfile
+
+Add this file in the **root** of your repo:
+
+```groovy
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "your-dockerhub-username/dockerized-app"
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/<username>/dockerized-app.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $DOCKER_IMAGE:$BUILD_NUMBER .'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                      echo "$PASS" | docker login -u "$USER" --password-stdin
+                      docker push $DOCKER_IMAGE:$BUILD_NUMBER
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                  docker rm -f myapp || true
+                  docker run -d -p 5000:5000 --name myapp $DOCKER_IMAGE:$BUILD_NUMBER
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Build and deployment successful!"
+        }
+        failure {
+            echo "Build failed. Check logs."
+        }
+    }
+}
+```
+
+---
+
+##### 2. Configure Jenkins Job
+
+* Go to **Jenkins → New Item → Pipeline**
+* Select **Pipeline script from SCM**
+* Choose **Git** and paste repo URL
+* Jenkins will automatically read **Jenkinsfile** from repo
+
+---
+
+##### 3. Test the Jenkinsfile
+
+* Commit & push Jenkinsfile to GitHub
+* Run the job → Jenkins will:
+  Clone repo → Build Docker image → Push to Docker Hub → Deploy container
+
+---
+
+#### Verification
+
+* Jenkins console logs show pipeline execution.
+* New Docker image is pushed to **Docker Hub**.
+* App is accessible on `http://<EC2_PUBLIC_IP>:5000`.
+
+---
+
+#### Bonus (Advanced Jenkinsfile Features)
+
+* Add **parallel stages** (e.g., test + linting at same time).
+* Use **when conditions** for environment-specific deployments.
+* Add **post actions** for Slack/email notifications.
+
+---
+
+#### Key Concepts Applied
+
+| Concept            | Example Used                         |
+| ------------------ | ------------------------------------ |
+| Pipeline as Code   | Jenkinsfile in GitHub repo           |
+| Declarative Syntax | Structured stages and steps          |
+| Automation         | Build → Push → Deploy flow automated |
+
+---
+
+#### Congratulations!
+
+You have now moved from **manual pipelines** to **Pipeline as Code** with Jenkinsfiles
+
+This is a **huge milestone** in becoming a DevOps engineer!
+
+---
+
+#### Try These Next
+
+* Add **unit tests** as a pipeline stage.
+* Run multiple environments (**dev/staging/prod**) with `when` conditions.
+* Store pipeline in a **shared library** for reuse.
+
+## 19. Cohort Practice — Day 35: Multi-Stage Builds & Docker Hub
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today's goal is to **build optimized images and share them with the world**.
+
+Multi-stage builds are how real teams ship small, secure images. Docker Hub is how you distribute them. Both are interview favourites.
+
+-------------
+
+#### Expected Output
+
+- A markdown file: `day-35-multistage-hub.md`
+- Dockerfiles demonstrating multi-stage builds
+- An image pushed to your Docker Hub account
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: The Problem with Large Images
+1. Write a simple Go, Java, or Node.js app (even a "Hello World" is fine)
+2. Create a Dockerfile that builds and runs it in a **single stage**
+3. Build the image and check its **size**
+
+Note down the size — you'll compare it later.
+
+---
+
+##### Task 2: Multi-Stage Build
+1. Rewrite the Dockerfile using **multi-stage build**:
+   - Stage 1: Build the app (install dependencies, compile)
+   - Stage 2: Copy only the built artifact into a minimal base image (`alpine`, `distroless`, or `scratch`)
+2. Build the image and check its size again
+3. Compare the two sizes
+
+Write in your notes: Why is the multi-stage image so much smaller?
+
+---
+
+##### Task 3: Push to Docker Hub
+1. Create a free account on [Docker Hub](https://hub.docker.com) (if you don't have one)
+2. Log in from your terminal
+3. Tag your image properly: `yourusername/image-name:tag`
+4. Push it to Docker Hub
+5. Pull it on a different machine (or after removing locally) to verify
+
+---
+
+##### Task 4: Docker Hub Repository
+1. Go to Docker Hub and check your pushed image
+2. Add a **description** to the repository
+3. Explore the **tags** tab — understand how versioning works
+4. Pull a specific tag vs `latest` — what happens?
+
+---
+
+##### Task 5: Image Best Practices
+Apply these to one of your images and rebuild:
+1. Use a **minimal base image** (alpine vs ubuntu — compare sizes)
+2. **Don't run as root** — add a non-root USER in your Dockerfile
+3. Combine `RUN` commands to **reduce layers**
+4. Use **specific tags** for base images (not `latest`)
+
+Check the size before and after.
+
+---
+
+#### Hints
+- Multi-stage: use `FROM ... AS builder` then `COPY --from=builder`
+- Login: `docker login`
+- Tag: `docker tag local-image:tag username/repo:tag`
+- Push: `docker push username/repo:tag`
+- Non-root user: `RUN adduser` + `USER`
+
+---
+
+#### Submission
+1. Add your Dockerfiles and `day-35-multistage-hub.md` to `2026/day-35/`
+2. Include the link to your Docker Hub repo
+3. Commit and push to your fork
+
+---
+
+
+#### Learn in Public
+Share your before/after image sizes on LinkedIn — the difference is always impressive.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 35: Terraform Pipeline
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Focus: Jenkins pipeline to fmt/validate, scan (tfsec/checkov), plan, approve, apply/destroy.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [scripts/tf_apply.sh](files/hands-on-projects/scripts/tf_apply.sh)
+- [scripts/tf_destroy.sh](files/hands-on-projects/scripts/tf_destroy.sh)
+- [scripts/tf_init.sh](files/hands-on-projects/scripts/tf_init.sh)
+- [scripts/tf_plan.sh](files/hands-on-projects/scripts/tf_plan.sh)
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
+- [terraform/versions.tf](files/hands-on-projects/terraform/versions.tf)
+
+
 ---
 
 [← Day 34](../day-34/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 36 →](../day-36/README.md)

@@ -412,7 +412,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🛡️ Day 18 - SAST, SCA & SonarQube (Manual Code Analysis)
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -677,6 +677,531 @@ Together, they help build secure, reliable, and production-ready applications.
 ---
 
 > **"The best time to fix a security issue is before it reaches production. Shift left, secure early, and build with confidence."** 🔐🚀
+
+## 19. Challenge Notes — Day 18: AWS CloudTrail and Centralized Logging (ELK)
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+[![](https://img.youtube.com/vi/AuNvc334X1s/0.jpg)](https://www.youtube.com/watch?v=AuNvc334X1s)
+
+[Watch the video](https://www.youtube.com/watch?v=AuNvc334X1s)
+
+#### Part 1: AWS CloudTrail – Monitoring AWS API Calls
+
+##### What is AWS CloudTrail?
+AWS CloudTrail is a service that enables governance, compliance, and operational and risk auditing of your AWS account. It records all API calls made on your account through the AWS Console, CLI, SDKs, and other services.
+
+##### Key Features
+- Tracks API activity (who did what, when, and from where).
+- Stores logs in S3 securely.
+- Supports multi-region trails.
+- Can send events to CloudWatch Logs for alerting.
+
+##### Use Cases in DevOps & AWS
+- **Security Auditing:** Detect unauthorized access.
+- **Operational Monitoring:** Track changes to critical infrastructure.
+- **Compliance:** Prove change history during audits.
+- **Automation Triggers:** Use Lambda to respond to CloudTrail events.
+
+##### Key Concepts
+- **Trail:** Configuration to deliver events to S3.
+- **Event:** A record of an AWS API action.
+- **Management Events:** Admin actions like launching instances.
+- **Data Events:** Data-level actions like reading S3 objects.
+
+##### Example CLI
+```bash
+aws cloudtrail lookup-events --max-results 5
+```
+
+##### 🧪 Lab Task 1: Enable CloudTrail
+1. Go to AWS CloudTrail Console.
+2. Create a new trail:
+    - Name: MyTrail
+    - Enable for all regions
+    - Store logs in new S3 bucket
+    - Enable log file validation
+3. View logs in the S3 bucket.
+
+---
+
+#### Part 2: Centralized Logging with ELK Stack
+
+##### What is the ELK Stack?
+- **Elasticsearch:** Search and analytics engine.
+- **Logstash:** Log collection and processing engine.
+- **Kibana:** Visualization and dashboard tool.
+- **Filebeat:** Lightweight shipper for logs (optional, part of Elastic Stack).
+
+##### Why Use ELK in DevOps?
+- Centralizes logs from EC2, ECS, etc.
+- Real-time visibility into infrastructure and apps.
+- Enables root cause analysis and alerting.
+
+##### ELK Architecture & Data Flow
+```text
+App Logs -> Filebeat -> Logstash -> Elasticsearch -> Kibana
+AWS Logs -> CloudWatch -> Logstash -> Elasticsearch -> Kibana
+```
+
+##### Component Overview
+###### Elasticsearch
+- Fast, scalable log storage and indexing.
+- Supports filtering and full-text search.
+
+###### Logstash
+- Parses and enriches logs.
+- Configured using pipelines and filters.
+
+###### Kibana
+- UI to search, filter, and visualize logs.
+- Create dashboards and real-time insights.
+
+##### 💼 Use Cases in AWS
+| Use Case | ELK Role |
+|----------|----------|
+| Debug EC2 or Lambda | Use Filebeat/CloudWatch logs |
+| ECS Logs Monitoring | Use Fluentd/Filebeat |
+| Detect Login Attempts | Analyze CloudTrail logs |
+| HTTP Errors Dashboard | Visualize via Kibana |
+| Anomaly Detection | Alerts based on thresholds |
+
+---
+
+#### 🧪 Lab Task 2: Deploy ELK Stack on EC2
+
+##### Requirements
+- 1 Ubuntu EC2 instance (t2.medium or higher)
+- Open ports: 5044, 5601, 9200
+
+##### Steps
+```bash
+# Install Java
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+
+# Install Elasticsearch
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-9.0.0-amd64.deb
+sudo dpkg -i elasticsearch-9.0.0-amd64.deb
+sudo systemctl enable --now elasticsearch
+
+# Install Logstash
+wget https://artifacts.elastic.co/downloads/logstash/logstash-9.0.0.deb
+sudo dpkg -i logstash-9.0.0.deb
+sudo systemctl enable --now logstash
+
+# Install Kibana
+wget https://artifacts.elastic.co/downloads/kibana/kibana-9.0.0-amd64.deb
+sudo dpkg -i kibana-9.0.0-amd64.deb
+sudo systemctl enable --now kibana
+```
+
+Access Kibana at: `http://<EC2-Public-IP>:5601`
+
+---
+
+#### 🧪 Lab Task 3: Ingest CloudTrail Logs into ELK
+
+##### Create Logstash Config (cloudtrail.conf)
+```conf
+input {
+  s3 {
+    bucket => "your-cloudtrail-bucket"
+    access_key_id => "YOUR_ACCESS_KEY"
+    secret_access_key => "YOUR_SECRET_KEY"
+    region => "us-east-1"
+  }
+}
+filter {
+  json {
+    source => "message"
+  }
+}
+output {
+  elasticsearch {
+    hosts => ["localhost:9200"]
+    index => "cloudtrail-logs"
+  }
+}
+```
+
+##### Run Logstash
+```bash
+sudo /usr/share/logstash/bin/logstash -f cloudtrail.conf
+```
+
+##### Verify Logs
+```bash
+curl -X GET "localhost:9200/_cat/indices?v"
+```
+
+---
+
+#### 🧪 Lab Task 4: Visualize Logs in Kibana
+
+1. Access Kibana: `http://<EC2-Public-IP>:5601`
+2. Go to **Stack Management > Index Patterns**
+3. Create a pattern: `cloudtrail-logs*`
+4. Explore logs in **Discover**
+5. Build dashboards in **Visualize**
+
+---
+
+#### 🧠 Summary
+
+| Topic | Description |
+|-------|-------------|
+| CloudTrail | Tracks AWS API activity |
+| ELK Stack | Log collection and analysis |
+| Elasticsearch | Search and index logs |
+| Logstash | Pipeline for parsing logs |
+| Kibana | UI for visualization |
+| DevOps Use | Debugging, Monitoring, Alerting |
+
+### Attachments
+
+- [Day 18 AWS CloudTrail and Centralized Logging (ELK).pdf](Day%2018%20AWS%20CloudTrail%20and%20Centralized%20Logging%20%28ELK%29.pdf)
+
+## 20. Cohort Practice — Day 18: Shell Scripting: Functions & intermediate Concepts
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Write cleaner, reusable scripts — learn functions, strict mode, and real-world patterns.
+
+You will:
+- Write and call **functions**
+- Use **`set -euo pipefail`** for safer scripts
+- Work with **return values** and **local variables**
+- Build an intermediate script
+
+
+
+---
+
+
+
+#### Expected Output
+
+
+- A markdown file: `day-18-scripting.md`
+- All scripts you write during the tasks
+
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Basic Functions
+1. Create `functions.sh` with:
+   - A function `greet` that takes a name as argument and prints `Hello, <name>!`
+   - A function `add` that takes two numbers and prints their sum
+   - Call both functions from the script
+
+---
+
+##### Task 2: Functions with Return Values
+1. Create `disk_check.sh` with:
+   - A function `check_disk` that checks disk usage of `/` using `df -h`
+   - A function `check_memory` that checks free memory using `free -h`
+   - A main section that calls both and prints the results
+
+---
+
+
+
+
+##### Task 3: Strict Mode — `set -euo pipefail`
+1. Create `strict_demo.sh` with `set -euo pipefail` at the top
+2. Try using an **undefined variable** — what happens with `set -u`?
+3. Try a command that **fails** — what happens with `set -e`?
+4. Try a **piped command** where one part fails — what happens with `set -o pipefail`?
+
+**Document:** What does each flag do?
+- `set -e` →
+- `set -u` →
+- `set -o pipefail` →
+
+---
+
+##### Task 4: Local Variables
+1. Create `local_demo.sh` with:
+   - A function that uses `local` keyword for variables
+   - Show that `local` variables don't leak outside the function
+   - Compare with a function that uses regular variables
+
+---
+
+##### Task 5: Build a Script — System Info Reporter
+Create `system_info.sh` that uses functions for everything:
+1. A function to print **hostname and OS info**
+2. A function to print **uptime**
+3. A function to print **disk usage** (top 5 by size)
+4. A function to print **memory usage**
+5. A function to print **top 5 CPU-consuming processes**
+6. A `main` function that calls all of the above with section headers
+7. Use `set -euo pipefail` at the top
+
+Output should look clean and readable.
+
+---
+
+#### Hints
+- Function syntax: `function_name() { ... }`
+- Local vars: `local MY_VAR="value"`
+- Strict mode: `set -euo pipefail` as first line after shebang
+- Pass args to functions: `greet "Shubham"` → access as `$1` inside
+- `$?` gives the exit code of last command
+
+---
+
+#### Documentation
+
+Create `day-18-scripting.md` with:
+- Each script's code and output
+- Explanation of `set -euo pipefail`
+- What you learned (3 key points)
+
+---
+
+#### Submission
+1. Add your scripts and `day-18-scripting.md` to `2026/day-18/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+
+Share what you learned about shell functions and strict mode on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-18-scripting
+
+
+##### Task 1: Basic Functions
+
+#!/bin/bash
+
+
+
+greet(){
+        echo "Hello, $1!"
+}
+
+add(){
+        sum=$(( $1 + $2 ))
+        echo "Sum: $sum"
+}
+
+
+greet Devops
+add 10 110
+
+
+##### Task 2: Functions with Return Values
+
+#!/bin/bash
+
+check_disk(){
+        echo "____ Disk Space ____"
+        df -h /
+}
+
+check_memory(){
+        echo "==== Check Memory ===="
+        free -h
+}
+
+check_disk
+check_memory
+
+
+##### Task 3: Strict Mode — `set -euo pipefail`
+
+set -e -> command fail 
+set -u -> variable undefined
+set -0 pipefail -> pipe fail
+=============================
+
+#!/bin/bash
+
+set -euo pipefail
+
+#echo $name
+#echo "This line would not execute"
+
+
+#mkdir /root/test
+#echo "this line not execute"
+
+#cat helloosjdbhs.txt | grep hii
+echo "This also not execute"
+
+##### Task 4: Local Variables
+
+
+#!/bin/bash
+
+
+local_func(){
+        local message="i am local variable."
+        echo "Inside the local function : $message"
+}
+
+global_func(){
+        msg="i am global variable."
+        echo "Inside the global function: $msg"
+}
+
+local_func
+echo "outside the local function : $message"
+
+
+global_func
+echo "outside the global function: $msg"
+
+
+
+##### Task 5: Build a Script — System Info Reporter
+#!/bin/bash
+
+set -euo pipefail
+
+### Hostname and OS Info
+system_info() {
+
+    echo "===== Hostname & OS Info ====="
+
+    hostname
+
+    cat /etc/os-release | grep PRETTY_NAME
+}
+
+### Uptime
+uptime_info() {
+
+    echo "===== Uptime ====="
+
+    uptime
+}
+
+### Disk Usage
+disk_usage() {
+
+    echo "===== Top 5 Disk Usage ====="
+
+    du -ah / 2>/dev/null | sort -rh | head -5
+}
+
+### Memory Usage
+memory_usage() {
+
+    echo "===== Memory Usage ====="
+
+    free -h
+}
+
+### CPU Processes
+top_processes() {
+
+    echo "===== Top 5 CPU Processes ====="
+
+    ps aux --sort=-%cpu | head -6
+}
+
+### Main function
+main() {
+
+    system_info
+
+    echo ""
+
+    uptime_info
+
+    echo ""
+
+    disk_usage
+
+    echo ""
+
+    memory_usage
+
+    echo ""
+
+    top_processes
+}
+
+### Execute main function
+main
+
+## 21. Hands-on Project — Day 18: Application Load Balancer (ALB) with HTTPS (ACM) + Health Checks
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Provision an ALB with Terraform**, enable **HTTPS** via an **ACM certificate**, add an **HTTP→HTTPS redirect**, and register targets with a **Target Group** (instances from Day 17 or attach later from an ASG).
+
+This module plugs into **Day 14** (VPC/subnets), **Day 16** (SGs), and can front the instance from **Day 17** or an Auto Scaling Group you create later.
+
+---
+
+#### 🎯 Learning Goals
+- Create an **internet-facing ALB** in public subnets with a dedicated SG.  
+- Configure **listeners**: port **80** (redirect to 443) and **443** (HTTPS with ACM).  
+- Build a **target group** with **health checks** and attach instances.  
+- Output the **ALB DNS** name for quick testing and Route53 mapping.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1) Prereqs
+   - An ACM certificate in the same region as the ALB (var.certificate_arn).
+   - VPC ID + **public** subnet IDs from Day 14.
+   - (Optional) One or more instance IDs (e.g., from Day 17) to register as targets.
+
+2) Initialize & Plan
+   terraform -chdir=terraform init
+   terraform -chdir=terraform plan      -var='vpc_id=vpc-0123456789abcdef0'      -var='public_subnet_ids=["subnet-aaa","subnet-bbb"]'      -var='certificate_arn=arn:aws:acm:us-east-1:111122223333:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'      -var='instance_ids=["i-0123abcd","i-0456efgh"]'
+
+3) Apply
+   terraform -chdir=terraform apply -auto-approve      -var='vpc_id=vpc-0123456789abcdef0'      -var='public_subnet_ids=["subnet-aaa","subnet-bbb"]'      -var='certificate_arn=arn:aws:acm:us-east-1:111122223333:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'      -var='instance_ids=["i-0123abcd","i-0456efgh"]'
+
+4) Test
+   - Open: http://<ALB_DNS_NAME> → should redirect to HTTPS
+   - Open: https://<ALB_DNS_NAME> → should reach your Day 17 NGINX index page
+
+5) (Optional) Attach an ASG later
+   - Output `target_group_arn` and reference it in your ASG resource via `target_group_arns = [var.target_group_arn]`.
+```
+
+---
+
+#### 💡 Challenge
+- Add an **HTTPS listener rule** that routes `/api/*` to a second target group on a different port.  
+- Enable **access logs** to S3 and set **deletion protection** on the ALB.  
+- Use **Route53** to map a friendly domain to the ALB with an alias A record.
+
+---
+
+
+#### 📌 Commit
+```bash
+git add day18-alb-with-https
+git commit -m "day18: Internet-facing ALB with HTTPS (ACM), HTTP→HTTPS redirect, target group + health checks"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

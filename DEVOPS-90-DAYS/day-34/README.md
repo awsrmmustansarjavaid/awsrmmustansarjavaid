@@ -505,6 +505,314 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 34: CICD for Dockerized Apps
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 34** of the DevOps 90-Day Challenge!
+Yesterday, you integrated **Jenkins with GitHub**.
+Today, you’ll take it a step further by building a **CI/CD pipeline for Dockerized applications**.
+
+[![](https://img.youtube.com/vi/pAsUEqQ1eKI/0.jpg)](https://www.youtube.com/watch?v=pAsUEqQ1eKI)
+
+[Watch the video](https://www.youtube.com/watch?v=pAsUEqQ1eKI)
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Build and push a **Docker image** with Jenkins.
+* Run a container automatically after code changes.
+* Automate end-to-end CI/CD for containerized apps.
+
+---
+
+#### Tools Used
+
+* **Jenkins** (with Docker plugin installed)
+* **Docker Hub** (registry for images)
+* **GitHub Repository** (Dockerized app)
+* **AWS EC2 (Jenkins host)**
+
+---
+
+#### Project Structure
+
+```bash
+dockerized-app/
+ ├── Dockerfile
+ ├── app.py
+ └── requirements.txt
+```
+
+**Dockerfile Example**
+
+```dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["python", "app.py"]
+```
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Install Docker on Jenkins Server
+
+```bash
+sudo apt update
+sudo apt install docker.io -y
+sudo usermod -aG docker jenkins
+sudo systemctl restart jenkins
+```
+
+*(Logout & re-login to apply group changes)*
+
+---
+
+##### 2. Create Docker Hub Credentials in Jenkins
+
+* Go to **Manage Jenkins → Credentials → Global**
+* Add new credentials:
+
+  * ID: `docker-hub`
+  * Username: `<your-dockerhub-username>`
+  * Password: `<your-dockerhub-password>`
+
+---
+
+##### 3. Jenkins Pipeline Script (CI/CD)
+
+Create a **Pipeline job** and use this script:
+
+```groovy
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "your-dockerhub-username/dockerized-app"
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/<username>/dockerized-app.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t $DOCKER_IMAGE:$BUILD_NUMBER .'
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                      echo "$PASS" | docker login -u "$USER" --password-stdin
+                      docker push $DOCKER_IMAGE:$BUILD_NUMBER
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                sh 'docker run -d -p 5000:5000 --name myapp $DOCKER_IMAGE:$BUILD_NUMBER'
+            }
+        }
+    }
+}
+```
+
+---
+
+##### 4. Test the Pipeline
+
+* Push code changes to GitHub
+* Jenkins should:
+  Pull code → Build Docker image → Push to Docker Hub → Run container
+
+Check running container:
+
+```bash
+docker ps
+```
+
+Access app via `http://<EC2_PUBLIC_IP>:5000`
+
+---
+
+#### Verification
+
+* Confirm image is available on **Docker Hub**.
+* App is running inside a container.
+* Jenkins pipeline runs automatically on code push.
+
+---
+
+#### Key Concepts Applied
+
+| Concept          | Example Used              |
+| ---------------- | ------------------------- |
+| CI/CD Automation | Jenkins Pipeline          |
+| Dockerization    | Build & Push Docker Image |
+| Deployment       | Run container after build |
+
+---
+
+#### Congratulations!
+
+You’ve built your **first Dockerized CI/CD pipeline** with Jenkins
+Now, every code push can ship a new container image!
+
+---
+
+#### Try These Next
+
+* Replace **Freestyle jobs** with **Declarative Pipelines**.
+* Deploy app on a **Kubernetes cluster** instead of EC2.
+* Add **version tags** (e.g., `latest`, `v1.0.0`).
+
+## 19. Cohort Practice — Day 34: Docker Compose: Real-World Multi-Container Apps
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today's goal is to **build more complex, production-like setups with Docker Compose**.
+
+Yesterday was basics. Today you handle real scenarios — app + database + cache, healthchecks, restart policies, and service dependencies.
+
+---
+
+#### Expected Output
+- A markdown file: `day-34-compose-advanced.md`
+- All compose files and Dockerfiles you create
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Build Your Own App Stack
+Create a `docker-compose.yml` for a 3-service stack:
+- A **web app** (use Python Flask, Node.js, or any language you know)
+- A **database** (Postgres or MySQL)
+- A **cache** (Redis)
+
+Write a simple Dockerfile for the web app. The app doesn't need to be complex — even a "Hello World" that connects to the database is enough.
+
+---
+
+##### Task 2: depends_on & Healthchecks
+1. Add `depends_on` to your compose file so the app starts **after** the database
+2. Add a **healthcheck** on the database service
+3. Use `depends_on` with `condition: service_healthy` so the app waits for the database to be truly ready, not just started
+
+**Test:** Bring everything down and up — does the app wait for the DB?
+
+---
+
+
+##### Task 3: Restart Policies
+1. Add `restart: always` to your database service
+2. Manually kill the database container — does it come back?
+3. Try `restart: on-failure` — how is it different?
+4. Write in your notes: When would you use each restart policy?
+
+---
+
+##### Task 4: Custom Dockerfiles in Compose
+1. Instead of using a pre-built image for your app, use `build:` in your compose file to build from a Dockerfile
+2. Make a code change in your app
+3. Rebuild and restart with one command
+
+---
+
+##### Task 5: Named Networks & Volumes
+1. Define **explicit networks** in your compose file instead of relying on the default
+2. Define **named volumes** for database data
+3. Add **labels** to your services for better organization
+
+---
+
+##### Task 6: Scaling (Bonus)
+1. Try scaling your web app to 3 replicas using `docker compose up --scale`
+2. What happens? What breaks?
+3. Write in your notes: Why doesn't simple scaling work with port mapping?
+
+---
+
+#### Hints
+- Build from Dockerfile: `build: ./app`
+- Healthcheck: `healthcheck:` with `test`, `interval`, `timeout`
+- Rebuild: `docker compose up --build`
+- Scale: `docker compose up --scale web=3`
+
+---
+
+#### Submission
+1. Add your compose files, Dockerfiles, and `day-34-compose-advanced.md` to `2026/day-34/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your 3-service app stack running via Compose on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-34-compose-advanced
+
+## 20. Hands-on Project — Day 34: Jenkins Shared Libraries
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Jenkins Shared Libraries** — centralize reusable pipeline steps and keep Jenkinsfiles clean.
+
+#### 🎯 Learning Goals
+- Structure a Jenkins Global Pipeline Library (`vars/` + optional `src/`).
+- Call library steps via `@Library('devopslib@main')`.
+- Handle **AWS ECR** auth and **Docker build/push** safely.
+- Send **Slack** notifications from a reusable helper.
+
+#### 🛠️ Tasks
+1) Publish the library (point Jenkins Global Pipeline Libraries to this path/repo).
+2) Use it in a Jenkinsfile (`Jenkinsfile-example.groovy`).
+3) Run a build and verify the results.
+
+#### 💡 Challenge
+- Add a `kubeDeploy()` step to apply a manifest with a Kubeconfig credential.
+- Extend `dockerBuildPush` for multi-arch builds and SBOM export.
+- Add a `withVaultSecret` helper to fetch secrets on demand.
+
+#### 📌 Commit
+```bash
+git add day34-jenkins-shared-libraries
+git commit -m "day34: Jenkins Shared Libraries (dockerBuildPush, withECRLogin, slackNotify, hello)"
+git push
+```
+
+### Files
+
+- [Jenkinsfile-example.groovy](files/hands-on-projects/Jenkinsfile-example.groovy)
+- [shared-lib/src/org/devopsninja/Semver.groovy](files/hands-on-projects/shared-lib/src/org/devopsninja/Semver.groovy)
+- [shared-lib/vars/dockerBuildPush.groovy](files/hands-on-projects/shared-lib/vars/dockerBuildPush.groovy)
+- [shared-lib/vars/hello.groovy](files/hands-on-projects/shared-lib/vars/hello.groovy)
+- [shared-lib/vars/slackNotify.groovy](files/hands-on-projects/shared-lib/vars/slackNotify.groovy)
+- [shared-lib/vars/withECRLogin.groovy](files/hands-on-projects/shared-lib/vars/withECRLogin.groovy)
+
+
 ---
 
 [← Day 33](../day-33/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 35 →](../day-35/README.md)

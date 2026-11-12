@@ -483,6 +483,240 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 57: AWS API Gateway Deep Dive
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 57** of the DevOps 90-Day Challenge!
+Today, we dive deep into **Amazon API Gateway**, the front door for your serverless applications. It allows you to create robust REST and HTTP APIs that expose your Lambda functions to the world.
+
+[![](https://img.youtube.com/vi/R_qvD5rjKj8/0.jpg)](https://www.youtube.com/watch?v=R_qvD5rjKj8)
+
+
+[Watch the video](https://www.youtube.com/watch?v=R_qvD5rjKj8)
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand the difference between **REST** vs **HTTP** APIs in AWS.
+* Create an API that triggers a Lambda function.
+* Implement **Query Parameters** and **Path Variables**.
+* secure your API using **API Keys** or **Throttling**.
+
+---
+
+#### Tools Used
+
+* **Amazon API Gateway**
+* **AWS Lambda**
+* **Postman** or **Curl** (for testing)
+
+---
+
+#### Key Concepts
+
+##### 1. Types of APIs
+*   **REST API**: Feature-rich. Supports complex validation, transformation, WAF, and private endpoints.
+*   **HTTP API**: Newer, faster, and cheaper. Good for simple proxying to Lambda.
+*   **WebSocket API**: For persistent, real-time 2-way communication (chat apps).
+
+##### 2. Integration Request/Response
+API Gateway is a proxy.
+*   **Method Request**: Client sends data (GET /users?id=123).
+*   **Integration Request**: Gateway maps this data to what Lambda expects (JSON event).
+*   **Lambda Processing**: Business logic.
+*   **Integration Response**: Lambda returns data.
+*   **Method Response**: Gateway formats it for the client (Status 200 OK).
+
+##### 3. Deployment Stages
+You can't call an API until it's **Deployed**.
+You deploy APIs to **Stages** (e.g., `dev`, `test`, `prod`). This allows you to manage different versions of your API simultaneously.
+
+---
+
+#### Key Concepts Applied
+
+| Concept | Example Used |
+| :--- | :--- |
+| **Resources & Methods** | Creating a `/hello` resource and a `GET` method. |
+| **Lambda Proxy Integration** | Passing the raw HTTP request directly to Lambda as a JSON object. |
+| **CORS** | Enabling Cross-Origin Resource Sharing so your frontend can call the API. |
+
+---
+
+#### Bonus (Extra Learning)
+
+*   Set up a **Usage Plan** and **API Key** to limit how many requests a user can make.
+*   Import an API definition using **OpenAPI (Swagger)** spec.
+
+---
+
+#### Congratulations!
+
+You have successfully exposed your backend code as a web API! You can now build frontends, mobile apps, or command-line tools that interact with your cloud logic.
+
+---
+
+#### Try These Next
+
+*   Build a simple **Calculator API** (GET /add?a=5&b=10).
+*   Enable **Access Logging** for your API Gateway stage to debug traffic.
+
+## 19. Cohort Practice — Day 57: Resource Requests, Limits, and Probes
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Your Pods are running, but Kubernetes has no idea how much CPU or memory they need — and no way to tell if they are actually healthy. Today you set resource requests and limits for smart scheduling, then add probes so Kubernetes can detect and recover from failures automatically.
+
+---
+
+#### Expected Output
+- A Pod with CPU and memory requests and limits
+- OOMKilled observed when exceeding memory limits
+- Liveness, readiness, and startup probes tested
+- A markdown file: `day-57-resources-probes.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Resource Requests and Limits
+1. Write a Pod manifest with `resources.requests` (cpu: 100m, memory: 128Mi) and `resources.limits` (cpu: 250m, memory: 256Mi)
+2. Apply and inspect with `kubectl describe pod` — look for the Requests, Limits, and QoS Class sections
+3. Since requests and limits differ, the QoS class is `Burstable`. If equal, it would be `Guaranteed`. If missing, `BestEffort`.
+
+CPU is in millicores: `100m` = 0.1 CPU. Memory is in mebibytes: `128Mi`.
+
+**Requests** = guaranteed minimum (scheduler uses this for placement). **Limits** = maximum allowed (kubelet enforces at runtime).
+
+**Verify:** What QoS class does your Pod have?
+
+---
+
+##### Task 2: OOMKilled — Exceeding Memory Limits
+1. Write a Pod manifest using the `polinux/stress` image with a memory limit of `100Mi`
+2. Set the stress command to allocate 200M of memory: `command: ["stress"] args: ["--vm", "1", "--vm-bytes", "200M", "--vm-hang", "1"]`
+3. Apply and watch — the container gets killed immediately
+
+CPU is throttled when over limit. Memory is killed — no mercy.
+
+Check `kubectl describe pod` for `Reason: OOMKilled` and `Exit Code: 137` (128 + SIGKILL).
+
+**Verify:** What exit code does an OOMKilled container have?
+
+---
+
+##### Task 3: Pending Pod — Requesting Too Much
+1. Write a Pod manifest requesting `cpu: 100` and `memory: 128Gi`
+2. Apply and check — STATUS stays `Pending` forever
+3. Run `kubectl describe pod` and read the Events — the scheduler says exactly why: insufficient resources
+
+**Verify:** What event message does the scheduler produce?
+
+---
+
+##### Task 4: Liveness Probe
+A liveness probe detects stuck containers. If it fails, Kubernetes restarts the container.
+
+1. Write a Pod manifest with a busybox container that creates `/tmp/healthy` on startup, then deletes it after 30 seconds
+2. Add a liveness probe using `exec` that runs `cat /tmp/healthy`, with `periodSeconds: 5` and `failureThreshold: 3`
+3. After the file is deleted, 3 consecutive failures trigger a restart. Watch with `kubectl get pod -w`
+
+**Verify:** How many times has the container restarted?
+
+---
+
+##### Task 5: Readiness Probe
+A readiness probe controls traffic. Failure removes the Pod from Service endpoints but does NOT restart it.
+
+1. Write a Pod manifest with nginx and a `readinessProbe` using `httpGet` on path `/` port `80`
+2. Expose it as a Service: `kubectl expose pod <name> --port=80 --name=readiness-svc`
+3. Check `kubectl get endpoints readiness-svc` — the Pod IP is listed
+4. Break the probe: `kubectl exec <pod> -- rm /usr/share/nginx/html/index.html`
+5. Wait 15 seconds — Pod shows `0/1` READY, endpoints are empty, but the container is NOT restarted
+
+**Verify:** When readiness failed, was the container restarted?
+
+---
+
+##### Task 6: Startup Probe
+A startup probe gives slow-starting containers extra time. While it runs, liveness and readiness probes are disabled.
+
+1. Write a Pod manifest where the container takes 20 seconds to start (e.g., `sleep 20 && touch /tmp/started`)
+2. Add a `startupProbe` checking for `/tmp/started` with `periodSeconds: 5` and `failureThreshold: 12` (60 second budget)
+3. Add a `livenessProbe` that checks the same file — it only kicks in after startup succeeds
+
+**Verify:** What would happen if `failureThreshold` were 2 instead of 12?
+
+---
+
+##### Task 7: Clean Up
+Delete all pods and services you created.
+
+---
+
+#### Hints
+- CPU is compressible (throttled); memory is incompressible (OOMKilled)
+- CPU: `1` = 1 core = `1000m`. Memory: `Mi` (mebibytes), `Gi` (gibibytes)
+- QoS: Guaranteed (requests == limits), Burstable (requests < limits), BestEffort (none set)
+- Probe types: `httpGet`, `exec`, `tcpSocket`
+- Liveness failure = restart. Readiness failure = remove from endpoints. Startup failure = kill.
+- `initialDelaySeconds`, `periodSeconds`, `failureThreshold` control probe timing
+- Exit code 137 = OOMKilled (128 + SIGKILL)
+
+---
+
+#### Documentation
+Create `day-57-resources-probes.md` with:
+- Requests vs limits (scheduling vs enforcement)
+- What happens when CPU or memory limits are exceeded
+- Liveness vs readiness vs startup probes
+- Screenshots of OOMKilled, Pending, and probe events
+
+---
+
+#### Submission
+1. Add `day-57-resources-probes.md` to `2026/day-57/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share on LinkedIn: "Set resource requests and limits in Kubernetes today, watched a pod get OOMKilled, and added liveness, readiness, and startup probes for self-healing."
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 57: Fluent Bit + CloudWatch Logs (EKS)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Use IRSA + Fluent Bit DaemonSet to ship /var/log/containers/*.log to CloudWatch. Includes kustomize overlays and Jenkinsfile.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [iam/cloudwatch-logs-policy.json](files/hands-on-projects/iam/cloudwatch-logs-policy.json)
+- [iam/trust-policy.json](files/hands-on-projects/iam/trust-policy.json)
+- [k8s/base/clusterrole.yaml](files/hands-on-projects/k8s/base/clusterrole.yaml)
+- [k8s/base/clusterrolebinding.yaml](files/hands-on-projects/k8s/base/clusterrolebinding.yaml)
+- [k8s/base/configmap-env.yaml](files/hands-on-projects/k8s/base/configmap-env.yaml)
+- [k8s/base/configmap-fluent-bit.yaml](files/hands-on-projects/k8s/base/configmap-fluent-bit.yaml)
+- [k8s/base/daemonset.yaml](files/hands-on-projects/k8s/base/daemonset.yaml)
+- [k8s/base/kustomization.yaml](files/hands-on-projects/k8s/base/kustomization.yaml)
+- [k8s/base/namespace.yaml](files/hands-on-projects/k8s/base/namespace.yaml)
+- [k8s/base/serviceaccount.yaml](files/hands-on-projects/k8s/base/serviceaccount.yaml)
+- [k8s/overlays/prod/kustomization.yaml](files/hands-on-projects/k8s/overlays/prod/kustomization.yaml)
+- [k8s/overlays/staging/kustomization.yaml](files/hands-on-projects/k8s/overlays/staging/kustomization.yaml)
+- [scripts/deploy.sh](files/hands-on-projects/scripts/deploy.sh)
+- [scripts/status.sh](files/hands-on-projects/scripts/status.sh)
+
+
 ---
 
 [← Day 56](../day-56/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 58 →](../day-58/README.md)

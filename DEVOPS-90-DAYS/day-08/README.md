@@ -410,7 +410,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🔐 Day 08 - Network Security, System Design & Python APIs
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -719,6 +719,535 @@ Example
 ---
 
 ⭐ Every day is another step toward becoming a better DevOps Engineer!
+
+## 19. Challenge Notes — Day 8: Managing EC2 Instances and Auto Scaling
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Managing EC2 instances and utilizing Auto Scaling are fundamental practices in AWS to ensure **high availability**, **fault tolerance**, and **cost optimization**. This guide covers EC2 management via GUI and CLI, Auto Scaling types and strategies, real-world use cases, and best practices.
+![Autoscalling](Day8_autoscalling.png)
+
+
+[![](https://img.youtube.com/vi/Wj0-Vkx0AKk/0.jpg)](https://www.youtube.com/watch?v=Wj0-Vkx0AKk)
+
+[Watch the video](https://www.youtube.com/watch?v=Wj0-Vkx0AKk)
+---
+
+#### 🔍 Why Managing EC2 Instances is Important
+
+1. **Cost Optimization** – Start/stop instances based on demand.
+2. **Performance Management** – Resize instances for workload efficiency.
+3. **Security Maintenance** – Apply patches and updates.
+4. **Resource Utilization** – Monitor and analyze performance.
+5. **Backup and Recovery** – Use AMIs and snapshots for resilience.
+
+---
+
+#### 📈 Why Auto Scaling is Important
+
+1. **High Availability** – Automatically replaces unhealthy instances.
+2. **Cost Efficiency** – Scales in/out based on load.
+3. **Improved Performance** – Maintains app performance under load.
+4. **Fault Tolerance** – Balances traffic across instances.
+
+---
+
+#### 🧠 Types of Auto Scaling
+
+##### 1. Dynamic Scaling
+- **Target Tracking** – e.g., Maintain CPU at 50%.
+- **Step Scaling** – Scale in steps (e.g., add 2 instances if CPU > 80%).
+- **Simple Scaling** – Triggered by thresholds.
+
+##### 2. Scheduled Scaling
+- Set based on time, e.g., scale up at 9 AM and scale down at 9 PM.
+
+##### 3. Predictive Scaling
+- Uses ML to anticipate load spikes and scale proactively.
+
+---
+
+#### ⚖️ Auto Scaling Approaches
+
+| Feature                | Horizontal Scaling         | Vertical Scaling             |
+|------------------------|----------------------------|------------------------------|
+| Definition             | Adds/removes instances     | Resize the current instance  |
+| Scalability            | Near-infinite              | Limited by hardware          |
+| Performance            | Handles large-scale loads  | Best for compute-heavy apps  |
+| Cost                   | Cost-efficient for traffic | Expensive for high specs     |
+| Complexity             | Requires Load Balancer     | Easier but limited           |
+| Use Case               | Web apps, microservices    | Databases, single-threaded   |
+
+---
+
+#### 🎯 Scenarios for Auto Scaling
+
+- E-commerce sites during peak sales.
+- Batch processing jobs.
+- Analytics pipelines with variable loads.
+- Microservices scaling per service.
+
+---
+
+#### 🧩 Components of Auto Scaling
+
+1. **Launch Template/Config** – Instance settings like AMI, type, key pair.
+2. **Auto Scaling Group (ASG)** – Core unit managing EC2 instances.
+3. **Scaling Policies** – Define how/when to scale:
+   - Target Tracking
+   - Step Scaling
+   - Scheduled Scaling
+
+##### Auto Scaling Group Parameters
+
+- **Desired Capacity** – Target number of instances.
+- **Min/Max Capacity** – Lower and upper bounds.
+- **Policies** – Trigger-based rules for scaling.
+
+---
+
+#### 🛠️ Managing EC2 Instances
+
+##### ✅ GUI Method (AWS Console)
+
+1. **Start/Stop/Reboot**  
+   - EC2 Dashboard → Instances → Actions → Start/Stop/Reboot
+
+2. **Resize**  
+   - Stop → Actions → Instance Settings → Change Instance Type → Start
+
+3. **Monitor**  
+   - Monitoring tab: View CPU, I/O, network metrics
+
+---
+
+##### 🧰 CLI Method
+
+###### Filter by Instance Type
+```bash
+aws ec2 describe-instances \
+  --filters "Name=instance-type,Values=t2.micro" \
+  --query "Reservations[*].Instances[*].[InstanceId]" \
+  --output text
+```
+
+###### Start / Stop / Reboot
+```bash
+aws ec2 start-instances --instance-ids i-1234567890abcdef0
+aws ec2 stop-instances --instance-ids i-1234567890abcdef0
+aws ec2 reboot-instances --instance-ids i-1234567890abcdef0
+```
+
+###### Resize Instance
+```bash
+aws ec2 stop-instances --instance-ids i-1234567890abcdef0
+aws ec2 modify-instance-attribute --instance-id i-1234567890abcdef0 --instance-type t3.medium
+aws ec2 start-instances --instance-ids i-1234567890abcdef0
+```
+
+###### Check Status
+```bash
+aws ec2 describe-instance-status --instance-id i-1234567890abcdef0
+```
+
+---
+
+#### 🔄 Auto Scaling in AWS
+
+##### Step 1: Create Launch Configuration/Template
+
+###### ✅ GUI
+- EC2 Dashboard → Auto Scaling Groups → Launch Configs/Templates → Create
+
+###### 🧰 CLI
+```bash
+aws autoscaling create-launch-configuration \
+  --launch-configuration-name my-launch-config \
+  --image-id ami-12345678 \
+  --instance-type t2.micro
+```
+
+---
+
+##### Step 2: Create Auto Scaling Group
+
+###### ✅ GUI
+- Auto Scaling Groups → Create → Select Launch Config → Set Capacity + Subnets → Review & Create
+
+###### 🧰 CLI
+```bash
+aws autoscaling create-auto-scaling-group \
+  --auto-scaling-group-name my-asg \
+  --launch-configuration-name my-launch-config \
+  --min-size 1 --max-size 5 --desired-capacity 2 \
+  --vpc-zone-identifier subnet-12345abc,subnet-67890def
+```
+
+---
+
+##### Step 3: Configure Scaling Policies
+
+###### ✅ GUI
+- Auto Scaling Group → Automatic Scaling → Add Policy
+
+###### 🧰 CLI (Target Tracking)
+```bash
+aws autoscaling put-scaling-policy \
+  --auto-scaling-group-name my-asg \
+  --policy-name my-scaling-policy \
+  --policy-type TargetTrackingScaling \
+  --target-tracking-configuration '{"PredefinedMetricSpecification": {"PredefinedMetricType": "ASGAverageCPUUtilization"}, "TargetValue": 50.0}'
+```
+
+---
+
+##### Step 4: Monitor Auto Scaling
+
+###### ✅ GUI
+- Auto Scaling Group → Monitoring tab
+
+###### 🧰 CLI
+```bash
+aws cloudwatch describe-alarms --alarm-name-prefix "my-asg"
+```
+
+---
+
+##### Step 5: Delete Auto Scaling Group
+
+###### ✅ GUI
+- Auto Scaling Group → Actions → Delete
+
+###### 🧰 CLI
+```bash
+aws autoscaling delete-auto-scaling-group --auto-scaling-group-name my-asg --force-delete
+```
+
+---
+
+#### ✅ Benefits of Auto Scaling
+
+- ✅ Ensures high availability
+- 🔄 Automatically adjusts to demand
+- 💰 Cost-effective
+- 💡 Reliable and responsive
+
+---
+
+#### 🌐 Real-World Use Cases
+
+| Use Case               | How Auto Scaling Helps                     |
+|------------------------|--------------------------------------------|
+| E-commerce             | Handles traffic surges during sales        |
+| Streaming Services     | Scales based on viewer count               |
+| Data Pipelines         | Adds compute power dynamically             |
+| Microservices          | Individual service scaling per traffic     |
+
+---
+
+#### 🧠 Best Practices
+
+- 🎯 Set realistic thresholds to avoid over-scaling.
+- 🌍 Use Multi-AZ for high availability.
+- 📊 Monitor using CloudWatch alarms.
+- 🧪 Test scaling policies frequently.
+- 🔁 Integrate with CI/CD pipelines.
+
+---
+
+#### 🧪 Hands-On Lab: Real-Time Example
+
+##### Scenario: Black Friday Scaling
+
+1. **Launch EC2**
+   - AMI: ubuntu
+   - Type: `t2.micro`
+   - Install Apache:  
+     ```bash
+     sudo apt install apache2 -y
+     sudo systemctl start apache2
+     ```
+
+2. **Create Launch Template**
+   - Add startup script to install Apache in User Data.
+
+3. **Set Up Auto Scaling Group**
+   - Min: 1, Desired: 2, Max: 5
+   - Target Tracking: CPU > 50% scale out, < 20% scale in
+
+4. **Simulate Load**
+   ```bash
+   sudo yum install stress -y
+   stress --cpu 4 --timeout 60
+   ```
+
+5. **Observe Scaling**
+   - View Auto Scaling in action via Console/CLI
+
+6. **Clean Up**
+   - Delete Auto Scaling Group and Launch Template
+
+---
+
+#### 📘 AWS CLI Cheat Sheet
+
+##### Basic Syntax
+```bash
+aws ec2 describe-instances [OPTIONS]
+```
+
+##### Common Filters
+```bash
+--filters "Name=instance-state-name,Values=running"
+--filters "Name=tag:Environment,Values=Dev"
+--filters "Name=instance-type,Values=t2.micro"
+```
+
+##### Query Examples
+```bash
+aws ec2 describe-instances \
+  --query "Reservations[*].Instances[*].[InstanceId,State.Name]" \
+  --output table
+```
+
+##### Output Formats
+```bash
+--output json
+--output table
+--output text
+```
+
+---
+
+#### 📎 Pro Tips
+
+- Combine filters, queries, and output to fine-tune data.
+- Use `--dry-run` for permission checks.
+- Use tags for better resource tracking and filtering.
+- Use pagination wisely for large outputs.
+
+---
+
+### Attachments
+
+- [Auto Scaling.png](Auto%20Scaling.png)
+- [Day 8 Managing EC2 Instances and Auto Scaling.pdf](Day%208%20Managing%20EC2%20Instances%20and%20Auto%20Scaling.pdf)
+
+## 20. Cohort Practice — Day 8: Cloud Server Setup: Docker, Nginx & Web Deployment
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today's goal is to **deploy a real web server on the cloud** and learn practical server management.
+
+You will:
+- Launch a cloud instance (AWS EC2 or Utho)
+- Connect via SSH
+- Install Nginx
+- Configure security groups for web access (port 80 by default for nginx)
+- Extract and save logs to a file
+- Verify your webpage is accessible from the internet
+
+This is real DevOps work - exactly what you'll do in production.
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+1. A markdown file named: `day-08-cloud-deployment.md`
+2. Screenshots showing:
+   - SSH connection to your server
+   - Nginx welcome page accessible from browser
+   - Log file contents
+3. The log file: `nginx-logs.txt`
+
+---
+
+#### Prerequisites
+- AWS account (Free Tier) OR Utho account
+- Basic understanding of Linux commands (Days 1-7)
+- SSH client (Terminal on Mac/Linux, PuTTY on Windows)
+
+---
+
+#### Guidelines
+
+##### Part 1: Launch Cloud Instance & SSH Access (15 minutes)
+
+**Step 1: Create a Cloud Instance**
+
+
+**Step 2: Connect via SSH**
+
+
+---
+
+##### Part 2: Install Docker & Nginx (20 minutes)
+
+**Step 1: Update System**
+
+
+**Step 3: Install Nginx**
+
+**Verify Nginx is running:**
+
+---
+
+##### Part 3: Security Group Configuration (10 minutes)
+
+**Test Web Access:**
+Open browser and visit: `http://<your-instance-ip>`
+
+You should see the **Nginx welcome page**!
+
+📸 **Screenshot this page** - you'll need it for submission
+
+---
+
+##### Part 4: Extract Nginx Logs (15 minutes)
+
+**Step 1: View Nginx Logs**
+
+**Step 2: Save Logs to File**
+
+**Step 3: Download Log File to Your Local Machine**
+```bash
+# On your local machine (new terminal window)
+# For AWS:
+scp -i your-key.pem ubuntu@<your-instance-ip>:~/nginx-logs.txt .
+
+# For Utho:
+scp root@<your-instance-ip>:~/nginx-logs.txt .
+```
+
+---
+
+
+#### Documentation Template
+
+Create your `day-08-cloud-deployment.md` with this structure:
+
+#### Commands Used
+[List the key commands you used]
+
+#### Challenges Faced
+[Describe any issues and how you solved them]
+
+#### What I Learned
+[3-5 bullet points of key learnings]
+
+---
+
+
+#### Why This Matters for DevOps
+
+This exercise teaches you:
+- **Cloud infrastructure provisioning** - launching and configuring servers
+- **Remote server management** - SSH, security, access control
+- **Service deployment** - installing and running applications
+- **Log management** - accessing and analyzing logs
+- **Security** - configuring firewalls and security groups
+
+These are core skills for any DevOps engineer working in production.
+
+---
+
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository
+2. Navigate to the `2026/day-08/` folder
+3. Add your `day-08-cloud-deployment.md` file
+4. Add your `nginx-logs.txt` file
+5. Add screenshots (name them: `ssh-connection.png`, `nginx-webpage.png`, `docker-nginx.png`)
+6. Commit and push your changes to your fork
+
+---
+
+#### Learn in Public
+Share your Day 08 progress on LinkedIn:
+
+- Post 2-3 lines on deploying your first cloud server
+- Share screenshot of your Nginx webpage
+- Mention one challenge you faced and solved
+- Optional: Share your instance IP (if comfortable)
+
+Use hashtags:
+```
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+```
+
+Happy Learning
+**TrainWithShubham**
+
+##### Notes: day-08-cloud-deployment
+
+## 21. Hands-on Project — Day 8: Python Unit Testing with Pytest
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Python Unit Testing with Pytest**.  
+We’ll explore how to write and run unit tests with `pytest` to ensure code quality and catch bugs early.
+
+---
+
+#### 🎯 Learning Goals
+- Install and configure **pytest**.  
+- Write simple test functions and use assertions.  
+- Group tests into test files and classes.  
+- Use fixtures to set up and tear down test data.  
+- Run tests with markers and get detailed reports.  
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1. Install pytest
+   pip install pytest
+
+2. Write basic tests
+   python -m pytest tests/test_math_basic.py
+
+3. Use fixtures
+   python -m pytest tests/test_with_fixtures.py
+
+4. Run with markers
+   pytest -m "slow"
+
+5. Generate detailed reports
+   pytest -v
+   pytest --junitxml=report.xml
+```
+
+---
+
+#### 💡 Challenge
+- Extend the math tests to include **edge cases** (division by zero, negative numbers, large inputs).  
+- Add a custom marker `@pytest.mark.integration` and run only those tests.  
+- Create a fixture that sets up a temporary file and cleans it up after tests.  
+
+---
+
+
+
+#### 📌 Commit
+Once complete, commit your progress:
+```bash
+git add day08-pytest-unit-testing
+git commit -m "day08: Python unit testing with pytest — basics, fixtures, markers"
+git push
+```
+
+### Files
+
+- [math_utils.py](files/hands-on-projects/math_utils.py)
+- [tests/test_math_basic.py](files/hands-on-projects/tests/test_math_basic.py)
+- [tests/test_with_fixtures.py](files/hands-on-projects/tests/test_with_fixtures.py)
+- [tests/test_with_markers.py](files/hands-on-projects/tests/test_with_markers.py)
 
 
 ---

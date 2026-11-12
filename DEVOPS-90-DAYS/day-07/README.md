@@ -650,7 +650,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🌐 Day 07 - Networking Fundamentals, OSI Model & Python Basics
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -1008,6 +1008,735 @@ Next, I'll continue exploring AWS services, Python scripting, and core DevOps to
 ---
 
 ⭐ Thanks for following my #90DaysOfDevOps journey!
+
+## 19. Challenge Notes — Day 7: AWS EC2 Launch, Configure, and SSH Access
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### **1. Introduction to AWS EC2**
+Amazon Elastic Compute Cloud (EC2) is a web service that provides secure, scalable compute capacity in the cloud. It allows users to launch virtual servers, called instances, to run applications on the AWS infrastructure.
+Key Features of AWS EC2:
+- **Scalability**: Easily scale up or down as needed.
+- **Flexibility**: Choose from various instance types and configurations.
+- **Reliability**: Built on AWS’s global data centers.
+- **Customizability**: Fully customizable instances with different operating systems and software.
+- **Cost-Efficiency**: Pay-as-you-go pricing model.
+---
+
+[![](https://img.youtube.com/vi/eVYer7367NU/0.jpg)](https://www.youtube.com/watch?v=eVYer7367NU)
+
+[Watch the video](https://www.youtube.com/watch?v=eVYer7367NU)
+
+
+---
+#### **2. Types of EC2 Instances**
+AWS EC2 instances are classified into various families based on their use case and workload characteristics:
+**A. General Purpose**
+- Balanced compute, memory, and networking.
+- Suitable for web servers, development environments, and small databases.
+
+| Instance Family | Description               | Example Types         |
+|-----------------|---------------------------|------------------------|
+| t4g, t3, t2      | Burstable performance       | t4g.micro, t3.medium    |
+| m7g, m6i, m5      | Balanced CPU and memory     | m6i.large, m5.xlarge    |
+
+**B. Compute Optimized**
+- Ideal for compute-intensive tasks such as gaming servers and scientific modeling.
+
+| Instance Family |	Description | Example Types |
+|-----------------|-------------|---------------|
+| c7g, c6i, c5 |	High CPU-to-memory ratio | c6i.large, c5.xlarge |
+
+**C. Memory Optimized**
+- Designed for memory-intensive applications like in-memory databases and real-time data processing.
+
+| Instance Family |	Description | Example Types |
+|-----------------|-------------|---------------|
+| r6i, r5, x2idn | High memory | r6i.large, x2idn.24xlarge |
+
+**D. Storage Optimized**
+- Suitable for workloads requiring high disk throughput, like data warehousing.
+
+| Instance Family |	Description | Example Types |
+|-----------------|-------------|---------------|
+| i4i, d3, h1 | High I/O performance | i4i.large, h1.2xlarge |
+
+**E. Accelerated Computing**
+- Use hardware accelerators or GPUs for machine learning and graphics rendering.
+
+| Instance Family |	Description | Example Types |
+|-----------------|-------------|---------------|
+| p4de, g5, f1 | GPU and FPGA support | p4de.24xlarge, g5.xlarge |
+
+##### **3. Launching an EC2 Instance**
+**Step 1: Open the EC2 Dashboard**
+1.	Sign in to the **AWS Management Console**.
+2. Navigate to the **EC2 Dashboard** by:
+   - Selecting **EC2** from the **Services** menu, or
+   - Searching for "EC2" in the top search bar.
+
+**Step 2: Launch an Instance**
+1.	Click Launch Instance.
+2.	Enter an instance name (e.g., "MyWebServer").
+3.	Choose an Amazon Machine Image (AMI), such as:
+    - Amazon Linux 2
+    - Ubuntu Server
+    - Windows Server
+4.	Select an Instance Type:
+    - General Purpose: t2.micro (Free Tier Eligible)
+    - Compute Optimized: c5.large
+5.	Click Next: Configure Instance Details.
+
+**4. Configuring Instance Details**
+- Network: Choose the VPC and Subnet.
+- Auto-Assign Public IP: Enable it for direct access.
+- IAM Role: Attach a role if needed.
+- Shutdown Behavior: Choose between Stop or Terminate.
+- User Data (Optional): Add bootstrap scripts.
+
+**Example User Data Script (for ubuntu):**
+
+    #!/bin/bash
+    apt update -y
+    apt install apache2 -y
+    systemctl start apache2
+    systemctl enable apache2
+    echo "Welcome to My Web Server" > /var/www/html/index.html
+
+Click **Next: Add Storage**.
+
+##### **5. Adding Storage**
+1.	Specify the root volume size (e.g., 20 GB).
+2.	Choose the volume type:
+- General Purpose SSD (gp3, gp2): Cost-effective and suitable for general workloads.
+- Provisioned IOPS SSD (io2, io1): High performance for mission-critical applications.
+- Throughput Optimized HDD (st1): Low-cost HDD for frequently accessed workloads.
+- Cold HDD (sc1): Lowest cost, suitable for less frequently accessed data.
+3.	Click Next: Add Tags.
+
+##### **6. Adding Tags**
+Add tags to identify your instance. 
+
+For example:
+
+- Key: Name
+- Value: MyWebServer
+
+Click **Next: Configure Security Group**.
+
+##### **7. Configuring Security Group**
+1.	Create a New Security Group or Select an Existing One.
+2.	Add the following rules:
+
+| Type	| Protocol	| Port Range	| Source |
+|-------|-----------|---------------|--------|
+| SSH	| TCP | 22 | 0.0.0.0/0 |
+| HTTP	| TCP | 80 | 0.0.0.0/0 |
+| HTTPS | TCP | 443 | 0.0.0.0/0 |
+
+Click **Review and Launch**.
+
+##### **8. Launching the Instance**
+1.	Click Launch.
+2.	Choose an existing key pair or create a new one.
+3.	Download the key pair (.pem file) and keep it secure.
+4.	Click Launch Instances.
+---
+
+##### **9. Accessing EC2 via SSH**
+**Step 1: Set Permissions for the Key Pair**
+
+chmod 400 mykey.pem
+
+**Step 2: Connect to Your Instance**
+
+Find the Public DNS (IPv4) from the instance details and connect:
+
+    ssh -i "mykey.pem" ec2-user@ec2-52-12-116-90.compute-1.amazonaws.com
+
+- Replace mykey.pem with your key file name.
+- Replace the DNS with your instance's public IP.
+---
+##### **10. Verifying and Managing Your Instance**
+Check Running Services
+
+    sudo systemctl status apache2
+
+Update the Instance
+
+    sudo apt update -y
+
+Restarting the Web Server
+
+    sudo systemctl restart apache2
+
+##### **11. Stopping and Terminating Instances**
+
+Stop an Instance
+
+Stopping an instance preserves the data on disk.
+
+    aws ec2 stop-instances --instance-ids i-1234567890abcdef0
+
+Start an Instance
+
+    aws ec2 start-instances --instance-ids i-1234567890abcdef0
+
+Terminate an Instance
+
+Terminating deletes the instance and attached volumes.
+
+    aws ec2 terminate-instances --instance-ids i-1234567890abcdef0
+
+
+##### **12. Monitoring and Managing Instances**
+
+View Instance Status
+
+    aws ec2 describe-instances
+
+Check Instance State
+
+    aws ec2 describe-instance-status --instance-ids i-1234567890abcdef0
+
+Reboot an Instance
+
+    aws ec2 reboot-instances --instance-ids i-1234567890abcdef0
+    
+---
+
+##### **13. Troubleshooting EC2 Connectivity Issues**
+##### Common Issues:
+###### SSH Permission Denied:
+- Check the file permission of your .pem file.
+- Verify that the correct key pair is being used.
+###### Instance Not Reachable:
+- Check security group rules for open ports.
+- Verify the network ACLs and VPC settings.
+###### Web Server Not Responding:
+- Ensure that the HTTP or HTTPS port is open.
+- Restart the web server and check logs.
+
+##### **14. Best Practices for EC2**
+- Use IAM Roles: Avoid hardcoding credentials.
+- Regular Backups: Use snapshots or AMIs.
+- Secure Access: Restrict SSH access by IP.
+- Automate Deployments: Use scripts for consistent configurations.
+- Monitor Usage: Set up CloudWatch alarms.
+
+### Attachments
+
+- [EC2 Lunch, configure and SSH Access.pdf](EC2%20Lunch%2C%20configure%20and%20SSH%20Access.pdf)
+
+## 20. Cohort Practice — Day 7: Linux File System Hierarchy & Scenario-Based Practice
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today's goal is to **understand where things live in Linux** and **practice troubleshooting like a DevOps engineer**.
+
+You will create notes covering:
+- Linux File System Hierarchy (the most important directories)
+- Practice solving real-world scenarios step by step
+
+This consolidates your Linux fundamentals and prepares you for real-world troubleshooting.
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+- A markdown file named:
+  `day-07-linux-fs-and-scenarios.md`
+
+or
+
+- A hand written set of notes (Recommended)
+
+Your notes should have two sections: File System Hierarchy and Scenario Practice.
+
+---
+
+#### Guidelines
+
+##### Part 1: Linux File System Hierarchy (30 minutes)
+
+Document the purpose of these **essential** directories:
+
+**Core Directories (Must Know):**
+- `/` (root) - The starting point of everything
+- `/home` - User home directories
+- `/root` - Root user's home directory
+- `/etc` - Configuration files
+- `/var/log` - Log files (very important for DevOps!)
+- `/tmp` - Temporary files
+
+**Additional Directories (Good to Know):**
+- `/bin` - Essential command binaries
+- `/usr/bin` - User command binaries
+- `/opt` - Optional/third-party applications
+
+For each directory:
+- Write 1-2 lines explaining what it contains
+- Run `ls -l <directory>` and note 1-2 files/folders you see
+- Write one sentence: "I would use this when..."
+
+**Hands-on task:**
+```bash
+# Find the largest log file in /var/log
+du -sh /var/log/* 2>/dev/null | sort -h | tail -5
+
+# Look at a config file in /etc
+cat /etc/hostname
+
+# Check your home directory
+ls -la ~
+```
+
+---
+
+##### Part 2: Scenario-Based Practice (40 minutes)
+
+**Important:** Focus on understanding the **troubleshooting flow**, not memorizing commands. Use the hints!
+
+---
+
+###### SOLVED EXAMPLE: Understanding How to Approach Scenarios
+
+**Example Scenario: Check if a service is running**
+```
+Question: How do you check if the 'nginx' service is running?
+```
+
+**My Solution (Step by step):**
+
+**Step 1:** Check service status
+```bash
+systemctl status nginx
+```
+**Why this command?** It shows if the service is active, failed, or stopped
+
+**Step 2:** If service is not found, list all services
+```bash
+systemctl list-units --type=service
+```
+**Why this command?** To see what services exist on the system
+
+**Step 3:** Check if service is enabled on boot
+```bash
+systemctl is-enabled nginx
+```
+**Why this command?** To know if it will start automatically after reboot
+
+**What I learned:** Always check status first, then investigate based on what you see.
+
+---
+
+Now try these scenarios yourself:
+
+---
+
+**Scenario 1: Service Not Starting** 
+```
+A web application service called 'myapp' failed to start after a server reboot.
+What commands would you run to diagnose the issue?
+Write at least 4 commands in order.
+```
+
+**Hint:**
+- First check: Is the service running or failed?
+- Then check: What do the logs say?
+- Finally check: Is it enabled to start on boot?
+
+**Commands to explore:** `systemctl status myapp`, `systemctl is-enabled myapp`, `journalctl -u myapp -n 50`
+
+**Resource:** Review Day 04 (Process and Services practice)
+
+**Template for your answer:**
+```
+Step 1: [command]
+Why: [one line explanation]
+
+Step 2: [command]
+Why: [one line explanation]
+
+...
+```
+
+---
+
+**Scenario 2: High CPU Usage** 
+```
+Your manager reports that the application server is slow.
+You SSH into the server. What commands would you run to identify
+which process is using high CPU?
+```
+
+**Hint:**
+- Use a command that shows **live** CPU usage
+- Look for processes sorted by CPU percentage
+- Note the PID (Process ID) of the top process
+
+**Commands to explore:** `top` (press 'q' to quit), `htop`, `ps aux --sort=-%cpu | head -10`
+
+**Resource:** Review Day 05 (Troubleshooting Drill - CPU & Memory section)
+
+---
+
+**Scenario 3: Finding Service Logs** 
+```
+A developer asks: "Where are the logs for the 'docker' service?"
+The service is managed by systemd.
+What commands would you use?
+```
+
+**Hint:**
+- systemd services → logs are in journald
+- Command pattern: `journalctl -u <service-name>`
+- Use -n flag to limit number of lines
+- Use -f flag to follow logs in real-time (like tail -f)
+
+**Commands to explore:**
+```bash
+# Check service status first
+systemctl status ssh
+
+# View last 50 lines of logs
+journalctl -u ssh -n 50
+
+# Follow logs in real-time
+journalctl -u ssh -f
+```
+
+**Resource:** Review Day 04 (Process and Services - Log checks section)
+
+---
+
+**Scenario 4: File Permissions Issue** 
+```
+A script at /home/user/backup.sh is not executing.
+When you run it: ./backup.sh
+You get: "Permission denied"
+
+What commands would you use to fix this?
+```
+
+**Hint:**
+- First: Check what permissions the file has
+- Understand: Files need 'x' (execute) permission to run
+- Fix: Add execute permission with chmod
+
+**Step-by-step solution structure:**
+```
+Step 1: Check current permissions
+Command: ls -l /home/user/backup.sh
+Look for: -rw-r--r-- (notice no 'x' = not executable)
+
+Step 2: Add execute permission
+Command: chmod +x /home/user/backup.sh
+
+Step 3: Verify it worked
+Command: ls -l /home/user/backup.sh
+Look for: -rwxr-xr-x (notice 'x' = executable)
+
+Step 4: Try running it
+Command: ./backup.sh
+```
+
+**Resource:** Review Day 02 (File Permissions and Users Management)
+
+---
+
+#### Why This Matters for DevOps
+Understanding the file system is critical for:
+- Knowing where to find logs, configs, and binaries
+- Troubleshooting deployment issues
+- Writing automation scripts that work across systems
+
+Scenario-based practice prepares you for:
+- Real production incidents
+- DevOps interviews
+- On-call troubleshooting under pressure
+
+These are questions you **will** face in interviews and during real incidents.
+
+---
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository
+2. Navigate to the `2026/day-07/` folder
+3. Add your `day-07-linux-fs-and-scenarios.md` file
+4. Commit and push your changes to your fork
+
+---
+
+#### Learn in Public
+Share your Day 07 progress on LinkedIn:
+
+- Post 2–3 lines on what you learned about Linux file system
+- Share one scenario you found challenging and how you solved it
+- Optional: screenshot of your notes
+
+Use hashtags:
+```
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+```
+
+
+
+
+Happy Learning
+**TrainWithShubham**
+
+##### Notes: day-07-linux-fs-and-scenarios
+
+- `/` (root) - The starting point of everything
+===============================================
+-> Everythings in linux starts with / (forward slash) 
+
+-> / (root) - the top of everything file on the system 
+
+-> it contains bin   dev  home  lib64       media  opt   root  sbin  srv  tmp  var
+boot  etc  lib   lost+found  mnt    proc  run   snap  sys  usr
+- `/home` - User home directories
+=================================
+
+-> home- is the user home directory it contains the user 
+-> you can run ssh to remote server , server live in the home directory
+
+ubuntu@ip-172-31-37-148:~$ ls
+app.sh    demo        development  hello       projects  tee-demo
+code.py   deploy.log  file         output.txt  show.jar  testing
+code.txt  dev.txt     file.txt     production  staging
+ubuntu@ip-172-31-37-148:~$ pwd
+/home/ubuntu
+ubuntu@ip-172-31-37-148:~$
+
+
+
+- `/root` - Root user's home directory
+======================================
+-> it is the home directory of the root user 
+-> system adminstrator or superuser
+
+-> root user has absolute power over the entire operating system
+-> you can not change the directory to root/ 
+
+ubuntu@ip-172-31-37-148:/$ pwd
+/
+ubuntu@ip-172-31-37-148:/$ ls
+bin   dev  home  lib64       media  opt   root  sbin  srv  tmp  var
+boot  etc  lib   lost+found  mnt    proc  run   snap  sys  usr
+ubuntu@ip-172-31-37-148:/$ cd root/
+-bash: cd: root/: Permission denied
+ubuntu@ip-172-31-37-148:/$
+
+
+- `/etc` - Configuration files
+==============================
+/etc - directory contains text based configuration file that control the behaviour of the operating system and the applications running  on it.
+
+etc/ contains a list of all user accounts on the system their user is and their home directory path
+
+etc/ contains user group on the system and lists which uses belong to them
+
+it contains all the system config file password group ssh/ nginx/ docker/ hostname
+
+you edit here to configure server
+
+it cotains
+----------
+ubuntu@ip-172-31-37-148:/$ cd etc/
+ubuntu@ip-172-31-37-148:/etc$ ls
+ModemManager            hosts.allow             ppp
+NetworkManager          hosts.deny              profile
+PackageKit              init                    profile.d
+X11                     init.d                  protocols
+acpi                    initramfs-tools         python3
+adduser.conf            inputrc                 python3.14
+alternatives            iscsi                   rc0.d
+apparmor                issue                   rc1.d
+apparmor.d              issue.net               rc2.d
+apport                  kernel                  rc3.d
+apt                     landscape               rc4.d
+
+
+
+
+- `/var/log` - Log files (very important for DevOps!)
+=====================================================
+it contains
+ubuntu@ip-172-31-37-148:/var$ cd log/
+ubuntu@ip-172-31-37-148:/var/log$ ls
+README            btmp                   dpkg.log   private
+alternatives.log  chrony                 journal    syslog
+amazon            cloud-init-output.log  kern.log   sysstat
+apport.log        cloud-init.log         landscape  unattended-upgrades
+apt               dist-upgrade           lastlog    wtmp
+auth.log          dmesg                  nginx
+
+it contains all the log file and directory
+
+
+- `/tmp` - Temporary files
+==========================
+ubuntu@ip-172-31-37-148:/tmp$ ls
+runbook-demo
+snap-private-tmp
+systemd-private-5badf4dbcce9432bb33241b581d5c449-ModemManager.service-uT7Pbr
+systemd-private-5badf4dbcce9432bb33241b581d5c449-chrony.service-ncPfp7
+systemd-private-5badf4dbcce9432bb33241b581d5c449-irqbalance.service-9a9IHB
+systemd-private-5badf4dbcce9432bb33241b581d5c449-polkit.service-baL4DY
+systemd-private-5badf4dbcce9432bb33241b581d5c449-systemd-logind.service-68D37u
+
+it contains the temporary data
+never store important data here
+
+- `/bin` - Essential command binaries
+=====================================
+essential binaries every user can run this command -it contains all the command
+
+ubuntu@ip-172-31-37-148:/bin$ ls
+ 3cpio                                nm
+ GET                                  nohup
+ HEAD                                 nproc
+ POST                                 nroff
+ VGAuthService                        nsenter
+ X11                                  nslookup
+ '['                                  nstat
+ aa-enabled                           nsupdate
+ aa-exec                              ntfs-3g
+ aa-features-abi                      ntfs-3g.probe
+ acpi_listen                          ntfscat
+ acpidbg                              ntfscluster
+ add-apt-repository                   ntfscmp
+
+ - `/usr/bin` - User command binaries
+======================================
+contains the actual applications you install and use day to day work
+
+
+ubuntu@ip-172-31-37-148:/usr/bin$ ls
+ 3cpio                                nm
+ GET                                  nohup
+ HEAD                                 nproc
+ POST                                 nroff
+ VGAuthService                        nsenter
+ X11                                  nslookup
+ '['                                  nstat
+ aa-enabled                           nsupdate
+ aa-exec                              ntfs-3g
+ aa-features-abi                      ntfs-3g.probe
+ acpi_listen                          ntfscat
+
+
+- `/opt` - Optional/third-party applications
+============================================
+it contains
+ubuntu@ip-172-31-37-148:/$ cd opt/
+ubuntu@ip-172-31-37-148:/opt$ ls
+containerd
+ubuntu@ip-172-31-37-148:/opt$ cd containerd/
+ubuntu@ip-172-31-37-148:/opt/containerd$ ls
+ls: cannot open directory '.': Permission denied
+ubuntu@ip-172-31-37-148:/opt/containerd$
+
+optional and third party software  install here
+
+## 21. Hands-on Project — Day 7: Git Hooks (pre-commit, pre-push)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Git Hooks (pre-commit, pre-push)**.  
+We’ll automate checks and actions using Git’s built-in hook system to enforce standards before commits and pushes.
+
+---
+
+#### 🎯 Learning Goals
+- Understand what Git hooks are and how they are used.  
+- Create a **pre-commit hook** to enforce coding standards (linting, formatting, or tests).  
+- Create a **pre-push hook** to block pushes if tests fail.  
+- Learn how to share hooks across a team using `core.hooksPath`.  
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1. Initialize a Git repo
+   git init git-hooks-lab && cd git-hooks-lab
+
+2. Pre-commit hook
+   .git/hooks/pre-commit
+   ✔ Run shell script to check for trailing spaces or run `black --check` on Python files.
+
+3. Pre-push hook
+   .git/hooks/pre-push
+   ✔ Run unit tests before allowing push; block push if tests fail.
+
+4. Make hooks executable
+   chmod +x .git/hooks/pre-commit .git/hooks/pre-push
+
+5. Test the workflow
+   - Try committing a file with trailing spaces (should be blocked).
+   - Fix and re-commit (should pass).
+   - Push with failing tests (blocked).
+   - Push with passing tests (success).
+```
+
+---
+
+#### 💡 Challenge
+- Add a hook to **reject commits to `main` directly** (force using feature branches).  
+- Integrate `gitleaks` in pre-commit to block accidental secret commits.  
+- Share hooks across projects by setting a global hooks directory:
+  ```bash
+  git config --global core.hooksPath ~/.git-hooks
+  ```
+
+---
+
+#### 📌 Commit
+Once complete, commit your progress:
+```bash
+git add day07-git-hooks
+git commit -m "day07: Git hooks — pre-commit linting & pre-push testing"
+git push
+```
+
+##### Notes: README_hooks
+
+### Git Hooks Scripts
+
+- `pre-commit`: Blocks commits with trailing spaces or badly formatted Python code (uses black if installed).
+- `pre-push`: Runs pytest before pushing; blocks push if tests fail.
+- `challenge-pre-commit`: Optional hook that blocks direct commits to `main`/`master`.
+
+#### Install
+
+Copy scripts into `.git/hooks/` inside your repo:
+
+```bash
+cp pre-commit .git/hooks/pre-commit
+cp pre-push .git/hooks/pre-push
+chmod +x .git/hooks/pre-commit .git/hooks/pre-push
+```
+
+For the challenge branch restriction:
+
+```bash
+cp challenge-pre-commit .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
+
+### Files
+
+- [challenge-pre-commit](files/hands-on-projects/challenge-pre-commit)
+- [pre-commit](files/hands-on-projects/pre-commit)
+- [pre-push](files/hands-on-projects/pre-push)
 
 
 ---

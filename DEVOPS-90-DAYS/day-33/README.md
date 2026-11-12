@@ -343,6 +343,314 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 33: Jenkins + GitHub Integration
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 33** of our DevOps 90-Day Challenge!
+Yesterday, you installed Jenkins on AWS EC2.
+Today, we’ll integrate Jenkins with **GitHub** so your pipelines can trigger automatically when code changes are pushed.
+
+[![](https://img.youtube.com/vi/3LUGdzzitgw/0.jpg)](https://www.youtube.com/watch?v=3LUGdzzitgw)
+
+[Watch the video](https://www.youtube.com/watch?v=3LUGdzzitgw)
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Connect **Jenkins** with **GitHub**.
+* Configure **GitHub Webhooks**.
+* Automate Jenkins builds on code push events.
+
+---
+
+#### Tools Used
+
+* **Jenkins (Day 32 setup on EC2)**
+* **GitHub Repository** (sample app)
+* **Jenkins Git Plugin**
+* **GitHub Webhooks**
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Install Git Plugin in Jenkins
+
+* Go to: **Manage Jenkins → Plugins → Available Plugins**
+* Search: **Git Plugin**
+* Install & Restart Jenkins
+
+---
+
+##### 2. Create a GitHub Repository
+
+* Create a sample repo (e.g., `hello-jenkins`)
+* Add a simple `index.html` or code project
+* Push code to GitHub
+
+---
+
+##### 3. Configure Git in Jenkins
+
+On your Jenkins server:
+
+```bash
+sudo apt install git -y
+git --version
+```
+
+---
+
+##### 4. Create Jenkins Job
+
+* New Item → **Freestyle Project** → Name: `github-integration-demo`
+* Source Code Management → **Git**
+
+  * Repo URL: `https://github.com/<username>/hello-jenkins.git`
+* Build Triggers → Select **GitHub hook trigger for GITScm polling**
+* Save
+
+---
+
+##### 5. Configure GitHub Webhook
+
+* Go to your GitHub repo → **Settings → Webhooks → Add Webhook**
+* Payload URL: `http://<EC2_PUBLIC_IP>:8080/github-webhook/`
+* Content type: `application/json`
+* Events: Select **Push Events**
+* Save
+
+---
+
+##### 6. Test the Integration
+
+* Make a small change in your repo:
+
+```bash
+echo "Hello Jenkins Integration" >> index.html
+git add .
+git commit -m "Testing Jenkins GitHub integration"
+git push origin main
+```
+
+* Jenkins job should trigger automatically
+
+---
+
+#### Verification
+
+* Jenkins build is triggered instantly after GitHub push.
+* Build logs show the updated commit.
+* No manual build click needed.
+
+---
+
+#### Bonus (Advanced)
+
+* Use **GitHub Personal Access Token** for private repos.
+* Integrate with **Jenkinsfile** instead of Freestyle job.
+* Send build status back to GitHub PR.
+
+---
+
+#### Key Concepts Applied
+
+| Concept          | Example Used                          |
+| ---------------- | ------------------------------------- |
+| CI/CD Automation | Auto-trigger build on GitHub push     |
+| SCM Integration  | Jenkins Git plugin                    |
+| Webhooks         | GitHub webhook triggering Jenkins job |
+
+---
+
+#### Congratulations!
+
+You’ve now connected **Jenkins with GitHub**
+From here, you can build pipelines that automatically deploy whenever your code changes!
+
+---
+
+#### Try These Next
+
+* Create a **Pipeline job** using `Jenkinsfile`.
+* Integrate with **GitHub Actions** as comparison.
+* Add **Slack notifications** for build success/failure.
+
+## 19. Cohort Practice — Day 33: Docker Compose: Multi-Container Basics
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today's goal is to **run multi-container applications with a single command**.
+
+Yesterday you manually created networks and volumes and ran containers one by one. Docker Compose does all of that in one YAML file.
+
+---
+
+#### Expected Output
+- A markdown file: `day-33-compose.md`
+- All `docker-compose.yml` files you create
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Install & Verify
+1. Check if Docker Compose is available on your machine
+2. Verify the version
+
+---
+
+##### Task 2: Your First Compose File
+1. Create a folder `compose-basics`
+2. Write a `docker-compose.yml` that runs a single **Nginx** container with port mapping
+3. Start it with `docker compose up`
+4. Access it in your browser
+5. Stop it with `docker compose down`
+
+---
+
+##### Task 3: Two-Container Setup
+Write a `docker-compose.yml` that runs:
+- A **WordPress** container
+- A **MySQL** container
+
+They should:
+
+- Be on the same network (Compose does this automatically)
+- MySQL should have a named volume for data persistence
+- WordPress should connect to MySQL using the service name
+
+Start it, access WordPress in your browser, and set it up.
+
+**Verify:** Stop and restart with `docker compose down` and `docker compose up` — is your WordPress data still there?
+
+---
+
+##### Task 4: Compose Commands
+Practice and document these:
+1. Start services in **detached mode**
+2. View running services
+3. View **logs** of all services
+4. View logs of a **specific** service
+5. **Stop** services without removing
+6. **Remove** everything (containers, networks)
+7. **Rebuild** images if you make a change
+
+---
+
+##### Task 5: Environment Variables
+1. Add environment variables directly in your `docker-compose.yml`
+2. Create a `.env` file and reference variables from it in your compose file
+3. Verify the variables are being picked up
+
+---
+
+#### Hints
+- Start: `docker compose up -d`
+- Stop: `docker compose down`
+- Logs: `docker compose logs -f`
+- Compose creates a default network for all services automatically
+- Service names in compose are the DNS names containers use to talk to each other
+
+---
+
+#### Submission
+1. Add your compose files and `day-33-compose.md` to `2026/day-33/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your WordPress + MySQL running via Compose on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-33-compose
+
+## 20. Hands-on Project — Day 33: Jenkins Multibranch Pipelines
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Jenkins Multibranch Pipelines** — automatic discovery of branches & PRs and per‑branch Jenkinsfile execution.  
+You’ll set up a multibranch job, add branch/PR conditions, and use small helper scripts for build/test/package. Works great with GitHub and Bitbucket.
+
+---
+
+#### 🎯 Learning Goals
+- Configure a **Multibranch Pipeline** that scans your Git repo.
+- Use **branch & PR conditions** with `when {}` and `changeRequest()`.
+- Build different behaviors for **feature branches**, **PRs**, **main**, and **tags**.
+- Generate jobs via **Job DSL seed** (repeatable Jenkins configuration).
+
+---
+
+#### 🛠️ Tasks
+
+1) **Create a Multibranch Pipeline job**
+   - Jenkins → *New Item* → **Multibranch Pipeline** → Name: `90daysofdevops`
+   - *Branch Sources*: Git → Repository URL: `https://github.com/<your-org>/<repo>.git`
+   - Credentials: (if private)
+   - *Build Configuration*: by Jenkinsfile (default path: `Jenkinsfile`)
+   - *Scan Multibranch Pipeline Triggers*: every 1–5 minutes (demo) or cron.
+   - Save. Jenkins will discover branches & PRs and run the right Jenkinsfile logic.
+
+2) **Use the provided Jenkinsfiles**
+   - `Jenkinsfile` — single file with smart `when` rules: 
+     - **PRs**: run lint/test only
+     - **Branches**: build + test + optionally image tag `branch-SHORTSHA`
+     - **main**: full build + image push + deploy (simulated)
+     - **tags (v*)**: release build (e.g., `v1.2.3`)
+   - (Optional) Use `Jenkinsfile.pr.groovy` / `Jenkinsfile.release.groovy` if you prefer dedicated files per flow.
+
+3) **Run the seed job (optional)**
+   - Install **Job DSL** plugin.
+   - Create a Freestyle job named `seed-multibranch`.
+   - Add *Process Job DSLs*: `jenkins/seed-jobs/Multibranch.groovy`
+   - Build the job → it creates/updates a multibranch job pointing to your repo.
+
+4) **Webhook**
+   - Add a webhook on GitHub: **Settings → Webhooks → Add**  
+     - Payload URL: `https://<jenkins>/github-webhook/`  
+     - Content type: `application/json`  
+     - Events: *Just the push event* (and Pull Request events if using GitHub App integration)
+
+---
+
+#### 💡 Challenge
+- Add a **quality gate** stage (e.g., `tfsec`, `checkov`, `trivy`).  
+- Publish **JUnit** and **coverage** results per branch.  
+- Promote images to `:stable` when building tags.  
+- Add a **shared library** step to standardize Docker build & push across repos.
+
+---
+
+#### 📌 Commit
+```bash
+git add day33-jenkins-multibranch-pipelines
+git commit -m "day33: Jenkins Multibranch Pipelines (branch/PR conditions, Job DSL seed, helper scripts)"
+git push
+```
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [Jenkinsfile.pr.groovy](files/hands-on-projects/Jenkinsfile.pr.groovy)
+- [Jenkinsfile.release.groovy](files/hands-on-projects/Jenkinsfile.release.groovy)
+- [jenkins/seed-jobs/Multibranch.groovy](files/hands-on-projects/jenkins/seed-jobs/Multibranch.groovy)
+- [scripts/build.sh](files/hands-on-projects/scripts/build.sh)
+- [scripts/quality.sh](files/hands-on-projects/scripts/quality.sh)
+- [scripts/test.sh](files/hands-on-projects/scripts/test.sh)
+
+
 ---
 
 [← Day 32](../day-32/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 34 →](../day-34/README.md)

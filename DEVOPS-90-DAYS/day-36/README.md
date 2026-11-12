@@ -300,6 +300,270 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 36: GitHub Actions Introduction
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 36** of the DevOps 90-Day Challenge!
+Yesterday, you learned how to write **Jenkinsfiles** and automate pipelines with Jenkins.
+Today, you’ll start with **GitHub Actions** — GitHub’s native CI/CD system.
+
+[![](https://img.youtube.com/vi/9_S2T4Wnagk/0.jpg)](https://www.youtube.com/watch?v=9_S2T4Wnagk)
+
+[Watch the video](https://www.youtube.com/watch?v=9_S2T4Wnagk)
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand what **GitHub Actions** are.
+* Learn the basic structure of a **workflow**.
+* Automate your first workflow (build + test).
+
+---
+
+#### Tools Used
+
+* **GitHub Repository**
+* **GitHub Actions** (built-in CI/CD tool)
+* **YAML workflow files**
+
+---
+
+#### Project Structure
+
+```bash
+myapp/
+ ├── .github/
+ │    └── workflows/
+ │         └── ci.yml
+ ├── app.py
+ ├── requirements.txt
+ └── tests/
+      └── test_app.py
+```
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Create Workflow File
+
+Inside your repo, create:
+
+**`.github/workflows/ci.yml`**
+
+```yaml
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Tests
+      run: pytest
+```
+
+---
+
+##### 2. Commit and Push
+
+```bash
+git add .github/workflows/ci.yml
+git commit -m "Added GitHub Actions workflow"
+git push origin main
+```
+
+---
+
+##### 3. Check Workflow Execution
+
+* Go to **GitHub → Your Repo → Actions tab**
+* See pipeline running automatically on **push**
+
+---
+
+#### Verification
+
+* Code is checked out.
+* Dependencies installed.
+* Tests executed successfully.
+
+---
+
+#### Bonus (Extra Learning)
+
+* Add **matrix builds** (Python 3.8, 3.9, 3.10).
+* Trigger workflows on **schedule** (cron jobs).
+* Use **Marketplace Actions** (e.g., linting, Docker builds).
+
+---
+
+#### Key Concepts Applied
+
+| Concept       | Example Used                    |
+| ------------- | ------------------------------- |
+| Workflow      | `.github/workflows/ci.yml` file |
+| Event Trigger | On push & pull\_request         |
+| Job + Runner  | `runs-on: ubuntu-latest`        |
+| Steps         | Checkout, Setup Python, Test    |
+
+---
+
+#### Congratulations!
+
+You have successfully created your **first GitHub Actions workflow**
+Now, you can use GitHub Actions to **automate builds, tests, and deployments** directly in your repos.
+
+---
+
+#### Try These Next
+
+* Add a **linter check** (flake8).
+* Add **build artifact upload** (test reports).
+* Add **Docker build & push** step.
+
+## 19. Cohort Practice — Day 36: Docker Project: Dockerize a Full Application
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today's goal is to **take a real application and Dockerize it end-to-end**.
+
+No tutorials. No hand-holding. Pick an app, write the Dockerfile, set up Compose, and ship it. This is what you'll do on the job.
+
+
+-----------------
+
+#### Expected Output
+
+
+- A markdown file: `day-36-docker-project.md`
+- Complete project with Dockerfile, docker-compose.yml, and app code
+- Image pushed to Docker Hub
+
+
+
+--------------------
+
+#### Challenge Tasks
+
+##### Task 1: Pick Your App
+Choose **one** of these (or use your own project):
+- A **Python Flask/Django** app with a database
+- A **Node.js Express** app with MongoDB
+- A **static website** served by Nginx with a backend API
+- Any app from your GitHub that doesn't have Docker yet
+
+If you don't have an app, clone a simple open-source one and Dockerize it.
+
+---
+
+##### Task 2: Write the Dockerfile
+1. Create a Dockerfile for your application
+2. Use a **multi-stage build** if applicable
+3. Use a **non-root user**
+4. Keep the image **small** — use alpine or slim base images
+5. Add a `.dockerignore` file
+
+Build and test it locally.
+
+---
+
+##### Task 3: Add Docker Compose
+Write a `docker-compose.yml` that includes:
+1. Your **app** service (built from Dockerfile)
+2. A **database** service (Postgres, MySQL, MongoDB — whatever your app needs)
+3. **Volumes** for database persistence
+4. A **custom network**
+5. **Environment variables** for configuration (use `.env` file)
+6. **Healthchecks** on the database
+
+Run `docker compose up` and verify everything works together.
+
+---
+
+##### Task 4: Ship It
+1. Tag your app image
+2. Push it to Docker Hub
+3. Share the Docker Hub link
+4. Write a `README.md` in your project with:
+   - What the app does
+   - How to run it with Docker Compose
+   - Any environment variables needed
+
+---
+
+##### Task 5: Test the Whole Flow
+1. Remove all local images and containers
+2. Pull from Docker Hub and run using only your compose file
+3. Does it work fresh? If not — fix it until it does
+
+---
+
+#### Documentation
+Create `day-36-docker-project.md` with:
+- What app you chose and why
+- Your Dockerfile (with comments explaining each line)
+- Challenges you faced and how you solved them
+- Final image size
+- Docker Hub link
+
+---
+
+#### Submission
+1. Add all project files and `day-36-docker-project.md` to `2026/day-36/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your Dockerized project on LinkedIn — include the Docker Hub link so others can pull and run it.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 36: Docker Build + Push to ECR
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Focus: Dockerize a small Flask app and push to AWS ECR via Jenkins.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [docker/Dockerfile](files/hands-on-projects/docker/Dockerfile)
+- [docker/app.py](files/hands-on-projects/docker/app.py)
+- [docker/requirements.txt](files/hands-on-projects/docker/requirements.txt)
+- [scripts/build.sh](files/hands-on-projects/scripts/build.sh)
+- [scripts/login_ecr.sh](files/hands-on-projects/scripts/login_ecr.sh)
+- [scripts/push.sh](files/hands-on-projects/scripts/push.sh)
+
+
 ---
 
 [← Day 35](../day-35/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 37 →](../day-37/README.md)

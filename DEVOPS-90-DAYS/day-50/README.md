@@ -699,6 +699,503 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 50: Ansible Best Practices and Secrets Management
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 50** of the DevOps 90-Day Challenge!
+Today, we’ll level up our Ansible skills by learning **Best Practices** and how to secure sensitive data using **Ansible Vault**.
+
+[![](https://img.youtube.com/vi/qlakf5UhGck/0.jpg)](https://www.youtube.com/watch?v=qlakf5UhGck)
+
+[Watch the video](https://www.youtube.com/watch?v=qlakf5UhGck)
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Structure your Ansible projects effectively.
+* Encrypt sensitive data (passwords, keys) using **Ansible Vault**.
+* Manage variables using `group_vars` and `host_vars`.
+
+---
+
+#### Tools Used
+
+* **Ansible Vault**
+* **Git** (for versioning encrypted files)
+* **Standard Project Layout**
+
+---
+
+#### Key Concepts
+
+##### 1. Ansible Best Practices
+
+* **Use Roles**: Don't write everything in one huge playbook.
+* **Readable Names**: Name every task clearly.
+* **Version Control**: Everything goes into Git.
+* **Separation**: Keep inventory separate from playbooks.
+
+##### 2. Ansible Vault
+
+Vault allows you to encrypt YAML files.
+
+```bash
+# Create a new encrypted file
+ansible-vault create secrets.yml
+
+# Edit an encrypted file
+ansible-vault edit secrets.yml
+
+# Encrypt an existing file
+ansible-vault encrypt existing_file.yml
+```
+
+##### 3. Running with Vault
+
+```bash
+ansible-playbook site.yml --ask-vault-pass
+```
+
+---
+
+#### Key Concepts Applied
+
+| Concept | Example Used |
+| :--- | :--- |
+| **Security** | Encrypting DB passwords in `group_vars/all/passwords.yml`. |
+| **Modularity** | Using `site.yml` to import other playbooks. |
+| **Variable Precedence** | Understanding how `group_vars` override defaults. |
+
+---
+
+#### Bonus (Extra Learning)
+
+* Set up a **Vault Password File** so you don't have to type it every time (add it to `.gitignore`!).
+* Use **multiple vault passwords** for different environments (dev/prod).
+
+---
+
+#### Congratulations!
+
+You’ve successfully secured your automation using **Ansible Vault** and cleaned up your project structure!
+Security is a critical part of DevOps, and you're doing it right.
+
+---
+
+#### Try These Next
+
+* Refactor your previous project to follow the **Standard Directory Layout**.
+* storing your vault password in a secured Jenkins credential used during pipeline runs.
+
+## 19. Cohort Practice — Day 50: Kubernetes Architecture and Cluster Setup
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+You have been building and shipping containers with Docker. But what happens when you need to run hundreds of containers across multiple servers? You need an orchestrator. Today you start your Kubernetes journey — understand the architecture, set up a local cluster, and run your first `kubectl` commands.
+
+This is where things get real.
+
+---
+
+#### Expected Output
+- A running local Kubernetes cluster (kind or minikube)
+- A markdown file: `day-50-k8s-setup.md`
+- Screenshot of `kubectl get nodes` showing your cluster is ready
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Recall the Kubernetes Story
+Before touching a terminal, write down from memory:
+
+1. Why was Kubernetes created? What problem does it solve that Docker alone cannot?
+2. Who created Kubernetes and what was it inspired by?
+3. What does the name "Kubernetes" mean?
+
+Do not look anything up yet. Write what you remember from the session, then verify against the official docs.
+
+---
+
+##### Task 2: Draw the Kubernetes Architecture
+From memory, draw or describe the Kubernetes architecture. Your diagram should include:
+
+**Control Plane (Master Node):**
+- API Server — the front door to the cluster, every command goes through it
+- etcd — the database that stores all cluster state
+- Scheduler — decides which node a new pod should run on
+- Controller Manager — watches the cluster and makes sure the desired state matches reality
+
+**Worker Node:**
+- kubelet — the agent on each node that talks to the API server and manages pods
+- kube-proxy — handles networking rules so pods can communicate
+- Container Runtime — the engine that actually runs containers (containerd, CRI-O)
+
+After drawing, verify your understanding:
+- What happens when you run `kubectl apply -f pod.yaml`? Trace the request through each component.
+- What happens if the API server goes down?
+- What happens if a worker node goes down?
+
+---
+
+##### Task 3: Install kubectl
+`kubectl` is the CLI tool you will use to talk to your Kubernetes cluster.
+
+Install it:
+```bash
+# macOS
+brew install kubectl
+
+# Linux (amd64)
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+# Windows (with chocolatey)
+choco install kubernetes-cli
+```
+
+Verify:
+```bash
+kubectl version --client
+```
+
+
+---
+
+##### Task 4: Set Up Your Local Cluster
+Choose **one** of the following. Both give you a fully functional Kubernetes cluster on your machine.
+
+**Option A: kind (Kubernetes in Docker)**
+```bash
+# Install kind
+# macOS
+brew install kind
+
+# Linux
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+
+# Create a cluster
+kind create cluster --name devops-cluster
+
+# Verify
+kubectl cluster-info
+kubectl get nodes
+```
+
+**Option B: minikube**
+```bash
+# Install minikube
+
+# macOS
+brew install minikube
+
+# Linux
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# Start a cluster
+minikube start
+
+
+# Verify
+kubectl cluster-info
+kubectl get nodes
+```
+
+Write down: Which one did you choose and why?
+
+---
+
+##### Task 5: Explore Your Cluster
+Now that your cluster is running, explore it:
+
+```bash
+# See cluster info
+kubectl cluster-info
+
+# List all nodes
+kubectl get nodes
+
+# Get detailed info about your node
+kubectl describe node <node-name>
+
+# List all namespaces
+kubectl get namespaces
+
+# See ALL pods running in the cluster (across all namespaces)
+kubectl get pods -A
+```
+
+Look at the pods running in the `kube-system` namespace:
+```bash
+kubectl get pods -n kube-system
+```
+
+You should see pods like `etcd`, `kube-apiserver`, `kube-scheduler`, `kube-controller-manager`, `coredns`, and `kube-proxy`. These are the architecture components you drew in Task 2 — running as pods inside the cluster.
+
+**Verify:** Can you match each running pod in `kube-system` to a component in your architecture diagram?
+
+---
+
+##### Task 6: Practice Cluster Lifecycle
+Build muscle memory with cluster operations:
+
+```bash
+# Delete your cluster
+kind delete cluster --name devops-cluster
+# (or: minikube delete)
+
+# Recreate it
+kind create cluster --name devops-cluster
+# (or: minikube start)
+
+# Verify it is back
+kubectl get nodes
+```
+
+Try these useful commands:
+```bash
+# Check which cluster kubectl is connected to
+kubectl config current-context
+
+# List all available contexts (clusters)
+kubectl config get-contexts
+
+# See the full kubeconfig
+kubectl config view
+```
+
+Write down: What is a kubeconfig? Where is it stored on your machine?
+
+---
+
+#### Hints
+- kind requires Docker to be running (it creates clusters using containers)
+- minikube can use Docker, VirtualBox, or other drivers
+- The default kubeconfig file is at `~/.kube/config`
+- `kubectl get pods -A` is short for `kubectl get pods --all-namespaces`
+- If `kubectl` cannot connect, check if your cluster is running: `kind get clusters` or `minikube status`
+- `-o wide` flag gives extra details: `kubectl get nodes -o wide`
+
+---
+
+#### Documentation
+Create `day-50-k8s-setup.md` with:
+- Kubernetes history in your own words (3-4 sentences)
+- Your architecture diagram (text-based or image)
+- Which tool you chose (kind/minikube) and why
+- Screenshot of `kubectl get nodes` and `kubectl get pods -n kube-system`
+- What each kube-system pod does
+
+---
+
+#### Submission
+1. Add `day-50-k8s-setup.md` to `2026/day-50/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share on LinkedIn: "Started my Kubernetes journey today. Set up a local cluster, explored the architecture, and saw the control plane components running as actual pods. The orchestration chapter begins."
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-50-k8s-setup
+
+##### Task 1: Recall the Kubernetes Story
+Before touching a terminal, write down from memory:
+
+1. Why was Kubernetes created? What problem does it solve that Docker alone cannot?
+
+-> Kubernetes was created to automate the deployment, scalling and management of the containerized application. Docker is great for creating and running containers , but it can not efficiently manage large number of containers across multiple servers. kubernetes solves problems like container orchestration , load balancing , service discovery, auto-scling , slef -healing , rolling updateds, and high availability.
+
+
+
+
+
+2. Who created Kubernetes and what was it inspired by?
+
+-> Kubernetes was originally created by  google and later donated to thr cloud native computing foundationn(CNCF). it was inspired by google's internal container management system called BROG, which google used to manage workloads at massive scale.
+
+
+3. What does the name "Kubernetes" mean?
+
+-> The word kubernetes comes from greek and means "Helmsman" or "Polit" , someone who streers a ship. THis represents how kubernetes manages and orchestrates containers its abbreviation in k8s , where the 8 represents the eight letters between k and s
+
+Do not look anything up yet. Write what you remember from the session, then verify against the official docs.
+
+##### Task 2: Draw the Kubernetes Architecture
+From memory, draw or describe the Kubernetes architecture. Your diagram should include:
+
+**Control Plane (Master Node):**
+- API Server — the front door to the cluster, every command goes through it
+========================================================================
+-> Entry point of the kubernetes cluster.
+-> receives all requests from kubectl.
+-> validates requests.
+-> Stores cluster information in etcd
+-> communicates with all other control plane components.
+
+
+- etcd — the database that stores all cluster state
+====================================================
+-> Distributed key-value database.
+-> Stores the complete cluster state.
+-> Stores Pods , Deployments , services , secrets, ConfigMpas, etc.
+-> Considered the single source of truth.
+
+
+
+
+- Scheduler — decides which node a new pod should run on
+=========================================================
+-> Watches for Pods without assigned nodes.
+-> Chooses the best worker node based on available CPU, memory , affinity, taints, tolerations, etc.
+Assigns the Pod to a worker node.
+
+
+
+- Controller Manager — watches the cluster and makes sure the desired state matches reality
+========================================================================
+-> Continuously watches the cluster.
+-> Ensures the actual state matches the desired state.
+-> Create or replace Pods if needed.
+-> handles ReplicaSet, Nodes , Jobs, Deployments and more.
+
+**Worker Node:**
+- kubelet — the agent on each node that talks to the API server and manages pods
+====================================================================
+-> Runs on every worker node.
+-> Receives instructions from the Api server.
+-> creates and monitors pods.
+-> Reports node and pod status back to the API server.
+
+
+
+
+
+
+- kube-proxy — handles networking rules so pods can communicate
+==================================================================
+->  Manages networking .
+-> implements service networking.
+-> Enables communication between pods and services
+-> Performs load balancing.
+
+
+
+- Container Runtime — the engine that actually runs containers (containerd, CRI-O)
+===============================================================
+-> Runs the actual containers.
+Examplpe :- contained
+CRI-O
+
+After drawing, verify your understanding:
+- What happens when you run `kubectl apply -f pod.yaml`? Trace the 
+request through each component.
+===================================================================
+-> kubectl -> api server -> stores desired state in etcd -> scheduler notics pod has no node -> selects best worker node -> api server updted assignement -> kubelet on selectes worker node detectes new pod -> container runtime pulls images -> container starts -> kubelet reports pod status back -> api server updates etcd
+
+
+steps
+=====
+i- kubectl apply -f pod.yml
+ii- request goes to the api server.
+iii- api server validagtes the yml.
+iv- Desired state is stored in etcd.
+v- schudeler selects a worker node.
+vi- kubelet on that node sees the assignment.
+vii- containers run time pulls the docker images
+viii- pods starts.
+ix- kubelet reports the pods status
+x- api server updates etcd with the current state.
+
+- What happens if the API server goes down?
+===========================================
+-> kubectl commands stop working.
+-> no new pods can be created.
+-> no updated or scalling operationss can occur.
+-> controllers and schudeler cannot coordinate changes.
+-> existing pods continue running on worker nodes.
+-> if configuredd with multiple api server (high availability), another api server can continue serving request.
+
+
+
+
+- What happens if a worker node goes down?
+===========================================
+-> kubelet stops sending heartbets.
+-> controller manager detects the node is unavailable.
+-> pods on that node become unavailable.
+-> controller manager schudelers replacement pods on healthy worker nodes(if managed by a deployment or repicaset).
+-> traffic is redirecred to the healthy pos throught services and kube-proxy
+-users expericnce little or no downtiume if replicated are available.
+
+
+
+                    +----------------------+
+                    |      kubectl         |
+                    +----------+-----------+
+                               |
+                               v
+                    +----------------------+
+                    |      API Server      |
+                    +----------+-----------+
+                               |
+        +----------------------+----------------------+
+        |                      |                      |
+        v                      v                      v
++---------------+     +----------------+     +----------------------+
+|     etcd      |     |   Scheduler    |     | Controller Manager   |
+| Cluster State |     | Selects Node   |     | Maintains Desired    |
++---------------+     +----------------+     | State                |
+                                              +----------------------+
+                               |
+                               v
+                 -------------------------------------
+                 |                                   |
+                 v                                   v
+         +-------------------+              +-------------------+
+         |   Worker Node 1   |              |   Worker Node 2   |
+         +-------------------+              +-------------------+
+         | kubelet           |              | kubelet           |
+         | kube-proxy        |              | kube-proxy        |
+         | Container Runtime |              | Container Runtime |
+         | (containerd/CRI-O)|              | (containerd/CRI-O)|
+         |       Pods        |              |       Pods        |
+         +-------------------+              +-------------------+
+
+## 20. Hands-on Project — Day 50: Kubernetes Deployment & Service
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Kustomize-based Deployment & Service with probes, resources, overlays (staging/prod), rollout helpers, and Jenkinsfile.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [k8s/base/configmap.yaml](files/hands-on-projects/k8s/base/configmap.yaml)
+- [k8s/base/deployment.yaml](files/hands-on-projects/k8s/base/deployment.yaml)
+- [k8s/base/kustomization.yaml](files/hands-on-projects/k8s/base/kustomization.yaml)
+- [k8s/base/service.yaml](files/hands-on-projects/k8s/base/service.yaml)
+- [k8s/overlays/prod/kustomization.yaml](files/hands-on-projects/k8s/overlays/prod/kustomization.yaml)
+- [k8s/overlays/staging/kustomization.yaml](files/hands-on-projects/k8s/overlays/staging/kustomization.yaml)
+- [scripts/deploy.sh](files/hands-on-projects/scripts/deploy.sh)
+- [scripts/rollback.sh](files/hands-on-projects/scripts/rollback.sh)
+- [scripts/rollout_status.sh](files/hands-on-projects/scripts/rollout_status.sh)
+
+
 ---
 
 [← Day 49](../day-49/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 51 →](../day-51/README.md)

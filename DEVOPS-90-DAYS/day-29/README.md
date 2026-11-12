@@ -461,7 +461,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — Day 29: Production-Oriented CI/CD + DevSecOps Pipeline
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 “A production-ready pipeline doesn't just deploy code—it proves that the code is secure, tested, traceable, and ready to run in production.” 🔐🚀
 
@@ -509,6 +509,308 @@ A production-ready DevSecOps pipeline is much more than build and deployment. It
 `Code quality → Security → Dependencies → Infrastructure → Containers → Application → Deployment`
 
 Building this pipeline helped me understand how DevOps, DevSecOps, AWS, Docker, CI/CD, security testing, and release management work together in a real-world workflow.
+
+## 19. Challenge Notes — Day 29: Helm Charts and Application Packaging
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+[![](https://img.youtube.com/vi/HG38LO5K8tA/0.jpg)](https://www.youtube.com/watch?v=HG38LO5K8tA)
+
+[Watch the video](https://www.youtube.com/watch?v=HG38LO5K8tA)
+
+Welcome to **Day 29** of the #90DaysOfDevOps challenge!  
+Today, we dive into the world of **Helm**, the package manager for Kubernetes.
+
+---
+
+#### 📌 Why Helm?
+
+Managing Kubernetes apps involves a lot of YAML — `Deployment`, `Service`, `ConfigMap`, `PVC`, etc.  
+For a **microservices architecture**, this quickly becomes overwhelming.
+
+Helm solves this by:
+- Packaging everything into a single unit called a **Chart**
+- Enabling **templating**, **versioning**, and **reuse**
+- Simplifying **deployments**, **upgrades**, and **rollbacks**
+
+---
+
+#### 📦 What is a Helm Chart?
+
+A Helm Chart is a collection of files that describe a related set of Kubernetes resources.
+
+```
+
+myapp/
+├── Chart.yaml          # Chart metadata
+├── values.yaml         # Default configuration values
+└── templates/          # Templated Kubernetes manifests
+├── deployment.yaml
+├── service.yaml
+├── configmap.yaml
+└── \_helpers.tpl    # Optional: reusable template helpers
+
+````
+
+---
+
+#### 🛠️ Installing Helm
+
+##### 🔧 Install Helm CLI
+```bash
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+````
+
+Or use a package manager:
+
+* macOS: `brew install helm`
+* Ubuntu: `sudo apt install helm`
+
+##### ✅ Verify Installation
+
+```bash
+helm version
+```
+
+---
+
+#### 🎮 Using Helm with Minikube (Even on EC2!)
+
+1. SSH into your EC2 where Minikube is running:
+
+   ```bash
+   ssh -i your-key.pem ec2-user@your-ec2-public-ip
+   ```
+
+2. Create or install a chart:
+
+   ```bash
+   helm repo add bitnami https://charts.bitnami.com/bitnami
+   helm install my-nginx bitnami/nginx
+   ```
+
+3. Access via port-forwarding:
+
+   ```bash
+   kubectl port-forward svc/my-nginx 8080:80
+   ```
+
+   Now open `http://<your-ec2-ip>:8080`
+
+---
+
+#### 🔄 Rollback a Helm Release
+
+1. Check revision history:
+
+   ```bash
+   helm history my-nginx
+   ```
+
+2. Rollback:
+
+   ```bash
+   helm rollback my-nginx 1
+   ```
+
+---
+
+#### 🧪 Bonus: Create Your Own Chart
+
+```bash
+helm create myapp
+```
+
+Edit `values.yaml` and files under `templates/`, then deploy:
+
+```bash
+helm install myapp ./myapp
+```
+
+---
+
+#### 🧠 Best Practices
+
+* Use `values.yaml` for config separation
+* Version your charts (semver)
+* Use `_helpers.tpl` to avoid repetition
+* Store charts in a versioned repository (e.g., GitHub Pages, ChartMuseum)
+
+#### 🔗 Resources
+
+* [Helm Docs](https://helm.sh/docs/)
+* [Bitnami Charts](https://bitnami.com/stacks/helm)
+* [Helm Charts GitHub](https://github.com/helm/charts)
+
+---
+
+✅ **Day 29 Completed!** You're now ready to package and manage your K8s apps with confidence using Helm!
+Tag your progress: `#90DaysOfDevOps`
+
+### Attachments
+
+- [Day 29 - Helm Charts and Application Packaging.pdf](Day%2029%20-%20Helm%20Charts%20and%20Application%20Packaging.pdf)
+
+## 20. Cohort Practice — Day 29: Introduction to Docker
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today's goal is to **understand what Docker is and run your first container**.
+
+You will:
+- Learn why containers exist and how they differ from VMs
+- Install Docker on your machine
+- Run and explore containers from Docker Hub
+
+---
+
+#### Expected Output
+- A markdown file: `day-29-docker-basics.md`
+- Screenshots of your running containers
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: What is Docker?
+Research and write short notes on:
+- What is a container and why do we need them?
+- Containers vs Virtual Machines — what's the real difference?
+- What is the Docker architecture? (daemon, client, images, containers, registry)
+
+Draw or describe the Docker architecture in your own words.
+
+---
+
+##### Task 2: Install Docker
+1. Install Docker on your machine (or use a cloud instance)
+2. Verify the installation
+3. Run the `hello-world` container
+4. Read the output carefully — it explains what just happened
+
+---
+
+##### Task 3: Run Real Containers
+1. Run an **Nginx** container and access it in your browser
+2. Run an **Ubuntu** container in interactive mode — explore it like a mini Linux machine
+3. List all running containers
+4. List all containers (including stopped ones)
+5. Stop and remove a container
+
+---
+
+##### Task 4: Explore
+1. Run a container in **detached mode** — what's different?
+2. Give a container a custom **name**
+3. Map a **port** from the container to your host
+4. Check **logs** of a running container
+5. Run a command **inside** a running container
+
+---
+
+#### Hints
+- `docker run`, `docker ps`, `docker stop`, `docker rm`
+- Interactive mode: `-it` flag
+- Detached mode: `-d` flag
+- Port mapping: `-p host:container`
+- Naming: `--name`
+- Logs: `docker logs`
+- Exec into container: `docker exec`
+
+---
+
+#### Why This Matters for DevOps
+Docker is the foundation of modern deployment. Every CI/CD pipeline, Kubernetes cluster, and microservice architecture starts with containers. Today you took the first step.
+
+---
+
+#### Submission
+1. Add your `day-29-docker-basics.md` to `2026/day-29/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your first Docker container screenshot on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 21. Hands-on Project — Day 29: AWS Config Rules, Conformance Packs & Remediation (Terraform)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **governance & compliance** with **AWS Config**. You’ll:
+- Stand up **AWS Config** (recorder + delivery to S3)
+- Enable a **set of managed rules** (S3 public access, SSH, encryption, password policy, RDS)
+- (Optional) Deploy a **Conformance Pack** to group rules
+- Wire **auto‑remediation** for an S3 rule via **SSM Automation**
+
+---
+
+#### 🎯 Learning Goals
+- Turn on AWS Config with a dedicated **S3 bucket** and **recorder**  
+- Apply common **managed rules** for a baseline security posture  
+- Use a **Conformance Pack** to roll up multiple rules with a single template  
+- Attach **remediation** so drift can auto‑correct (guardrails, not handrails)
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```bash
+# 1) Initialize
+terraform -chdir=terraform init
+
+# 2) Plan (tune variables)
+terraform -chdir=terraform plan   -var='name_prefix=day29'   -var='enable_conformance_pack=true'   -var='enable_s3_public_block_remediation=true'
+
+# 3) Apply
+terraform -chdir=terraform apply -auto-approve
+
+# 4) Test
+# - Make an S3 bucket public (in a sandbox) and watch the rule go NON_COMPLIANT
+# - If remediation is enabled, AWS Config will trigger SSM Automation to block public access
+```
+
+**Notes**
+- The **recorder** captures all supported resources by default; you can scope via `resource_types` if needed.
+- The **delivery channel** writes to a dedicated S3 bucket. Retain logs for audit.
+- Conformance Packs are a convenient abstraction; rules can be managed either way.
+
+---
+
+#### 💡 Challenge
+- Add **organization‑wide** aggregation using **aws_config_configuration_aggregator** (multi‑account)  
+- Attach additional **remediations** (e.g., disable public RDS snapshots)  
+- Export **SNS** notifications from Config to SIEM via EventBridge → SNS
+
+---
+
+#### ✅ Checklist
+- [ ] Recorder **STARTED** and delivering to S3  
+- [ ] Baseline rules show **COMPLIANT / NON_COMPLIANT** resources  
+- [ ] (Optional) Conformance pack deployed and visible in console  
+- [ ] Remediation executed for S3 public access violations
+
+---
+
+#### 📌 Commit
+```bash
+git add day29-aws-config-rules
+git commit -m "day29: AWS Config baseline — recorder, managed rules, conformance pack, SSM remediation"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

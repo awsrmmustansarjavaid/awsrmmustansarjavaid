@@ -595,7 +595,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🔐 Day 11 - DevSecOps Fundamentals, OWASP Threat Dragon & GitHub Secrets
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -935,6 +935,691 @@ echo $APP_NAME
 ---
 
 > **"Security is not a feature you add at the end—it's a mindset you build from the beginning."** 🔐
+
+## 19. Challenge Notes — Day 11: VPC Deep Dive – Subnets, Route Tables, Gateways
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+[![](https://img.youtube.com/vi/0EdHPdzv2ko/0.jpg)](https://www.youtube.com/watch?v=0EdHPdzv2ko)
+
+[Watch the video](https://www.youtube.com/watch?v=0EdHPdzv2ko)
+
+#### 🌐 What is a VPC?
+A **Virtual Private Cloud (VPC)** is an isolated network within AWS where you can launch AWS resources. It's like having your own private network in the cloud, with full control over:
+- IP addressing (CIDR block)
+- Subnetting
+- Routing
+- Security & access controls
+
+##### 🛠️ When You Create a VPC, You Define:
+- **CIDR block** (e.g., `10.0.0.0/16`)
+- **Subnets**
+- **Route Tables**
+- **Gateways**
+
+---
+
+#### 🧱 VPC Core Components
+
+| Component            | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| **CIDR Block**       | Range of IPs in the VPC (e.g., `10.0.0.0/16`)                               |
+| **Subnets**          | Logical divisions of the VPC into smaller address ranges                   |
+| **Internet Gateway** | Enables internet access for public subnets                                 |
+| **NAT Gateway**      | Allows private subnets to access the internet (outbound only)              |
+| **Route Tables**     | Control traffic routing across the VPC                                      |
+
+---
+
+#### 🧩 Subnets in VPC
+A **subnet** is a segment of a VPC's IP range where AWS resources (like EC2) reside. Subnets help with isolation, security, and IP address management.
+
+##### 🧭 Subnet Types
+| Type            | Description                                                                 |
+|-----------------|-----------------------------------------------------------------------------|
+| **Public**      | Connected to the Internet Gateway (e.g., web servers, load balancers)       |
+| **Private**     | No direct internet access; uses NAT Gateway for outbound traffic            |
+| **VPN-only**    | Connects to on-premise via VPN Gateway (no internet access)                |
+| **Isolated**    | No internet or external VPC access (e.g., internal databases)              |
+
+##### 🧮 Subnet IP Addressing
+- **VPC CIDR block**: `10.0.0.0/16` → Subnets: `10.0.1.0/24`, `10.0.2.0/24`, etc.
+- AWS **reserves 5 IPs** in each subnet.
+
+###### Reserved IPs (Example: `10.0.1.0/24`)
+| IP Address    | Purpose                          |
+|--------------|----------------------------------|
+| `10.0.1.0`   | Network ID                       |
+| `10.0.1.1`   | Default Gateway (VPC Router)     |
+| `10.0.1.2`   | Reserved by AWS (DNS)            |
+| `10.0.1.3`   | Reserved by AWS (Future Use)     |
+| `10.0.1.255` | Broadcast (unused in AWS)        |
+
+###### Usable IPs per Subnet
+| Subnet CIDR | Total IPs | Reserved | Usable |
+|------------|----------|----------|--------|
+| `/28`      | 16       | 5        | 11     |
+| `/24`      | 256      | 5        | 251    |
+| `/22`      | 1024     | 5        | 1019   |
+
+---
+
+#### 🚦 Route Tables
+A **Route Table** defines traffic routing rules. Every subnet must be associated with one.
+
+##### 📘 Route Table Fields
+- **Destination**: CIDR block (e.g., `0.0.0.0/0` for all traffic)
+- **Target**: IGW, NAT Gateway, Local, etc.
+
+##### 🔧 Types of Route Tables
+| Type            | Description                                                                 |
+|-----------------|-----------------------------------------------------------------------------|
+| **Main**        | Default route table (used by subnets without explicit association)          |
+| **Custom**      | Created for specific subnets (e.g., isolating dev/prod)                    |
+
+##### � Example Routes
+| Subnet Type | Destination | Target          |
+|------------|-------------|-----------------|
+| Public     | `0.0.0.0/0` | Internet Gateway|
+| Private    | `0.0.0.0/0` | NAT Gateway     |
+
+---
+
+#### 🌐 Gateways in VPC
+| Gateway Type         | Purpose                                                                     |
+|----------------------|-----------------------------------------------------------------------------|
+| **Internet Gateway (IGW)** | Enables public subnets to access the internet                          |
+| **NAT Gateway**      | Private subnets → Outbound internet (managed, HA, AZ-scoped)               |
+| **NAT Instance**     | Legacy EC2-based NAT (manual setup)                                        |
+| **Virtual Private Gateway (VGW)** | Site-to-Site VPN to on-premise                                |
+| **Transit Gateway**  | Hub-and-spoke model for multiple VPCs/VPNs                                 |
+| **VPC Peering**      | Direct connection between two VPCs (no transitive peering)                 |
+
+---
+
+#### 🛠️ Example: VPC Setup with Public/Private Subnets
+**Goal**: 1 Public Subnet + 1 Private Subnet with NAT.
+
+##### Step-by-Step
+1. **Create VPC**  
+   - CIDR: `10.0.0.0/16`
+
+2. **Create Subnets**  
+   - Public: `10.0.1.0/24` (AZ A)  
+   - Private: `10.0.2.0/24` (AZ B)  
+
+3. **Attach Internet Gateway**  
+   - Create IGW → Attach to VPC  
+   - Public Route Table: `0.0.0.0/0` → IGW  
+
+4. **Deploy NAT Gateway**  
+   - Launch in **Public Subnet**  
+   - Allocate Elastic IP  
+   - Private Route Table: `0.0.0.0/0` → NAT Gateway  
+
+5. **Associate Route Tables**  
+   - Public Subnet → Public RT (IGW)  
+   - Private Subnet → Private RT (NAT GW)  
+
+---
+
+##### 📚 Resources
+- [AWS VPC Documentation](https://docs.aws.amazon.com/vpc/)
+- [VPC CIDR Calculator](https://www.davidc.net/sites/default/subnets/subnets.html)
+
+
+
+#### 📦 Core Components
+```mermaid
+graph TD
+  A[VPC] --> B[Subnets]
+  A --> C[Route Tables]
+  A --> D[Gateways]
+  B --> E[Public]
+  B --> F[Private]
+  D --> G[IGW]
+  D --> H[NAT Gateway]
+```
+
+---
+
+#### 🔧 CLI Examples
+
+##### 1. Create a VPC
+```bash
+aws ec2 create-vpc \
+  --cidr-block 10.0.0.0/16 \
+  --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=ProdVPC}]'
+```
+**Output:**  
+```json
+{
+  "Vpc": {
+    "CidrBlock": "10.0.0.0/16",
+    "VpcId": "vpc-12345678"
+  }
+}
+```
+
+##### 2. Create Subnets
+```bash
+# Public Subnet
+aws ec2 create-subnet \
+  --vpc-id vpc-12345678 \
+  --cidr-block 10.0.1.0/24 \
+  --availability-zone us-east-1a \
+  --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=PublicSubnet-A}]'
+
+# Private Subnet
+aws ec2 create-subnet \
+  --vpc-id vpc-12345678 \
+  --cidr-block 10.0.2.0/24 \
+  --availability-zone us-east-1b \
+  --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=PrivateSubnet-B}]'
+```
+
+##### 3. Attach Internet Gateway (IGW)
+```bash
+aws ec2 create-internet-gateway \
+  --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=ProdIGW}]'
+
+aws ec2 attach-internet-gateway \
+  --internet-gateway-id igw-12345678 \
+  --vpc-id vpc-12345678
+```
+
+##### 4. Create NAT Gateway
+```bash
+# Allocate Elastic IP
+aws ec2 allocate-address --domain vpc
+
+# Create NAT Gateway in Public Subnet
+aws ec2 create-nat-gateway \
+  --subnet-id subnet-12345678 \
+  --allocation-id eipalloc-12345678 \
+  --tag-specifications 'ResourceType=natgateway,Tags=[{Key=Name,Value=ProdNAT}]'
+```
+
+##### 5. Configure Route Tables
+```bash
+# Public Route Table (0.0.0.0/0 → IGW)
+aws ec2 create-route-table \
+  --vpc-id vpc-12345678 \
+  --tag-specifications 'ResourceType=route-table,Tags=[{Key=Name,Value=PublicRT}]'
+
+aws ec2 create-route \
+  --route-table-id rtb-12345678 \
+  --destination-cidr-block 0.0.0.0/0 \
+  --gateway-id igw-12345678
+
+# Private Route Table (0.0.0.0/0 → NAT Gateway)
+aws ec2 create-route \
+  --route-table-id rtb-87654321 \
+  --destination-cidr-block 0.0.0.0/0 \
+  --nat-gateway-id nat-12345678
+```
+
+---
+
+#### 📐 Network Diagrams
+
+##### Public/Private Subnet Architecture
+```
++---------------------+       +---------------------+
+|     Public Subnet   |       |    Private Subnet   |
+| 10.0.1.0/24 (AZ A) |       | 10.0.2.0/24 (AZ B)  |
+| +---------------+   |       | +---------------+   |
+| |   EC2 Instance|   |       | |   EC2 Instance|   |
+| | (Public IP)   |   |       | | (No Public IP)|   |
+| +-------+-------+   |       | +-------+-------+   |
+|         |           |       |         |           |
++---------|-----------+       +---------|-----------+
+          |                             |
+          | (Route: 0.0.0.0/0 → IGW)    | (Route: 0.0.0.0/0 → NAT)
++---------|-----------+       +---------|-----------+
+|  Internet Gateway  |       |   NAT Gateway       |
+|       (IGW)        |       |  (in Public Subnet) |
++---------------------+       +---------------------+
+          |
++---------|-----------+
+|       Internet      |
++---------------------+
+```
+
+#### 🧪 Lab: Build a VPC with NAT
+
+##### Step 1: Create VPC
+```bash
+aws ec2 create-vpc --cidr-block 10.0.0.0/16
+```
+
+##### Step 2: Create Subnets
+```bash
+aws ec2 create-subnet --vpc-id vpc-12345678 --cidr-block 10.0.1.0/24 --availability-zone us-east-1a
+aws ec2 create-subnet --vpc-id vpc-12345678 --cidr-block 10.0.2.0/24 --availability-zone us-east-1b
+```
+
+##### Step 3: Verify Subnets
+```bash
+aws ec2 describe-subnets --filters "Name=vpc-id,Values=vpc-12345678"
+```
+
+##### Step 4: Cleanup (Optional)
+```bash
+aws ec2 delete-subnet --subnet-id subnet-12345678
+aws ec2 delete-vpc --vpc-id vpc-12345678
+```
+
+---
+
+#### 📚 Resources
+- [AWS CLI VPC Reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ec2/index.html)
+- [VPC CIDR Calculator](https://www.davidc.net/sites/default/subnets/subnets.html)
+
+## 20. Cohort Practice — Day 11: File Ownership Challenge (chown & chgrp)
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Master file and directory ownership in Linux.
+
+- Understand file ownership (user and group)
+- Change file owner using `chown`
+- Change file group using `chgrp`
+- Apply ownership changes recursively
+
+---
+
+#### Expected Output
+- A markdown file: `day-11-file-ownership.md`
+- Screenshots showing ownership changes
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Understanding Ownership (10 minutes)
+
+1. Run `ls -l` in your home directory
+2. Identify the **owner** and **group** columns
+3. Check who owns your files
+
+**Format:** `-rw-r--r-- 1 owner group size date filename`
+
+Document: What's the difference between owner and group?
+
+---
+
+##### Task 2: Basic chown Operations (20 minutes)
+
+1. Create file `devops-file.txt`
+2. Check current owner: `ls -l devops-file.txt`
+3. Change owner to `tokyo` (create user if needed)
+4. Change owner to `berlin`
+5. Verify the changes
+
+**Try:**
+```bash
+sudo chown tokyo devops-file.txt
+```
+
+---
+
+##### Task 3: Basic chgrp Operations (15 minutes)
+
+1. Create file `team-notes.txt`
+2. Check current group: `ls -l team-notes.txt`
+3. Create group: `sudo groupadd heist-team`
+4. Change file group to `heist-team`
+5. Verify the change
+
+---
+
+##### Task 4: Combined Owner & Group Change (15 minutes)
+
+Using `chown` you can change both owner and group together:
+
+1. Create file `project-config.yaml`
+2. Change owner to `professor` AND group to `heist-team` (one command)
+3. Create directory `app-logs/`
+4. Change its owner to `berlin` and group to `heist-team`
+
+**Syntax:** `sudo chown owner:group filename`
+
+---
+
+##### Task 5: Recursive Ownership (20 minutes)
+
+1. Create directory structure:
+   ```
+   mkdir -p heist-project/vault
+   mkdir -p heist-project/plans
+   touch heist-project/vault/gold.txt
+   touch heist-project/plans/strategy.conf
+   ```
+
+2. Create group `planners`: `sudo groupadd planners`
+
+3. Change ownership of entire `heist-project/` directory:
+   - Owner: `professor`
+   - Group: `planners`
+   - Use recursive flag (`-R`)
+
+4. Verify all files and subdirectories changed: `ls -lR heist-project/`
+
+---
+
+##### Task 6: Practice Challenge (20 minutes)
+
+1. Create users: `tokyo`, `berlin`, `nairobi` (if not already created)
+2. Create groups: `vault-team`, `tech-team`
+3. Create directory: `bank-heist/`
+4. Create 3 files inside:
+   ```
+   touch bank-heist/access-codes.txt
+   touch bank-heist/blueprints.pdf
+   touch bank-heist/escape-plan.txt
+   ```
+
+5. Set different ownership:
+   - `access-codes.txt` → owner: `tokyo`, group: `vault-team`
+   - `blueprints.pdf` → owner: `berlin`, group: `tech-team`
+   - `escape-plan.txt` → owner: `nairobi`, group: `vault-team`
+
+**Verify:** `ls -l bank-heist/`
+
+---
+
+#### Key Commands Reference
+
+```bash
+# View ownership
+ls -l filename
+
+# Change owner only
+sudo chown newowner filename
+
+# Change group only
+sudo chgrp newgroup filename
+
+# Change both owner and group
+sudo chown owner:group filename
+
+# Recursive change (directories)
+sudo chown -R owner:group directory/
+
+# Change only group with chown
+sudo chown :groupname filename
+```
+
+---
+
+#### Hints
+
+- Most `chown`/`chgrp` operations need `sudo`
+- Use `-R` flag for recursive directory changes
+- Always verify with `ls -l` after changes
+- User must exist before using in `chown`
+- Group must exist before using in `chgrp`/`chown`
+
+---
+
+#### Documentation
+
+Create `day-11-file-ownership.md`:
+
+```markdown
+# Day 11 Challenge
+
+## Files & Directories Created
+[list all files/directories]
+
+## Ownership Changes
+[before/after for each file]
+
+Example:
+- devops-file.txt: user:user → tokyo:heist-team
+
+## Commands Used
+[your commands here]
+
+## What I Learned
+[3 key points about file ownership]
+```
+
+---
+
+#### Troubleshooting
+
+**Permission denied?**
+- Use `sudo` for chown/chgrp operations
+
+**Group doesn't exist?**
+- Create it first: `sudo groupadd groupname`
+
+**User doesn't exist?**
+- Create it first: `sudo useradd username`
+
+---
+
+#### Why This Matters for DevOps
+
+In real DevOps scenarios, you need proper file ownership for:
+
+- Application deployments
+- Shared team directories
+- Container file permissions
+- CI/CD pipeline artifacts
+- Log file management
+
+---
+
+#### Submission
+1. Navigate to `2026/day-11/` folder
+2. Add `day-11-file-ownership.md` with screenshots
+3. Commit and push to your fork
+
+---
+
+#### Learn in Public
+
+Share on LinkedIn about mastering file ownership.
+
+Use hashtags:
+```
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+```
+
+Happy Learning
+**TrainWithShubham**
+
+##### Notes: day-11-file-ownership
+
+##### Task 1: Understanding Ownership (10 minutes)
+
+ls -l -> is the long list to check the user group permission date file or folder name
+
+identify the in left is the owner and right side of the owner is the group
+and check the who is the owner of the file
+
+
+-rw-r--r-- 1 owner group size date filename -> in this format owner is the who created the file and group is a collection of the user if owner assign this file or dir to group and in this group member have permission to read write and execute this file
+
+##### Task 2: Basic chown Operations (20 minutes)
+
+
+
+create a file devops-notes.txt and check the permission in ls -l devops-notes.txt 
+
+create a new user tokyo using sudo useradd -m tokyo and then set the password using sudo passwd tokyo 
+
+and sudo chown tokyo devops-notes.txt
+
+
+then create another user in sudo adduser berlin and password that time created and assing to the the new user to this file 
+
+sudo chown berlin devops-notes.txt
+
+##### Task 3: Basic chgrp Operations (15 minutes)
+================================================
+
+create a file team-notes.txt
+then create a group add heist-team and assing this group to team-notes.txt 
+
+sudo chgrp heist-team team-notes.txt
+
+##### Task 4: Combined Owner & Group Change (15 minutes)
+
+Using `chown` you can change both owner and group together:
+
+Create file `project-config.yaml`
+and change the owner of the file using sudo chown user:group filename
+
+then Create directory `app-logs/` and assign the user and group sudo chown username file and then chgrp groupname file
+
+command : sudo chown owner:group filename
+
+
+
+##### Task 5: Recursive Ownership (20 minutes)
+Create directory three directory and one file
+
+   mkdir -p heist-project/vault
+   mkdir -p heist-project/plans
+   touch heist-project/vault/gold.txt
+   touch heist-project/plans/strategy.conf
+
+
+Create group `planners`: `sudo groupadd planners`
+
+ad change the with out -R recursivly then check directoy is change but sub dir not change then add -R to change the total directory path group change and owner change
+Change ownership of entire `heist-project/` directory:
+   - Owner: `professor`
+   - Group: `planners`
+   - Use recursive flag (`-R`)
+
+ Verify all files and subdirectories changed: `ls -lR heist-project/`
+
+##### Task 6: Practice Challenge (20 minutes)
+
+Create users: `tokyo`, `berlin`, `nairobi` two users existed and add new user nairobi 
+then two  Create groups: `vault-team`, `tech-team`
+then Create directory: `bank-heist/`
+under this directory Create 3 files inside:
+
+   touch bank-heist/access-codes.txt
+   touch bank-heist/blueprints.pdf
+   touch bank-heist/escape-plan.txt
+   
+
+Set different ownership:
+   - `access-codes.txt` → owner: `tokyo`, group: `vault-team`
+   - `blueprints.pdf` → owner: `berlin`, group: `tech-team`
+   - `escape-plan.txt` → owner: `nairobi`, group: `vault-team`
+
+ `ls -l bank-heist/`
+
+## 21. Hands-on Project — Day 11: Terraform Remote State
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Terraform Remote State**.  
+You’ll bootstrap a secure remote backend on **S3 (+ DynamoDB locking)**, migrate local state to remote, and consume that state from another Terraform project via `terraform_remote_state`.
+
+---
+
+#### 🎯 Learning Goals
+- Create an **S3 backend** with **DynamoDB** for state locking.  
+- Initialize and **migrate** local state to a remote backend.  
+- Store state per environment/path using `key` conventions.  
+- **Consume** remote state outputs from another Terraform project.  
+- Use backend config files (`.hcl`) and safe automation scripts.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1) Bootstrap backend (S3 + DynamoDB)
+   cd bootstrap
+   terraform init
+   terraform apply -auto-approve      -var="region=us-east-1"      -var="name_prefix=devopsday11"
+
+   # Outputs will show: bucket, dynamodb_table, region
+
+2) Prepare backend config for the app
+   cd ../app
+   # Edit env/backend.hcl (or use defaults printed in README)
+   terraform init      -backend-config=env/backend.hcl
+
+3) Apply app stack (writes state to S3)
+   terraform apply -auto-approve
+
+4) Consume remote state from another project
+   cd ../consumer
+   terraform init
+   terraform plan  # reads outputs from app's remote state
+
+5) (Optional) Migrate from local to remote
+   - Comment out backend in app/main backend init (use local), apply, then re-init with remote to migrate.
+```
+
+---
+
+#### 💡 Challenge
+- Add an **`environment` variable** (`dev`, `staging`, `prod`) and use it in the backend `key` to separate states.  
+- Add **server-side encryption** with a custom **KMS key** (update S3 bucket + backend config).  
+- Split `consumer` into **multiple modules** that read different remote states (e.g., networking/app).
+
+---
+
+#### ✅ Checklist
+- [ ] S3 bucket + DynamoDB table created for backend & locking  
+- [ ] App stack state stored in S3 (confirmed by `terraform state list`)  
+- [ ] `consumer` successfully read outputs via `terraform_remote_state`  
+- [ ] Challenge implemented (env-based keys or KMS encryption)
+
+---
+
+#### 🔐 Notes
+- You must have valid AWS credentials (`aws configure`) with permissions to manage S3 and DynamoDB.  
+- S3 bucket names are **global**; change `name_prefix` if creation fails due to name conflicts.  
+- Never commit real **state files** or secrets.
+
+---
+
+#### 📌 Commit
+```bash
+git add day11-terraform-remote-state
+git commit -m "day11: Terraform remote state — S3 backend + DynamoDB locking + remote_state consumer"
+git push
+```
+
+##### Notes: scripts/README
+
+### Helper Scripts (optional)
+
+These scripts wrap common commands. Adjust variable values as needed.
+
+### Files
+
+- [app/env/backend.hcl](files/hands-on-projects/app/env/backend.hcl)
+- [app/main.tf](files/hands-on-projects/app/main.tf)
+- [app/variables.tf](files/hands-on-projects/app/variables.tf)
+- [bootstrap/main.tf](files/hands-on-projects/bootstrap/main.tf)
+- [bootstrap/providers.tf](files/hands-on-projects/bootstrap/providers.tf)
+- [bootstrap/variables.tf](files/hands-on-projects/bootstrap/variables.tf)
+- [consumer/main.tf](files/hands-on-projects/consumer/main.tf)
+- [consumer/variables.tf](files/hands-on-projects/consumer/variables.tf)
+- [scripts/apply_app.sh](files/hands-on-projects/scripts/apply_app.sh)
+- [scripts/apply_bootstrap.sh](files/hands-on-projects/scripts/apply_bootstrap.sh)
+- [scripts/init_app.sh](files/hands-on-projects/scripts/init_app.sh)
+- [scripts/init_bootstrap.sh](files/hands-on-projects/scripts/init_bootstrap.sh)
+- [scripts/init_consumer.sh](files/hands-on-projects/scripts/init_consumer.sh)
+- [scripts/plan_consumer.sh](files/hands-on-projects/scripts/plan_consumer.sh)
 
 
 ---

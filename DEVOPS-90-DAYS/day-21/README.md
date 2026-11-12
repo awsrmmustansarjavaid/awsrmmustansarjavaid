@@ -1142,7 +1142,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🐳 Day 21 - Advanced Containerization: Multi-Stage Builds & Security
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -1241,6 +1241,795 @@ Containerizing applications is one thing, but making them lightweight, secure, a
 🔗 Explore the project code & configuration here: https://lnkd.in/dQ7z8-C8
 
 #90DaysOfDevOps #Docker #Golang #DevOps #DockerScout #ContainerSecurity #Microservices #CloudComputing #LearningInPublic #TrainWithShubham
+
+## 19. Challenge Notes — Day 21: Docker Networking, Volumes, and Compose
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+[![](https://img.youtube.com/vi/nMbGQ9my7TY/0.jpg)](https://www.youtube.com/watch?v=nMbGQ9my7TY)
+
+[Watch the video](https://www.youtube.com/watch?v=nMbGQ9my7TY)
+
+1. Docker Networking
+
+---
+
+##### Summary
+
+Docker networking enables containers to communicate with each other and with external networks. Docker provides several network drivers tailored to specific use cases.
+
+| Network Mode | Description                                         | Use Case                                 |
+| ------------ | --------------------------------------------------- | ---------------------------------------- |
+| bridge       | Default internal network with NAT and IP assignment | Local isolated containers                |
+| host         | Shares host network stack (no isolation)            | High-performance apps                    |
+| none         | Disables networking completely                      | Secure or offline containers             |
+| overlay      | Enables cross-host networking                       | Distributed microservices in Swarm       |
+| macvlan      | Assigns MAC address from physical NIC               | Legacy apps requiring Layer 2 visibility |
+| ipvlan       | Similar to macvlan with Layer 3 separation          | High-scale apps                          |
+
+##### Internals
+
+* Uses Linux namespaces for isolation
+* Virtual Ethernet pairs (veth) connect containers to host bridge (docker0)
+* iptables/NAT handles external access
+* Internal DNS at 127.0.0.11
+
+##### Lab Examples
+
+**Bridge Network:**
+
+```sh
+docker network create my_bridge_net
+docker run -dit --name app1 --network my_bridge_net alpine sh
+docker run -dit --name app2 --network my_bridge_net alpine sh
+docker exec app1 ping app2
+```
+
+**Host Network:**
+
+```sh
+docker run --rm -d --network host nginx
+curl http://localhost:80
+```
+
+**None Network:**
+
+```sh
+docker run -dit --name isolated --network none alpine
+```
+
+**Overlay Network (Docker Swarm):**
+
+```sh
+docker swarm init
+docker network create --driver overlay my_overlay_net
+docker service create --replicas 2 --network my_overlay_net --name web nginx
+```
+
+**Macvlan Network:**
+
+```sh
+docker network create -d macvlan \
+  --subnet=192.168.1.0/24 \
+  --gateway=192.168.1.1 \
+  -o parent=eth0 \
+  macvlan_net
+docker run -dit --name mac_container --network macvlan_net alpine
+```
+
+2. Docker Storage
+
+---
+
+##### Storage Options
+
+| Type        | Description                                             | Use Case                  |
+| ----------- | ------------------------------------------------------- | ------------------------- |
+| Volumes     | Managed by Docker, stored under /var/lib/docker/volumes | Recommended for most apps |
+| Bind Mounts | Maps host path to container                             | Dev or advanced use       |
+| tmpfs       | RAM-only storage, non-persistent                        | Temporary secrets/logs    |
+
+##### Volumes
+
+```sh
+docker volume create mydata
+docker run -dit --name volume-container -v mydata:/app/data alpine sh
+docker exec -it volume-container sh -c "echo 'persistent log' > /app/data/log.txt"
+docker rm -f volume-container
+docker run --rm -v mydata:/app/data alpine cat /app/data/log.txt
+```
+
+##### Bind Mount
+
+```sh
+mkdir -p /tmp/logs
+echo "Hello from host" > /tmp/logs/hello.txt
+docker run --rm -v /tmp/logs:/data alpine cat /data/hello.txt
+```
+
+##### tmpfs Mount
+
+```sh
+docker run --rm \
+  --tmpfs /app/temp \
+  alpine sh -c "echo secret > /app/temp/secret && cat /app/temp/secret"
+```
+
+3. Docker Compose
+
+---
+
+##### Overview
+
+Tool for defining and running multi-container Docker apps using YAML.
+
+##### Benefits
+
+* Declarative configuration
+* Simplified orchestration
+* Built-in networking
+* Portable across environments
+
+##### Example File
+
+```yaml
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+    networks:
+      - appnet
+
+  redis:
+    image: redis
+    networks:
+      - appnet
+
+networks:
+  appnet:
+```
+
+##### Flask + Redis Lab Example
+
+**Directory Structure:**
+
+```
+docker-compose-demo/
+├── app.py
+├── requirements.txt
+├── Dockerfile
+└── docker-compose.yml
+```
+
+**app.py**
+
+```python
+from flask import Flask
+import redis
+app = Flask(__name__)
+r = redis.Redis(host='redis', port=6379)
+
+@app.route('/')
+def count():
+    r.incr('hits')
+    return f"Viewed {r.get('hits').decode('utf-8')} times."
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+```
+
+**requirements.txt**
+
+```
+flask
+redis
+```
+
+**Dockerfile**
+
+```Dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+```
+
+**docker-compose.yml**
+
+```yaml
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+    networks:
+      - appnet
+
+  redis:
+    image: redis
+    networks:
+      - appnet
+
+networks:
+  appnet:
+```
+
+**Commands:**
+
+```sh
+docker-compose up --build
+docker-compose down -v
+```
+
+### Attachments
+
+- [Day 21 Docker Networking, Volumes, and Compose.pdf](Day%2021%20Docker%20Networking%2C%20Volumes%2C%20and%20Compose.pdf)
+
+## 20. Cohort Practice — Day 21: Shell Scripting Cheat Sheet: Build Your Own Reference Guide
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+
+You've spent the last several days learning Shell scripting — from basics to real-world projects. Now it's time to consolidate everything into a **personal cheat sheet** that you can use as a quick-reference guide for the rest of your DevOps journey.
+
+The best way to revise is to **teach it back**. Writing a cheat sheet forces you to organize your understanding and identify gaps.
+
+---
+
+#### Expected Output
+- A markdown file: `shell_scripting_cheatsheet.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Basics
+Document the following with short descriptions and examples:
+1. Shebang (`#!/bin/bash`) — what it does and why it matters
+2. Running a script — `chmod +x`, `./script.sh`, `bash script.sh`
+3. Comments — single line (`#`) and inline
+4. Variables — declaring, using, and quoting (`$VAR`, `"$VAR"`, `'$VAR'`)
+5. Reading user input — `read`
+6. Command-line arguments — `$0`, `$1`, `$#`, `$@`, `$?`
+
+---
+
+##### Task 2: Operators and Conditionals
+Document with examples:
+1. String comparisons — `=`, `!=`, `-z`, `-n`
+2. Integer comparisons — `-eq`, `-ne`, `-lt`, `-gt`, `-le`, `-ge`
+3. File test operators — `-f`, `-d`, `-e`, `-r`, `-w`, `-x`, `-s`
+4. `if`, `elif`, `else` syntax
+5. Logical operators — `&&`, `||`, `!`
+6. Case statements — `case ... esac`
+
+---
+
+##### Task 3: Loops
+Document with examples:
+1. `for` loop — list-based and C-style
+2. `while` loop
+3. `until` loop
+4. Loop control — `break`, `continue`
+5. Looping over files — `for file in *.log`
+6. Looping over command output — `while read line`
+
+---
+
+##### Task 4: Functions
+Document with examples:
+1. Defining a function — `function_name() { ... }`
+2. Calling a function
+3. Passing arguments to functions — `$1`, `$2` inside functions
+4. Return values — `return` vs `echo`
+5. Local variables — `local`
+
+---
+
+##### Task 5: Text Processing Commands
+Document the most useful flags/patterns for each:
+1. `grep` — search patterns, `-i`, `-r`, `-c`, `-n`, `-v`, `-E`
+2. `awk` — print columns, field separator, patterns, `BEGIN/END`
+3. `sed` — substitution, delete lines, in-place edit
+4. `cut` — extract columns by delimiter
+5. `sort` — alphabetical, numerical, reverse, unique
+6. `uniq` — deduplicate, count
+7. `tr` — translate/delete characters
+8. `wc` — line/word/char count
+9. `head` / `tail` — first/last N lines, follow mode
+
+---
+
+##### Task 6: Useful Patterns and One-Liners
+Include at least 5 real-world one-liners you find useful. Examples:
+- Find and delete files older than N days
+- Count lines in all `.log` files
+- Replace a string across multiple files
+- Check if a service is running
+- Monitor disk usage with alerts
+- Parse CSV or JSON from command line
+- Tail a log and filter for errors in real time
+
+---
+
+##### Task 7: Error Handling and Debugging
+Document with examples:
+1. Exit codes — `$?`, `exit 0`, `exit 1`
+2. `set -e` — exit on error
+3. `set -u` — treat unset variables as error
+4. `set -o pipefail` — catch errors in pipes
+5. `set -x` — debug mode (trace execution)
+6. Trap — `trap 'cleanup' EXIT`
+
+---
+
+##### Task 8: Bonus — Quick Reference Table
+Create a summary table like this at the top of your cheat sheet:
+
+| Topic | Key Syntax | Example |
+|-------|-----------|---------|
+| Variable | `VAR="value"` | `NAME="DevOps"` |
+| Argument | `$1`, `$2` | `./script.sh arg1` |
+| If | `if [ condition ]; then` | `if [ -f file ]; then` |
+| For loop | `for i in list; do` | `for i in 1 2 3; do` |
+| Function | `name() { ... }` | `greet() { echo "Hi"; }` |
+| Grep | `grep pattern file` | `grep -i "error" log.txt` |
+| Awk | `awk '{print $1}' file` | `awk -F: '{print $1}' /etc/passwd` |
+| Sed | `sed 's/old/new/g' file` | `sed -i 's/foo/bar/g' config.txt` |
+
+---
+
+#### Format Guidelines
+
+Your cheat sheet should be:
+- Written in **Markdown** (`.md`)
+- Organized with **clear headings** for each section
+- Include **code blocks** with syntax highlighting (` ```bash `)
+- Keep explanations **short** — 1-2 lines max per item
+- Focus on **practical examples** over theory
+- Something **you would actually refer back to** on the job
+
+---
+
+#### Submission
+1. Add your `shell_scripting_cheatsheet.md` to `2026/day-21/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+
+Share your cheat sheet on LinkedIn — help others revise too!
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: shell_scripting_cheatsheet
+
+##### Task 1: Basics
+1. Shebang (`#!/bin/bash`) — what it does and why it matters
+#!/bin/bash -> this is indicate which shell is used 
+
+
+2. Running a script — `chmod +x`, `./script.sh`, `bash script.sh`
+chmod +x is used to assgin the execute permission to all the user group and other member 
+./script.sh is execute the script with permission if permission not assign not execute
+bash script.sh is used to execute with out permission
+
+3. Comments — single line (`#`) and inline
+ this is used to comment the single line
+
+<<comment
+this is 
+multi line
+
+comment
+
+4. Variables — declaring, using, and quoting (`$VAR`, `"$VAR"`, `'$VAR'`)
+$VAR - this is Replace variable with value
+"$VAR"	- this Replace with value and keep spaces
+'$VAR'- this print exactly $VAR
+
+
+
+
+5. Reading user input — `read`
+ - it is used to the user input in run time
+
+6. Command-line arguments — `$0`, `$1`, `$#`, `$@`, `$?`
+$0 - is the script file name
+$1 - is the first args
+$# - is the total number of argument how many args passed
+#@ - is the print the total number of args
+$? - Exit Status of Previous Command
+
+
+
+##### Task 2: Operators and Conditionals
+Document with examples:
+1. String comparisons — `=`, `!=`, `-z`, `-n`
+= -> equal to , check the two string equal or not
+!= -> not equal to , check two string are different
+-z -> empty string
+-n -> string length is not zero
+
+2. Integer comparisons — `-eq`, `-ne`, `-lt`, `-gt`, `-le`, `-ge`
+-eq -> this is equal to
+-ne -> not equal to
+-lt -> this is less than
+-gt -> this is greater than
+-le -> this is less than equal to
+-ge -> this is greater than equal to
+
+
+3. File test operators — `-f`, `-d`, `-e`, `-r`, `-w`, `-x`, `-s`
+-f -> regular files
+-d -> regular directory
+-e -> file or directory exists
+-r -> readable
+-w -> writable
+-x -> executable
+-s -> file exists and size
+
+
+4. `if`, `elif`, `else` syntax
+
+if - check first condition
+elif - check second condition if first conditon is false
+else - check last condition if all condioon is false
+
+
+5. Logical operators — `&&`, `||`, `!`
+
+&& -> logical and operator second command run only if the first command success both conadition true
+
+|| -> local or operator second command run only in first command fails
+    one condition true 
+
+! -> Not operator - reverse condition 
+
+6. Case statements — `case ... esac`
+
+-> case is used when you have multiple choices / options
+instead of writing many if elif else conditions, you can use case
+
+this is like a switch statement in java , python
+
+
+
+##### Task 3: Loops
+Document with examples:
+1. `for` loop — list-based and C-style
+-> for loop is used when you want to execute the same block of code multiple times
+- > repeat this task for each item.
+
+2. `while` loop
+-> while loop runs as long as the condition is true.
+
+3. `until` loop
+-> until is the  opposite  of while.
+
+4. Loop control — `break`, `continue`
+-> break is used to break (exit) the statement(loop) is condition is trun 
+-> continue is used to skip true condition and run next condition
+
+5. Looping over files — `for file in *.log`
+-> in this loop print all the file with .log extension one by one which 
+6. Looping over command output — `while read line`
+
+while read line is one of the most important patterns is  shell scripting.
+it is used when you want to read command output line by line.
+
+---
+
+
+
+##### Task 4: Functions
+Document with examples:
+1. Defining a function — `function_name() { ... }`
+-> function in shell scripting are used to group a set of commands so they can bee reused multiple times.
+
+instead of wrting the same code again and again , put it inside the function and call it whenever needed.
+
+2. Calling a function
+-> after defining a function , you execute it by writing its name.
+
+-> function is called by function name only
+function call is execute after the function defination
+
+3. Passing arguments to functions — `$1`, `$2` inside functions
+-> in shell scripting there are two different types of arguments
+    i - script arguments
+        - script argument passed when the script is execute time after the script file right side is $1 and send args is $2
+
+    ii - function arguments
+        - function argument is passed when function called statement
+
+4. Return values — `return` vs `echo`
+
+    - > returns an exit status (0- 255) from a function.
+    - > echo - prints /output text
+
+5. Local variables — `local`
+    -> local keyword is used to define variable  local
+    -> in shell scripting local is used inside a function to create a variable that exists only within that function.
+    -> without local variable  , a variable can affect the entire script.
+
+
+---
+
+##### Task 5: Text Processing Commands
+Document the most useful flags/patterns for each:
+1. `grep` — search patterns, `-i`, `-r`, `-c`, `-n`, `-v`, `-E`
+    - grep -i - ignore case search without caring uppercase and lowercase
+    - grep -r - search inside all files and sub directories.
+    - frep -c - count match 
+        = grep -c "error" app.log
+            error count and print the output in integer 
+    - grep -n - show the line number
+    - grep -v - invert match - show the lines that do not match.
+
+2. `awk` — print columns, field separator, patterns, `BEGIN/END`
+
+- begin and end are special blocks in awk
+    - BEGIN -> Before reading any line
+    - MAIN -> for every line
+    - END -> After reading all lines
+
+
+
+3. `sed` — substitution, delete lines, in-place edit
+- sed stands for Stream Editor
+- sed replace text in config files
+delete lines
+update enviornment variables
+modify YAML , Nginx, Apache and application configs
+
+substitution (s)- sed 's/old/new' file.txt
+delete(d) - delete the line
+in-place(-i) - normally sed only print output.
+
+
+4. `cut` — extract columns by delimiter
+    example
+        extract first column cut -d ':' -f1 file.txt
+        -d -> delimiter
+        -f -> field number
+
+5. `sort` — alphabetical, numerical, reverse, unique
+    - sort lines alphabetically
+    -n - numeric sort
+    -r - reverse sort
+    
+    
+6. `uniq` — deduplicate, count
+    - uniq - removes adjacent duplicate lines
+    
+
+7. `tr` — translate/delete characters
+- tr - translate / deleted characters
+            convert lowercase to uppercase
+8. `wc` — line/word/char count
+    -> count the work in a files
+        coomand output
+
+9. `head` / `tail` — first/last N lines, follow mode
+    -> head - show the first 10 lines
+    -> tail - show last 10 lines
+
+
+---
+
+##### Task 6: Useful Patterns and One-Liners
+Include at least 5 real-world one-liners you find useful. Examples:
+- Find and delete files older than N days
+    find /var/log -type f -mtime +30
+    find /var/log -type f -mtime +30 -delete
+
+- Count lines in all `.log` files
+    wc -l *.log
+    count the lines in each .log file
+
+- Replace a string across multiple files
+    - sed -i 's/old_string/new_string/g' file.txt
+
+- Check if a service is running
+    - systemctl is-active nginx
+
+- Monitor disk usage with alerts
+
+#!/bin/bash
+
+threshold=80
+
+usage=$(df -h / | awk 'NR==2 {print $5}' | sed 's/%//')
+
+if [ "$usage -ge "$threshold" ]
+then
+    echo "Alert: Disk usage is ${usage}%"
+else
+    echo "Disk usage is normal : ${usage}%"
+fi
+
+- Parse CSV or JSON from command line
+- Tail a log and filter for errors in real time
+
+---
+
+##### Task 7: Error Handling and Debugging
+Document with examples:
+1. Exit codes — `$?`, `exit 0`, `exit 1`
+- $? - previous command exit code
+- exit 0 - script completed successfully
+- exit 1 - script failed
+
+2. `set -e` — exit on error
+- Exit immedeiately if a command faiils
+
+3. `set -u` — treat unset variables as error
+- treat undefined variables as errors
+
+4. `set -o pipefail` — catch errors in pipes
+- if any command in pipeline fails whole pipeline fails
+
+5. `set -x` — debug mode (trace execution)
+
+- 
+6. Trap — `trap 'cleanup' EXIT`
+- when the script exist, automatically run clean up function.
+
+---
+
+##### Task 8: Bonus — Quick Reference Table
+Create a summary table like this at the top of your cheat sheet:
+
+| Topic | Key Syntax | Example |
+|-------|-----------|---------|
+| Variable | `VAR="value"` | `NAME="DevOps"` |
+| Argument | `$1`, `$2` | `./script.sh arg1` |
+| If | `if [ condition ]; then` | `if [ -f file ]; then` |
+| For loop | `for i in list; do` | `for i in 1 2 3; do` |
+| Function | `name() { ... }` | `greet() { echo "Hi"; }` |
+| Grep | `grep pattern file` | `grep -i "error" log.txt` |
+| Awk | `awk '{print $1}' file` | `awk -F: '{print $1}' /etc/passwd` |
+| Sed | `sed 's/old/new/g' file` | `sed -i 's/foo/bar/g' config.txt` |
+
+---
+variable
+========
+var="devops"
+var="sre"
+
+use varibale
+============
+$var
+echo $var
+
+arguments
+=========
+$0 - script file
+$1 - first args
+$2 - second args
+$# - args count
+$@- all args
+
+if =
+====
+if [ condition ]; then
+
+if else 
+=======
+if ---- else ----- fi
+
+
+
+
+function defination
+===================
+name() {
+    echo "hii"
+}
+
+function call
+==============
+name
+
+function args
+=============
+$1 
+name $1
+
+grep -i - ignore case
+
+awk '{print $1}' print column
+
+sed -i sed in place edit
+
+## 21. Hands-on Project — Day 21: RDS with Terraform (PostgreSQL)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Provision Amazon RDS (PostgreSQL)** using Terraform with production‑minded defaults: **Multi‑AZ**, **subnet group** in private subnets, **parameter group**, **automated backups**, **encryption**, and **least‑privilege network access** from your app tier.
+
+This module plugs into:
+- **Day 14** VPC & subnets (use **private** subnets for RDS)
+- **Day 16** Security Groups (allow DB from app/web SG as needed)
+- Optional: **Day 19** ASG (app connects to this DB)
+
+---
+
+#### 🎯 Learning Goals
+- Model an RDS **Subnet Group** and **Parameter Group**.  
+- Create an **RDS instance** (PostgreSQL) with backups, encryption, and Multi‑AZ.  
+- Restrict network access via a dedicated **DB Security Group**.  
+- (Optional) Store DB credentials in **Secrets Manager** automatically.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```bash
+# 1) Initialize
+terraform -chdir=terraform init
+
+# 2) Plan (replace values)
+terraform -chdir=terraform plan   -var='vpc_id=vpc-0123'   -var='private_subnet_ids=["subnet-a","subnet-b"]'   -var='app_security_group_ids=["sg-app123"]'   -var='db_name=appdb' -var='db_username=appuser'   -var='multi_az=true' -var='allocated_storage=20'
+
+# 3) Apply
+terraform -chdir=terraform apply -auto-approve   -var='vpc_id=vpc-0123'   -var='private_subnet_ids=["subnet-a","subnet-b"]'   -var='app_security_group_ids=["sg-app123"]'   -var='db_name=appdb' -var='db_username=appuser'
+
+# 4) Retrieve connection details
+terraform -chdir=terraform output
+# (If secrets are enabled) fetch password from Secrets Manager:
+# aws secretsmanager get-secret-value --secret-id <output: secret_arn>
+```
+
+**Notes**
+- By default, this module **generates a strong password** and stores it in **Secrets Manager** (encrypted). You can disable this and pass your own via `db_password` if you prefer.  
+- RDS is deployed in **private subnets**. Make sure your app has network path (via NAT or endpoints as needed).
+
+---
+
+#### 💡 Challenge
+- Add a **read replica** and point read traffic via a separate connection string.  
+- Configure a **Route53 private hosted zone** CNAME for the DB endpoint.  
+- Add parameter overrides (e.g., `max_connections`) per environment using `var.db_parameters`.
+
+---
+
+#### ✅ Checklist
+- [ ] DB subnet group spans at least **2 private subnets**  
+- [ ] **Multi‑AZ** (optional) and backups enabled  
+- [ ] **Encryption at rest** (KMS) and in transit (require TLS)  
+- [ ] Access restricted to **app SGs** only  
+- [ ] Password stored securely (Secrets Manager or SSM)
+
+---
+
+#### 📌 Commit
+```bash
+git add day21-rds-with-terraform
+git commit -m "day21: RDS PostgreSQL with subnet group, parameter group, backups, Multi-AZ, and Secrets Manager"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

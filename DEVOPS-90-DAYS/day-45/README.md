@@ -404,6 +404,313 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 45: Writing Reusable CloudFormation Templates
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 45** of the DevOps 90-Day Challenge!
+Yesterday, you learned basic CloudFormation templates.
+Today, we’ll focus on **reusable and modular templates**, which allow you to scale and manage AWS infrastructure efficiently.
+
+[![](https://img.youtube.com/vi/3w49Ad7ftCs/0.jpg)](https://www.youtube.com/watch?v=3w49Ad7ftCs)
+
+[Watch the video](https://www.youtube.com/watch?v=3w49Ad7ftCs)
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Create **modular CloudFormation templates**.
+* Use **parameters, mappings, and outputs** for reusability.
+* Implement **nested stacks** for complex infrastructures.
+
+---
+
+#### Tools Used
+
+* **AWS CloudFormation**
+* **YAML Templates**
+* **AWS CLI** (optional)
+
+---
+
+#### Key Concepts
+
+##### 1. Parameters for Reusability
+
+* Use **parameters** to make templates flexible
+
+```yaml
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    Description: EC2 instance type
+```
+
+* Change the input value per environment (dev/staging/prod)
+
+---
+
+##### 2. Mappings
+
+* Define **static values** that vary by region, environment, or account
+
+```yaml
+Mappings:
+  RegionMap:
+    us-east-1:
+      AMI: ami-0abcdef1234567890
+    ap-south-1:
+      AMI: ami-0fedcba9876543210
+```
+
+* Access mapping with `!FindInMap`
+
+```yaml
+ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMI]
+```
+
+---
+
+##### 3. Outputs for Inter-Stack Communication
+
+* Use **outputs** to share information with other stacks
+
+```yaml
+Outputs:
+  InstanceId:
+    Description: EC2 instance ID
+    Value: !Ref MyEC2Instance
+```
+
+---
+
+##### 4. Nested Stacks
+
+* Split templates into **child stacks** for modularity
+
+```yaml
+Resources:
+  NetworkStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/mybucket/network.yaml
+```
+
+* Parent stack deploys multiple **child templates**
+
+---
+
+##### 5. Sample Reusable Template
+
+```yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Reusable EC2 Template
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+
+Mappings:
+  EnvMap:
+    dev:
+      InstanceType: t2.micro
+    prod:
+      InstanceType: t2.large
+
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !FindInMap [EnvMap, !Ref Environment, InstanceType]
+      ImageId: ami-0abcdef1234567890
+
+Outputs:
+  InstanceId:
+    Value: !Ref MyEC2Instance
+```
+
+---
+
+##### 6. Deploy the Template
+
+```bash
+aws cloudformation create-stack \
+    --stack-name reusable-demo \
+    --template-body file://reusable-ec2.yaml \
+    --parameters ParameterKey=Environment,ParameterValue=prod
+```
+
+---
+
+##### 7. Verify
+
+* Check **EC2 console** → instance type matches environment
+* Stack outputs available in **Outputs tab**
+
+---
+
+#### Key Concepts Applied
+
+| Concept       | Example Used                               |
+| ------------- | ------------------------------------------ |
+| Parameters    | Environment input (dev/prod)               |
+| Mappings      | InstanceType per environment               |
+| Outputs       | EC2 instance ID                            |
+| Nested Stacks | Split templates for modular infrastructure |
+
+---
+
+#### Bonus (Extra Learning)
+
+* Create **child templates** for VPC, Security Groups, and EC2
+* Reuse the **same template** for multiple accounts/environments
+* Integrate CloudFormation templates with **CI/CD pipeline**
+
+---
+
+#### Congratulations!
+
+You’ve learned to write **reusable and modular CloudFormation templates**!
+This enables scalable and maintainable infrastructure automation on AWS.
+
+---
+
+#### Try These Next
+
+* Implement **nested stacks** for VPC, EC2, and S3
+* Test parameters and mappings in different regions
+* Automate **stack creation via Terraform or Jenkins pipeline**
+
+## 19. Cohort Practice — Day 45: Docker Build & Push in GitHub Actions
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today you build a **complete CI/CD pipeline** — code pushed to GitHub automatically builds a Docker image and ships it to Docker Hub. No manual steps.
+
+This is exactly what happens in real production pipelines.
+
+---
+
+
+#### Expected Output
+- A complete workflow: `.github/workflows/docker-publish.yml`
+- Your Docker image live on Docker Hub
+- A status badge in your repo README
+- A markdown file: `day-45-docker-cicd.md`
+
+  
+----
+
+
+
+
+
+
+
+
+#### Challenge Tasks
+
+##### Task 1: Prepare
+1. Use the app you Dockerized on Day 36 (or any simple Dockerfile)
+2. Add the Dockerfile to your `github-actions-practice` repo (or create a minimal one)
+3. Make sure `DOCKER_USERNAME` and `DOCKER_TOKEN` secrets are set from Day 44
+
+---
+
+##### Task 2: Build the Docker Image in CI
+Create `.github/workflows/docker-publish.yml` that:
+1. Triggers on push to `main`
+2. Checks out the code
+3. Builds the Docker image and tags it
+
+**Verify:** Check the build step logs — does the image build successfully?
+
+---
+
+##### Task 3: Push to Docker Hub
+Add steps to:
+1. Log in to Docker Hub using your secrets
+2. Tag the image as `username/repo:latest` and also `username/repo:sha-<short-commit-hash>`
+3. Push both tags
+
+**Verify:** Go to Docker Hub — is your image there with both tags?
+
+---
+
+##### Task 4: Only Push on Main
+Add a condition so the push step only runs on the `main` branch — not on feature branches or PRs.
+
+Test it: push to a feature branch and verify the image is built but NOT pushed.
+
+---
+
+##### Task 5: Add a Status Badge
+1. Get the badge URL for your `docker-publish` workflow from the Actions tab
+2. Add it to your `README.md`
+3. Push — the badge should show green
+
+---
+
+##### Task 6: Pull and Run It
+1. On your local machine (or a cloud server), pull the image you just pushed
+2. Run it
+3. Confirm it works
+
+Write in your notes: What is the full journey from `git push` to a running container?
+
+---
+
+#### Hints
+- Docker login: `uses: docker/login-action@v3`
+- Build and push: `uses: docker/build-push-action@v5`
+- Short SHA: `${{ github.sha }}` (use `cut` or `slice` to get first 7 chars)
+- Badge URL format: `https://github.com/<user>/<repo>/actions/workflows/<file>.yml/badge.svg`
+
+---
+
+#### Documentation
+Create `day-45-docker-cicd.md` with:
+- Your complete workflow YAML
+- Docker Hub link to your image
+- Screenshot of the pipeline run
+- The full journey described in Task 6
+
+---
+
+#### Submission
+1. Add `day-45-docker-cicd.md` to `2026/day-45/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your Docker Hub image link and the green badge on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 45: Backup & Restore Jenkins
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Create verified backups of $JENKINS_HOME, prune old ones, and optionally push/pull from S3.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [scripts/backup_jenkins.sh](files/hands-on-projects/scripts/backup_jenkins.sh)
+- [scripts/prune_backups.sh](files/hands-on-projects/scripts/prune_backups.sh)
+- [scripts/restore_jenkins.sh](files/hands-on-projects/scripts/restore_jenkins.sh)
+- [scripts/verify_backup.sh](files/hands-on-projects/scripts/verify_backup.sh)
+
+
 ---
 
 [← Day 44](../day-44/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 46 →](../day-46/README.md)

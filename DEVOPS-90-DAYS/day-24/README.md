@@ -525,7 +525,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🚀 Day 24 - First Steps into CI/CD Automation with GitHub Actions
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -652,6 +652,593 @@ https://lnkd.in/dfK96iiQ
 Looking forward to expanding this pipeline with testing, Docker image builds, security scanning, and automated deployments in the coming days.
  
 #90DaysOfDevOps #GitHubActions #CI #CD #CICD #DevOps #Automation #NodeJS #GitHub #SoftwareEngineering #CloudComputing #LearningInPublic #TrainWithShubham
+
+## 19. Challenge Notes — Day 24: Deploying Apps on Kubernetes (kubectl, YAML)
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### 1. What is a Kubernetes Cluster?
+
+A **Kubernetes cluster** is a collection of computers (called nodes) that run containerized applications managed by Kubernetes. It abstracts away the underlying hardware and provides a powerful, scalable, and self-healing platform for running your applications.
+
+
+[![](https://img.youtube.com/vi/aeXJyxX7j6Y/0.jpg)](https://www.youtube.com/watch?v=aeXJyxX7j6Y)
+
+[Watch the video](https://www.youtube.com/watch?v=aeXJyxX7j6Y)
+
+##### Key Components:
+
+- **Control Plane (Master Node)**  
+  Responsible for managing the cluster’s state, scheduling workloads, and making global decisions. Key components include:  
+  - `kube-apiserver`: API server, the cluster’s front door  
+  - `kube-controller-manager`: Runs controller processes  
+  - `kube-scheduler`: Assigns workloads to nodes  
+  - `etcd`: Distributed key-value store for cluster data
+
+- **Worker Nodes**  
+  Run your application containers inside Pods. Each node runs:  
+  - `kubelet`: Agent managing containers on a node  
+  - `kube-proxy`: Handles network proxying  
+  - Container runtime (e.g., Docker, containerd)
+
+---
+
+#### 2. Introduction to YAML for Kubernetes
+
+Kubernetes resources are described declaratively using **YAML files**. These files define the desired state of your resources—such as Deployments, Services, ConfigMaps—and Kubernetes works to maintain that state.
+
+##### Why YAML?
+- Human-readable and easy to write  
+- Defines complex objects with nesting and lists  
+- Declarative style: You specify *what* you want, not *how* to do it  
+
+---
+
+#### 3. How to Write Kubernetes YAML Files
+
+##### Basic Structure
+
+Every Kubernetes resource YAML includes these sections:
+
+```yaml
+apiVersion: <api-version>
+kind: <resource-kind>
+metadata:
+  name: <resource-name>
+  labels:            # optional but recommended
+    key: value
+spec:
+  # resource-specific configuration here
+````
+
+##### YAML Syntax Rules
+
+* Use **2 spaces** per indentation level (never tabs)
+* Use `-` to denote list items
+* Strings don’t need quotes unless they contain special characters
+* Comments start with `#`
+
+---
+
+#### 4. Core Kubernetes Objects Explained
+
+##### 4.1 Deployment
+
+A **Deployment** manages Pods and ReplicaSets, providing declarative updates and rollbacks.
+
+**Key Features:**
+
+* Controls the number of Pod replicas
+* Enables rolling updates without downtime
+* Automatically replaces failed Pods
+
+**Example Deployment YAML:**
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 2                      # desired number of Pods
+  selector:                       # label selector to identify Pods managed
+    matchLabels:
+      app: nginx
+  template:                       # Pod template used to create Pods
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+```
+
+---
+
+##### 4.2 ReplicaSet
+
+A **ReplicaSet** ensures that a specified number of identical Pods are running at any time. Deployments create and manage ReplicaSets behind the scenes.
+
+* Typically, you do **not manage ReplicaSets directly**, but it’s important to understand their role in Pod lifecycle management.
+
+---
+
+##### 4.3 Service
+
+A **Service** exposes your Pods to network traffic and load balances requests.
+
+**Types of Services:**
+
+* `ClusterIP` (default): Internal access only
+* `NodePort`: Exposes service on each Node’s IP at a static port
+* `LoadBalancer`: Creates an external load balancer (cloud providers only)
+
+**Example Service YAML:**
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx                   # select Pods labeled 'app: nginx'
+  ports:
+    - protocol: TCP
+      port: 80                  # port exposed inside the cluster
+      targetPort: 80            # port on the Pod container
+  type: NodePort                # expose service on each node's port
+```
+
+---
+
+#### 5. Tools You Need
+
+| Tool       | Purpose                              |
+| ---------- | ------------------------------------ |
+| `kubectl`  | Kubernetes CLI to manage cluster     |
+| `minikube` | Local Kubernetes cluster for testing |
+
+---
+
+#### 6. Step-by-Step: Creating a Kubernetes Cluster and Deploying an App
+
+##### Step 1: Install `kubectl`
+
+```bash
+sudo apt update
+sudo apt install -y apt-transport-https curl
+
+curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg \
+  https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] \
+  https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt update
+sudo apt install -y kubectl
+```
+
+Verify installation:
+
+```bash
+kubectl version --client
+```
+
+---
+
+##### Step 2: Install Minikube
+
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+Verify:
+
+```bash
+minikube version
+```
+
+---
+
+##### Step 3: Start the Minikube Cluster
+
+```bash
+minikube start --driver=docker
+```
+
+Check node status:
+
+```bash
+kubectl get nodes
+```
+
+---
+
+##### Step 4: Create `deployment.yaml`
+
+Create a file named `deployment.yaml` with the following content:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+```
+
+---
+
+##### Step 5: Create `service.yaml`
+
+Create a file named `service.yaml`:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+```
+
+---
+
+##### Step 6: Apply the YAML files
+
+Deploy the app and service:
+
+```bash
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+```
+
+Check the Deployment and Pods:
+
+```bash
+kubectl get deployments
+kubectl get pods
+kubectl get services
+```
+
+---
+
+##### Step 7: Access Your App
+
+Use Minikube to access the service:
+
+```bash
+minikube service nginx-service
+```
+
+This command opens the NGINX welcome page in your browser.
+
+---
+
+##### Step 8: Clean up Resources
+
+To delete your deployment and service:
+
+```bash
+kubectl delete -f deployment.yaml
+kubectl delete -f service.yaml
+```
+
+Stop Minikube when done:
+
+```bash
+minikube stop
+```
+
+---
+
+#### 7. Best Practices for Writing Kubernetes YAML
+
+| Practice                            | Reason                                       |
+| ----------------------------------- | -------------------------------------------- |
+| Use consistent 2-space indentation  | YAML syntax requires proper indentation      |
+| Use comments (`#`)                  | Makes files easier to understand             |
+| Break resources into separate files | Clear organization and easier management     |
+| Label your resources properly       | For effective selector matching and grouping |
+| Use declarative `kubectl apply`     | Keeps your cluster in sync with YAML         |
+
+---
+
+#### 8. Summary and Recap
+
+| Component          | Description                                            |
+| ------------------ | ------------------------------------------------------ |
+| Kubernetes Cluster | Orchestrates containerized apps with high availability |
+| YAML               | Declarative format to define Kubernetes objects        |
+| Deployment         | Declaratively manages Pods and ReplicaSets             |
+| ReplicaSet         | Ensures specified number of Pods are always running    |
+| Service            | Exposes Pods and enables networking and load balancing |
+
+---
+
+#### 9. Quick `kubectl` Command Reference
+
+| Task                      | Command                             |
+| ------------------------- | ----------------------------------- |
+| Apply config              | `kubectl apply -f <filename>.yaml`  |
+| Check Deployments         | `kubectl get deployments`           |
+| Check Pods                | `kubectl get pods`                  |
+| Check Services            | `kubectl get services`              |
+| Delete resources          | `kubectl delete -f <filename>.yaml` |
+| Access Service (Minikube) | `minikube service <service-name>`   |
+
+### Attachments
+
+- [Day 24 - Deploying Apps on Kubernetes (kubectl, YAML).pdf](Day%2024%20-%20Deploying%20Apps%20on%20Kubernetes%20%28kubectl%2C%20YAML%29.pdf)
+
+## 20. Cohort Practice — Day 24: Advanced Git: Merge, Rebase, Stash & Cherry Pick
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+
+You know how to branch and push to GitHub. Now it's time to learn how branches come back together — and what to do when you're in the middle of something and need to context-switch. These are the Git skills that separate beginners from confident practitioners.
+
+---
+
+#### Expected Output
+- A markdown file: `day-24-notes.md` with your observations and answers
+- Continue updating `git-commands.md` in your `devops-git-practice` repo
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Git Merge — Hands-On
+1. Create a new branch `feature-login` from `main`, add a couple of commits to it
+2. Switch back to `main` and merge `feature-login` into `main`
+3. Observe the merge — did Git do a **fast-forward** merge or a **merge commit**?
+4. Now create another branch `feature-signup`, add commits to it — but also add a commit to `main` before merging
+5. Merge `feature-signup` into `main` — what happens this time?
+6. Answer in your notes:
+   - What is a fast-forward merge?
+   - When does Git create a merge commit instead?
+   - What is a merge conflict? (try creating one intentionally by editing the same line in both branches)
+
+---
+
+##### Task 2: Git Rebase — Hands-On
+1. Create a branch `feature-dashboard` from `main`, add 2-3 commits
+2. While on `main`, add a new commit (so `main` moves ahead)
+3. Switch to `feature-dashboard` and rebase it onto `main`
+4. Observe your `git log --oneline --graph --all` — how does the history look compared to a merge?
+5. Answer in your notes:
+   - What does rebase actually do to your commits?
+   - How is the history different from a merge?
+   - Why should you **never rebase commits that have been pushed and shared** with others?
+   - When would you use rebase vs merge?
+
+---
+
+##### Task 3: Squash Commit vs Merge Commit
+1. Create a branch `feature-profile`, add 4-5 small commits (typo fix, formatting, etc.)
+2. Merge it into `main` using `--squash` — what happens?
+3. Check `git log` — how many commits were added to `main`?
+4. Now create another branch `feature-settings`, add a few commits
+5. Merge it into `main` **without** `--squash` (regular merge) — compare the history
+6. Answer in your notes:
+   - What does squash merging do?
+   - When would you use squash merge vs regular merge?
+   - What is the trade-off of squashing?
+
+---
+
+##### Task 4: Git Stash — Hands-On
+1. Start making changes to a file but **do not commit**
+2. Now imagine you need to urgently switch to another branch — try switching. What happens?
+3. Use `git stash` to save your work-in-progress
+4. Switch to another branch, do some work, switch back
+5. Apply your stashed changes using `git stash pop`
+6. Try stashing multiple times and list all stashes
+7. Try applying a specific stash from the list
+8. Answer in your notes:
+   - What is the difference between `git stash pop` and `git stash apply`?
+   - When would you use stash in a real-world workflow?
+
+---
+
+##### Task 5: Cherry Picking
+1. Create a branch `feature-hotfix`, make 3 commits with different changes
+2. Switch to `main`
+3. Cherry-pick **only the second commit** from `feature-hotfix` onto `main`
+4. Verify with `git log` that only that one commit was applied
+5. Answer in your notes:
+   - What does cherry-pick do?
+   - When would you use cherry-pick in a real project?
+   - What can go wrong with cherry-picking?
+
+---
+
+#### Hints
+- Visualize history: `git log --oneline --graph --all`
+- To intentionally create a merge conflict: edit the **same line** of the **same file** on two branches
+- Stash with a message: `git stash push -m "description"`
+- Cherry-pick needs a commit hash — find it with `git log --oneline`
+
+---
+
+#### Submission
+1. Add your `day-24-notes.md` to `2026/day-24/`
+2. Update `git-commands.md` with all new commands and commit
+3. Push to your fork
+
+---
+
+#### Learn in Public
+
+Share your merge vs rebase comparison on LinkedIn — a diagram or screenshot of `git log --graph` goes a long way!
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-24-notes
+
+##### Task 1: Git Merge — Hands-On
+1. Create a new branch `feature-login` from `main`, add a couple of commits to it
+2. Switch back to `main` and merge `feature-login` into `main`
+3. Observe the merge — did Git do a **fast-forward** merge or a **merge commit**?
+4. Now create another branch `feature-signup`, add commits to it — but also add a commit to `main` before merging
+5. Merge `feature-signup` into `main` — what happens this time?
+
+i have write the something to commit in feature-login branch and push it and merge it
+
+
+
+this is the second line o =f the feature-login branch
+
+
+
+6. Answer in your notes:
+   - What is a fast-forward merge?
+   - When does Git create a merge commit instead?
+   - What is a merge conflict? (try creating one intentionally by editing the same line in both branches)
+
+
+a fast forward merge happens when the taget branches has not moved forward since the feature branch was created
+
+
+
+git simply moves the branch pointer ahead without creating a new branch commit 
+
+
+git create a merge commit when both branches have different commmits.
+
+
+##### Task 2: Git Rebase — Hands-On
+1. Create a branch `feature-dashboard` from `main`, add 2-3 commits
+2. While on `main`, add a new commit (so `main` moves ahead)
+3. Switch to `feature-dashboard` and rebase it onto `main`
+4. Observe your `git log --oneline --graph --all` — how does the history look compared to a merge?
+5. Answer in your notes:
+   - What does rebase actually do to your commits?
+   - How is the history different from a merge?
+   - Why should you **never rebase commits that have been pushed and shared** with others?
+   - When would you use rebase vs merge?
+
+##### Notes: git-commands
+
+git checkout main
+git switch main
+
+git checkout -b feature-login
+git branch feature-login
+
+git add .
+git add file_name
+git commit "message"
+ 
+
+git log --oneline
+
+## 21. Hands-on Project — Day 24: Amazon ECR: Repositories, Lifecycle, and IAM (Terraform)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Amazon Elastic Container Registry (ECR)** with production-minded defaults:
+- Private **repositories** (immutable tags optional)
+- **Lifecycle policies** for pruning old/untagged images
+- **Image scanning on push**
+- **Encryption at rest** (KMS optional)
+- Minimal **IAM policies** for CI (push) and runtime (pull)
+- (Optional) **Cross-account read** via repository policy
+
+This prepares the ground for upcoming CI/CD and containerized workloads.
+
+---
+
+#### 🎯 Learning Goals
+- Create and govern ECR repositories per app/environment.
+- Enforce **image hygiene** with lifecycle rules.
+- Provide **least-privilege** JSON policies for CI (push) and runtime (pull).
+- (Optional) Allow **cross-account** read access safely.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```bash
+# 1) Initialize
+terraform -chdir=terraform init
+
+# 2) Plan (edit variables as needed)
+terraform -chdir=terraform plan   -var='env=dev'   -var='repositories=["api","worker"]'   -var='untagged_keep_count=5'   -var='tagged_keep_count=10'
+
+# 3) Apply
+terraform -chdir=terraform apply -auto-approve ...
+
+# 4) Use from CI (example)
+# Login (GitHub Actions/Jenkins agent) and push an image:
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <account>.dkr.ecr.us-east-1.amazonaws.com
+
+# Build & push
+export REPO=<account>.dkr.ecr.us-east-1.amazonaws.com/dev-api
+docker build -t ${REPO}:v1 .
+docker push ${REPO}:v1
+```
+
+---
+
+#### 💡 Challenge
+- Add **per-repository** lifecycle rules (e.g., keep 50 prod tags, 10 dev tags).
+- Add a **registry scanning configuration** (enhanced scans) and set **severity thresholds** for promotion.
+- Wire a **cross-account** reader principal (prod account) via `cross_account_reader_arns`.
+
+---
+
+#### ✅ Checklist
+- [ ] Repos created and visible under **ECR → Repositories**  
+- [ ] **Scan on push** turned on  
+- [ ] Lifecycle policy prunes **untagged** & stale **tagged** images  
+- [ ] CI has **push** rights, runtime has **pull** rights
+
+---
+
+#### 📌 Commit
+```bash
+git add day24-ecr-repositories
+git commit -m "day24: ECR repos with lifecycle, scan-on-push, and IAM policies for push/pull"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

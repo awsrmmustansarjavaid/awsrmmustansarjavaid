@@ -474,7 +474,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🛡️ Day 23 - Containerizing Microservices & DevSecOps Best Practices
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -589,6 +589,544 @@ This hands-on project reinforced several important DevOps principles:
 Every hands-on project deepens my understanding of how modern applications are built, secured, and deployed in real-world DevOps environments. Looking forward to exploring Kubernetes and taking these containers to the next level! 🚀
  
 #90DaysOfDevOps #DevOps #Docker #Microservices #Containerization #DevSecOps #DockerSecurity #AlpineLinux #NGINX #Python #CloudComputing #SoftwareEngineering #LearningInPublic #GitHub #AWS #TrainWithShubham
+
+## 19. Challenge Notes — Day 23: Introduction to Kubernetes
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to Day 23 of the 90 Days of DevOps Challenge! Today, we begin our journey into **Kubernetes** — the most widely used container orchestration platform.
+
+[![](https://img.youtube.com/vi/gFYI2oyX4Ew/0.jpg)](https://www.youtube.com/watch?v=gFYI2oyX4Ew)
+
+[Watch the video](https://www.youtube.com/watch?v=gFYI2oyX4Ew)
+
+
+
+---
+
+#### 🌟 What is Kubernetes?
+
+**Kubernetes** (also known as **K8s**) is an open-source container orchestration platform that automates:
+
+- Deployment
+- Scaling
+- Management
+- Networking
+- Availability
+
+of containerized applications.
+
+Originally developed by Google and now maintained by the **Cloud Native Computing Foundation (CNCF)**.
+
+---
+
+#### 🧱 Why Kubernetes?
+
+| Feature              | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| **High Availability** | Keeps your applications running even if a node fails.                      |
+| **Auto-Scaling**      | Automatically scales your application based on load.                       |
+| **Self-Healing**      | Restarts failed containers, replaces and reschedules them when necessary. |
+| **Rolling Updates**   | Updates applications with zero downtime.                                   |
+| **Service Discovery** | Finds services within the cluster automatically.                          |
+
+---
+
+#### ⚙️ Kubernetes Architecture
+
+Kubernetes has a **Master-Worker** architecture:
+
+##### 🧠 Control Plane (Master Node)
+
+Manages the cluster. Key components:
+
+- `kube-apiserver`: Entry point for commands.
+- `etcd`: Key-value store for cluster state.
+- `kube-scheduler`: Assigns Pods to nodes.
+- `kube-controller-manager`: Handles controllers (replica, node, endpoints, etc.).
+- `cloud-controller-manager`: Manages cloud-specific logic.
+
+##### 🧳 Worker Node (Minion)
+
+Runs application workloads. Key components:
+
+- `kubelet`: Communicates with the API server.
+- `kube-proxy`: Manages networking.
+- `Container Runtime`: Runs containers (Docker, containerd, etc.).
+
+---
+
+#### 🧩 Kubernetes Core Concepts
+
+##### 1. **Pod**
+- Smallest deployable unit in Kubernetes.
+- Wraps one or more containers.
+
+##### 2. **Deployment**
+- Manages the lifecycle of Pods (create, update, rollback).
+
+##### 3. **Service**
+- Exposes Pods to internal/external traffic.
+
+##### 4. **Namespace**
+- Logical cluster segmentation for multi-tenancy.
+
+##### 5. **ConfigMap & Secret**
+- Manage app configuration and sensitive data.
+
+---
+
+#### 💡 How Kubernetes Works (Simplified Flow)
+
+1. You define a **Deployment YAML**.
+2. `kubectl apply -f deploy.yaml` sends the spec to the API Server.
+3. Kubernetes Scheduler decides **where to run the Pod**.
+4. **Kubelet** tells the container runtime to run the container.
+5. Pod is created and exposed via **Service**.
+
+---
+
+#### 📦 Kubernetes vs Docker
+
+| Feature              | Docker                                | Kubernetes                      |
+|----------------------|---------------------------------------|----------------------------------|
+| Focus                | Containerization                      | Orchestration                    |
+| Networking           | Basic via bridge/network              | Advanced Service Discovery       |
+| Scaling              | Manual                                | Automatic                        |
+| Load Balancing       | Not built-in                          | Built-in                         |
+| Self-Healing         | No                                    | Yes                              |
+
+Kubernetes can **run Docker containers**, but it adds powerful orchestration capabilities on top.
+
+---
+
+#### 🧪 Getting Started with Kubernetes (Minikube)
+
+```bash
+# Start a Kubernetes cluster locally
+minikube start
+
+# Check cluster status
+kubectl cluster-info
+
+# List nodes
+kubectl get nodes
+```
+
+### Attachments
+
+- [Day 23 Introduction to Kubernetes.pdf](Day%2023%20Introduction%20to%20Kubernetes.pdf)
+
+## 20. Cohort Practice — Day 23: Git Branching & Working with GitHub
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+
+Now that you know how to create repos, stage, and commit — it's time to learn the most powerful concept in Git: **branching**. Branches let you work on features, fixes, and experiments in isolation without breaking your main code. You'll also push your work to GitHub for the first time.
+
+---
+
+#### Expected Output
+- A markdown file: `day-23-notes.md` with your answers
+- Continue updating `git-commands.md` in your `devops-git-practice` repo
+- Your practice repo pushed to GitHub
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Understanding Branches
+Answer these in your `day-23-notes.md`:
+1. What is a branch in Git?
+2. Why do we use branches instead of committing everything to `main`?
+3. What is `HEAD` in Git?
+4. What happens to your files when you switch branches?
+
+---
+
+##### Task 2: Branching Commands — Hands-On
+In your `devops-git-practice` repo, perform the following:
+1. List all branches in your repo
+2. Create a new branch called `feature-1`
+3. Switch to `feature-1`
+4. Create a new branch and switch to it in a single command — call it `feature-2`
+5. Try using `git switch` to move between branches — how is it different from `git checkout`?
+6. Make a commit on `feature-1` that does **not** exist on `main`
+7. Switch back to `main` — verify that the commit from `feature-1` is not there
+8. Delete a branch you no longer need
+9. Add all branching commands to your `git-commands.md`
+
+---
+
+##### Task 3: Push to GitHub
+1. Create a **new repository** on GitHub (do NOT initialize it with a README)
+2. Connect your local `devops-git-practice` repo to the GitHub remote
+3. Push your `main` branch to GitHub
+4. Push `feature-1` branch to GitHub
+5. Verify both branches are visible on GitHub
+6. Answer in your notes: What is the difference between `origin` and `upstream`?
+
+---
+
+##### Task 4: Pull from GitHub
+1. Make a change to a file **directly on GitHub** (use the GitHub editor)
+2. Pull that change to your local repo
+3. Answer in your notes: What is the difference between `git fetch` and `git pull`?
+
+---
+
+##### Task 5: Clone vs Fork
+1. **Clone** any public repository from GitHub to your local machine
+2. **Fork** the same repository on GitHub, then clone your fork
+3. Answer in your notes:
+   - What is the difference between clone and fork?
+   - When would you clone vs fork?
+   - After forking, how do you keep your fork in sync with the original repo?
+
+---
+
+#### Hints
+- When you create a branch, it starts from the commit you're currently on
+- `git switch` is the modern alternative to `git checkout` for switching branches
+- To push a new branch: `git push -u origin <branch-name>`
+- A fork is a GitHub concept, not a Git concept
+
+---
+
+#### Submission
+1. Add your `day-23-notes.md` to `2026/day-23/`
+2. Update `git-commands.md` with all new commands and commit
+3. Push to your fork
+
+---
+
+#### Learn in Public
+
+Share your branching workflow and first GitHub push on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-23-notes
+
+##### Task 1: Understanding Branches
+Answer these in your `day-23-notes.md`:
+1. What is a branch in Git?
+2. Why do we use branches instead of committing everything to `main`?
+3. What is `HEAD` in Git?
+4. What happens to your files when you switch branches?
+
+
+1- A branch is an independent line of development in git 
+
+is is a separate workspace where you can make changes without affecting the main code
+
+2- we use branches to work on new features , bug fixes or experiments without affecting the stable code in the main branch.
+
+if every one commit directly to main
+
+- bugs can reach production
+- Team members may overwrite each others work.
+- Testing becomes difficult.
+- The main branch may become unstable.
+
+
+Branches provide an isolated workspace where developers can make changes safely , test them and review them before merging into main.
+
+
+
+3- HEAD is a pointer that tells git which commit and branch you are currently working on 
+
+HEAD is the current position in git
+
+4- when you switch branche , git updates your working directory to match the files stored in the target branch.
+
+
+
+<<<<<<< HEAD
+
+
+
+
+
+##### Task 2: Branching Commands — Hands-On
+In your `devops-git-practice` repo, perform the following:
+1. List all branches in your repo
+git branch-
+to get the all the branch in the git and * is the current branch
+
+git branch -v
+show all commit and branch details
+
+
+2. Create a new branch called `feature-1`
+git bracnh feature-1
+git checkout - feature-1 to create and switch the branch
+
+
+3. Switch to `feature-1`
+git checkout feature-1
+git switch feature-1
+
+4. Create a new branch and switch to it in a single command — call it `feature-2`
+
+git checkout -b feature-2
+
+5. Try using `git switch` to move between branches — how is it different from `git checkout`?
+
+- both commands can be used to move between branches , but git switch is newer and simpler
+
+git checkout feature-1 - switch the branch
+git checkout -b feature-1 - create and switch the branch
+
+git checkout
+============
+switch branches
+create branches
+restore files
+checkout commits
+
+git switch
+==========
+switching branches
+createtig and switching branches
+
+6. Make a commit on `feature-1` that does **not** exist on `main`
+git switch feature-1
+
+- create a file and added the code and commit 
+
+git log --online
+
+git switch main
+and notice
+
+7. Switch back to `main` — verify that the commit from `feature-1` is not there
+
+git checkout main
+and notice nothing is theere in this file and file does not exists
+
+8. Delete a branch you no longer need
+git branch -d feature-1
+
+
+git checkout -d branch_name
+
+9. Add all branching commands to your `git-commands.md`
+
+##### Task 3: Push to GitHub
+1. Create a **new repository** on GitHub (do NOT initialize it with a README)
+2. Connect your local `devops-git-practice` repo to the GitHub remote
+3. Push your `main` branch to GitHub
+4. Push `feature-1` branch to GitHub
+5. Verify both branches are visible on GitHub
+6. Answer in your notes: What is the difference between `origin` and `upstream`?
+
+
+
+origin => Your own remote repository
+upstream => the original source repository from which your repository was forked 
+
+
+
+##### Task 4: Pull from GitHub
+1. Make a change to a file **directly on GitHub** (use the GitHub editor)
+2. Pull that change to your local repo
+3. Answer in your notes: What is the difference between `git fetch` and `git pull`?
+
+
+
+git fetch 
+=========
+
+git fetch downloads the latest changes from the remote repository but does not modify my local branch
+
+it updates the remote - tracking branches such as
+
+origin / main
+
+git fetch origin 
+
+
+git pull
+========
+git pull download changes from the remote repository and immediatly merges them into my current branch
+
+
+git pull origin main
+
+
+##### Task 5: Clone vs Fork
+1. **Clone** any public repository from GitHub to your local machine
+2. **Fork** the same repository on GitHub, then clone your fork
+3. Answer in your notes:
+   - What is the difference between clone and fork?
+   - When would you clone vs fork?
+   - After forking, how do you keep your fork in sync with the original repo?
+
+
+-> a clone creates a copy of a git repository on your local machine.
+
+
+you make changes locally , commit them and push them if you have permission.
+
+
+a form create your own copy of some one else repository on github.
+
+
+after forking you can clone your fork
+
+
+clone
+====
+you own the repository
+you are part of the project team
+you already have write access.
+you want a local copy of the repository.
+
+fork
+====
+
+you do not have write access.
+you want to contribute to an open source project.
+
+you want your own github copy of the project
+=======
+##### Task 2: Branching Commands — Hands-On
+In your `devops-git-practice` repo, perform the following:
+1. List all branches in your repo
+2. Create a new branch called `feature-1`
+3. Switch to `feature-1`
+4. Create a new branch and switch to it in a single command — call it `feature-2`
+5. Try using `git switch` to move between branches — how is it different from `git checkout`?
+6. Make a commit on `feature-1` that does **not** exist on `main`
+7. Switch back to `main` — verify that the commit from `feature-1` is not there
+8. Delete a branch you no longer need
+9. Add all branching commands to your `git-commands.md`
+>>>>>>> 168f1bbbb2cf6f5c6217034681cfb79ff053c260
+
+##### Notes: git-commands
+
+Branch
+======
+git checkout -b branch_name
+git switch branch_name
+git checkout branch_name
+
+
+git merge branch_name
+git branch -d branch_name
+
+
+git log
+git log --oneline
+
+
+git status
+git add file_name
+git commit -m "messsage"
+git push origin main
+
+git branch
+git branch -v
+git branch branch_name
+git checkout -b branch_name
+git checkout branch_name
+
+
+git log --oneline
+
+
+
+
+==========================
+git br
+
+### Files
+
+- [devops-git-practice](files/cohort-2026/devops-git-practice)
+- [feature-notes.txt](files/cohort-2026/feature-notes.txt)
+
+## 21. Hands-on Project — Day 23: SSM Parameters & Secrets (KMS + App Bootstrap)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **AWS Systems Manager Parameter Store** and **AWS Secrets Manager** for **configuration and secrets management**.  
+You’ll create a **parameter hierarchy** per app/environment, protect sensitive values with **KMS encryption**, and learn **bootstrap patterns** for EC2/ECS/EKS apps.
+
+This builds on:
+- **Day 14–16** (network & security groups) and **Day 17–19** (compute & scaling)
+- **Day 21–22** (stateful services)
+
+---
+
+#### 🎯 Learning Goals
+- Model a **/env/app/** parameter hierarchy (e.g., `/prod/api/DB_HOST`).  
+- Store **plain** and **secure** (KMS) parameters in **Parameter Store**.  
+- Create a **Secrets Manager** secret for rotation-friendly credentials.  
+- Fetch config at **boot time** (user data) or **runtime** (SDK/CLI) safely.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```bash
+# 1) Initialize
+terraform -chdir=terraform init
+
+# 2) Plan (edit variables or pass -var)
+terraform -chdir=terraform plan   -var='env=dev'   -var='app_name=sampleapp'   -var='parameters={"LOG_LEVEL":"info","FEATURE_X_ENABLED":"true"}'   -var='secure_parameters={"DB_PASSWORD":"s3cr3t!"}'
+
+# 3) Apply
+terraform -chdir=terraform apply -auto-approve   -var='env=dev'   -var='app_name=sampleapp'
+
+# 4) Try bootstrap examples
+#   a) On EC2 (Day 17/19), run:
+bash app-examples/fetch_ssm_to_envfile.sh /dev/sampleapp .env
+#   b) Python (anywhere with AWS creds):
+python3 app-examples/read_params_python.py /dev/sampleapp
+```
+
+**Where things land**
+- Parameter Store path prefix: `/${env}/${app_name}/...`  
+- Secret name: `${env}/${app_name}/db-credentials` (editable via var)  
+- Custom **KMS key** (optional) used for `SecureString` params and the secret.
+
+---
+
+#### 💡 Challenge
+- Add **parameter version pinning** in CI/CD (break glass: rollbacks).  
+- Use **EC2/ECS task role** scoped to a **narrow SSM/Secrets policy** (least privilege).  
+- Wire **Lambda rotation** for the Secrets Manager secret.  
+
+---
+
+#### ✅ Checklist
+- [ ] Clear **/env/app** naming for parameters  
+- [ ] **SecureString** values encrypted with **KMS**  
+- [ ] App can **fetch and render .env** safely at boot or runtime  
+- [ ] Secrets never committed to git
+
+---
+
+#### 📌 Commit
+```bash
+git add day23-ssm-parameters-secrets
+git commit -m "day23: SSM Param Store hierarchy + Secrets Manager with KMS; bootstrap examples"
+git push
+```
+
+### Files
+
+- [app-examples/fetch_ssm_to_envfile.sh](files/hands-on-projects/app-examples/fetch_ssm_to_envfile.sh)
+- [app-examples/read_params_python.py](files/hands-on-projects/app-examples/read_params_python.py)
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

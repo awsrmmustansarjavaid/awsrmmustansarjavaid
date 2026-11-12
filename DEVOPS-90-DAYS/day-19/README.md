@@ -465,7 +465,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🐳 Day 19 - Advanced Docker: Multi-Stage Builds, Volumes & Networking
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -858,6 +858,405 @@ docker service scale web=3
 ---
 
 > **"Containers make applications portable, but mastering storage, networking, and orchestration makes them production-ready."** 🐳🚀
+
+## 19. Challenge Notes — Day 19: Introduction to Docker and Containerization
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Understanding the Basics and Importance of Docker
+
+
+
+[![](https://img.youtube.com/vi/lRKtZCdgxWM/0.jpg)](https://www.youtube.com/watch?v=lRKtZCdgxWM)
+
+[Watch the video](https://www.youtube.com/watch?v=lRKtZCdgxWM)
+
+#### What is Containerization?
+
+- Lightweight virtualization
+- Runs applications in containers
+- Shares host OS kernel
+- Packages code, dependencies, settings
+
+#### Why Containers?
+
+- Consistency: Solves 'works on my machine'
+- Portability: Run anywhere
+- Efficiency: Faster, low resource
+- Isolation: Self-contained environments
+
+#### What is Docker?
+
+- Open platform for containerized apps
+- Separates apps from infrastructure
+- Written in Go
+- Launched: March 20, 2013
+
+#### Key Docker Concepts
+
+- Docker Engine: Build and run containers
+- Image: Read-only snapshot
+- Container: Running image
+- Dockerfile: Build script
+- Docker Hub: Public image registry
+
+#### Why Docker Over VMs?
+
+- VMs are heavy, containers are light
+- Containers start in seconds
+- Easier to scale
+- Higher portability and efficiency
+
+#### Docker vs. Virtual Machines
+
+VMs:
+- Full OS
+- Heavy
+- Slower start
+Docker:
+- Process isolation
+- Lightweight
+- Faster start
+
+#### Docker Architecture
+
+- Docker Engine: Client, Daemon, REST API
+- Image: Template
+- Container: Executable image
+- Registry: Stores images
+- Volume: Persistent storage
+
+#### Impact of Docker
+
+- Streamlines DevOps (CI/CD)
+- Supports microservices
+- Cloud-optimized
+- Boosts developer productivity
+
+#### Real-World Use Cases
+
+- Dev/test environments
+- CI/CD pipelines
+- Cloud deployments
+- Microservices
+- Edge/IoT
+
+#### Future Outlook
+
+- Kubernetes integration
+- Serverless and Edge computing
+- Hybrid cloud
+- Cloud-native design
+
+#### Summary
+
+- Docker vs VMs: Lightweight, portable
+- Solves VM limitations
+- Key components: Image, Container, etc.
+- Next: Build and deploy with Docker
+
+### Attachments
+
+- [Day 19_Introduction to Docker & Containerization Explained.pdf](Day%2019_Introduction%20to%20Docker%20%26%20Containerization%20Explained.pdf)
+
+## 20. Cohort Practice — Day 19: Shell Scripting Project: Log Rotation, Backup & Crontab
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Apply everything from Days 16–18 in real-world mini projects.
+
+You will:
+- Write a **log rotation** script
+- Write a **server backup** script
+- Schedule them with **crontab**
+
+---
+
+#### Expected Output
+- A markdown file: `day-19-project.md`
+- All scripts you write during the tasks
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Log Rotation Script
+Create `log_rotate.sh` that:
+1. Takes a log directory as an argument (e.g., `/var/log/myapp`)
+2. Compresses `.log` files older than 7 days using `gzip`
+3. Deletes `.gz` files older than 30 days
+4. Prints how many files were compressed and deleted
+5. Exits with an error if the directory doesn't exist
+
+---
+
+##### Task 2: Server Backup Script
+Create `backup.sh` that:
+1. Takes a source directory and backup destination as arguments
+2. Creates a timestamped `.tar.gz` archive (e.g., `backup-2026-02-08.tar.gz`)
+3. Verifies the archive was created successfully
+4. Prints archive name and size
+5. Deletes backups older than 14 days from the destination
+6. Handles errors — exit if source doesn't exist
+
+---
+
+##### Task 3: Crontab
+1. Read: `crontab -l` — what's currently scheduled?
+2. Understand cron syntax:
+   ```
+   * * * * *  command
+   │ │ │ │ │
+   │ │ │ │ └── Day of week (0-7)
+   │ │ │ └──── Month (1-12)
+   │ │ └────── Day of month (1-31)
+   │ └──────── Hour (0-23)
+   └────────── Minute (0-59)
+   ```
+3. Write cron entries (in your markdown, don't apply if unsure) for:
+   - Run `log_rotate.sh` every day at 2 AM
+   - Run `backup.sh` every Sunday at 3 AM
+   - Run a health check script every 5 minutes
+
+---
+
+##### Task 4: Combine — Scheduled Maintenance Script
+Create `maintenance.sh` that:
+1. Calls your log rotation function
+2. Calls your backup function
+3. Logs all output to `/var/log/maintenance.log` with timestamps
+4. Write the cron entry to run it daily at 1 AM
+
+---
+
+#### Hints
+- Compress old files: `find /path -name "*.log" -mtime +7 -exec gzip {} \;`
+- Timestamp: `date +%Y-%m-%d`
+- Tar: `tar -czf backup.tar.gz /source/dir`
+- Cron edit: `crontab -e`
+- Log with timestamp: `echo "$(date): message" >> logfile`
+
+---
+
+#### Documentation
+
+Create `day-19-project.md` with:
+- Each script's code
+- Sample outputs
+- Cron entries you wrote
+- What you learned (3 key points)
+
+---
+
+#### Submission
+1. Add your scripts and `day-19-project.md` to `2026/day-19/`
+2. Commit and push to your fork
+
+---
+
+#### Reference Video
+
+[![Watch the video](https://img.youtube.com/vi/PZYJ33bMXAw/0.jpg)](https://youtu.be/PZYJ33bMXAw?si=RzEzOSom7-FqnopA)
+
+---
+
+#### Learn in Public
+
+Share your shell scripting projects on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-19-project
+
+##### Task 1: Log Rotation Script
+
+
+#!/bin/bash
+
+log_dir=$1
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+        echo "Usage: $0 <log_directory.>"
+        exit 1
+fi
+
+
+if [[ ! -d $log_dir  ]]; then
+        echo "Directory $log_dir does not exists!"
+        exit 1
+#else
+        #echo "Directory exists."
+fi
+
+echo "Starting log rotation..."
+
+compressed_count=0
+
+while IFS= read -r file
+do
+    sudo gzip "$file"
+    ((compressed_count++))
+done < <(
+    #find "$log_dir" -type f -name "*.log" -mtime +7
+        find "$log_dir" -type f -name "*.log" -mmin +5
+)
+
+
+
+deleted_count=0
+
+while IFS= read -r file
+do
+        sudo rm -f "$file"
+
+        ((deleted_count++))
+
+done < <(
+        #find "$log_dir" -type f -name "*.gz" -mtime +30
+        find "$log_dir" -type f -name "*.gz" -mmin +2
+)
+
+
+
+echo "Compressing files..."
+find "$log_dir" -type f -name "*.log" -mmin +5
+
+echo "Deleting files..."
+find "$log_dir" -type f -name "*.gz" -mmin +2
+echo "-------------------------------------"
+echo "Compressed Files : $compressed_count"
+echo "Deleted Files    : $deleted_count"
+echo "Log Rotation completed."
+
+
+
+
+##### Task 2: Server Backup Script
+##### Task 2: Server Backup Script
+#!/bin/bash
+
+set -euo pipefail
+
+if [[ $# -ne 2 ]]; then
+        echo "Usage: $0 <source_directory> <backup_destination>"
+        exit 1
+fi
+
+source_dir=$1
+backup_dir=$2
+
+if [[ ! -d "$source_dir" ]] ; then
+        echo "Error: Sorce directory '$source_dir' does not exist."
+        exit 1
+fi
+
+mkdir -p "$backup_dir"
+
+
+timestamp=$(date +%Y-%m-%d_%H_%M_%S)
+
+
+backup_file="$backup_dir/backup-$timestamp.tar.gz"
+
+echo "Starting backup..."
+
+tar -czf "$backup_file" "$source_dir"
+
+if [[ -f $backup_file ]]; then
+        echo "Backup created successfully."
+else
+        echo "Backup Failed."
+        exit 1
+fi
+
+
+size=$(du -sh "$backup_file" | awk '{print $1}')
+
+echo "Archive Name : $(basename "$backup_file")"
+echo "Archive Size : $size"
+
+deleted_count=$(find "$backup_dir" -type f -name "*.tar.gz" -mtime +14 | wc -l)
+
+find "$backup_dir" -type f -name "*.tar.gz" -mtime +14 -delete
+
+
+echo "Old Backups Deleted : $deleted_count"
+
+echo "Backup Completed Successfully."
+
+### Files
+
+- [backup.sh](files/cohort-2026/backup.sh)
+- [log_rotate.sh](files/cohort-2026/log_rotate.sh)
+
+## 21. Hands-on Project — Day 19: Auto Scaling Group (ASG) behind the ALB (Rolling Updates + Target Tracking)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Launch Template + Auto Scaling Group** registered to the **Day 18 Target Group**. We’ll support **rolling instance refresh**, **ELB health checks**, and **target tracking** (CPU or ALB requests per target).
+
+This module plugs into **Day 14** (VPC), **Day 16** (SGs), **Day 17** (user data ideas), and **Day 18** (ALB target group).
+
+---
+
+#### 🎯 Learning Goals
+- Create a reusable **Launch Template** with user data.
+- Run an **ASG** across private subnets and register to an ALB **target group**.
+- Configure **Instance Refresh** for **rolling updates** on LT changes.
+- Add **target tracking** scaling policy (choose CPU or ALB Requests/Target).
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1) Inputs you need
+   - vpc_id
+   - private_subnet_ids (list, where your app will run)
+   - security_group_ids (e.g., Day 16 web_sg or app_sg)
+   - target_group_arn (from Day 18)
+
+2) Init & Plan
+   terraform -chdir=terraform init
+   terraform -chdir=terraform plan      -var='vpc_id=vpc-0123'      -var='private_subnet_ids=["subnet-a","subnet-b"]'      -var='security_group_ids=["sg-xyz"]'      -var='target_group_arn=arn:aws:elasticloadbalancing:...:targetgroup/...'      -var='desired_capacity=2' -var='min_size=2' -var='max_size=5'
+
+3) Apply
+   terraform -chdir=terraform apply -auto-approve ...
+
+4) Test
+   - Hit your **ALB DNS** (from Day 18) and see responses coming from ASG instances.
+   - Increase load (e.g., `ab` or `hey`) and watch scaling (if target tracking enabled).
+```
+
+---
+
+#### 💡 Challenge
+- Switch scaling policy to **ALBRequestCountPerTarget** (default provided) or **CPUUtilization**.
+- Enable **CloudWatch agent** in user data and push custom metrics.
+- Add **Warm Pools** and experiment with **scheduled actions** (e.g., office hours).
+
+---
+
+
+
+#### 📌 Commit
+```bash
+git add day19-asg-behind-alb
+git commit -m "day19: Launch Template + Auto Scaling Group behind ALB with rolling updates and target tracking"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

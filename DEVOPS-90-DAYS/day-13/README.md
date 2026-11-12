@@ -391,7 +391,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🔐 Day 13 - DevSecOps Pipeline, Security Automation & Python Projects
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -664,6 +664,333 @@ Revised commonly asked DevOps interview topics including:
 ---
 
 > **"Security is everyone's responsibility. Automating it makes software faster, safer, and more reliable."** 🔐🚀
+
+## 19. Challenge Notes — Day 13: NAT Gateway, Internet Gateway, and Bastion Host
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+---
+
+#### 1. Internet Gateway (IGW)
+
+##### What is an Internet Gateway?
+- A **horizontally scaled**, **redundant**, and **highly available** AWS service that enables communication between instances in your VPC and the **internet**.
+- It supports both **IPv4** and **IPv6** traffic.
+
+
+
+
+[![](https://img.youtube.com/vi/jgR16ACHw2M/0.jpg)](https://www.youtube.com/watch?v=jgR16ACHw2M)
+
+[Watch the video](https://www.youtube.com/watch?v=jgR16ACHw2M)
+
+##### Why do we need an Internet Gateway?
+- To allow resources in a **public subnet** to:
+  - Initiate **outbound** connections to the internet.
+  - Receive **inbound** connections (for example, users accessing a web server).
+
+##### How it works:
+- Attach an Internet Gateway to your **VPC**.
+- Modify the **route table** associated with your **public subnet** to include a route to the Internet Gateway for **0.0.0.0/0** (all IPv4 traffic) or **::/0** (all IPv6 traffic).
+- Instances must have a **Public IP** or an **Elastic IP** assigned to be reachable from the internet.
+
+---
+
+#### 2. NAT Gateway
+
+##### What is a NAT Gateway?
+- A **Network Address Translation** (NAT) service that allows **instances in private subnets** to **connect to the internet**, while **preventing the internet from initiating connections back** to them.
+
+##### Why do we need a NAT Gateway if we have an Internet Gateway?
+| Scenario | Behavior |
+|:---|:---|
+| Instance in a **public subnet** with a public IP | Connects directly to the internet via Internet Gateway. |
+| Instance in a **private subnet** without a public IP | Cannot connect to the internet directly even though the VPC has an IGW. Needs NAT Gateway for outbound traffic. |
+
+**Summary:**  
+- Private instances (no public IP) → NAT Gateway → Internet Gateway → Internet
+
+##### Types of NAT Gateways
+| Type | Description |
+|:---|:---|
+| Public NAT Gateway | Deployed in a public subnet. It uses an Elastic IP. |
+| Private NAT Gateway | Deployed in a private subnet. Does not need an Elastic IP. Used for internal VPC-to-VPC communication without traversing the internet. |
+
+---
+
+##### Key Points about NAT Gateway:
+- **Outbound connections only** from private instances.
+- **Cannot receive inbound** internet traffic.
+- **Requires** an **Elastic IP address** (for Public NAT Gateway).
+- **Automatically scales** to accommodate your traffic.
+- **More secure** than assigning public IPs to private instances.
+
+---
+
+##### NAT Gateway Related Quotas
+| Quota | Default |
+|:---|:---|
+| Max number of EIPs (Elastic IPs) per account | Limited; must be available to create NAT Gateway |
+| Private NAT Gateway: Max number of private IPv4 addresses | 8 |
+| Public NAT Gateway: Max number of Elastic IPs attached | 2 (can request increase) |
+
+---
+
+#### 3. Bastion Host (Jump Box)
+
+##### What is a Bastion Host?
+- A **special-purpose instance** that acts as a **gateway** for accessing instances inside a **private subnet**.
+- **Deployed in a public subnet** with a **public IP**.
+
+##### Why do we need a Bastion Host?
+- Private instances **cannot be accessed directly from the internet**.
+- The Bastion Host acts as a **controlled entry point** to the private environment via **SSH (Linux)** or **RDP (Windows)**.
+
+---
+
+##### Security Best Practices for Bastion Hosts
+| Practice | Description |
+|:---|:---|
+| Use restrictive security groups | Allow inbound SSH (TCP 22) or RDP (TCP 3389) only from **your known IPs**. |
+| Disable password login | Enforce **key-based authentication** (SSH keys). |
+| Enable logging | Enable session logging (e.g., using Systems Manager Session Manager). |
+| Harden the server | Regularly patch and monitor the Bastion Host. |
+
+---
+
+##### What happens if you don't restrict Bastion Host Security Groups properly?
+- **High Risk of Attack**:
+  - Open SSH or RDP ports to `0.0.0.0/0` (anyone on the internet) makes it vulnerable to brute-force and hacking attempts.
+  - Attackers could compromise the Bastion Host and then move laterally inside your private network (a technique called "pivoting").
+
+---
+
+#### 4. Internet Gateway vs NAT Gateway: Key Differences
+
+| Feature                     | Internet Gateway (IGW)            | NAT Gateway                         |
+|------------------------------|-----------------------------------|-------------------------------------|
+| Purpose                      | Bidirectional internet access     | Outbound internet access only       |
+| Type of instances it serves  | Instances with public IP          | Instances without public IP         |
+| Direction of traffic         | Inbound and outbound              | Outbound only                       |
+| Associated with              | Public subnet route table         | Private subnet route table          |
+| Elastic IP needed            | No                                | Yes (for Public NAT Gateway)        |
+| Supports private connectivity | No | Yes (Private NAT Gateway supports VPC-to-VPC without public internet) |
+
+---
+
+#### 5. Practical Lab Activities for Class
+
+##### Setup
+- Create a **VPC** with:
+  - 1 Public Subnet
+  - 1 Private Subnet
+
+##### Internet Gateway Lab
+- Attach an **Internet Gateway** to the VPC.
+- Route the **public subnet's** traffic to the Internet Gateway.
+- Launch an EC2 instance (public IP) in the public subnet and confirm internet access.
+
+##### NAT Gateway Lab
+- Create a **NAT Gateway** in the public subnet.
+- Route the **private subnet's** traffic to the NAT Gateway.
+- Launch an EC2 instance (without a public IP) in the private subnet.
+- SSH into the instance through the Bastion Host or Systems Manager and verify outbound internet access (e.g., `yum update`).
+
+##### Bastion Host Lab
+- Deploy a **Bastion Host** EC2 instance in the public subnet.
+- Open inbound SSH port **only from your IP address**.
+- SSH into the Bastion Host.
+- From Bastion Host, SSH into the private EC2 instance.
+
+---
+
+### Final Summary for Day 13 🚀
+
+- **Internet Gateway** provides direct public access to instances with public IPs.
+- **NAT Gateway** allows private instances to reach out to the internet **securely**.
+- **Bastion Host** provides **secure remote access** to private instances without exposing them to the internet.
+- **Security Groups and Routing are Critical** for proper and secure architecture.
+- Always **restrict traffic tightly** to enhance security posture.
+
+---
+
+### 📢 Note:
+✅ You can also replace the Bastion Host with **AWS Systems Manager Session Manager** (for even better security — no open SSH ports at all).
+
+### Attachments
+
+- [Day 13 - NAT Gateway, Internet Gateway, and Bastion Host.pdf](Day%2013%20-%20NAT%20Gateway%2C%20Internet%20Gateway%2C%20and%20Bastion%20Host.pdf)
+
+## 20. Cohort Practice — Day 13: Linux Volume Management (LVM)
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Learn LVM to manage storage flexibly – create, extend, and mount volumes.
+
+**Watch First:** [Linux LVM Tutorial](https://youtu.be/Evnf2AAt7FQ?si=ncnfQYySYtK_2K3c)
+
+---
+
+#### Expected Output
+- A markdown file: `day-13-lvm.md`
+- Screenshots of command outputs
+
+---
+
+#### Before You Start
+
+Switch to root user:
+```bash
+sudo -i
+```
+or
+```bash
+sudo su
+```
+No spare disk? Create a virtual one (watch the tutorial):
+```bash
+dd if=/dev/zero of=/tmp/disk1.img bs=1M count=1024
+losetup -fP /tmp/disk1.img
+losetup -a   # Note the device name (e.g., /dev/loop0)
+```
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Check Current Storage
+Run: `lsblk`, `pvs`, `vgs`, `lvs`, `df -h`
+
+##### Task 2: Create Physical Volume
+```bash
+pvcreate /dev/sdb   # or your loop device
+pvs
+```
+
+##### Task 3: Create Volume Group
+```bash
+vgcreate devops-vg /dev/sdb
+vgs
+```
+
+##### Task 4: Create Logical Volume
+```bash
+lvcreate -L 500M -n app-data devops-vg
+lvs
+```
+
+##### Task 5: Format and Mount
+```bash
+mkfs.ext4 /dev/devops-vg/app-data
+mkdir -p /mnt/app-data
+mount /dev/devops-vg/app-data /mnt/app-data
+df -h /mnt/app-data
+```
+
+##### Task 6: Extend the Volume
+```bash
+lvextend -L +200M /dev/devops-vg/app-data
+resize2fs /dev/devops-vg/app-data
+df -h /mnt/app-data
+```
+
+---
+
+#### Documentation
+
+Create `day-13-lvm.md` with:
+- Commands used
+- Screenshots of outputs
+- What you learned (3 points)
+
+---
+
+#### Submission
+1. Add your `day-13-lvm.md` to `2026/day-13/`
+2. Commit and push
+
+---
+
+#### Learn in Public
+
+Share your LVM progress on LinkedIn.
+
+```
+#90DaysOfDevOps #DevOpsKaJosh #TrainWithShubham
+```
+
+Happy Learning!
+**TrainWithShubham**
+
+## 21. Hands-on Project — Day 13: S3 Bucket + Versioning & Lifecycle
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Amazon S3 with Versioning & Lifecycle** using Terraform.  
+You’ll provision an S3 bucket with **server-side encryption**, **public access block**, **versioning**, and **lifecycle rules** (transition/expiration/noncurrent/abort-incomplete).
+
+---
+
+#### 🎯 Learning Goals
+- Enable **bucket versioning** and understand object/version behavior.  
+- Configure **lifecycle rules** for cost optimization and hygiene: transitions to IA/Glacier, expiration, noncurrent cleanup, and abort incomplete uploads.  
+- Use **prefix/tag filters** to scope lifecycle behavior (e.g., `data/` vs `logs/`).  
+- Apply **security** best practices: encryption + block public access.  
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1) Initialize & plan
+   terraform -chdir=terraform init
+   terraform -chdir=terraform plan -var="bucket_name_prefix=devopsday13-demo"
+
+2) Apply
+   terraform -chdir=terraform apply -auto-approve -var="bucket_name_prefix=devopsday13-demo"
+
+3) (Optional) Put and version objects
+   aws s3 cp ./sample.txt s3://<bucket-name>/data/sample.txt
+   aws s3 cp ./sample.txt s3://<bucket-name>/logs/app.log
+
+4) Inspect lifecycle & versions
+   aws s3api list-object-versions --bucket <bucket-name>
+
+5) Destroy when done
+   terraform -chdir=terraform destroy -auto-approve
+```
+
+---
+
+#### 💡 Challenge
+- Add a **tag-based** lifecycle rule (e.g., `{"class":"archive"}` → transition to Glacier Deep Archive at 30 days).  
+- Wire an **access log bucket** and enable **server access logging** for the main bucket.  
+- Switch encryption to **SSE-KMS** with a customer-managed key.  
+
+---
+
+#### ✅ Checklist
+- [ ] Bucket created with encryption & public access blocked  
+- [ ] Versioning enabled and verified with multiple object versions  
+- [ ] Lifecycle transitions & expirations configured and planned  
+- [ ] Optional: tag-based rule / access logging / SSE-KMS implemented  
+
+---
+
+#### 📌 Commit
+```bash
+git add day13-s3-versioning-lifecycle
+git commit -m "day13: S3 bucket with versioning + lifecycle (transition, expiration, noncurrent, abort)"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/providers.tf](files/hands-on-projects/terraform/providers.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

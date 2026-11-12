@@ -412,7 +412,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🚀 Day 12 - Advanced Git & AWS EC2, IAM and S3
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -991,6 +991,295 @@ aws s3 rm s3://my-demo-bucket/image.png
 ---
 
 > **"Mastering DevOps isn't about memorising commands—it's about understanding how the tools work together to build reliable, secure, and scalable systems."** 🌟
+
+## 19. Challenge Notes — Day 12: Security Groups, NACLs, and VPC Peering
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+---
+
+#### 🔐 1. Security Groups (SGs)
+
+##### ✅ What is a Security Group?
+A virtual firewall that controls **inbound and outbound** traffic for **EC2 instances** and **Elastic Network Interfaces (ENIs)** at the **instance level**.
+
+
+[![](https://img.youtube.com/vi/5I0Gz-H0pzI/0.jpg)](https://www.youtube.com/watch?v=5I0Gz-H0pzI)
+
+[Watch the video](https://www.youtube.com/watch?v=5I0Gz-H0pzI)
+
+##### 🔑 Key Features:
+- **Stateful:** If you allow inbound traffic, the response traffic is automatically allowed.
+- **Attached to resources**, not subnets.
+- **Multiple rules supported** for different types of traffic.
+- **Default behavior:** All traffic is denied until explicitly allowed.
+
+##### 📌 When to Use:
+- For **fine-grained control** over access to individual instances.
+- **Example:** Allow SSH (port 22) from your IP only.
+
+##### 🧱 Example Rules:
+| Type     | Protocol | Port Range | Source        |
+|----------|----------|-------------|----------------|
+| Inbound  | TCP      | 22          | My IP          |
+| Inbound  | TCP      | 80          | 0.0.0.0/0      |
+| Outbound | All      | All         | 0.0.0.0/0      |
+
+##### 📌 Common Use Cases:
+- Allow HTTP/HTTPS for web servers
+- Allow SSH only from office IP
+- Block all else by default
+
+---
+
+#### 🚧 2. Network Access Control Lists (NACLs)
+
+##### ✅ What is a NACL?
+A **subnet-level firewall** that controls **inbound and outbound traffic** for all resources within a subnet.
+
+##### 🔑 Key Features:
+- **Stateless:** Must define both **inbound and outbound rules**.
+- **Rules evaluated in number order** (lower rule number = higher priority).
+- **Supports Allow and Deny rules.**
+- Applied to **entire subnets**.
+
+##### 📌 When to Use:
+- Add **extra layer of security**.
+- Block **known malicious IP ranges**.
+
+##### 🧱 Example Rules:
+| Rule # | Type  | Protocol | Port | Source          | Allow/Deny |
+|--------|-------|----------|------|------------------|-------------|
+| 100    | HTTP  | TCP      | 80   | 0.0.0.0/0        | ALLOW       |
+| 110    | SSH   | TCP      | 22   | 203.0.113.0/24   | ALLOW       |
+| *      | All   | All      | All  | 0.0.0.0/0        | DENY        |
+
+##### 🆚 SG vs NACL
+| Feature            | Security Group       | NACL                  |
+|--------------------|-----------------------|------------------------|
+| Level              | Instance-level        | Subnet-level           |
+| Stateful           | ✅ Yes                | ❌ No                  |
+| Rules              | Only Allow            | Allow + Deny           |
+| Evaluation Order   | All at once           | Rule order (low → high) |
+| Use Case           | App/resource access   | Subnet-level control   |
+
+---
+
+#### 🔄 3. VPC Peering
+
+##### 🌐 What is it?
+A networking connection between **two VPCs** that enables **private communication** via AWS’s internal network.
+
+##### ✅ Key Points:
+- Works **within the same AWS account** or **across accounts**.
+- **No overlapping CIDR blocks.**
+- **No transitive peering**.
+- Requires **route table updates**.
+
+##### 📌 Use Cases:
+- Connect microservices in different VPCs
+- Separate environments (dev/test/prod)
+- Cross-account/region connectivity
+
+##### 🧱 Steps to Setup:
+1. Create VPC-A (`10.0.0.0/16`) and VPC-B (`192.168.0.0/16`)
+2. Request a **peering connection** from VPC-A to VPC-B
+3. Accept the request in VPC-B
+4. Update route tables:
+   - VPC-A → add route to `192.168.0.0/16` → peering ID
+   - VPC-B → add route to `10.0.0.0/16` → peering ID
+5. Update **SGs and NACLs** to allow traffic
+
+##### 🔁 VPC Peering Lifecycle
+| State               | Description                                           | Action/Visibility                            |
+|---------------------|-------------------------------------------------------|-----------------------------------------------|
+| Initiating-request  | Request created                                       | Visible to requester                          |
+| Failed              | Request failed due to overlap/permissions            | Visible for 2 hours                           |
+| Pending-acceptance  | Awaiting approval                                     | Expires in 7 days                             |
+| Expired             | No action taken                                       | Visible for 2 days                            |
+| Rejected            | Accepter rejected                                     | 2 days (requester), 2 hours (accepter)        |
+| Provisioning        | AWS is configuring                                    | Temporary state                               |
+| Active              | Connection is ready                                   | Can be deleted, not rejected                  |
+
+##### 🧮 VPC Peering Quotas
+| Name                                         | Default | Adjustable |
+|----------------------------------------------|---------|-------------|
+| Active VPC peering connections per VPC       | 50      | ✅ Yes       |
+| Outstanding peering requests per VPC         | 25      | ✅ Yes       |
+| Expiry for unaccepted peering request        | 7 days  | ❌ No        |
+
+---
+
+#### 🧪 Hands-On Lab: Configure SG, NACL, and VPC Peering
+
+##### 🛠️ Prerequisites:
+- Two VPCs: `devops-vpc-a` and `devops-vpc-b`
+
+##### ✅ Part 1: Create Security Group
+1. Name: `web-sg`
+2. Inbound:
+   - HTTP (80) from `0.0.0.0/0`
+   - SSH (22) from your IP
+3. Outbound: All traffic allowed
+4. Attach to EC2 instance in a public subnet
+
+##### ✅ Part 2: Create Network ACL
+1. Go to **VPC > Network ACLs**
+2. Create or select a NACL
+3. Inbound Rules:
+   - Allow TCP 22 and 80
+4. Outbound Rules:
+   - Allow all
+5. Associate with the EC2’s subnet
+
+##### ✅ Part 3: VPC Peering
+1. Go to **VPC Dashboard > Peering Connections**
+2. Create request from `devops-vpc-a` to `devops-vpc-b`
+3. Accept the request in `devops-vpc-b`
+4. Update route tables in both VPCs
+5. Verify connectivity (use ICMP or SSH)
+
+---
+
+#### 💡 Real-World Use Cases
+
+##### Security Groups:
+- Allow only app tier to access databases
+- Restrict public access to internal services
+
+##### NACLs:
+- Block malicious IPs at subnet level
+- Prevent internal lateral movement during attacks
+
+##### VPC Peering:
+- Enable shared logging/monitoring VPC
+- Isolate environments but allow communication
+
+---
+
+#### 🔒 Tips & Best Practices
+- SGs are **your first line of defense**
+- Use NACLs for **additional subnet-level protection**
+- Document peering connections and rules
+- Apply **consistent naming conventions**
+  - e.g., `dev-app-sg`, `qa-db-nacl`
+- Regularly audit and optimize rules
+
+---
+
+#### 📌 Summary Comparison Table
+
+| Feature        | Security Groups        | NACLs                  | VPC Peering             |
+|----------------|-------------------------|--------------------------|--------------------------|
+| Level          | Instance                | Subnet                   | VPC                      |
+| Type           | Stateful                | Stateless                | Private connectivity     |
+| Rules          | Allow only              | Allow + Deny             | Needs route updates      |
+| Scope          | ENIs (instance level)   | Subnets                  | Entire VPCs              |
+
+### Attachments
+
+- [Day 12 Security Groups, NACLs, and VPC Peering.pdf](Day%2012%20Security%20Groups%2C%20NACLs%2C%20and%20VPC%20Peering.pdf)
+
+## 20. Cohort Practice — Day 12: Breather & Revision (Days 01–11)
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Goal
+Take a **one-day pause** to consolidate everything from Days 01–11 so you don’t forget the fundamentals you just built.
+
+#### Expected Output
+- A markdown file: `day-12-revision.md`  
+  (bullet notes + checkpoints)  
+- Optional: screenshots of any re-runs you do
+
+#### What to Review (pick at least one per section)
+- **Mindset & plan:** revisit your Day 01 learning plan—are your goals still right? any tweaks?  
+- **Processes & services:** rerun 2 commands from Day 04/05 (e.g., `ps`, `systemctl status`, `journalctl -u <service>`); jot what you observed today.  
+- **File skills:** practice 3 quick ops from Days 06–11 (e.g., `echo >>`, `chmod`, `chown`, `ls -l`, `cp`, `mkdir`).  
+- **Cheat sheet refresh:** skim your Day 03 commands—highlight 5 you’d reach for first in an incident.  
+- **User/group sanity:** recreate one small scenario from Day 09 or Day 11 (create a user or change ownership) and verify with `id`/`ls -l`.
+
+#### Mini Self-Check (write short answers in `day-12-revision.md`)
+1) Which 3 commands save you the most time right now, and why?  
+2) How do you check if a service is healthy? List the exact 2–3 commands you’d run first.  
+3) How do you safely change ownership and permissions without breaking access? Give one example command.  
+4) What will you focus on improving in the next 3 days?
+
+#### Suggested Flow (30–45 minutes)
+- 10 min: skim notes from each day, update Day 01 plan if needed.  
+- 15–20 min: rerun a tiny hands-on set (process check, service check, file permission change).  
+- 5–10 min: write the self-check answers and key takeaways.
+
+#### Tips
+- Keep it light—this is about retention, not new concepts.  
+- If something felt shaky this week (e.g., `chmod` numbers, `journalctl` flags), practice that specifically.  
+- Small wins: one screenshot of a command rerun + 5 bullet notes is enough.
+
+#### Submission
+1. Navigate to `2026/day-12/`  
+2. Add `day-12-revision.md` with your bullets and answers  
+3. Commit and push to your fork
+
+#### Learn in Public
+Post 2–3 lines on what you reinforced today and one command you now remember confidently.
+
+Use hashtags:  
+#90DaysOfDevOps  
+#DevOpsKaJosh  
+#TrainWithShubham
+
+Happy Learning  
+**TrainWithShubham**
+
+##### Notes: day-12-revision
+
+in day one i have decide why i am learn devops what is devops and how to get a devops engineer job
+
+systemctl is check the system services
+journalctl check the log status
+
+chmod change the file and directory permission
+chown change to group and owner
+ls -l check the long list permission owner and group
+
+## 21. Hands-on Project — Day 12: IAM Users & Policies
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **IAM Users & Policies**.  
+You’ll create IAM users and groups, attach **least-privilege** managed/inline policies, and enforce security controls like **MFA-required** access — all with Terraform.
+
+#### 🎯 Learning Goals
+- Model **users, groups, and policies** in Terraform.  
+- Write **least-privilege** policies with `aws_iam_policy_document`.  
+- Attach **managed** and **inline** policies to groups/users.  
+- Enforce **MFA** with a deny-without-MFA guardrail.  
+- Output safe credentials (optional) and clean up responsibly.
+
+#### 🛠️ Lab Setup & Tasks
+```bash
+terraform -chdir=terraform init
+terraform -chdir=terraform plan -var="user_name=devops.student" -var="target_bucket_arn=arn:aws:s3:::my-logs-bucket"
+terraform -chdir=terraform apply -auto-approve -var="user_name=devops.student" -var="target_bucket_arn=arn:aws:s3:::my-logs-bucket"
+```
+
+#### 💡 Challenge
+- Add a **permissions boundary** that limits all custom users to `ReadOnlyAccess`.  
+- Add a **login profile** with password reset + MFA enforcement.  
+- Expand S3 access to multiple buckets or prefixes.
+
+#### ⚠️ Security Notes
+- Prefer **federated** or **role-based** access.  
+- Delete test users/keys after use.
+
+### Files
+
+- [policies/deny_without_mfa_example.json](files/hands-on-projects/policies/deny_without_mfa_example.json)
+- [policies/s3_readonly_example.json](files/hands-on-projects/policies/s3_readonly_example.json)
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

@@ -455,7 +455,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🔄 Day 26 - Weekly Revision: Containerization & CI/CD Pipelines
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -520,6 +520,286 @@ Connecting all these dots—from writing the first Dockerfile to watching an aut
 Automation and optimization compound! I'm feeling far more confident in building scalable, production-ready deployments. 🚀
 
 #90DaysOfDevOps #DevOps #Docker #DockerCompose #GitHubActions #CICD #AWS #CloudComputing #Containerization #Microservices #LearningInPublic #TrainWithShubham
+
+## 19. Challenge Notes — Day 26: Kubernetes Volumes, ConfigMaps, and Secrets
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+[![](https://img.youtube.com/vi/Qc60pavEJFw/0.jpg)](https://www.youtube.com/watch?v=Qc60pavEJFw)
+
+[Watch the video](https://www.youtube.com/watch?v=Qc60pavEJFw)
+
+
+#### 🎯 Objectives
+- Understand the concept of Kubernetes Volumes and their types.
+- Learn how to use ConfigMaps for configuration management.
+- Explore Secrets to manage sensitive data securely.
+
+---
+
+#### 📦 Kubernetes Volumes
+
+Volumes in Kubernetes are used to persist data across container restarts.
+
+##### Why Volumes?
+- Containers are ephemeral.
+- Data stored inside a container is lost if the container crashes or is restarted.
+- Volumes allow data to be shared among containers in a pod and persist beyond container life.
+
+##### Common Volume Types:
+- `emptyDir`: For temporary scratch space shared between containers.
+- `hostPath`: Maps a file or directory from the host node's filesystem into the Pod.
+- `persistentVolumeClaim` (PVC): Used to request storage from a PersistentVolume.
+
+##### Example: `emptyDir`
+```yaml
+volumes:
+  - name: cache-volume
+    emptyDir: {}
+```
+
+---
+
+#### ⚙️ ConfigMaps
+
+ConfigMaps are used to inject configuration data into Pods.
+
+##### Use Cases:
+- Store non-sensitive configuration values (e.g., environment variables, command-line arguments).
+- Decouple configuration from application code.
+
+##### Create ConfigMap:
+```bash
+kubectl create configmap app-config --from-literal=APP_MODE=production
+```
+
+##### Mount into Pod:
+```yaml
+envFrom:
+  - configMapRef:
+      name: app-config
+```
+
+---
+
+#### 🔐 Secrets
+
+Secrets are similar to ConfigMaps but intended for sensitive data like passwords, tokens, or keys.
+
+##### Key Characteristics:
+- Stored in base64-encoded format (not encrypted by default).
+- Must be accessed securely with RBAC and proper usage patterns.
+
+##### Create a Secret:
+```bash
+kubectl create secret generic db-secret --from-literal=username=admin --from-literal=password=secret123
+```
+
+##### Use in Pod:
+```yaml
+env:
+  - name: DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: db-secret
+        key: username
+```
+
+---
+
+#### 🔐 Security Note
+
+While Secrets are stored base64-encoded, this is **not secure encryption**. Use Kubernetes RBAC and tools like HashiCorp Vault for enhanced security in production.
+
+---
+
+#### ✅ Summary
+
+- Volumes persist data beyond container life.
+- ConfigMaps allow external configuration of applications.
+- Secrets manage sensitive data with base64 encoding (and should be protected properly).
+
+---
+
+### Attachments
+
+- [Kubernetes Volumes, ConfigMaps, and Secrets.pdf](Kubernetes%20Volumes%2C%20ConfigMaps%2C%20and%20Secrets.pdf)
+
+## 20. Cohort Practice — Day 26: GitHub CLI: Manage GitHub from Your Terminal
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+
+Every time you switch to the browser to create a PR, check an issue, or manage a repo — you lose context. The **GitHub CLI (`gh`)** lets you do all of that without leaving your terminal. For DevOps engineers, this is essential — especially when you start automating workflows, scripting PR reviews, and managing repos at scale.
+
+---
+
+#### Expected Output
+- A markdown file: `day-26-notes.md` with your observations and answers
+- Add `gh` commands to your `git-commands.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Install and Authenticate
+1. Install the GitHub CLI on your machine
+2. Authenticate with your GitHub account
+3. Verify you're logged in and check which account is active
+4. Answer in your notes: What authentication methods does `gh` support?
+
+---
+
+##### Task 2: Working with Repositories
+1. Create a **new GitHub repo** directly from the terminal — make it public with a README
+2. Clone a repo using `gh` instead of `git clone`
+3. View details of one of your repos from the terminal
+4. List all your repositories
+5. Open a repo in your browser directly from the terminal
+6. Delete the test repo you created (be careful!)
+
+---
+
+##### Task 3: Issues
+1. Create an issue on one of your repos from the terminal — give it a title, body, and a label
+2. List all open issues on that repo
+3. View a specific issue by its number
+4. Close an issue from the terminal
+5. Answer in your notes: How could you use `gh issue` in a script or automation?
+
+---
+
+##### Task 4: Pull Requests
+1. Create a branch, make a change, push it, and create a **pull request** entirely from the terminal
+2. List all open PRs on a repo
+3. View the details of your PR — check its status, reviewers, and checks
+4. Merge your PR from the terminal
+5. Answer in your notes:
+   - What merge methods does `gh pr merge` support?
+   - How would you review someone else's PR using `gh`?
+
+---
+
+##### Task 5: GitHub Actions & Workflows (Preview)
+1. List the workflow runs on any public repo that uses GitHub Actions
+2. View the status of a specific workflow run
+3. Answer in your notes: How could `gh run` and `gh workflow` be useful in a CI/CD pipeline?
+
+(Don't worry if you haven't learned GitHub Actions yet — this is a preview for upcoming days)
+
+---
+
+##### Task 6: Useful `gh` Tricks
+Explore and try these — add the ones you find useful to your `git-commands.md`:
+1. `gh api` — make raw GitHub API calls from the terminal
+2. `gh gist` — create and manage GitHub Gists
+3. `gh release` — create and manage releases
+4. `gh alias` — create shortcuts for commands you use often
+5. `gh search repos` — search GitHub repos from the terminal
+
+---
+
+#### Hints
+- `gh help` and `gh <command> --help` are your best friends
+- Most `gh` commands work with `--repo owner/repo` to target a specific repo
+- Use `--json` flag with most commands to get machine-readable output (useful for scripting)
+- `gh pr create --fill` auto-fills the PR title and body from your commits
+
+---
+
+#### Submission
+1. Add your `day-26-notes.md` to `2026/day-26/`
+2. Update `git-commands.md` with `gh` commands — this completes your Git & GitHub reference from Days 22–26
+3. Push to your fork
+
+---
+
+#### Learn in Public
+
+Share your favorite `gh` commands or a screenshot of creating a PR from the terminal on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 21. Hands-on Project — Day 26: Route53 DNS Records (CloudFront + optional ALB)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Amazon Route 53 DNS** — creating public hosted zones and records that point your domains to **CloudFront** (Day 25) and optionally to an **ALB** (Day 18). We’ll cover **A/AAAA Alias**, **CNAME**, and **TXT** (verification) records, with a clean, repeatable Terraform module.
+
+---
+
+#### 🎯 Learning Goals
+- Create or reuse a **public hosted zone**.
+- Publish **A/AAAA alias** records for **CloudFront** (apex and/or subdomain).
+- (Optional) Publish **A/AAAA alias** records for an **ALB** (e.g., `api.example.com`).
+- Manage **TXT** verification records (e.g., ACM/Email/Google Site Verification).
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```bash
+# 1) Initialize
+terraform -chdir=terraform init
+
+# 2) Plan (replace with your values)
+terraform -chdir=terraform plan   -var='domain_name=example.com'   -var='create_zone=false'   -var='zone_id=Z123EXAMPLE'   -var='site_subdomain="www"'   -var='cloudfront_domain_name=d111111abcdef8.cloudfront.net'   -var='root_apex_alias=true'
+
+# 3) Apply
+terraform -chdir=terraform apply -auto-approve
+
+# 4) Verify
+# - Check Route53 → Hosted Zones → Records
+# - Resolve DNS locally
+dig +short www.example.com
+```
+
+> **Tip**: CloudFront’s hosted zone ID is generally `Z2FDTNDATAQYW2` (provided as default here), but you can override with `cloudfront_zone_id` to be explicit.
+
+**Optional ALB example**
+```bash
+terraform -chdir=terraform plan   -var='create_alb_record=true'   -var='alb_subdomain="api"'   -var='alb_dns_name=day18-alb-123456.us-east-1.elb.amazonaws.com'   -var='alb_zone_id=Z35SXDOTRQ7X7K'  # from your ALB attributes
+```
+
+**TXT verification records**
+```bash
+terraform -chdir=terraform plan   -var='txt_records={"_amazonses.example.com"="random-token","@"]="v=spf1 include:amazonses.com ~all"}'
+```
+
+---
+
+#### 💡 Challenge
+- Add **weighted** or **latency-based** records for active/active across regions.  
+- Use **failover** alias to a static maintenance page on S3/CloudFront.  
+- Wire **ACM DNS validation** records via Terraform (if issuing a new cert).
+
+---
+
+#### ✅ Checklist
+- [ ] Hosted zone exists and is **authoritative** for your domain (NS updated at registrar)  
+- [ ] **A/AAAA alias** records resolve to CloudFront within minutes (TTL)  
+- [ ] Optional **ALB** `api.` subdomain resolves correctly  
+- [ ] TXT verification records present (SPF/ACM/etc.)
+
+---
+
+#### 📌 Commit
+```bash
+git add day26-route53-dns-records
+git commit -m "day26: Route53 DNS — hosted zone + CloudFront/ALB aliases + TXT records"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

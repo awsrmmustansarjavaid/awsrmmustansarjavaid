@@ -743,6 +743,444 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 65: Compliance Tools AWS Config, Security Hub, Trusted Advisor
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 65** of the DevOps 90-Day Challenge!
+Today, we focus on **Continuous Compliance**. In a large cloud, how do you know if your resources follow the rules? We will use **AWS Config**, **Security Hub**, and **Trusted Advisor**.
+
+[![](https://img.youtube.com/vi/placeholder/0.jpg)](https://www.youtube.com)
+
+[Watch the video (Link Pending)]()
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand the concept of **Continuous Compliance**.
+* Set up **AWS Config Rules** to enforce policies (e.g., "S3 Buckets must be private").
+* Use **Security Hub** for a centralized security view.
+* Analyze recommendations from **Trusted Advisor**.
+* Compare Reactive vs Proactive compliance.
+
+---
+
+#### Tools Used
+
+* **AWS Config**
+* **AWS Security Hub**
+* **AWS Trusted Advisor**
+* **AWS CloudTrail** (for auditing)
+
+---
+
+#### Key Concepts
+
+##### 1. AWS Config
+Records the configuration history of your resources. It asks "What changed?" and "Is it compliant?".
+*   **Config Rule**: "Is port 22 open to the world?" If yes, mark as NON-COMPLIANT.
+*   **Remediation**: Automatically close port 22 if detected.
+
+##### 2. AWS Security Hub
+Aggregates alerts (Findings) from multiple services (GuardDuty, Inspector, Macie) into a single dashboard. It checks your account against standards like **CIS AWS Foundations Benchmark** or **PCI DSS**.
+
+##### 3. Trusted Advisor
+Your personal cloud expert. It scans your account and gives recommendations in 5 categories:
+*   **Cost Optimization**
+*   **Performance**
+*   **Security**
+*   **Fault Tolerance**
+*   **Service Limits**
+
+---
+
+#### Key Concepts Applied
+
+| Concept | Example Used |
+| :--- | :--- |
+| **Config Rule** | `s3-bucket-public-read-prohibited` checks if any bucket is public. |
+| **Security Standard** | Enabling **CIS Benchmark Level 1** in Security Hub. |
+| **Trusted Advisor** | Checking for "Idle Load Balancers" to save money. |
+
+---
+
+#### Bonus (Extra Learning)
+
+*   Create a custom Config Rule using **Lambda** (e.g., "Every EC2 instance must have a `CostCenter` tag").
+*   Explore **AWS Audit Manager** for automated evidence collection.
+
+---
+
+#### Congratulations!
+
+You’ve automated your governance! Instead of manually auditing resources once a year, you now have compliance as code running 24/7.
+
+---
+
+#### Try These Next
+
+*   Set up an **SNS Notification** when a resource becomes Non-Compliant.
+*   Use **AWS Organizations** to apply Config Rules across multiple accounts.
+
+### Day 65 - Compliance Tools AWS Config Security Hub Trusted Advisor
+
+In Day 65, we cover AWS compliance and governance tools.
+
+[![](https://via.placeholder.com/1280x720.png?text=Video+Not+Found)]()
+
+[Watch the video (Link Pending)]()
+
+---
+
+#### Objective
+
+- Continuous compliance with AWS Config
+- Security posture management with AWS Security Hub
+- Cost and performance insights from AWS Trusted Advisor
+- Real-world compliance use cases in DevOps
+
+---
+
+#### Tools Used
+
+* **AWS Trusted Advisor**
+* **AWS Config**
+* **AWS Security Hub**
+
+---
+
+#### Key Concepts
+
+##### 1. Continuous compliance with AWS Config
+
+*   Continuous compliance with AWS Config
+*   (Hands-on demo in video)
+
+##### 2. Security posture management with AWS Security Hub
+
+*   Security posture management with AWS Security Hub
+*   (Hands-on demo in video)
+
+##### 3. Cost and performance insights from AWS Trusted Advisor
+
+*   Cost and performance insights from AWS Trusted Advisor
+*   (Hands-on demo in video)
+
+##### 4. Real-world compliance use cases in DevOps
+
+*   Real-world compliance use cases in DevOps
+*   (Hands-on demo in video)
+
+
+
+---
+
+#### Key Concepts Applied
+
+| Concept | Example Used |
+| :--- | :--- |
+| **Continuous** | Covered in lab | 
+| **Security** | Covered in lab | 
+| **Cost** | Covered in lab | 
+| **Real-world** | Covered in lab | 
+
+
+---
+
+#### Bonus (Extra Learning)
+
+* Explore official documentation for the tools used.
+* Try to implement a variation of the lab.
+
+---
+
+#### Congratulations!
+
+You’ve successfully completed Day 65!
+
+---
+
+#### Try These Next
+
+* Document your learnings on LinkedIn.
+* Share your code on GitHub.
+
+## 19. Cohort Practice — Day 65: Terraform Modules: Build Reusable Infrastructure
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+You have been writing everything in one big `main.tf` file. That works for learning, but in real teams you manage dozens of environments with hundreds of resources. Copy-pasting configs across projects is a recipe for disaster.
+
+Today you learn Terraform modules -- the way to package, reuse, and share infrastructure code. Think of modules as functions in programming. Write once, call many times.
+
+---
+
+#### Expected Output
+- A custom EC2 module you built from scratch
+- A custom security group module wired into the EC2 module
+- A VPC created using the official public registry module
+- A markdown file: `day-65-modules.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Understand Module Structure
+A Terraform module is just a directory with `.tf` files. Create this structure:
+
+```
+terraform-modules/
+  main.tf                    # Root module -- calls child modules
+  variables.tf               # Root variables
+  outputs.tf                 # Root outputs
+  providers.tf               # Provider config
+  modules/
+    ec2-instance/
+      main.tf                # EC2 resource definition
+      variables.tf           # Module inputs
+      outputs.tf             # Module outputs
+    security-group/
+      main.tf                # Security group resource definition
+      variables.tf           # Module inputs
+      outputs.tf             # Module outputs
+```
+
+Create all the directories and empty files. This is the standard layout every Terraform project follows.
+
+**Document:** What is the difference between a "root module" and a "child module"?
+
+---
+
+##### Task 2: Build a Custom EC2 Module
+Create `modules/ec2-instance/`:
+
+1. **`variables.tf`** -- define inputs:
+   - `ami_id` (string)
+   - `instance_type` (string, default: `"t2.micro"`)
+   - `subnet_id` (string)
+   - `security_group_ids` (list of strings)
+   - `instance_name` (string)
+   - `tags` (map of strings, default: `{}`)
+
+2. **`main.tf`** -- define the resource:
+   - `aws_instance` using all the variables
+   - Merge the Name tag with additional tags
+
+3. **`outputs.tf`** -- expose:
+   - `instance_id`
+   - `public_ip`
+   - `private_ip`
+
+Do NOT apply yet -- just write the module.
+
+---
+
+##### Task 3: Build a Custom Security Group Module
+Create `modules/security-group/`:
+
+1. **`variables.tf`** -- define inputs:
+   - `vpc_id` (string)
+   - `sg_name` (string)
+   - `ingress_ports` (list of numbers, default: `[22, 80]`)
+   - `tags` (map of strings, default: `{}`)
+
+2. **`main.tf`** -- define the resource:
+   - `aws_security_group` in the given VPC
+   - Use `dynamic "ingress"` block to create rules from the `ingress_ports` list
+   - Allow all egress
+
+3. **`outputs.tf`** -- expose:
+   - `sg_id`
+
+This is your first time using a `dynamic` block -- it loops over a list to generate repeated nested blocks.
+
+---
+
+##### Task 4: Call Your Modules from Root
+In the root `main.tf`, wire everything together:
+
+1. Create a VPC and subnet directly (or reuse your Day 62 config)
+2. Call the security group module:
+```hcl
+module "web_sg" {
+  source        = "./modules/security-group"
+  vpc_id        = aws_vpc.main.id
+  sg_name       = "terraweek-web-sg"
+  ingress_ports = [22, 80, 443]
+  tags          = local.common_tags
+}
+```
+
+3. Call the EC2 module -- deploy **two instances** with different names using the same module:
+```hcl
+module "web_server" {
+  source             = "./modules/ec2-instance"
+  ami_id             = data.aws_ami.amazon_linux.id
+  instance_type      = "t2.micro"
+  subnet_id          = aws_subnet.public.id
+  security_group_ids = [module.web_sg.sg_id]
+  instance_name      = "terraweek-web"
+  tags               = local.common_tags
+}
+
+module "api_server" {
+  source             = "./modules/ec2-instance"
+  ami_id             = data.aws_ami.amazon_linux.id
+  instance_type      = "t2.micro"
+  subnet_id          = aws_subnet.public.id
+  security_group_ids = [module.web_sg.sg_id]
+  instance_name      = "terraweek-api"
+  tags               = local.common_tags
+}
+```
+
+4. Add root outputs that reference module outputs:
+```hcl
+output "web_server_ip" {
+  value = module.web_server.public_ip
+}
+
+output "api_server_ip" {
+  value = module.api_server.public_ip
+}
+```
+
+5. Apply:
+```bash
+terraform init    # Downloads/links the local modules
+terraform plan    # Should show all resources from both module calls
+terraform apply
+```
+
+**Verify:** Two EC2 instances running, same security group, different names. Check the AWS console.
+
+---
+
+##### Task 5: Use a Public Registry Module
+Instead of building your own VPC from scratch, use the official module from the Terraform Registry.
+
+1. Replace your hand-written VPC resources with:
+```hcl
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 5.0"
+
+  name = "terraweek-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["ap-south-1a", "ap-south-1b"]
+  public_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnets = ["10.0.3.0/24", "10.0.4.0/24"]
+
+  enable_nat_gateway = false
+  enable_dns_hostnames = true
+
+  tags = local.common_tags
+}
+```
+
+2. Update your EC2 and SG module calls to reference `module.vpc.vpc_id` and `module.vpc.public_subnets[0]`
+
+3. Run:
+```bash
+terraform init     # Downloads the registry module
+terraform plan
+terraform apply
+```
+
+4. Compare: how many resources did the VPC module create vs your hand-written VPC from Day 62?
+
+**Document:** Where does Terraform download registry modules to? Check `.terraform/modules/`.
+
+---
+
+##### Task 6: Module Versioning and Best Practices
+1. Pin your registry module version explicitly:
+   - `version = "5.1.0"` -- exact version
+   - `version = "~> 5.0"` -- any 5.x version
+   - `version = ">= 5.0, < 6.0"` -- range
+
+2. Run `terraform init -upgrade` to check for newer versions
+
+3. Check the state to see how modules appear:
+```bash
+terraform state list
+```
+Notice the `module.vpc.`, `module.web_server.`, `module.web_sg.` prefixes.
+
+4. Destroy everything:
+```bash
+terraform destroy
+```
+
+**Document:** Write down five module best practices:
+- Always pin versions for registry modules
+- Keep modules focused -- one concern per module
+- Use variables for everything, hardcode nothing
+- Always define outputs so callers can reference resources
+- Add a README.md to every custom module
+
+---
+
+#### Hints
+- `terraform init` must be re-run after adding a new module source
+- Module outputs are accessed as `module.<name>.<output>`
+- `dynamic` blocks use `content {}` inside to define the repeated block
+- Registry modules document all inputs and outputs on registry.terraform.io
+- Local modules use `source = "./modules/<name>"`, registry modules use `source = "<org>/<name>/<provider>"`
+- `terraform get` downloads modules without full init
+
+---
+
+#### Documentation
+Create `day-65-modules.md` with:
+- Your custom module structure (directory tree)
+- The `variables.tf`, `main.tf`, and `outputs.tf` for your EC2 module
+- Root `main.tf` showing how you call both custom and registry modules
+- Screenshot of both EC2 instances running from the same module
+- Comparison: hand-written VPC vs registry VPC module (resources created)
+- Five module best practices in your own words
+
+---
+
+#### Submission
+1. Add `day-65-modules.md` to `2026/day-65/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share on LinkedIn: "Built my first custom Terraform modules today -- EC2 and security group modules called multiple times with different configs. Then replaced 50 lines of VPC code with one registry module. Modules are the key to scalable infrastructure as code."
+
+`#90DaysOfDevOps` `#TerraWeek` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 65: KMS Keys & Encryption
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **KMS Keys & Encryption**.
+
+#### 🎯 Learning Goals
+- Understand the fundamentals of KMS Keys & Encryption.
+- Work through hands-on examples.
+
+#### 🛠️ Tasks
+1. Read the lesson notes here.
+2. Run provided examples or write your own scripts/config.
+3. Commit progress with message: `day65: KMS Keys & Encryption`.
+
+#### 💡 Challenge
+- Extend today’s exercise with an extra feature or edge case.
+
+
 ---
 
 [← Day 64](../day-64/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 66 →](../day-66/README.md)

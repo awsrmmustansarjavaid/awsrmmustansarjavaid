@@ -601,6 +601,328 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 61: APM with Datadog and AWS Integrations
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 61** of the DevOps 90-Day Challenge!
+Today, we dive into **APM (Application Performance Monitoring)**. Sometimes logs and metrics aren't enough—you need to see exactly *where* in the code your application is slow. We will use **Datadog**, a leading observability platform.
+
+[![](https://img.youtube.com/vi/placeholder/0.jpg)](https://www.youtube.com)
+
+[Watch the video (Link Pending)]()
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand the difference between Infrastructure Monitoring and APM.
+* Install the **Datadog Agent** on AWS EC2.
+* Instrument a Python/Node.js app to send Traces to Datadog.
+* Integrate Datadog with **AWS CloudWatch** to pull metrics.
+* Create a **Service Map** to visualize dependencies.
+
+---
+
+#### Tools Used
+
+* **Datadog** (SaaS Platform)
+* **Datadog Agent**
+* **AWS EC2**
+* **Python** (Sample App)
+
+---
+
+#### Key Concepts
+
+##### 1. What is APM?
+Application Performance Monitoring tells you:
+*   **Latency**: How long did the request take?
+*   **Throughput**: How many requests per second?
+*   **Errors**: What percentage of requests failed?
+*   **Saturation**: How full is the queue?
+This is often called the **RED Method** (Rate, Errors, Duration).
+
+##### 2. The Datadog Agent
+A lightweight software installed on your hosts (EC2, Kubernetes Nodes). It collects metrics (CPU/RAM) and acts as a local proxy for Traces sent by your application code.
+
+##### 3. AWS Integration
+Datadog can pull metrics from AWS CloudWatch API (e.g., RDS CPU, Lambda Duration) so you can see your AWS metrics side-by-side with your application traces.
+
+---
+
+#### Key Concepts Applied
+
+| Concept | Example Used |
+| :--- | :--- |
+| **Flame Graph** | A visual breakdown of a request showing that 80% of time was spent in a MySQL query. |
+| **Tagging** | Adding `env:production` and `service:payment-api` tags to filter data easily. |
+| **Monitors** | Creating an alert if `p95 latency > 200ms` for 5 minutes. |
+
+---
+
+#### Bonus (Extra Learning)
+
+*   Set up **Datadog Log Management** to correlate logs with traces (click a trace, see the logs for that exact request).
+*   Explore **Synthetic Monitoring** to ping your API from around the world.
+
+---
+
+#### Congratulations!
+
+You now have enterprise-grade visibility into your application stack. Datadog is a standard tool in many large organizations, so this is a highly employable skill.
+
+---
+
+#### Try These Next
+
+*   Enable **Database Monitoring** to see which SQL queries are the slowest.
+*   Create a custom Dashboard combining EC2 CPU, RDS Connections, and API Latency.
+
+## 19. Cohort Practice — Day 61: Introduction to Terraform and Your First AWS Infrastructure
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+You have been deploying containers, writing CI/CD pipelines, and orchestrating workloads on Kubernetes. But who creates the servers, networks, and clusters underneath? Today you start your Infrastructure as Code journey with Terraform -- the tool that lets you define, provision, and manage cloud infrastructure by writing code.
+
+By the end of today, you will have created real AWS resources using nothing but a `.tf` file and a terminal.
+
+---
+
+#### Expected Output
+- Terraform installed and working on your machine
+- AWS CLI configured with valid credentials
+- An S3 bucket and EC2 instance created and destroyed via Terraform
+- A markdown file: `day-61-terraform-intro.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Understand Infrastructure as Code
+Before touching the terminal, research and write short notes on:
+
+1. What is Infrastructure as Code (IaC)? Why does it matter in DevOps?
+2. What problems does IaC solve compared to manually creating resources in the AWS console?
+3. How is Terraform different from AWS CloudFormation, Ansible, and Pulumi?
+4. What does it mean that Terraform is "declarative" and "cloud-agnostic"?
+
+Write this in your own words -- not copy-pasted definitions.
+
+---
+
+##### Task 2: Install Terraform and Configure AWS
+1. Install Terraform:
+```bash
+# macOS
+brew tap hashicorp/tap
+brew install hashicorp/tap/terraform
+
+# Linux (amd64)
+wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install terraform
+
+# Windows
+choco install terraform
+```
+
+2. Verify:
+```bash
+terraform -version
+```
+
+3. Install and configure the AWS CLI:
+```bash
+aws configure
+# Enter your Access Key ID, Secret Access Key, default region (e.g., ap-south-1), output format (json)
+```
+
+4. Verify AWS access:
+```bash
+aws sts get-caller-identity
+```
+
+You should see your AWS account ID and ARN.
+
+---
+
+##### Task 3: Your First Terraform Config -- Create an S3 Bucket
+Create a project directory and write your first Terraform config:
+
+```bash
+mkdir terraform-basics && cd terraform-basics
+```
+
+Create a file called `main.tf` with:
+1. A `terraform` block with `required_providers` specifying the `aws` provider
+2. A `provider "aws"` block with your region
+3. A `resource "aws_s3_bucket"` that creates a bucket with a globally unique name
+
+Run the Terraform lifecycle:
+```bash
+terraform init      # Download the AWS provider
+terraform plan      # Preview what will be created
+terraform apply     # Create the bucket (type 'yes' to confirm)
+```
+
+Go to the AWS S3 console and verify your bucket exists.
+
+**Document:** What did `terraform init` download? What does the `.terraform/` directory contain?
+
+---
+
+##### Task 4: Add an EC2 Instance
+In the same `main.tf`, add:
+1. A `resource "aws_instance"` using AMI `ami-0f5ee92e2d63afc18` (Amazon Linux 2 in ap-south-1 -- use the correct AMI for your region)
+2. Set instance type to `t2.micro`
+3. Add a tag: `Name = "TerraWeek-Day1"`
+
+Run:
+```bash
+terraform plan      # You should see 1 resource to add (bucket already exists)
+terraform apply
+```
+
+Go to the AWS EC2 console and verify your instance is running with the correct name tag.
+
+**Document:** How does Terraform know the S3 bucket already exists and only the EC2 instance needs to be created?
+
+---
+
+##### Task 5: Understand the State File
+Terraform tracks everything it creates in a state file. Time to inspect it.
+
+1. Open `terraform.tfstate` in your editor -- read the JSON structure
+2. Run these commands and document what each returns:
+```bash
+terraform show                          # Human-readable view of current state
+terraform state list                    # List all resources Terraform manages
+terraform state show aws_s3_bucket.<name>   # Detailed view of a specific resource
+terraform state show aws_instance.<name>
+```
+
+3. Answer these questions in your notes:
+   - What information does the state file store about each resource?
+   - Why should you never manually edit the state file?
+   - Why should the state file not be committed to Git?
+
+---
+
+##### Task 6: Modify, Plan, and Destroy
+1. Change the EC2 instance tag from `"TerraWeek-Day1"` to `"TerraWeek-Modified"` in your `main.tf`
+2. Run `terraform plan` and read the output carefully:
+   - What do the `~`, `+`, and `-` symbols mean?
+   - Is this an in-place update or a destroy-and-recreate?
+3. Apply the change
+4. Verify the tag changed in the AWS console
+5. Finally, destroy everything:
+```bash
+terraform destroy
+```
+6. Verify in the AWS console -- both the S3 bucket and EC2 instance should be gone
+
+---
+
+#### Hints
+- S3 bucket names must be globally unique -- use something like `terraweek-<yourname>-2026`
+- AMI IDs are region-specific -- search "Amazon Linux 2 AMI" in your region's EC2 launch wizard
+- `terraform fmt` auto-formats your `.tf` files -- run it before committing
+- `terraform validate` checks for syntax errors without connecting to AWS
+- The `.terraform/` directory contains downloaded provider plugins
+- Add `*.tfstate`, `*.tfstate.backup`, and `.terraform/` to your `.gitignore`
+
+---
+
+#### Documentation
+Create `day-61-terraform-intro.md` with:
+- IaC explanation in your own words (3-4 sentences)
+- Screenshot of `terraform apply` creating your S3 bucket and EC2 instance
+- Screenshot of the resources in the AWS console
+- What each Terraform command does (init, plan, apply, destroy, show, state list)
+- What the state file contains and why it matters
+
+---
+
+#### Submission
+1. Add `day-61-terraform-intro.md` to `2026/day-61/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share on LinkedIn: "Started the TerraWeek Challenge -- installed Terraform, created my first S3 bucket and EC2 instance using code, and destroyed it all with one command. Infrastructure as Code just clicked."
+
+`#90DaysOfDevOps` `#TerraWeek` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-61-terraform-intro
+
+Task 1: Understand Infrastructure as Code
+==========================================
+What is Infrastructure as Code (IaC)? Why does it matter in DevOps?
+--------------------------------------------------------------------
+-> infrastructure as code (iac) is a modern it practives that automatically manages and sets up technology a modern IT practice that automatically manages and sets up technology resources (like servers, networks, and databases) using machine-readable definition files, instead of manually configuring them through a graphic interface or physical hardware.
+
+
+-> The Manual Way: A system administrator logs into a cloud provider's dashboard, clicks buttons, and manually types in settings to create a virtual server.
+-> The IaC Way: A developer writes a text file that lists all the needed ingredients (e.g., "give me 2 servers, a firewall, and 2 gigabytes of memory"). An IaC tool reads this file and builds the exact environment automatically.
+
+DevOps is a cultural and technical philosophy that unites software developers and IT operations teams to deliver software faster. IaC is a cornerstone of DevOps for several key reasons
+
+- Version control
+- consistency
+- speed and scalability
+- seamless ci/cd
+
+What problems does IaC solve compared to manually creating resources in the AWS console?
+----------------------------------------------------------------------------------------
+-> Infrastructure as Code (IaC) is the practice of managing cloud resources using machine-readable configuration files rather than manual clicks. It solves major problems like human error, deployment delays, and "configuration drift" (where manual tweaks over time cause differences between development and production environments).
+
+1. Replicating Exact EnvironmentsManual Console: You have to click through menus over and over, which is tedious and risks missing a step when setting up copies like Development, Testing, and Production.IaC: You write the setup down in a text file. You can deploy this exact same "blueprint" across different AWS accounts or regions with a single command, ensuring all environments are 100% identical.
+2. Eliminating Human ErrorManual Console: It is easy to mistype an IP address, forget to encrypt a storage bucket, or select the wrong server size.IaC: The code is the single source of truth. Once tested and verified, it removes human error and ensures settings are applied perfectly every single time.
+
+How is Terraform different from AWS CloudFormation, Ansible, and Pulumi?
+-------------------------------------------------------------------------
+Terraform is an open-source, declarative Infrastructure as Code (IaC) tool that manages multi-cloud environments using state files.While tools like AWS CloudFormation, Ansible, and Pulumi share similarities, they differ fundamentally in cloud compatibility, language design, state management, and primary purpose
+
+Feature       | Terraform         | AWS CloudFormation | Ansible  | Pulumi
+cloud         |Multi-Cloud
+support       |
+              |
+language      |HCL (Declarative)
+              |
+primary       |Orchestration
+use           |
+              |
+state file    |Yes (Managed)
+
+What does it mean that Terraform is "declarative" and "cloud-agnostic"?
+
+## 20. Hands-on Project — Day 61: tfsec + checkov Integration (Terraform IaC Security)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Static scanning for Terraform with tfsec and Checkov. Quality gate fails on HIGH/CRITICAL. Includes Jenkinsfile, pre-commit hooks, and example insecure Terraform.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [policy/checkov.yaml](files/hands-on-projects/policy/checkov.yaml)
+- [policy/gate.json](files/hands-on-projects/policy/gate.json)
+- [scripts/scan.sh](files/hands-on-projects/scripts/scan.sh)
+- [scripts/summary.py](files/hands-on-projects/scripts/summary.py)
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/providers.tf](files/hands-on-projects/terraform/providers.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
+- [terraform/versions.tf](files/hands-on-projects/terraform/versions.tf)
+
+
 ---
 
 [← Day 60](../day-60/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 62 →](../day-62/README.md)

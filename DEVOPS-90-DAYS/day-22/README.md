@@ -2189,7 +2189,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🐙 Day 22 - Docker Compose Orchestration
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -2284,6 +2284,558 @@ Automating multi-container orchestration with proper health checks and startup o
 🔗 Explore the code & deployment setup here: https://lnkd.in/dX8Cftq5
 
 #90DaysOfDevOps #Docker #DockerCompose #Golang #PostgreSQL #DevOps #Containerization #BackendDevelopment #CloudComputing #LearningInPublic #TrainWithShubham
+
+## 19. Challenge Notes — Day 22: Dockerizing a Sample App
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+[![](https://img.youtube.com/vi/rKm-_VdjTsU/0.jpg)](https://www.youtube.com/watch?v=rKm-_VdjTsU)
+
+[Watch the video](https://www.youtube.com/watch?v=rKm-_VdjTsU)
+
+#### 🎯 Objective
+
+Learn how to Dockerize a full-stack application (Frontend + Backend) using Docker and run both services using Docker Compose. You’ll also use environment variables to configure the application.
+
+---
+
+#### 🧠 Concepts Covered
+
+- Dockerizing frontend and backend apps  
+- Creating multi-container apps with Docker Compose  
+- Using `.env` files for configuration  
+- Building custom Dockerfiles for each service  
+- Container-to-container networking in Docker
+
+---
+
+#### 🧩 Project Structure
+
+```
+
+dockerized-app/
+├── backend/
+│   ├── server.js
+│   ├── package.json
+│   └── Dockerfile
+├── frontend/
+│   ├── index.html
+│   ├── server.js
+│   ├── package.json
+│   └── Dockerfile
+├── .env
+├── docker-compose.yml
+└── README.md
+
+````
+
+---
+
+#### 🧪 Lab Steps
+
+##### Step 1: Backend Setup (Node.js + Express)
+
+**backend/server.js**
+```js
+const express = require('express');
+const app = express();
+const PORT = process.env.BACKEND_PORT || 4000;
+
+app.get('/api', (req, res) => {
+  res.json({ message: 'Hello from Backend API!' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Backend server running on port ${PORT}`);
+});
+````
+
+**backend/package.json**
+
+```json
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+```
+
+**backend/Dockerfile**
+
+```Dockerfile
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 4000
+
+CMD ["npm", "start"]
+```
+
+---
+
+##### 🌐 Step 2: Frontend Setup (Express Static Server)
+
+**frontend/index.html**
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Frontend</title>
+  </head>
+  <body>
+    <h1>Hello from Frontend!</h1>
+    <script>
+      fetch('/api')
+        .then(res => res.json())
+        .then(data => {
+          document.body.innerHTML += `<p>${data.message}</p>`;
+        });
+    </script>
+  </body>
+</html>
+```
+
+**frontend/server.js**
+
+```js
+const express = require('express');
+const fetch = require('node-fetch');
+const app = express();
+const PORT = process.env.FRONTEND_PORT || 3000;
+
+app.use(express.static(__dirname));
+
+app.get('/api', async (req, res) => {
+  const backendUrl = process.env.BACKEND_URL || 'http://localhost:4000/api';
+  try {
+    const response = await fetch(backendUrl);
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to connect to backend' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Frontend running on port ${PORT}`);
+});
+```
+
+**frontend/package.json**
+
+```json
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.7"
+  }
+}
+```
+
+**frontend/Dockerfile**
+
+```Dockerfile
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+---
+
+##### ⚙️ Step 3: Docker Compose Setup
+
+**docker-compose.yml**
+
+```yaml
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "${BACKEND_PORT}:4000"
+    environment:
+      - BACKEND_PORT=${BACKEND_PORT}
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "${FRONTEND_PORT}:3000"
+    environment:
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - BACKEND_URL=http://backend:4000/api
+    depends_on:
+      - backend
+```
+
+---
+
+##### 🔐 Step 4: .env File
+
+**.env**
+
+```
+BACKEND_PORT=4000
+FRONTEND_PORT=3000
+```
+
+---
+
+##### ▶️ Step 5: Run the App
+
+```bash
+docker compose up -d --build
+```
+
+Visit the frontend:
+
+```
+http://localhost:3000
+```
+
+You should see a message from the backend displayed on the page.
+
+---
+
+##### Step 6: Stop and Clean Up
+
+```bash
+docker compose down
+docker image prune -f
+```
+
+---
+
+#### Extra Useful Docker Commands
+
+```bash
+docker logs <container_id>           # Show logs
+docker inspect <container_id>        # View container metadata
+docker exec -it <container_id> bash  # Access container shell
+docker stats                         # Real-time container metrics
+```
+
+---
+
+#### Summary
+
+✅ Built a full-stack app with backend and frontend
+✅ Wrote Dockerfiles for both services
+✅ Used Docker Compose for orchestration
+✅ Configured with .env file
+✅ Connected services using internal Docker networking
+
+## 20. Cohort Practice — Day 22: Introduction to Git: Your First Repository
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+
+Today marks the beginning of your Git journey. Git is the backbone of modern DevOps — every tool, pipeline, and workflow revolves around version control. Before diving into advanced concepts, you need to get comfortable with the basics by doing.
+
+You will:
+- Understand what Git is and why it matters
+- Set up your first Git repository from scratch
+- Start building a living document of Git commands
+
+---
+
+#### Expected Output
+- A local Git repository with a clean commit history
+- A file called `git-commands.md` that you will keep updating in future days
+- A file called `day-22-notes.md` with your answers
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Install and Configure Git
+1. Verify Git is installed on your machine
+2. Set up your Git identity — name and email
+3. Verify your configuration
+
+---
+
+##### Task 2: Create Your Git Project
+1. Create a new folder called `devops-git-practice`
+2. Initialize it as a Git repository
+3. Check the status — read and understand what Git is telling you
+4. Explore the hidden `.git/` directory — look at what's inside
+
+---
+
+##### Task 3: Create Your Git Commands Reference
+1. Create a file called `git-commands.md` inside the repo
+2. Add the Git commands you've used so far, organized by category:
+   - **Setup & Config**
+   - **Basic Workflow**
+   - **Viewing Changes**
+3. For each command, write:
+   - What it does (1 line)
+   - An example of how to use it
+
+---
+
+##### Task 4: Stage and Commit
+1. Stage your file
+2. Check what's staged
+3. Commit with a meaningful message
+4. View your commit history
+
+---
+
+##### Task 5: Make More Changes and Build History
+1. Edit `git-commands.md` — add more commands as you discover them
+2. Check what changed since your last commit
+3. Stage and commit again with a different, descriptive message
+4. Repeat this process at least **3 times** so you have multiple commits in your history
+5. View the full history in a compact format
+
+---
+
+##### Task 6: Understand the Git Workflow
+Answer these questions in your own words (add them to a `day-22-notes.md` file):
+1. What is the difference between `git add` and `git commit`?
+2. What does the **staging area** do? Why doesn't Git just commit directly?
+3. What information does `git log` show you?
+4. What is the `.git/` folder and what happens if you delete it?
+5. What is the difference between a **working directory**, **staging area**, and **repository**?
+
+---
+
+#### Ongoing Task
+
+**Keep updating `git-commands.md` every day** as you learn new Git commands in the upcoming days. This will become your personal Git reference. Maintain a clean commit history — one commit per update with a clear message.
+
+---
+
+#### Hints
+- All you need today are about 8-10 Git commands — Google them, try them, break things
+- Read what `git status` tells you — it's your best friend
+- Use `man git-<command>` or `git <command> --help` to explore
+
+---
+
+#### Submission
+1. Share a screenshot of your `git log --oneline` output showing multiple commits
+2. Add your `day-22-notes.md` to `2026/day-22/`
+3. Commit and push to your fork
+4. Add your submission for Community Builder of the week on discord
+
+---
+
+#### Learn in Public
+
+Share your first Git repo and commit history on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-22-notes
+
+##### Task 1: Install and Configure Git
+1. Verify Git is installed on your machine
+- git --version
+
+2. Set up your Git identity — name and email
+git config --global user.name "Bijaya-423"
+git config --global user.email "bijayakumarjena1507@gmail.com"
+
+3. Verify your configuration
+git config --global user.name
+git config --global user.email
+
+##### Task 2: Create Your Git Project
+1. Create a new folder called `devops-git-practice`
+2. Initialize it as a Git repository
+git init
+
+3. Check the status — read and understand what Git is telling you
+git status
+untracked file 
+git add file_name to stage the file
+git commit -m "comment" to stage to tracked file
+
+4. Explore the hidden `.git/` directory — look at what's inside
+it contains
+HEAD 
+config
+description
+hooks 
+info
+objects
+refs
+
+
+##### Task 3: Create Your Git Commands Reference
+1. Create a file called `git-commands.md` inside the repo
+2. Add the Git commands you've used so far, organized by category:
+   - **Setup & Config**
+   - **Basic Workflow**
+   - **Viewing Changes**
+3. For each command, write:
+   - What it does (1 line)
+   - An example of how to use it
+
+
+git --version
+git config --global user.email "bijayakumarjena1507@gmail.com"
+git config --global user.name "Bijaya-423"
+
+git init
+git add file_name
+git commit -m "message"
+
+
+git clone git_repo_url - to download the remote repo to local
+
+git status 0 check the untracked staged and tracked
+
+git diff --staged - shows changes that have been staged for commit 
+git log - display commit history
+
+
+git log --oneline - display a compact one line commit history
+
+##### Task 4: Stage and Commit
+1. Stage your file
+2. Check what's staged
+3. Commit with a meaningful message
+4. View your commit history
+
+
+git add git-command.md
+
+git status
+Changes to be committed:
+  new file:   git-commands.md
+  
+git commit -m "Add git commands cheat sheet"
+[master abc1234] Add Git commands cheat sheet
+ 1 file changed, 100 insertions(+)
+ create mode 100644 git-commands.md
+
+git log 
+commit abc123456789
+Author: Your Name bijayakumarjena1507@gmail.com
+
+    Add Git commands cheat sheet
+
+
+
+git add moves thr changes from the working directory to dtaging
+
+git commit save the stage chnage to permananetly
+
+##### Notes: git-commands
+
+### Files
+
+- [devops-git-practice](files/cohort-2026/devops-git-practice)
+
+## 21. Hands-on Project — Day 22: ElastiCache (Redis) with Terraform
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Provision Amazon ElastiCache for Redis** using Terraform with production-minded defaults: **subnet group in private subnets**, **replication group** (Multi-AZ with automatic failover), **encryption in-transit/at-rest**, **AUTH token**, and **least-privilege** security group rules from your app tier.
+
+This module plugs into:
+- **Day 14** VPC & subnets (**private** subnets for Redis)
+- **Day 16** Security Groups (allow Redis 6379 from app SG)
+- Optional: **Day 19** ASG (app nodes connect to Redis endpoint)
+
+---
+
+#### 🎯 Learning Goals
+- Create a **Subnet Group** for ElastiCache in private subnets.  
+- Provision a **Redis Replication Group** with Multi‑AZ & automatic failover.  
+- Enable **TLS (in-transit)** and **at-rest** encryption + **AUTH token**.  
+- Expose a **single discovery endpoint** for applications.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```bash
+# 1) Initialize
+terraform -chdir=terraform init
+
+# 2) Plan (replace with your values)
+terraform -chdir=terraform plan   -var='vpc_id=vpc-0123'   -var='private_subnet_ids=["subnet-a","subnet-b"]'   -var='app_security_group_ids=["sg-app123"]'   -var='node_type=cache.t3.micro'   -var='num_cache_clusters=2'   -var='multi_az_enabled=true'   -var='automatic_failover_enabled=true'
+
+# 3) Apply
+terraform -chdir=terraform apply -auto-approve   -var='vpc_id=vpc-0123'   -var='private_subnet_ids=["subnet-a","subnet-b"]'   -var='app_security_group_ids=["sg-app123"]'
+
+# 4) Retrieve connection details
+terraform -chdir=terraform output
+# Use primary_endpoint_address for writes, reader_endpoint_address for reads (if provided).
+```
+
+**Notes**
+- TLS is **enabled** by default. Your app client must support `rediss://` or TLS options.  
+- An **AUTH token** is generated unless you pass your own via `auth_token`.  
+- For cluster-mode enabled (sharding), set `cluster_mode_enabled=true` and adjust shard/replica counts.
+
+---
+
+#### 💡 Challenge
+- Switch to **Cluster Mode Enabled** (sharded) with `num_node_groups` and `replicas_per_node_group`.  
+- Add **parameter group** overrides (e.g., `maxmemory-policy allkeys-lru`).  
+- Attach **CloudWatch Alarms** for CPU, memory, and evictions.
+
+---
+
+#### ✅ Checklist
+- [ ] Private **subnet group** and **SG** restricted to app tier  
+- [ ] **Multi‑AZ** + **automatic failover** (replication group)  
+- [ ] **TLS** and **AUTH token** enabled  
+- [ ] App connects via the **primary endpoint**
+
+---
+
+#### 📌 Commit
+```bash
+git add day22-elasticache-redis
+git commit -m "day22: ElastiCache Redis replication group (TLS, AUTH token, Multi-AZ) with Terraform"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

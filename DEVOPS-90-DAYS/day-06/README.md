@@ -315,7 +315,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🌐 Day 06 - Networking, AWS VPC & Shell Scripting Projects
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -777,6 +777,555 @@ Next, I will continue exploring AWS services, cloud architecture, infrastructure
 🛠️ Automated Backup Script
 📧 Website Monitoring with Email Alerts
 ⏰ Cron Job Automation
+
+## 19. Challenge Notes — Day 6: Linux Basics and Commands for DevOps
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### 1. What is Linux?
+Linux is a Unix-like operating system kernel initially developed by Linus Torvalds in 1991. It is widely used in servers, embedded systems, and desktop environments. Linux is known for its stability, security, and flexibility.
+
+
+[![](https://img.youtube.com/vi/ZR7D9k8dBC8/0.jpg)](https://www.youtube.com/watch?v=ZR7D9k8dBC8)
+
+[Watch the video](https://www.youtube.com/watch?v=ZR7D9k8dBC8)
+
+##### Key Features of Linux:
+1. **Open Source**: Free to use, modify, and distribute.
+2. **Multiuser**: Supports multiple users at the same time.
+3. **Multitasking**: Can run multiple processes simultaneously.
+4. **Portability**: Runs on a wide range of hardware.
+5. **Security**: Built-in features for file permissions and user authentication.
+6. **Shell**: Provides a command-line interface (CLI) for interacting with the system.
+
+#### 2. Types of Linux Distributions
+Linux distributions can be broadly classified into the following types based on their origin and package management system:
+
+| Type        | Popular Distros                | Package Manager | Target Audience           |
+|------------|--------------------------------|----------------|---------------------------|
+| Debian     | Ubuntu, Mint, Kali, MX Linux  | apt, dpkg      | Desktop, Server, Security |
+| Red Hat    | RHEL, CentOS, Fedora, Rocky  | yum, dnf, rpm  | Enterprise, Servers       |
+| Arch       | Arch, Manjaro, EndeavourOS    | pacman        | Advanced users, Customization |
+| Gentoo     | Gentoo, Calculate, Sabayon   | emerge        | Power users, Custom builds |
+| Slackware  | Slackware, Salix, Zenwalk    | slackpkg      | Minimalist, Unix-like      |
+| Independent| Alpine, Clear, Solus, NixOS  | Varies        | Various specialized use cases |
+
+#### 3. Linux Directory Structure
+The Linux file system follows a hierarchical structure starting from the root (/). Here’s an overview of the most important directories:
+
+| Directory | Description |
+|-----------|-------------|
+| /        | Root directory. All files and directories start here. |
+| /bin     | Essential binaries and commands. |
+| /boot    | Boot loader files. |
+| /dev     | Device files (e.g., disk drives, USB). |
+| /etc     | Configuration files and scripts. |
+| /home    | User home directories. |
+| /lib     | Shared libraries and kernel modules. |
+| /mnt     | Temporary mount point for filesystems. |
+| /opt     | Optional software packages. |
+| /proc    | Kernel and process files. |
+| /root    | Home directory of the root user. |
+| /sbin    | System administration binaries. |
+| /tmp     | Temporary files. |
+| /usr     | User-related programs and data. |
+| /var     | Variable data files (e.g., logs, cache). |
+
+#### 4. Linux Shell
+A shell is a command interpreter that allows users to interact with the operating system. The most common shell in Ubuntu is Bash (Bourne Again SHell). To check the current shell, use:
+```bash
+echo $SHELL
+```
+
+#### 5. Basic Linux Commands
+
+##### Viewing the Current Directory
+```bash
+pwd  # Prints the current working directory
+```
+
+##### Listing Files and Directories
+```bash
+ls  # Displays a list of files and directories
+```
+**Options:**
+- `ls -l` - Long listing format with file permissions.
+- `ls -a` - Shows hidden files.
+- `ls -lh` - Human-readable file sizes.
+- `ls -R` - Lists directories and subdirectories recursively.
+
+##### Changing Directories
+```bash
+cd /path/to/directory  # Changes the current directory
+```
+Examples:
+- `cd /home/user` - Moves to the user's home directory.
+- `cd ..` - Moves one level up in the directory hierarchy.
+- `cd ~` - Moves to the home directory.
+- `cd -` - Switches to the previous directory.
+
+#### 6. File and Directory Operations
+
+##### Creating a Directory
+```bash
+mkdir myfolder  # Creates a new directory named "myfolder"
+```
+Options:
+- `mkdir -p /path/to/new/folder` - Creates parent directories if they do not exist.
+
+##### Removing a Directory
+```bash
+rmdir myfolder  # Removes an empty directory
+```
+Options:
+- `rm -r myfolder` - Removes a directory and its contents recursively.
+- `rm -rf myfolder` - Forcefully deletes a directory and all its contents.
+
+##### Creating a File
+```bash
+touch file.txt  # Creates an empty file named "file.txt"
+```
+
+##### Viewing File Content
+```bash
+cat file.txt  # Displays the content of a file
+```
+Other Commands:
+- `more file.txt` - Shows content page by page.
+- `less file.txt` - Similar to "more" but allows backward navigation.
+- `head -n 5 file.txt` - Shows the first 5 lines.
+- `tail -n 5 file.txt` - Shows the last 5 lines.
+- `tail -f file.txt` - Monitors the file in real-time.
+
+##### Copying Files and Directories
+```bash
+cp file1.txt file2.txt  # Copies "file1.txt" to "file2.txt"
+```
+Options:
+- `cp -r dir1 dir2` - Copies a directory and its contents recursively.
+- `cp -i file1.txt file2.txt` - Prompts before overwriting.
+
+##### Moving or Renaming Files
+```bash
+mv file.txt /path/to/destination/  # Moves the file to the specified destination
+```
+Options:
+- `mv file1.txt file2.txt` - Renames the file.
+
+##### Deleting Files
+```bash
+rm file.txt  # Removes a file
+```
+Options:
+- `rm -i file.txt` - Prompts before deleting.
+- `rm -f file.txt` - Force deletes without prompt.
+
+#### 7. File Permissions and Ownership
+
+##### Viewing Permissions
+```bash
+ls -l  # Displays file permissions in the long listing format
+```
+
+##### Changing Permissions
+```bash
+chmod 755 file.txt  # Full access for owner, read & execute for others
+chmod 644 file.txt  # Read & write for owner, read-only for others
+chmod +x script.sh  # Add execute permission for everyone
+```
+
+##### Changing Ownership
+```bash
+chown user:group file.txt  # Change file ownership
+```
+Example:
+```bash
+sudo chown john file.txt  # Change owner to 'john'
+sudo chown john:developers file.txt  # Change owner to 'john' and group to 'developers'
+```
+
+##### Recursively Change Permissions
+```bash
+chmod -R 755 /var/www/html  # Sets permissions for all files & directories under /var/www/html
+sudo chown -R john:developers /home/john/  # Changes owner to john and group to developers
+```
+
+#### 8. Disk and Storage Management
+
+##### Checking Disk Usage
+```bash
+df -h  # Displays disk space usage in a human-readable format
+```
+
+##### Checking Directory Size
+```bash
+du -sh /path/to/directory  # Shows the size of a directory
+```
+
+### Essential Linux Commands
+
+#### 1. File and Directory Management
+```sh
+ls          # List files and directories
+ls -l       # Detailed list with permissions, owner, size, etc.
+ls -a       # Show hidden files
+pwd         # Print working directory
+cd /path    # Change directory
+mkdir dir   # Create a directory
+rmdir dir   # Remove an empty directory
+rm file.txt # Remove a file
+rm -r dir   # Remove directory and its contents
+cp file1 file2  # Copy a file
+cp -r dir1 dir2 # Copy directory and its contents
+mv file1 file2  # Move or rename a file
+find / -name "file.txt"  # Search for a file by name
+locate file.txt # Find file using locate database
+```
+
+#### 2. File Permissions & Ownership
+```sh
+chmod 755 file.txt   # Set file permissions using numeric mode
+chmod u+x file.txt   # Add execute permission for the owner
+chmod g-w file.txt   # Remove write permission for the group
+chmod o+r file.txt   # Add read permission for others
+chown user:group file.txt   # Change file ownership
+chown -R user:group /dir  # Change ownership recursively
+```
+
+#### 3. Viewing & Editing Files
+```sh
+cat file.txt   # Display file contents
+tac file.txt   # Display file in reverse
+less file.txt  # View file one page at a time
+head -n 10 file.txt  # Show first 10 lines
+tail -n 10 file.txt  # Show last 10 lines
+touch file.txt  # Create a new empty file
+nano file.txt   # Edit file in Nano editor
+vim file.txt    # Edit file in Vim editor
+```
+
+#### 4. User & Group Management
+```sh
+whoami         # Show current user
+who            # Show logged-in users
+id             # Show user ID and group ID
+adduser user   # Create a new user
+userdel -r user # Delete a user
+passwd user    # Change password
+groupadd group # Create a group
+usermod -aG group user # Add user to a group
+groups user    # Show user groups
+```
+
+#### 5. Process Management
+```sh
+ps aux         # Show running processes
+top            # Show active processes
+kill PID       # Kill a process by PID
+killall process # Kill all processes by name
+nohup command & # Run command in background
+jobs           # Show background jobs
+fg             # Bring job to foreground
+bg             # Resume background job
+```
+
+#### 6. Disk Usage & Management
+```sh
+df -h          # Show disk usage
+du -sh /path   # Show directory size
+mount /dev/sdX /mnt  # Mount a device
+umount /mnt    # Unmount a device
+fdisk -l       # Show partitions
+mkfs.ext4 /dev/sdX  # Format a partition
+fsck /dev/sdX  # Check and repair filesystem errors
+```
+
+#### 7. Networking Commands
+```sh
+ifconfig       # Show IP address
+ip a           # Show network interfaces
+ping google.com # Check connectivity
+netstat -tulnp  # Show open ports
+traceroute google.com # Show route to host
+wget URL       # Download file
+curl -O URL    # Download file
+scp file user@host:/path # Secure copy
+rsync -avz source/ user@host:/path # Sync files
+```
+
+#### 8. Package Management
+##### Debian-based (Ubuntu, Debian)
+```sh
+apt update           # Update package list
+apt upgrade          # Upgrade all packages
+apt install package  # Install package
+apt remove package   # Remove package
+dpkg -i package.deb  # Install a .deb package
+dpkg -r package      # Remove a .deb package
+```
+
+##### RHEL-based (CentOS, Fedora)
+```sh
+yum update           # Update packages
+yum install package  # Install package
+yum remove package   # Remove package
+rpm -ivh package.rpm # Install a .rpm package
+rpm -e package       # Remove a .rpm package
+```
+
+#### 9. Archive & Compression
+```sh
+tar -cvf archive.tar file  # Create tar archive
+tar -xvf archive.tar       # Extract tar archive
+tar -cvzf archive.tar.gz file # Create compressed archive
+tar -xvzf archive.tar.gz   # Extract compressed archive
+zip archive.zip file       # Create zip file
+unzip archive.zip          # Extract zip file
+```
+
+#### 10. System Monitoring & Logs
+```sh
+uptime         # Show system uptime
+free -h        # Show memory usage
+dmesg          # View kernel logs
+journalctl -xe # View system logs
+tail -f /var/log/syslog # View logs in real-time
+```
+
+#### 11. Shutdown & Reboot
+```sh
+shutdown -h now   # Shutdown system immediately
+shutdown -r now   # Reboot system immediately
+reboot           # Reboot system
+halt             # Stop system
+poweroff         # Power off system
+```
+
+### Attachments
+
+- [Linux Basic.pdf](Linux%20Basic.pdf)
+
+## 20. Cohort Practice — Day 6: Linux Fundamentals: Read and Write Text Files
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+This is a **continuation of Day 05**, but much simpler.
+
+Today’s goal is to **practice basic file read/write** using only fundamental commands.
+
+You will create a small text file and practice:
+- Creating a file
+- Writing text to a file
+- Appending new lines
+- Reading the file back
+
+Keep it basic and repeatable.
+
+
+---
+
+#### Expected Output
+By the end of today, you should have:
+
+- the new created files
+- A markdown file named:  
+  `file-io-practice.md`
+
+or
+
+- A hand written practice note (Recommended)
+
+Your note should include the commands you ran and what they did.
+
+---
+
+#### Guidelines
+Follow these rules while creating your practice note:
+
+- Create a file named `notes.txt`
+- Write 3 lines into the file using **redirection** (`>` and `>>`)
+- Use **`cat`** to read the full file
+- Use **`head`** and **`tail`** to read parts of the file
+- Use **`tee`** once to write and display at the same time
+- Keep it short (8–12 lines total in the file)
+
+Suggested command flow:
+1. `touch notes.txt`
+2. `echo "Line 1" > notes.txt`
+3. `echo "Line 2" >> notes.txt`
+4. `echo "Line 3" | tee -a notes.txt`
+5. `cat notes.txt`
+6. `head -n 2 notes.txt`
+7. `tail -n 2 notes.txt`
+
+---
+
+#### Resources
+Use these docs to understand the commands:
+
+- `touch` (create an empty file) 
+- `cat` (read full file) 
+- `head` and `tail` (read parts of a file) 
+- `tee` (write and display at the same time)
+
+---
+
+#### Why This Matters for DevOps
+Reading and writing files is a daily task in DevOps.
+
+Logs, configs, and scripts are all text files.  
+If you can handle files quickly, you can debug and automate faster.
+
+---
+
+#### Submission
+1. Fork this `90DaysOfDevOps` repository  
+2. Navigate to the `2026/day-06/` folder  
+3. Add your `file-io-practice.md` file  
+4. Commit and push your changes to your fork  
+
+---
+
+#### Learn in Public
+Share your Day 06 progress on LinkedIn:
+
+- Post 2–3 lines on what you learned about file read/write
+- Share one command you will use often
+- Optional: screenshot of your notes
+
+Use hashtags:  
+#90DaysOfDevOps  
+#DevOpsKaJosh  
+#TrainWithShubham
+
+Happy Learning  
+**TrainWithShubham**
+
+##### Notes: file-io-practice
+
+cat - to view the file data
+tee - this command is used to create the file and show the file data in create time
+ls -l | tee file.txt - is is show the how many file and dir present and store it into file.txt
+
+df -h | tee disk.log - show the disk status and store in the disk.log file
+
+tee -a file.txt - because tee is overwrite so -a means append the data do not remove the beforre saved data 
+
+ls -l > file.txt - it is  as tee but tee show which data store in the file but > this command not show(> this is overwrite)
+
+ls -l >> file.txt - is is also as tee but do not show it can append the data do not remove the before saved data
+
+touch file_name - it can create the empty file
+echo - it is use to print the data
+
+cat - is used to view the saved data
+
+
+vim - is the text editor
+i , a , I, A - is used to insert mode
+esc - to command mode
+:wq - to save and quit 
+:q! - without save quit
+ 
+mkdir - to create the dir
+mkdir dir1 dir2 dir3 - to create multiple directory
+mkdir -p A/B/C - to create the path of the directory
+mkdir dir{1..10} - to create the number of directory
+
+touch file1 file2 file3 - to create the 3 file 
+touch file{1..10} to create the multiple number of file
+touch file - to create the single file
+
+df -h - disk space of the file
+free - to memory usage
+top - to cpu
+
+## 21. Hands-on Project — Day 6: Shell Script: Backup & Rotate Logs
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Shell Script: Backup & Rotate Logs**.  
+You’ll build reliable log rotation and backup workflows with pure bash: time-based and size-based rotations, archiving, integrity checks, and restore.
+
+---
+
+#### 🎯 Learning Goals
+- Rotate logs safely (copy‑truncate pattern) without losing writes.
+- Create dated archives and prune old backups with retention policies.
+- Perform size‑based rotation for fast‑growing logs.
+- Verify archive integrity with checksums.
+- Restore logs from an archive confidently.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1. Generate sample logs
+   bash generate_logs.sh ./lab-logs
+
+2. Time-based rotation + archive + retention (days)
+   bash backup_rotate.sh ./lab-logs ./backups 7
+
+3. Size-based rotation (e.g., rotate files > 1MB)
+   bash rotate_by_size.sh ./lab-logs 1
+
+4. Daily archive (one tar.gz per day) + retention
+   bash archive_daily.sh ./lab-logs ./backups/daily 14
+
+5. Verify checksums of archives
+   bash verify_integrity.sh ./backups
+
+6. Restore from a given archive into restore/ dir
+   bash restore_from_archive.sh ./backups <archive-name.tar.gz> ./restore
+```
+
+---
+
+#### 💡 Challenge
+- Add **GZIP level** as an env var (e.g., `GZIP=-9`) and measure size/time tradeoffs.  
+- Encrypt archives using `gpg` (optional) and document restore steps.  
+- Add **exclusions** (e.g., `*.tmp`) via a config file read by the scripts.  
+
+---
+
+#### ✅ Checklist
+- [ ] Rotated logs safely with copy‑truncate  
+- [ ] Created dated archives and pruned by retention  
+- [ ] Rotated by size for large logs  
+- [ ] Verified checksums of all archives  
+- [ ] Restored logs successfully to a sandbox directory  
+
+---
+
+#### 📌 Commit
+Once complete, commit your progress:
+```bash
+git add day06-shell-backup-rotate-logs
+git commit -m "day06: shell log rotation & backup — time/size rotation, archive, retention, verify, restore"
+git push
+```
+
+##### Notes: EXTRAS
+
+### Extras
+- To change gzip level globally: `export GZIP=-9` (before running archive scripts)
+- To exclude patterns, modify `archive_daily.sh` tar command with `--exclude='*.tmp'` etc.
+- Cron idea (daily at 01:05):
+  ```cron
+  5 1 * * * /path/to/backup_rotate.sh /var/log /var/backups 14
+  ```
+
+### Files
+
+- [archive_daily.sh](files/hands-on-projects/archive_daily.sh)
+- [backup_rotate.sh](files/hands-on-projects/backup_rotate.sh)
+- [generate_logs.sh](files/hands-on-projects/generate_logs.sh)
+- [restore_from_archive.sh](files/hands-on-projects/restore_from_archive.sh)
+- [rotate_by_size.sh](files/hands-on-projects/rotate_by_size.sh)
+- [verify_integrity.sh](files/hands-on-projects/verify_integrity.sh)
 
 
 ---

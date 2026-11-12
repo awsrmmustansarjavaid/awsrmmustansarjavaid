@@ -497,7 +497,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — Day 30: 30 Days of Building, 30 Days of Learning 🚀
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 The biggest change in my #90DaysOfDevOps journey isn't the number of tools I've learned — it's the way I think about engineering problems.
 Today marks 30/90 days completed in my DevOps journey with TrainWithShubham.
@@ -560,6 +560,747 @@ DevOps isn't about knowing 50 tools. It's about understanding how those tools wo
 
 📈 30/90 COMPLETE
 Next goal: Kubernetes, deeper AWS, observability, advanced CI/CD, Infrastructure as Code, and more production-grade architectures. ☸️☁️
+
+## 19. Challenge Notes — Day 30: Real-World Kubernetes Deployment Example
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 30** of our Kubernetes journey! Today, we wrap up everything we've learned by deploying a fully functional, multi-tier application using key Kubernetes concepts from Days 23–29.
+
+
+[![](https://img.youtube.com/vi/pAsUEqQ1eKI/0.jpg)](https://www.youtube.com/watch?v=pAsUEqQ1eKI)
+
+[Watch the video](https://www.youtube.com/watch?v=pAsUEqQ1eKI)
+---
+
+#### 🎯 Objective
+
+Deploy a complete **full-stack application** with the following components:
+
+- **Frontend:** React application
+- **Backend:** Express.js server exposing a REST API
+- **Database:** PostgreSQL
+- **Monitoring:** Prometheus + Grafana
+
+---
+
+#### 🗂️ Directory Structure
+
+```
+
+capstone/
+├── k8s/
+│   ├── namespace.yaml
+│   ├── backend-deployment.yaml
+│   ├── backend-service.yaml
+│   ├── frontend-deployment.yaml
+│   ├── frontend-service.yaml
+│   ├── postgres-deployment.yaml
+│   ├── postgres-service.yaml
+│   └── configmap.yaml
+├── frontend/
+│   ├── Dockerfile
+│   ├── .env
+│   └── \[React App Code]
+├── backend/
+│   ├── Dockerfile
+│   └── \[Express App Code]
+└── README.md
+
+````
+
+---
+
+#### 🧰 Tools Used
+
+- **Minikube** (local Kubernetes cluster)
+- **kubectl** (K8s CLI)
+- **Docker** (image builds)
+- **Prometheus & Grafana** (monitoring)
+- **NodePort & Port Forwarding** for local access
+
+---
+
+#### 🔧 Step-by-Step Deployment
+
+##### 1. Start Minikube
+
+```bash
+minikube start --driver=docker
+````
+
+##### 2. Create Namespace
+
+```yaml
+# k8s/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: capstone-app
+```
+
+```bash
+kubectl apply -f k8s/namespace.yaml
+```
+
+---
+
+##### 3. Deploy PostgreSQL
+
+```bash
+kubectl apply -f k8s/postgres-deployment.yaml -n capstone-app
+kubectl apply -f k8s/postgres-service.yaml -n capstone-app
+```
+
+---
+
+##### 4. Deploy Backend
+
+```bash
+kubectl apply -f k8s/backend-deployment.yaml -n capstone-app
+kubectl apply -f k8s/backend-service.yaml -n capstone-app
+```
+
+---
+
+##### 5. Deploy Frontend
+
+```bash
+kubectl apply -f k8s/frontend-deployment.yaml -n capstone-app
+kubectl apply -f k8s/frontend-service.yaml -n capstone-app
+```
+
+---
+
+##### 6. Access Frontend via Port Forwarding
+
+```bash
+kubectl port-forward svc/frontend -n capstone-app 32362:80
+```
+
+Then visit:
+👉 `http://localhost:32362`
+
+---
+
+#### ✅ Verifications
+
+* Access Frontend → “Connected to Backend”
+* Inspect Network Request to `/api` → should return backend message
+* Backend can access PostgreSQL
+* All Pods show `STATUS: Running`
+
+---
+
+#### 📈 Bonus: Monitoring Setup
+
+Install Prometheus & Grafana using Helm (optional):
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
+```
+
+Port forward to access UIs:
+
+```bash
+kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n monitoring 9090
+kubectl port-forward svc/grafana -n monitoring 3000:80
+```
+
+---
+
+#### 🧠 Key Concepts Applied
+
+| Concept         | Example Used                   |
+| --------------- | ------------------------------ |
+| Namespaces      | capstone-app                   |
+| Deployments     | frontend, backend, postgres    |
+| Services        | ClusterIP & NodePort           |
+| ConfigMaps      | React app config via `.env`    |
+| Port Forwarding | frontend exposed on port 32362 |
+| DNS in Cluster  | `http://backend:3000/api`      |
+| Monitoring      | Prometheus scraping services   |
+
+---
+
+#### 🎉 Congratulations!
+
+You’ve now built and deployed a complete application using Kubernetes primitives! This project ties together all you've learned from Pods and Deployments to Services, Networking, ConfigMaps, and Observability.
+
+---
+
+#### 🧪 Try These Next
+
+* Add Ingress with TLS
+* Use PersistentVolumeClaim for PostgreSQL
+* Horizontal Pod Autoscaling
+* CI/CD pipeline with GitHub Actions and `kubectl apply`
+
+---
+
+> *“The best way to learn Kubernetes is to build real things. You just did. Onward!”*
+
+```
+
+---
+```
+
+## 20. Cohort Practice — Day 30: Docker Images & Container Lifecycle
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today's goal is to **understand how images and containers actually work**.
+
+You will:
+- Learn the relationship between images and containers
+- Understand image layers and caching
+- Master the full container lifecycle
+
+---
+
+#### Expected Output
+- A markdown file: `day-30-images.md`
+- Screenshots of key commands
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Docker Images
+1. Pull the `nginx`, `ubuntu`, and `alpine` images from Docker Hub
+2. List all images on your machine — note the sizes
+3. Compare `ubuntu` vs `alpine` — why is one much smaller?
+4. Inspect an image — what information can you see?
+5. Remove an image you no longer need
+
+---
+
+##### Task 2: Image Layers
+1. Run `docker image history nginx` — what do you see?
+2. Each line is a **layer**. Note how some layers show sizes and some show 0B
+3. Write in your notes: What are layers and why does Docker use them?
+
+---
+
+##### Task 3: Container Lifecycle
+Practice the full lifecycle on one container:
+1. **Create** a container (without starting it)
+2. **Start** the container
+3. **Pause** it and check status
+4. **Unpause** it
+5. **Stop** it
+6. **Restart** it
+7. **Kill** it
+8. **Remove** it
+
+Check `docker ps -a` after each step — observe the state changes.
+
+---
+
+##### Task 4: Working with Running Containers
+1. Run an Nginx container in detached mode
+2. View its **logs**
+3. View **real-time logs** (follow mode)
+4. **Exec** into the container and look around the filesystem
+5. Run a single command inside the container without entering it
+6. **Inspect** the container — find its IP address, port mappings, and mounts
+
+---
+
+##### Task 5: Cleanup
+1. Stop all running containers in one command
+2. Remove all stopped containers in one command
+3. Remove unused images
+4. Check how much disk space Docker is using
+
+---
+
+#### Hints
+- Image history: `docker image history`
+- Create without starting: `docker create`
+- Follow logs: `docker logs -f`
+- Inspect: `docker inspect`
+- Cleanup: `docker system df`, `docker system prune`
+
+---
+
+#### Submission
+1. Add your `day-30-images.md` to `2026/day-30/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share what surprised you about image layers or container states on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-30-images
+
+##### Task 1: Docker Images
+1. Pull the `nginx`, `ubuntu`, and `alpine` images from Docker Hub
+
+
+docker pull nginx
+docker pull ubuntu
+docker pull alpine
+
+
+2. List all images on your machine — note the sizes
+IMAGE                       ID             DISK USAGE   CONTENT SIZE   EXTRA
+
+alpine:latest               a2d49ea686c2       13.1MB         3.95MB
+ubuntu:latest               f3d28607ddd7        160MB         45.3MB
+nginx:latest                608a100c7165        241MB           66MB
+
+
+3. Compare `ubuntu` vs `alpine` — why is one much smaller?
+Built specifically for lightweight containers
+uses musl libc instead of glibc
+uses busybox utilities instead of full gnu tools
+contains only the essentials needed to run applications
+smaller download size , faster images pulls less store usage
+
+4. Inspect an image — what information can you see?
+
+docker inspect nginx
+====================
+[
+    {
+        "Id": "sha256:608a100c71651bf5b773c89083b4a1ad7ef4b2bd05d7a7e552271e03123692ad",
+        "RepoTags": [
+            "nginx:latest"
+        ],
+        "RepoDigests": [
+            "nginx@sha256:608a100c71651bf5b773c89083b4a1ad7ef4b2bd05d7a7e552271e03123692ad"
+        ],
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-06-11T00:23:30.136519073Z",
+        "Config": {
+            "ExposedPorts": {
+                "80/tcp": {}
+            },
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NGINX_VERSION=1.31.1",
+                "NJS_VERSION=0.9.9",
+                "NJS_RELEASE=1~trixie",
+                "ACME_VERSION=0.4.1",
+                "PKG_RELEASE=1~trixie",
+                "DYNPKG_RELEASE=1~trixie"
+            ],
+            "Entrypoint": [
+                "/docker-entrypoint.sh"
+            ],
+            "Cmd": [
+                "nginx",
+                "-g",
+                "daemon off;"
+            ],
+            "Labels": {
+                "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>"
+            },
+            "StopSignal": "SIGQUIT"
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 63125971,
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:f4f8b983b714f130e2cff99176baa26352db6a55d3622e10ada40f2b4720a4eb",
+                "sha256:af29206eb654bc703f8ac42874fced4323f978134f7c19e7c0c9edb14d16f2f7",
+                "sha256:493aa43406a6150afbb5c00f0b42053768bad005e9a454ca638af8a5af0f9de4",
+                "sha256:e8832fb2fc126ce5d91603b931812c2bf941a0169f565c0d777b7c3460a48e6c",
+                "sha256:57b80f15e54052ec53ba5a764092724e74d586b7bfef068adc8aadaab4957d2c",
+                "sha256:db054fb45c4c4d588f3bb6acd38a3a701426be7588400edba081eebb2e542192",
+                "sha256:121b6a4dad004ecad3e8292a919d6a2344153529354a9c9c4718eb38df5048ff"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-06-15T16:49:15.073365114Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.oci.image.index.v1+json",
+            "digest": "sha256:608a100c71651bf5b773c89083b4a1ad7ef4b2bd05d7a7e552271e03123692ad",
+            "size": 10229
+        }
+    }
+]
+docker inspect ubuntu
+=====================
+[
+    {
+        "Id": "sha256:f3d28607ddd78734bb7f71f117f3c6706c666b8b76cbff7c9ff6e5718d46ff64",
+        "RepoTags": [
+            "ubuntu:latest"
+        ],
+        "RepoDigests": [
+            "ubuntu@sha256:f3d28607ddd78734bb7f71f117f3c6706c666b8b76cbff7c9ff6e5718d46ff64"
+        ],
+        "Comment": "Add rock control metadata",
+        "Created": "2026-04-21T17:22:47.070440543Z",
+        "Config": {
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "/bin/bash"
+            ],
+            "Labels": {
+                "org.opencontainers.image.created": "2026-04-21T17:23:54.324551+00:00",
+                "org.opencontainers.image.description": "The Ubuntu container image maintained by Canonical\n\nUbuntu is a Debian-based Linux operating system that runs from the desktop to the cloud, to all your internet connected things.\nIt is the world's most popular operating system across public clouds and OpenStack clouds.\nIt is the number one platform for containers; from Docker to Kubernetes to LXD, Ubuntu can run your containers at scale.\nFast, secure and simple, Ubuntu powers millions of PCs worldwide.\n",
+                "org.opencontainers.image.title": "ubuntu",
+                "org.opencontainers.image.version": "26.04"
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 41567720,
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:0c3db79307ab91dad11fad2b136a2b56df6efeeb567c4c99e6e316b63885c9f6",
+                "sha256:f421a7e99ead34566fcb11403f6f38675b53035f39937394893eaf7d87c39f83"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-06-15T16:49:48.66748289Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.oci.image.index.v1+json",
+            "digest": "sha256:f3d28607ddd78734bb7f71f117f3c6706c666b8b76cbff7c9ff6e5718d46ff64",
+            "size": 6694
+        }
+    }
+]
+
+docker inspect alpine
+====================
+[
+    {
+        "Id": "sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4",
+        "RepoTags": [
+            "alpine:latest"
+        ],
+        "RepoDigests": [
+            "alpine@sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4"
+        ],
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-06-09T20:11:31.67032355Z",
+        "Config": {
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "/bin/sh"
+            ],
+            "WorkingDir": "/"
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 3877603,
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:bc5a3fe779ad9e705b6c5d7fb7a482d1bf8b633e4e3e72152ea3f8953460cda9"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-06-15T16:49:56.143876831Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.oci.image.index.v1+json",
+            "digest": "sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4",
+            "size": 9218
+        }
+    }
+]
+
+5. Remove an image you no longer need
+
+
+
+docker rmi nginx
+docker rmi ubuntu
+docker rmi alpine
+
+
+
+
+##### Task 2: Image Layers
+1. Run `docker image history nginx` — what do you see?
+
+ubuntu@ip-172-31-37-148:~$ docker image history nginx
+IMAGE          CREATED      CREATED BY                                      SIZE      COMMENT
+608a100c7165   4 days ago   CMD ["nginx" "-g" "daemon off;"]                0B        buildkit.dockerfile.v0
+<missing>      4 days ago   STOPSIGNAL SIGQUIT                              0B        buildkit.dockerfile.v0
+<missing>      4 days ago   EXPOSE map[80/tcp:{}]                           0B        buildkit.dockerfile.v0
+<missing>      4 days ago   ENTRYPOINT ["/docker-entrypoint.sh"]            0B        buildkit.dockerfile.v0
+<missing>      4 days ago   COPY 30-tune-worker-processes.sh /docker-ent…   16.4kB    buildkit.dockerfile.v0
+<missing>      4 days ago   COPY 20-envsubst-on-templates.sh /docker-ent…   12.3kB    buildkit.dockerfile.v0
+<missing>      4 days ago   COPY 15-local-resolvers.envsh /docker-entryp…   12.3kB    buildkit.dockerfile.v0
+<missing>      4 days ago   COPY 10-listen-on-ipv6-by-default.sh /docker…   12.3kB    buildkit.dockerfile.v0
+<missing>      4 days ago   COPY docker-entrypoint.sh / # buildkit          8.19kB    buildkit.dockerfile.v0
+<missing>      4 days ago   RUN /bin/sh -c set -x     && groupadd --syst…   87.1MB    buildkit.dockerfile.v0
+<missing>      4 days ago   ENV DYNPKG_RELEASE=1~trixie                     0B        buildkit.dockerfile.v0
+<missing>      4 days ago   ENV PKG_RELEASE=1~trixie                        0B        buildkit.dockerfile.v0
+<missing>      4 days ago   ENV ACME_VERSION=0.4.1                          0B        buildkit.dockerfile.v0
+<missing>      4 days ago   ENV NJS_RELEASE=1~trixie                        0B        buildkit.dockerfile.v0
+<missing>      4 days ago   ENV NJS_VERSION=0.9.9                           0B        buildkit.dockerfile.v0
+<missing>      4 days ago   ENV NGINX_VERSION=1.31.1                        0B        buildkit.dockerfile.v0
+<missing>      4 days ago   LABEL maintainer=NGINX Docker Maintainers <d…   0B        buildkit.dockerfile.v0
+<missing>      5 days ago   # debian.sh --arch 'amd64' out/ 'trixie' '@1…   87.4MB    debuerreotype 0.17
+
+
+2. Each line is a **layer**. Note how some layers show sizes and some show 0B
+
+Layer size > 0B 
+================
+-> These layer add , remove , or modify files
+
+- these create new filesystem data , so docker shown their size.
+
+
+Layer size with 0B
+================
+THese only add metadata or configuration.
+
+these do not create files , so they consume no additional storage.
+
+Docker Layer
+============
+A docker layer is made up multiple read only layers stacked on top of each other
+
+
+3. Write in your notes: What are layers and why does Docker use them?
+
+
+Docker images are built using multple read only layers stacked on the top of each other.
+
+each instruction in a docker file , such as FROM, RUN, COPY, ADD creates a new layer
+these layer tpgother from a complete docker images
+
+
+
+
+Why Docker Uses Layers
+Faster Builds – Docker reuses unchanged layers from the cache, reducing build time.
+Storage Efficiency – Multiple containers can share the same image layers, saving disk space.
+Faster Downloads – Docker downloads only the layers that have changed instead of the entire image.
+Easy Versioning and Rollbacks – Layers are immutable, making it easy to track changes and revert to previous versions.
+Improved Portability – Layered images can be efficiently shared across different environments.
+
+
+##### Task 3: Container Lifecycle
+Practice the full lifecycle on one container:
+1. **Create** a container (without starting it)
+=> docker create --name my-container nginx
+
+=> docker ps -a
+
+CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS                      PORTS                                         NAMES
+a8f2565ed640   nginx                  "/docker-entrypoint.…"   11 seconds ago   Created                                                                   mycontainer
+
+2. **Start** the container
+
+=> docker start a8f2565ed640
+=> docker start mycontainer
+
+
+3. **Pause** it and check status
+=> docker pause mycontainer
+
+4. **Unpause** it
+
+=> docker unpause mycontainer
+
+
+5. **Stop** it
+
+docker stop mycontainer
+
+6. **Restart** it
+
+docker restart mycontainer
+
+
+7. **Kill** it
+
+docker kill 
+8. **Remove** it
+
+docker remove mycontainer
+
+
+Check `docker ps -a` after each step — observe the state changes.
+
+CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS                        PORTS                                         NAMES
+a8f2565ed640   nginx                  "/docker-entrypoint.…"   5 minutes ago    Exited (137) 38 seconds ago                                                 mycontainer
+e220a512f880   6c112c1e6bc0           "/bin/sh -c 'javac H…"   44 minutes ago   Exited (2) 44 minutes ago                                                   modest_snyder
+262769750e45   todo-list              "/__cacert_entrypoin…"   46 minutes ago   Exited (1) 46 minutes ago                                                   inspiring_roentgen
+18d593e2040d   632a58b961c0           "/__cacert_entrypoin…"   50 minutes ago   Exited (1) 50 minutes ago                                                   sleepy_shamir
+32536eecfb9b   826a037d50f6           "/__cacert_entrypoin…"   50 minutes ago   Exited (1) 50 minutes ago                                                   strange_thompson
+87e2c908dfaf   826a037d50f6           "/__cacert_entrypoin…"   51 minutes ago   Exited (1) 51 minutes ago                                                   wizardly_vaughan
+f0e11309ad53   23f4a6fe1b28           "/bin/sh -c 'javac /…"   53 minutes ago   Exited (2) 53 minutes ago                                                   vigorous_blackwell
+06304573ef3f   5a6020bd1428           "/bin/sh -c 'javac s…"   54 minutes ago   Exited (2) 54 minutes ago                                                   inspiring_cori
+938f736b6990   5a6020bd1428           "/bin/sh -c 'javac T…"   55 minutes ago   Exited (2) 55 minutes ago                                                   lucid_allen
+889f472adc1e   devops-utilities-api   "python main.py"         2 hours ago      Exited (0) 8 minutes ago                                                    hungry_lovelace
+7e1eaa2a85f2   devops-utilities-api   "python main.py"         25 hours ago     Up 25 hours                   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp   peaceful_leakey
+
+
+
+
+
+
+
+##### Task 4: Working with Running Containers
+1. Run an Nginx container in detached mode
+docker run -d nginx
+docker exec -it d8afbb59dab6 bash
+
+2. View its **logs**
+
+docker logs d8afbb59dab6
+
+3. View **real-time logs** (follow mode)
+
+docker logs -f d8afbb59dab6
+docker logs -f mycontainer
+
+4. **Exec** into the container and look around the filesystem
+
+docker exec -it d8afbb59dab6 bash
+pwd - present working directory
+ls
+ls -la
+
+
+5. Run a single command inside the container without entering it
+
+=> docker exec d8afbb59dab6 hostname
+=> ubuntu@ip-172-31-37-148:~/Docker$ docker exec d8afbb59dab6 ls -la /usr/share/nginx/html
+total 16
+drwxr-xr-x 2 root root 4096 Jun 11 00:23 .
+drwxr-xr-x 3 root root 4096 Jun 11 00:23 ..
+-rw-r--r-- 1 root root  497 May 22 12:50 50x.html
+-rw-r--r-- 1 root root  896 May 22 12:50 index.html
+
+6. **Inspect** the container — find its IP address, port mappings, and mounts
+
+
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' d8afbb59dab6
+
+=> 172.17.0.3
+
+
+
+##### Task 5: Cleanup
+1. Stop all running containers in one command
+docker stop container_id
+
+2. Remove all stopped containers in one command
+docker rm container_id
+
+3. Remove unused images
+docker rmi image_id
+
+4. Check how much disk space Docker is using
+
+docker system df
+===============
+ubuntu@ip-172-31-37-148:~/Docker$ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          9         8         2.535GB   2.102GB (82%)
+Containers      12        2         3.015MB   1.565MB (51%)
+Local Volumes   0         0         0B        0B
+Build Cache     0         0         0B        0B
+
+## 21. Hands-on Project — Day 30: AWS Organizations & Service Control Policies (SCPs)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **AWS Organizations** guardrails with **Service Control Policies (SCPs)**. You’ll bootstrap (or connect to) an Organization, create **Organizational Units (OUs)**, and attach **opinionated SCPs** that enforce baseline security and region restrictions across accounts.
+
+> ⚠️ **Important**: Many Organizations operations must be run from the **management (payer) account** with elevated permissions. Some actions are **destructive** or **restrictive**. Test in a sandbox **org** first.
+
+---
+
+#### 🎯 Learning Goals
+- Understand **root**, **OU**, and **account** hierarchy.
+- Create and attach **SCPs** (deny by default-allow model) for guardrails:
+  - **DenyLeavingOrg** — prevent accounts leaving the org
+  - **DenyRootAccessKeys** — block creating access keys for root
+  - **RequireMFARoot** — deny most actions if root user MFA not enabled
+  - **DenyStopCloudTrail** — block disabling CloudTrail/GuardDuty/SecurityHub
+  - **DenyPublicS3** — deny S3 Public* APIs at org scope
+  - **AllowOnlyListedRegions** — limit actions to approved regions
+- Apply **different SCP sets per OU** (e.g., `Sandbox`, `Prod`).
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```bash
+# 1) Initialize
+terraform -chdir=terraform init
+
+# 2) Plan (adjust org/OU names and allowed regions)
+terraform -chdir=terraform plan   -var='org_feature_set=ALL'   -var='allowed_regions=["us-east-1","us-west-2"]'   -var='enable_prod_ou=true' -var='enable_sandbox_ou=true'
+
+# 3) Apply
+terraform -chdir=terraform apply -auto-approve
+
+# 4) Attach accounts to OUs (if not already)
+# Either move existing accounts into the OU in console, or use aws_organizations_account + aws_organizations_move_account.
+```
+
+**Notes**
+- SCPs do **not** grant permissions; they set the **maximum permissions boundary**. IAM roles/users still need explicit permissions.
+- The **Root** entity can have SCPs, which then apply to everything underneath unless explicitly excluded.
+- Be careful with **region restriction** SCP — keep at least one region allowed for management.
+
+---
+
+#### 💡 Challenge
+- Add an **exception SCP** for a specific account (attach a less restrictive SCP).
+- Create a **DenyDataDestruction** SCP for destructive actions (e.g., `s3:DeleteBucket`, `kms:ScheduleKeyDeletion`, `ec2:TerminateInstances`) with break‑glass tags.
+- Manage **Tag Policies** and **AI services opt‑out** (AWS policy types) for FinOps/Governance.
+
+---
+
+#### ✅ Checklist
+- [ ] Organization active with **ALL features**
+- [ ] `Sandbox` and/or `Prod` OU created
+- [ ] SCPs attached at **Root and OU** levels
+- [ ] Accounts in OU inherit guardrails (verify via **Organizations → Policies**)
+
+---
+
+#### 📌 Commit
+```bash
+git add day30-organizations-and-scps
+git commit -m "day30: AWS Organizations + SCPs — baseline guardrails for sandbox/prod with region allow list"
+git push
+```
+
+### Files
+
+- [policies/allow_only_listed_regions.json](files/hands-on-projects/policies/allow_only_listed_regions.json)
+- [policies/deny_leaving_org.json](files/hands-on-projects/policies/deny_leaving_org.json)
+- [policies/deny_public_s3.json](files/hands-on-projects/policies/deny_public_s3.json)
+- [policies/deny_root_access_keys.json](files/hands-on-projects/policies/deny_root_access_keys.json)
+- [policies/deny_stop_cloudtrail.json](files/hands-on-projects/policies/deny_stop_cloudtrail.json)
+- [policies/require_mfa_root.json](files/hands-on-projects/policies/require_mfa_root.json)
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

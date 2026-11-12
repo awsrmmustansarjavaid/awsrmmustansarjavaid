@@ -473,7 +473,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🚀 Day 16 - GitOps with Jira, AWS Auto Scaling & Amazon RDS
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -823,6 +823,360 @@ Ensure the RDS instance is in the **Available** state.
 ---
 
 > **"In DevOps, automation builds speed, but visibility builds confidence. GitOps brings both together by making Git the single source of truth."** 🚀
+
+## 19. Challenge Notes — Day 16: Introduction to AWS CloudWatch
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Here's the **Markdown** format for **Day 16: Introduction to AWS CloudWatch**:
+
+````markdown
+# 🌩️ **Day 16: Introduction to AWS CloudWatch**
+
+## 🎯 **Learning Objectives**
+By the end of this session, you should be able to:
+
+- Understand the purpose and benefits of AWS CloudWatch.
+- Explore core components: Metrics, Logs, Alarms, Dashboards, and Events.
+- Learn how to monitor EC2 instances using CloudWatch.
+- Configure CloudWatch Agent to collect system logs.
+- Analyze logs and metrics for troubleshooting.
+
+
+[![](https://img.youtube.com/vi/FX_z74uHWaM/0.jpg)](https://www.youtube.com/watch?v=FX_z74uHWaM)
+
+[Watch the video](https://www.youtube.com/watch?v=FX_z74uHWaM)
+
+---
+
+## 🧠 **What is AWS CloudWatch?**
+
+AWS CloudWatch is a monitoring and observability service that provides the following features:
+
+- **Metrics**: Collects numerical data, such as CPU utilization and network traffic.
+- **Alarms**: Set thresholds to trigger actions when certain metrics are exceeded.
+- **Logs**: Collects, stores, and analyzes log files from your AWS resources.
+- **Dashboards**: Customizable visual panels to display your metrics and logs.
+
+---
+
+## 🧱 **Core Components of AWS CloudWatch**
+
+| Component      | Description                                   |
+| -------------- | --------------------------------------------- |
+| **Metrics**    | Numeric data like CPU utilization, memory usage, etc. |
+| **Alarms**     | Allows you to set thresholds for metrics and trigger actions (like sending notifications) when the threshold is breached. |
+| **Logs**       | Collects logs from various AWS resources and applications. |
+| **Dashboards** | Allows you to create custom dashboards to visualize your metrics and logs in real-time. |
+| **Events**     | Responds to changes in the AWS environment by automating tasks or triggering actions. |
+
+---
+
+## 🧪 **Lab Tasks**
+
+### ✅ **Lab Task 1: View EC2 Metrics in CloudWatch**
+
+1. Launch an EC2 instance (if not already running).
+2. Go to **CloudWatch > Metrics**.
+3. Select **EC2 > Per-Instance Metrics**.
+4. View metrics such as:
+   - CPUUtilization
+   - Disk Read/Write
+   - Network In/Out
+
+### ✅ **Lab Task 2: Create a CloudWatch Alarm**
+
+1. Navigate to **CloudWatch > Alarms**.
+2. Create a new Alarm:
+   - Metric: `EC2 > CPUUtilization`
+   - Set the threshold to `> 70%` for the selected EC2 instance.
+3. Set the action: Send a notification (create an SNS topic if needed).
+
+### ✅ **Lab Task 3: Enable Detailed Monitoring (Optional)**
+
+1. Stop the EC2 instance.
+2. Enable **detailed monitoring** during instance modification.
+3. Restart the instance and confirm that the metrics are now available at 1-minute intervals.
+
+### ✅ **Lab Task 4: Collect and View System Logs**
+
+1. Install CloudWatch Agent:
+   ```bash
+   sudo yum install amazon-cloudwatch-agent -y
+````
+
+2. Create a configuration file (JSON) for the agent.
+3. Start the agent and verify that logs appear in **CloudWatch Logs**.
+
+##### ✅ **Lab Task 5: Create a CloudWatch Dashboard**
+
+1. Go to **CloudWatch > Dashboards**.
+2. Create a dashboard that includes:
+
+   * EC2 CPU graph
+   * Network In/Out graph
+   * Custom metric (optional)
+
+---
+
+#### 🛠️ **Commands Summary**
+
+| Task                     | Command                                                                          |
+| ------------------------ | -------------------------------------------------------------------------------- |
+| Install CloudWatch Agent | `sudo yum install amazon-cloudwatch-agent -y`                                    |
+| Start CloudWatch Agent   | `sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a start` |
+| View Logs                | Navigate to **CloudWatch Console > Logs**                                        |
+| Create Alarm             | Navigate to **CloudWatch Console > Alarms > Create Alarm**                       |
+
+---
+
+#### 📌 **Tip**
+
+* To semulate real-time CPU spikes, run a stress test on the EC2 instance:
+
+  ```bash
+  sudo apt install stress -y
+  stress --cpu 1 --timeout 300
+  ```
+* Then, observe the spike in CloudWatch metrics.
+
+---
+
+#### 🔄 **Summary**
+
+* AWS CloudWatch offers a comprehensive solution for monitoring and managing AWS resources.
+* Key features include Metrics, Alarms, Logs, Dashboards, and Events.
+* Hands-on labs provide experience with EC2 metrics, system logs, and configuring CloudWatch Dashboards.
+
+---
+
+#### ✨ **Next Steps**
+
+In the next session, we will dive deeper into **Setting Alarms, Dashboards, and Metrics**.
+
+### Attachments
+
+- [Day 16 Introduction to AWS CloudWatch.pdf](Day%2016%20Introduction%20to%20AWS%20CloudWatch.pdf)
+
+## 20. Cohort Practice — Day 16: Shell Scripting Basics
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Start your shell scripting journey — learn the fundamentals every script needs.
+
+You will:
+- Understand **shebang** (`#!/bin/bash`) and why it matters
+- Work with **variables**, **echo**, and **read**
+- Write basic **if-else** conditions
+
+---
+
+#### Expected Output
+- A markdown file: `day-16-shell-scripting.md`
+- All scripts you write during the tasks
+
+---
+
+#### Challenge Tasks
+
+
+##### Task 1: Your First Script
+1. Create a file `hello.sh`
+2. Add the shebang line `#!/bin/bash` at the top
+3. Print `Hello, DevOps!` using `echo`
+4. Make it executable and run it
+
+```bash
+chmod +x hello.sh
+./hello.sh
+```
+
+**Document:** What happens if you remove the shebang line?
+
+---
+
+##### Task 2: Variables
+1. Create `variables.sh` with:
+   - A variable for your `NAME`
+   - A variable for your `ROLE` (e.g., "DevOps Engineer")
+   - Print: `Hello, I am <NAME> and I am a <ROLE>`
+2. Try using single quotes vs double quotes — what's the difference?
+v
+---
+
+##### Task 3: User Input with read
+1. Create `greet.sh` that:
+   - Asks the user for their name using `read`
+   - Asks for their favourite tool
+   - Prints: `Hello <name>, your favourite tool is <tool>`
+
+---
+
+##### Task 4: If-Else Conditions
+1. Create `check_number.sh` that:
+   - Takes a number using `read`
+   - Prints whether it is **positive**, **negative**, or **zero**
+
+2. Create `file_check.sh` that:
+   - Asks for a filename
+   - Checks if the file **exists** using `-f`
+   - Prints appropriate message
+
+---
+
+##### Task 5: Combine It All
+Create `server_check.sh` that:
+1. Stores a service name in a variable (e.g., `nginx`, `sshd`)
+2. Asks the user: "Do you want to check the status? (y/n)"
+3. If `y` — runs `systemctl status <service>` and prints whether it's **active** or **not**
+4. If `n` — prints "Skipped."
+
+---
+
+#### Hints
+- Shebang: `#!/bin/bash` tells the system which interpreter to use
+- Variables: `NAME="Shubham"` (no spaces around `=`)
+- Read: `read -p "Enter name: " NAME`
+- If syntax: `if [ condition ]; then ... elif ... else ... fi`
+- File check: `if [ -f filename ]; then`
+
+---
+
+#### Documentation
+
+Create `day-16-shell-scripting.md` with:
+- Each script's code and output
+- What you learned (3 key points)
+
+---
+
+#### Submission
+1. Add your scripts and `day-16-shell-scripting.md` to `2026/day-16/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+
+Share your first shell scripts on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-16-shell-scripting
+
+create a hello.sh file
+
+chown 764 to assign the permission to script file.
+
+write the script without shebang script running successfully.
+
+i have remove the shebang line my script running successfully.
+
+
+
+create a variable.sh with NAME and ROLE as variable in single quotes variable run successfully
+
+but i have add a single quotes in echo print statement not print constant only print variable name
+
+
+##### Task 4: If-Else Conditions
+
+
+check the file path exists or not using -f in if else condition
+
+Create `server_check.sh` that:
+enter the user input in read for service 
+and read input in status check y or n
+
+and check in if else condition if y check else not check
+
+### Files
+
+- [arguments.sh](files/cohort-2026/arguments.sh)
+- [check_number.sh](files/cohort-2026/check_number.sh)
+- [file_check.sh](files/cohort-2026/file_check.sh)
+- [for_loop.sh](files/cohort-2026/for_loop.sh)
+- [greet.sh](files/cohort-2026/greet.sh)
+- [hello.sh](files/cohort-2026/hello.sh)
+- [if_file_exist.sh](files/cohort-2026/if_file_exist.sh)
+- [if_yalina_spy.sh](files/cohort-2026/if_yalina_spy.sh)
+- [install_package.sh](files/cohort-2026/install_package.sh)
+- [server_check.sh](files/cohort-2026/server_check.sh)
+- [variable.sh](files/cohort-2026/variable.sh)
+- [variables.sh](files/cohort-2026/variables.sh)
+
+## 21. Hands-on Project — Day 16: Security Groups & NACLs
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Security Groups (SGs) and Network ACLs (NACLs)** in a typical 3‑tier VPC. You’ll create SGs for **web** and **db** tiers and enforce subnet‑level controls via **public/private NACLs**.
+
+This module **plugs into Day 14**. Bring your `vpc_id`, `public_subnet_ids`, and `private_subnet_ids`.
+
+---
+
+#### 🎯 Learning Goals
+- Model **stateful** SG rules (web ingress, DB from app/web tier, scoped SSH).  
+- Configure **stateless** NACLs for public vs private subnets.  
+- Understand precedence: SGs (instance‑level) vs NACLs (subnet‑level).  
+- Parameterize allowed sources with variables for safe reuse.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+```text
+1) Gather inputs from Day 14
+   - vpc_id
+   - public_subnet_ids (list)
+   - private_subnet_ids (list)
+   - vpc_cidr (CIDR, e.g., 10.0.0.0/16)
+
+2) Init & Plan (replace vars)
+   terraform -chdir=terraform init
+   terraform -chdir=terraform plan      -var='vpc_id=vpc-0123'      -var='public_subnet_ids=["subnet-a","subnet-b"]'      -var='private_subnet_ids=["subnet-c","subnet-d"]'      -var='vpc_cidr="10.0.0.0/16"'      -var='ssh_allowed_cidr="YOUR.PUBLIC.IP/32"'
+
+3) Apply
+   terraform -chdir=terraform apply -auto-approve      -var='vpc_id=vpc-0123'      -var='public_subnet_ids=["subnet-a","subnet-b"]'      -var='private_subnet_ids=["subnet-c","subnet-d"]'      -var='vpc_cidr="10.0.0.0/16"'      -var='ssh_allowed_cidr="YOUR.PUBLIC.IP/32"'
+
+4) (Optional) Verify
+   - Launch a small EC2 in a public subnet with web_sg attached; try `curl http://EC2_PUBLIC_IP`.
+   - Launch a DB EC2 in a private subnet with db_sg; from web EC2, `nc -zv DB_PRIVATE_IP 5432`.
+   - Observe NACLs in console: public vs private rules.
+```
+
+---
+
+#### 💡 Challenge
+- Add an **app_sg** and restrict DB ingress to **app_sg only** (remove web_sg access).  
+- Add **egress‑only** rules on SGs (deny egress to RFC1918 outside `vpc_cidr`).  
+- Harden NACLs by **denying SSH** except from a **bastion** subnet CIDR.
+
+---
+
+#### ✅ Checklist
+- [ ] SGs created: `web_sg` (80/443 world, 22 from your IP), `db_sg` (5432 from web/app tier)  
+- [ ] NACLs created & associated: public vs private behavior  
+- [ ] Tested path: web → db on 5432 works; outside traffic denied as expected
+
+---
+
+#### 📌 Commit
+```bash
+git add day16-security-groups-nacls
+git commit -m "day16: SGs (web/db) + public/private NACLs with Terraform"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

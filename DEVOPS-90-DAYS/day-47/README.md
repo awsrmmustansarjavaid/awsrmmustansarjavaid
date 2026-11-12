@@ -530,6 +530,281 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 47: Introduction to Ansible and Configuration Management
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 47** of the DevOps 90-Day Challenge!
+Today, we’ll dive into **Configuration Management** with **Ansible**, exploring how to automate server setup and management.
+
+[![](https://img.youtube.com/vi/oIHRghjLfTM/0.jpg)](https://www.youtube.com/watch?v=oIHRghjLfTM)
+
+[Watch the video](https://www.youtube.com/watch?v=oIHRghjLfTM)
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand the concepts of **Configuration Management**.
+* Install and configure **Ansible** on a control node.
+* Setup **Passwordless SSH** between control and managed nodes.
+* Run your first **Ad-Hoc** Ansible commands.
+
+---
+
+#### Tools Used
+
+* **Ansible** (Control Node)
+* **Linux Servers** (Managed Nodes - e.g., Ubuntu/CentOS)
+* **SSH** (Secure Shell)
+* **Python** (Required on managed nodes)
+
+---
+
+#### Key Concepts
+
+##### 1. What is Ansible?
+
+Ansible is an open-source automation tool used for **configuration management**, **application deployment**, and **task automation**. It is **agentless**, meaning it doesn't require any software to be installed on the managed nodes, just SSH.
+
+##### 2. Architecture
+
+* **Control Node**: The machine where Ansible is installed and from where commands are run.
+* **Managed Nodes**: The servers being configured.
+* **Inventory**: A text file that lists the IP addresses or hostnames of managed nodes.
+
+##### 3. Inventory File Example
+
+```ini
+[webservers]
+192.168.1.10
+192.168.1.11
+
+[dbservers]
+192.168.1.20
+```
+
+##### 4. Ad-Hoc Commands
+
+Run a command across all servers without writing a playbook:
+
+```bash
+# Ping all servers
+ansible all -m ping -i inventory.txt
+
+# Check uptime
+ansible all -a "uptime" -i inventory.txt
+```
+
+---
+
+#### Key Concepts Applied
+
+| Concept | Example Used |
+| :--- | :--- |
+| **Agentless** | No software installed on `webservers`, only SSH access used. |
+| **Inventory** | `hosts` file defining the group of servers to manage. |
+| **Ad-Hoc Commands** | `ansible -m ping` to test connectivity quickly. |
+| **Idempotency** | Ensuring a task (like installing a package) changes state only if needed. |
+
+---
+
+#### Bonus (Extra Learning)
+
+* Explore **Ansible Configuration file (`ansible.cfg`)** settings.
+* Learn about **Dynamic Inventory** for cloud environments (AWS/Azure).
+
+---
+
+#### Congratulations!
+
+You’ve successfully set up your **Ansible environment** and established connectivity with your managed nodes!
+This is the foundation for creating complex automation playbooks.
+
+---
+
+#### Try These Next
+
+* Try installing **Apache/Nginx** using an ad-hoc command.
+* Create a custom group in your inventory file for **database servers**.
+
+## 19. Cohort Practice — Day 47: Advanced Triggers: PR Events, Cron Schedules & Event-Driven Pipelines
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+You've used `push` and basic `pull_request` triggers. But GitHub Actions supports **dozens of event types** — today you go deep into PR lifecycle events, scheduled cron jobs, and chaining workflows together.
+
+---
+
+#### Expected Output
+- Multiple workflow files demonstrating advanced triggers
+- A markdown file: `day-47-advanced-triggers.md`
+- At least one scheduled workflow running on your repo
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Pull Request Event Types
+Create `.github/workflows/pr-lifecycle.yml` that triggers on `pull_request` with **specific activity types**:
+1. Trigger on: `opened`, `synchronize`, `reopened`, `closed`
+2. Add steps that:
+   - Print which event type fired: `${{ github.event.action }}`
+   - Print the PR title: `${{ github.event.pull_request.title }}`
+   - Print the PR author: `${{ github.event.pull_request.user.login }}`
+   - Print the source branch and target branch
+3. Add a conditional step that only runs when the PR is **merged** (closed + merged = true)
+
+Test it: create a PR, push an update to it, then merge it. Watch the workflow fire each time with a different event type.
+
+---
+
+##### Task 2: PR Validation Workflow
+Create `.github/workflows/pr-checks.yml` — a real-world PR gate:
+1. Trigger on `pull_request` to `main`
+2. Add a job `file-size-check` that:
+   - Checks out the code
+   - Fails if any file in the PR is larger than 1 MB
+3. Add a job `branch-name-check` that:
+   - Reads the branch name from `${{ github.head_ref }}`
+   - Fails if it doesn't follow the pattern `feature/*`, `fix/*`, or `docs/*`
+4. Add a job `pr-body-check` that:
+   - Reads the PR body: `${{ github.event.pull_request.body }}`
+   - Warns (but doesn't fail) if the PR description is empty
+
+**Verify:** Open a PR from a badly named branch — does the check fail?
+
+---
+
+##### Task 3: Scheduled Workflows (Cron Deep Dive)
+Create `.github/workflows/scheduled-tasks.yml`:
+1. Add a `schedule` trigger with cron: `'30 2 * * 1'` (every Monday at 2:30 AM UTC)
+2. Add **another** cron entry: `'0 */6 * * *'` (every 6 hours)
+3. In the job, print which schedule triggered using `${{ github.event.schedule }}`
+4. Add a step that acts as a **health check** — curl a URL and check the response code
+
+Write in your notes:
+- The cron expression for: every weekday at 9 AM IST
+- The cron expression for: first day of every month at midnight
+- Why GitHub says scheduled workflows may be delayed or skipped on inactive repos
+
+**Important:** Also add `workflow_dispatch` so you can test it manually without waiting for the schedule.
+
+---
+
+##### Task 4: Path & Branch Filters
+Create `.github/workflows/smart-triggers.yml`:
+1. Trigger on push but **only** when files in `src/` or `app/` change:
+   ```yaml
+   on:
+     push:
+       paths:
+         - 'src/**'
+         - 'app/**'
+   ```
+2. Add `paths-ignore` in a second workflow that skips runs when only docs change:
+   ```yaml
+   paths-ignore:
+     - '*.md'
+     - 'docs/**'
+   ```
+3. Add branch filters to only trigger on `main` and `release/*` branches
+4. Test it: push a change to a `.md` file — does the workflow skip?
+
+Write in your notes: When would you use `paths` vs `paths-ignore`?
+
+---
+
+##### Task 5: `workflow_run` — Chain Workflows Together
+Create two workflows:
+1. `.github/workflows/tests.yml` — runs tests on every push
+2. `.github/workflows/deploy-after-tests.yml` — triggers **only after** `tests.yml` completes successfully:
+   ```yaml
+   on:
+     workflow_run:
+       workflows: ["Run Tests"]
+       types: [completed]
+   ```
+3. In the deploy workflow, add a conditional:
+   - Only proceed if the triggering workflow **succeeded** (`${{ github.event.workflow_run.conclusion == 'success' }}`)
+   - Print a warning and exit if it failed
+
+**Verify:** Push a commit — does the test workflow run first, then trigger the deploy workflow?
+
+---
+
+##### Task 6: `repository_dispatch` — External Event Triggers
+1. Create `.github/workflows/external-trigger.yml` with trigger `repository_dispatch`
+2. Set it to respond to event type: `deploy-request`
+3. Print the client payload: `${{ github.event.client_payload.environment }}`
+4. Trigger it using `curl` or `gh`:
+   ```bash
+   gh api repos/<owner>/<repo>/dispatches \
+     -f event_type=deploy-request \
+     -f client_payload='{"environment":"production"}'
+   ```
+
+Write in your notes: When would an external system (like a Slack bot or monitoring tool) trigger a pipeline?
+
+---
+
+#### Hints
+- PR merge check: `if: github.event.pull_request.merged == true`
+- Cron syntax: `minute hour day-of-month month day-of-week`
+- Scheduled workflows only run on the **default branch**
+- `workflow_run` gives you access to the triggering workflow's conclusion and artifacts
+- `repository_dispatch` requires a personal access token with `repo` scope
+- Path filters use glob patterns — `**` matches nested directories
+
+---
+
+#### Documentation
+Create `day-47-advanced-triggers.md` with:
+- Your workflow YAML files
+- The cron expressions from Task 3
+- Screenshot of the PR checks running on a pull request
+- Explanation of `workflow_run` vs `workflow_call` in your own words
+
+---
+
+#### Submission
+1. Add `day-47-advanced-triggers.md` to `2026/day-47/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your PR validation workflow on LinkedIn — automated PR gates are a real DevOps flex.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 47: Docker Compose for Local Dev
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Use Compose to run API + Redis, with healthchecks, smoke tests, and Jenkins pipeline.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [Makefile](files/hands-on-projects/Makefile)
+- [api/Dockerfile](files/hands-on-projects/api/Dockerfile)
+- [api/app.py](files/hands-on-projects/api/app.py)
+- [api/main.py](files/hands-on-projects/api/main.py)
+- [api/requirements.txt](files/hands-on-projects/api/requirements.txt)
+- [docker-compose.yml](files/hands-on-projects/docker-compose.yml)
+- [scripts/compose_down.sh](files/hands-on-projects/scripts/compose_down.sh)
+- [scripts/compose_up.sh](files/hands-on-projects/scripts/compose_up.sh)
+- [scripts/smoke_test.sh](files/hands-on-projects/scripts/smoke_test.sh)
+- [scripts/wait_for.sh](files/hands-on-projects/scripts/wait_for.sh)
+
+
 ---
 
 [← Day 46](../day-46/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 48 →](../day-48/README.md)

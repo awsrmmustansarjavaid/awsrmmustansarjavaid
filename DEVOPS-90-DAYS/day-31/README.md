@@ -538,7 +538,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — Day 31: Automated Jenkins Pipeline & GitHub Integration
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 “Automation becomes powerful when a code change can trigger the entire delivery process without manual intervention.” 🚀
 
@@ -579,6 +579,525 @@ In my successful run, the complete pipeline finished in approximately 25 seconds
 One of my biggest takeaways today was understanding the difference between simply running Jenkins and actually building an automated CI/CD workflow.
 The real power comes from connecting: `GitHub + Webhooks + Jenkins + Jenkinsfile + Docker + Deployment`
 Now, instead of manually checking for code changes and starting a deployment, a Git push can automatically trigger the pipeline.
+
+## 19. Challenge Notes — Day 31: Jenkins and CICD Fundamentals
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 31** of our DevOps 90-Day Challenge!
+Today we are starting our journey with **Jenkins**, one of the most popular CI/CD automation tools in the DevOps ecosystem.
+
+[![](https://img.youtube.com/vi/0J4WQqVoxHE/0.jpg)](https://www.youtube.com/watch?v=0J4WQqVoxHE)
+[Watch the video](https://www.youtube.com/watch?v=0J4WQqVoxHE)
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand what Jenkins is and why it’s used in DevOps.
+* Learn Jenkins architecture (Master & Agents).
+* Install Jenkins on your system (Linux/Windows/Docker).
+* Run your first Jenkins job.
+
+---
+
+#### Tools Used
+
+* **Jenkins** (Open-source CI/CD tool)
+* **Java (JDK 11 or higher)**
+* **Docker (optional, if you want containerized Jenkins)**
+* **GitHub** (for source code integration)
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Install Java
+
+Jenkins requires Java. On Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+java -version
+```
+
+##### 2. Install Jenkins
+
+```bash
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install jenkins -y
+```
+
+Start & enable service:
+
+```bash
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+```
+
+##### 3. Access Jenkins
+
+Open in browser:
+`http://localhost:8080`
+
+Unlock Jenkins using the initial admin password:
+
+```bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+
+##### 4. Install Plugins & Setup Admin
+
+* Install suggested plugins
+* Create admin user
+* Configure system
+
+##### 5. Create Your First Job
+
+* Go to **New Item** → Select **Freestyle project**
+* Add **Build Step** → `echo "Hello from Jenkins!"`
+* Run the job
+
+---
+
+#### Verification
+
+* Jenkins is accessible on `http://localhost:8080`
+* Plugins installed successfully
+* First job executes and prints "Hello from Jenkins!"
+
+---
+
+#### Key Concepts Applied
+
+| Concept           | Example Used                  |
+| ----------------- | ----------------------------- |
+| CI/CD Basics      | Jenkins automates code builds |
+| Jenkins Master    | Installed on local server     |
+| Agents            | (Optional) run jobs remotely  |
+| Freestyle Project | Simple job to test Jenkins    |
+
+---
+
+#### Congratulations!
+
+You’ve successfully installed Jenkins and run your very first job! From here, we’ll dive deeper into **pipelines, plugins, integrations, and automation**.
+
+---
+
+#### Try These Next
+
+* Install Jenkins using **Docker** instead of bare-metal
+* Connect Jenkins to **GitHub repository**
+* Explore Jenkinsfile for pipeline automation
+
+---
+
+## 20. Cohort Practice — Day 31: Dockerfile: Build Your Own Images
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today's goal is to **write Dockerfiles and build custom images**.
+
+This is the skill that separates someone who uses Docker from someone who actually ships with Docker.
+
+---
+
+#### Expected Output
+- A markdown file: `day-31-dockerfile.md`
+- All Dockerfiles you create
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Your First Dockerfile
+1. Create a folder called `my-first-image`
+2. Inside it, create a `Dockerfile` that:
+   - Uses `ubuntu` as the base image
+   - Installs `curl`
+   - Sets a default command to print `"Hello from my custom image!"`
+3. Build the image and tag it `my-ubuntu:v1`
+4. Run a container from your image
+
+**Verify:** The message prints on `docker run`
+
+---
+
+##### Task 2: Dockerfile Instructions
+Create a new Dockerfile that uses **all** of these instructions:
+- `FROM` — base image
+- `RUN` — execute commands during build
+- `COPY` — copy files from host to image
+- `WORKDIR` — set working directory
+- `EXPOSE` — document the port
+- `CMD` — default command
+
+Build and run it. Understand what each line does.
+
+---
+
+##### Task 3: CMD vs ENTRYPOINT
+1. Create an image with `CMD ["echo", "hello"]` — run it, then run it with a custom command. What happens?
+2. Create an image with `ENTRYPOINT ["echo"]` — run it, then run it with additional arguments. What happens?
+3. Write in your notes: When would you use CMD vs ENTRYPOINT?
+
+---
+
+##### Task 4: Build a Simple Web App Image
+1. Create a small static HTML file (`index.html`) with any content
+2. Write a Dockerfile that:
+   - Uses `nginx:alpine` as base
+   - Copies your `index.html` to the Nginx web directory
+3. Build and tag it `my-website:v1`
+4. Run it with port mapping and access it in your browser
+
+---
+
+##### Task 5: .dockerignore
+1. Create a `.dockerignore` file in one of your project folders
+2. Add entries for: `node_modules`, `.git`, `*.md`, `.env`
+3. Build the image — verify that ignored files are not included
+
+---
+
+##### Task 6: Build Optimization
+1. Build an image, then change one line and rebuild — notice how Docker uses **cache**
+2. Reorder your Dockerfile so that frequently changing lines come **last**
+3. Write in your notes: Why does layer order matter for build speed?
+
+---
+
+#### Hints
+- Build: `docker build -t name:tag .`
+- The `.` at the end is the build context
+- `COPY . .` copies everything from host to container
+- Nginx serves files from `/usr/share/nginx/html/`
+
+---
+
+#### Submission
+1. Add your Dockerfiles and `day-31-dockerfile.md` to `2026/day-31/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your custom Docker image or Nginx screenshot on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-31-dockerfile
+
+##### Task 1: Your First Dockerfile
+1. Create a folder called `my-first-image`
+2. Inside it, create a `Dockerfile` that:
+   - Uses `ubuntu` as the base image
+   - Installs `curl`
+   - Sets a default command to print `"Hello from my custom image!"`
+3. Build the image and tag it `my-ubuntu:v1`
+4. Run a container from your image
+
+**Verify:** The message prints on `docker run`
+
+
+FROM ubuntu:latest
+
+RUN apt-get update && \
+    apt-get install -y curl && \
+    apt-get clean
+
+CMD ["echo", "Hello from my custom image!"]
+
+
+docker build -t my-ubuntu:v1 .
+
+docker run my-ubuntu:v1
+
+docker images
+
+docker inspect my-ubuntu:v1
+
+docker logs 00ebbbe545dc
+
+
+##### Task 2: Dockerfile Instructions
+Create a new Dockerfile that uses **all** of these instructions:
+- `FROM` — base image
+- `RUN` — execute commands during build
+- `COPY` — copy files from host to image
+- `WORKDIR` — set working directory
+- `EXPOSE` — document the port
+- `CMD` — default command
+
+Build and run it. Understand what each line does.
+=============================================
+FROM python:3.14
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install  -r requirements.txt
+
+COPY . .
+
+CMD ["python", "qrGenerator.py"]
+
+
+
+
+
+##### Task 3: CMD vs ENTRYPOINT
+1. Create an image with `CMD ["echo", "hello"]` — run it, then run it with a custom command. What happens?
+
+FROM ubuntu:latest
+
+CMD ["echo", "Hello"]
+
+
+docker build -t cmd-demo .
+docer run cmd-demo
+docker ps
+docker inspect cmd-demo
+
+
+2. Create an image with `ENTRYPOINT ["echo"]` — run it, then run it with additional arguments. What happens?
+
+
+FROM ubuntu:latest
+
+ENTRYPOINT ["echo"]
+
+docker build -f Dockerfile.entrypoint -t entrypoint-demo .
+docker run entrypoint-demo
+docker ps
+docker inspect entrypoint-demo
+
+
+3. Write in your notes: When would you use CMD vs ENTRYPOINT?
+
+CMD
+===
+provides a default command
+can be overridden at run time
+flexible for different command
+
+CMD ["python"m "app.py"]
+
+
+ENTRYPOINT
+==========
+provides a fixed executable
+arguments are appended to it
+best for single -purpose containers
+
+ENTRYPOINT ["nginx"]
+
+
+##### Task 4: Build a Simple Web App Image
+1. Create a small static HTML file (`index.html`) with any content
+2. Write a Dockerfile that:
+   - Uses `nginx:alpine` as base
+   - Copies your `index.html` to the Nginx web directory
+3. Build and tag it `my-website:v1`
+4. Run it with port mapping and access it in your browser
+
+
+
+
+
+
+
+create a index.html and write the html static page code
+
+then write the Dockerfile.nginx
+
+
+FROM nginx:alpine
+
+COPY index.html /usr/share/nginx/html/
+
+EXPOSE 80
+
+
+then
+docker build -f Dockerfile.nginx -t my-website .
+docker run -d -p 8001:80 --name website-container my-website
+
+docker ps
+docker images
+docker logs my-website
+docker inspect my-website
+
+
+
+##### Task 5: .dockerignore
+1. Create a `.dockerignore` file in one of your project folders
+2. Add entries for: `node_modules`, `.git`, `*.md`, `.env`
+3. Build the image — verify that ignored files are not included
+
+---
+
+project_chat_application/
+├── client/
+│   ├── Dockerfile
+│   ├── package.json
+│   └── src/
+│
+├── server/
+│   ├── Dockerfile
+│   ├── package.json
+│   └── index.js
+│
+└── docker-compose.yml
+
+
+create the server Dockerfile
+============================
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["npm", "start"]
+
+
+docker build -t chat-server:v1 .
+docker run -d --name chat-server -p 5000:5000 chat-server:v1
+docker ps
+docker logs chat-server
+docker inspect chat-server
+
+
+create client Dockerfile
+========================
+FROM node:14-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+
+docker build -t chat-client:v1 .
+docker run -d --name chat-client -p 3000:3000 chat-client:v1
+docker logs chat-client
+docker inspect chat-client
+
+
+.dockerignore
+=============.git
+.github
+.netlify
+node_modules
+client/node_modules
+server/node_modules
+.gitignore
+README.md
+
+
+
+##### Task 6: Build Optimization
+1. Build an image, then change one line and rebuild — notice how Docker uses **cache**
+2. Reorder your Dockerfile so that frequently changing lines come **last**
+3. Write in your notes: Why does layer order matter for build speed?
+
+## 21. Hands-on Project — Day 31: Jenkins Docker Agent
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Jenkins Docker Agent** — running Jenkins builds inside containerized agents.  
+We’ll learn how to create a lightweight, reproducible Jenkins agent image that can build, test, and deploy applications from a Docker environment.
+
+---
+
+#### 🎯 Learning Goals
+- Understand how Jenkins agents connect to the controller.  
+- Build and run a **custom Docker agent** with all DevOps tools pre-installed.  
+- Configure Jenkins to dynamically use Docker agents for CI/CD workloads.  
+- Learn how to use this agent both locally and in a Kubernetes-based Jenkins setup.
+
+---
+
+#### 🛠️ Tasks
+
+1. **Build your Jenkins Agent Docker Image**
+   - Create a `Dockerfile` that includes:
+     - Jenkins inbound agent
+     - AWS CLI, Docker CLI
+     - Terraform, kubectl, and Python3  
+   - Example:
+     ```dockerfile
+     FROM jenkins/inbound-agent:latest
+     USER root
+     RUN apt-get update && apt-get install -y \
+         docker.io awscli curl unzip python3 python3-pip && \
+         curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+         echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list && \
+         apt-get update && apt-get install terraform -y && \
+         curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.29.0/bin/linux/amd64/kubectl" && \
+         chmod +x kubectl && mv kubectl /usr/local/bin/ && \
+         apt-get clean && rm -rf /var/lib/apt/lists/*
+     USER jenkins
+     ```
+
+2. **Run the Agent Locally**
+   ```bash
+   docker build -t devops/jenkins-docker-agent:latest .
+   docker run -d --name jenkins-agent \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v $HOME/.aws:/home/jenkins/.aws:ro \
+     -e JENKINS_URL="https://jenkins.yourdomain.com/" \
+     -e AGENT_NAME="docker-agent-1" \
+     -e AGENT_SECRET="YOUR_AGENT_SECRET" \
+     -e AGENT_WORKDIR="/home/jenkins/agent" \
+     devops/jenkins-docker-agent:latest
+
+3. **Integrate the Agent in Jenkins**
+Go to Jenkins → Manage Nodes and Clouds → New Node
+
+Choose “Permanent Agent” or “Docker Agent Template”
+
+Fill in:
+
+Remote root directory: /home/jenkins/agent
+
+Labels: docker-agent
+
+Launch method: “Launch agent by connecting it to the controller”
+```
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [agent/Dockerfile](files/hands-on-projects/agent/Dockerfile)
+- [agent/entrypoint.sh](files/hands-on-projects/agent/entrypoint.sh)
+- [docker-compose.yml](files/hands-on-projects/docker-compose.yml)
+- [k8s/jenkins-agent.yaml](files/hands-on-projects/k8s/jenkins-agent.yaml)
 
 
 ---

@@ -473,6 +473,311 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 40: Writing Terraform for AWS (EC2, S3, IAM)
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 40** of the DevOps 90-Day Challenge!
+Yesterday, you learned the basics of Terraform.
+Today, you’ll create **AWS infrastructure** including **EC2 instances, S3 buckets, and IAM users** using Terraform.
+
+[![](https://img.youtube.com/vi/EUOXrt-Dtjk/0.jpg)](https://www.youtube.com/watch?v=EUOXrt-Dtjk)
+[Watch the video](https://www.youtube.com/watch?v=EUOXrt-Dtjk)
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Provision **EC2 instances**.
+* Create **S3 buckets**.
+* Manage **IAM users and policies**.
+* Learn to structure Terraform files for AWS projects.
+
+---
+
+#### Tools Used
+
+* **Terraform CLI**
+* **AWS Account** (with IAM permissions)
+* **VS Code or any text editor**
+
+---
+
+#### Directory Structure
+
+```bash
+aws-terraform-demo/
+ ├── main.tf
+ ├── variables.tf
+ ├── outputs.tf
+ └── iam.tf
+```
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Provider Setup
+
+**`main.tf`**
+
+```hcl
+provider "aws" {
+  region = "ap-south-1"
+}
+```
+
+---
+
+##### 2. EC2 Instance
+
+```hcl
+resource "aws_instance" "web" {
+  ami           = "ami-0abcdef1234567890" # Replace with valid AMI
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "TerraformDemoEC2"
+  }
+}
+```
+
+---
+
+##### 3. S3 Bucket
+
+```hcl
+resource "aws_s3_bucket" "demo_bucket" {
+  bucket = "terraform-demo-bucket-12345"
+  acl    = "private"
+
+  tags = {
+    Name = "TerraformDemoBucket"
+  }
+}
+```
+
+---
+
+##### 4. IAM User
+
+**`iam.tf`**
+
+```hcl
+resource "aws_iam_user" "demo_user" {
+  name = "terraform-demo-user"
+}
+
+resource "aws_iam_access_key" "demo_key" {
+  user = aws_iam_user.demo_user.name
+}
+
+output "access_key_id" {
+  value = aws_iam_access_key.demo_key.id
+}
+
+output "secret_access_key" {
+  value = aws_iam_access_key.demo_key.secret
+}
+```
+
+---
+
+##### 5. Variables (Optional)
+
+**`variables.tf`**
+
+```hcl
+variable "region" {
+  description = "AWS Region"
+  default     = "ap-south-1"
+}
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  default     = "t2.micro"
+}
+```
+
+---
+
+##### 6. Apply Terraform
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+* Confirm with **yes** when prompted
+
+---
+
+##### 7. Verify
+
+* EC2 instance is running → AWS Console → EC2
+* S3 bucket created → AWS Console → S3
+* IAM user and access keys → AWS Console → IAM
+
+---
+
+#### Key Concepts Applied
+
+| Concept   | Example Used                          |
+| --------- | ------------------------------------- |
+| EC2       | `aws_instance`                        |
+| S3 Bucket | `aws_s3_bucket`                       |
+| IAM User  | `aws_iam_user` & `aws_iam_access_key` |
+| Variables | `variables.tf`                        |
+| Output    | `outputs.tf`                          |
+
+---
+
+#### Bonus (Extra Learning)
+
+* Attach **IAM Policy** to the user: `AdministratorAccess`
+* Enable **versioning** for S3 bucket
+* Use **Terraform modules** for reusable AWS resources
+
+---
+
+#### Congratulations!
+
+You’ve successfully provisioned **EC2, S3, and IAM** resources using Terraform
+This is the foundation for **automated cloud infrastructure management**.
+
+---
+
+#### Try These Next
+
+* Create multiple EC2 instances using `count` or `for_each`.
+* Enable **public access block** for S3 bucket.
+* Store Terraform state in **remote backend** (S3 + DynamoDB).
+
+## 19. Cohort Practice — Day 40: Your First GitHub Actions Workflow
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today you write your **first GitHub Actions pipeline** and watch it run in the cloud.
+
+This is the moment CI/CD stops being a concept and becomes real.
+
+---
+
+#### Expected Output
+- A workflow file: `.github/workflows/hello.yml`
+- A markdown file: `day-40-first-workflow.md`
+- Screenshot of your first green pipeline run
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Set Up
+1. Create a new **public** GitHub repository called `github-actions-practice`
+2. Clone it locally
+3. Create the folder structure: `.github/workflows/`
+
+---
+
+##### Task 2: Hello Workflow
+Create `.github/workflows/hello.yml` with a workflow that:
+1. Triggers on every `push`
+2. Has one job called `greet`
+3. Runs on `ubuntu-latest`
+4. Has two steps:
+   - Step 1: Check out the code using `actions/checkout`
+   - Step 2: Print `Hello from GitHub Actions!`
+
+Push it. Go to the **Actions** tab on GitHub and watch it run.
+
+**Verify:** Is it green? Click into the job and read every step.
+
+---
+
+##### Task 3: Understand the Anatomy
+Look at your workflow file and write in your notes what each key does:
+- `on:`
+- `jobs:`
+- `runs-on:`
+- `steps:`
+- `uses:`
+- `run:`
+- `name:` (on a step)
+
+---
+
+##### Task 4: Add More Steps
+Update `hello.yml` to also:
+1. Print the current date and time
+2. Print the name of the branch that triggered the run (hint: GitHub provides this as a variable)
+3. List the files in the repo
+4. Print the runner's operating system
+
+Push again — watch the new run.
+
+---
+
+##### Task 5: Break It On Purpose
+1. Add a step that runs a command that will **fail** (e.g., `exit 1` or a misspelled command)
+2. Push and observe what happens in the Actions tab
+3. Fix it and push again
+
+Write in your notes: What does a failed pipeline look like? How do you read the error?
+
+---
+
+#### Hints
+- Workflow files live in `.github/workflows/` and must end in `.yml`
+- `uses: actions/checkout@v4` checks out your code onto the runner
+- `run:` executes shell commands
+- GitHub provides built-in variables like `${{ github.ref_name }}` for branch name
+- Every push triggers a new run — check the Actions tab
+
+---
+
+#### Documentation
+Create `day-40-first-workflow.md` with:
+- Your workflow YAML
+- Screenshot of the green run
+- What each `on:`, `jobs:`, `steps:` key does (your own words)
+
+---
+
+#### Submission
+1. Add `day-40-first-workflow.md` to `2026/day-40/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share your first green pipeline screenshot on LinkedIn. That green checkmark hits different.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+### Files
+
+- [.github/workflows/hello.yml](files/cohort-2026/.github/workflows/hello.yml)
+
+## 20. Hands-on Project — Day 40: Artifact Archiving
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Focus: deterministic artifacts, checksums, Jenkins archiveArtifacts + fingerprints, and a consumer job using copyArtifacts.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [Jenkinsfile-consumer.groovy](files/hands-on-projects/Jenkinsfile-consumer.groovy)
+- [scripts/build.sh](files/hands-on-projects/scripts/build.sh)
+- [scripts/checksums.sh](files/hands-on-projects/scripts/checksums.sh)
+
+
 ---
 
 [← Day 39](../day-39/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 41 →](../day-41/README.md)

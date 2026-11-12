@@ -430,7 +430,7 @@ gh pr create --fill   # review your own PR, then merge
 
 ## 18. Personal Learning Journal — 🐳 Day 17 - Docker Fundamentals & AWS NoSQL Database
 
-> Notes from my own 90-days journal for this day (merged from the *90days_DevOps_Challenge* repo).
+> Notes from my own 90-days journal for this day (from the *90days_DevOps_Challenge* journal).
 
 #### 📅 Date
 
@@ -959,6 +959,461 @@ Amazon DynamoDB is a serverless NoSQL database designed for high performance and
 ---
 
 > **"Containers package applications, but understanding how they work is what transforms a developer into a DevOps engineer."** 🐳🚀
+
+## 19. Challenge Notes — Day 17: Setting Alarms, Dashboards, and Metrics
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+#### 🎯 Objective
+
+Deep dive into CloudWatch Alarms, Dashboards, and Custom Metrics. Learn to:
+
+* Set CloudWatch alarms to monitor AWS resources
+* Create visual dashboards to observe trends
+* Push custom business/application metrics
+
+
+[![](https://img.youtube.com/vi/PMMAyPLXdGc/0.jpg)](https://www.youtube.com/watch?v=PMMAyPLXdGc)
+
+[Watch the video](https://www.youtube.com/watch?v=PMMAyPLXdGc)
+
+---
+
+#### 🧠 Key Concepts
+
+| Feature                               | Description                                                             |
+| ------------------------------------- | ----------------------------------------------------------------------- |
+| **Alarms**                            | Trigger actions (e.g., email, Lambda) based on metric thresholds        |
+| **Dashboards**                        | Visual panels to monitor metrics across services                        |
+| **Custom Metrics**                    | Push your own data points for business/app tracking (e.g., login count) |
+| **SNS (Simple Notification Service)** | Used to notify users when alarms are triggered                          |
+
+---
+
+#### 💡 Use Cases
+
+* **User logins per hour** – Track app usage
+* **Queue length (SQS, Redis)** – Monitor message build-up
+* **Order volume** – Business KPI visualization
+
+---
+
+#### 🧪 Labs Overview
+
+You will perform multiple hands-on labs to solidify understanding.
+
+---
+
+#### ✅ Lab 1: Create a CloudWatch Alarm for EC2 CPU Usage
+
+##### Steps:
+
+1. Launch EC2 instance
+2. Navigate: **CloudWatch > Alarms > Create Alarm**
+3. Metric: `EC2 → Per-Instance Metrics → CPUUtilization`
+4. Set condition: CPU > 70% for 5 minutes
+5. Create SNS topic and confirm email subscription
+6. Launch stress test on EC2:
+
+```bash
+sudo apt install stress -y
+stress --cpu 1 --timeout 300
+```
+
+7. Watch alarm status in CloudWatch
+
+---
+
+#### ✅ Lab 2: Push a Custom Metric – Track User Logins
+
+```bash
+aws cloudwatch put-metric-data \
+  --namespace "MyApp/Metrics" \
+  --metric-name "UserLogins" \
+  --value 1 \
+  --unit Count
+```
+
+➡️ Run multiple times to simulate logins
+
+---
+
+#### ✅ Lab 3: Monitor Application Queue Length
+
+```bash
+aws cloudwatch put-metric-data \
+  --namespace "MyApp/Queues" \
+  --metric-name "JobQueueLength" \
+  --value 50 \
+  --unit Count
+```
+
+➡️ Simulate varying queue values using a loop
+
+---
+
+#### ✅ Lab 4: Create a CloudWatch Dashboard
+
+1. Go to **CloudWatch > Dashboards**
+2. Name dashboard: `MyApp-Monitoring`
+3. Add widgets:
+
+   * Line graph: `UserLogins`
+   * Gauge: `JobQueueLength`
+   * Number: `OrdersPlaced`
+
+---
+
+#### ✅ Lab 5: Push Business Metric – Orders Placed
+
+```bash
+aws cloudwatch put-metric-data \
+  --namespace "MyApp/Business" \
+  --metric-name "OrdersPlaced" \
+  --value 12 \
+  --unit Count
+```
+
+➡️ Add more data points later to simulate activity
+
+---
+
+#### ✅ Lab 6: Create Alarm for Custom Metric – Queue Length
+
+1. Go to **CloudWatch > Alarms > Create**
+2. Choose `MyApp/Queues` → `JobQueueLength`
+3. Condition: > 50
+4. Action: SNS topic
+5. Test:
+
+```bash
+aws cloudwatch put-metric-data \
+  --namespace "MyApp/Queues" \
+  --metric-name "JobQueueLength" \
+  --value 60 \
+  --unit Count
+```
+
+---
+
+#### ✅ Lab 7: Clean Up Resources
+
+```bash
+aws cloudwatch delete-dashboards --dashboard-names MyApp-Monitoring
+```
+
+Delete any unnecessary alarms or SNS topics from console
+
+#### 📘 Homework
+
+1. Create a dashboard for your own project idea.
+2. Push three different custom metrics with meaningful names.
+3. Create an alarm that notifies on a specific threshold for one of them.
+
+### Attachments
+
+- [Day 17 - Setting Alarms, Dashboards, and Metrics.pdf](Day%2017%20-%20Setting%20Alarms%2C%20Dashboards%2C%20and%20Metrics.pdf)
+
+## 20. Cohort Practice — Day 17: Shell Scripting: Loops, Arguments & Error Handling
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Level up your scripting — use loops, handle arguments, and deal with errors.
+
+You will:
+- Write **for** and **while** loops
+- Use **command-line arguments** (`$1`, `$2`, `$#`, `$@`)
+- Install packages via script
+- Add basic **error handling**
+
+---
+
+#### Expected Output
+- A markdown file: `day-17-scripting.md`
+- All scripts you write during the tasks
+
+---
+
+
+
+#### Challenge Tasks
+
+##### Task 1: For Loop
+1. Create `for_loop.sh` that:
+   - Loops through a list of 5 fruits and prints each one
+2. Create `count.sh` that:
+   - Prints numbers 1 to 10 using a for loop
+
+---
+
+##### Task 2: While Loop
+1. Create `countdown.sh` that:
+   - Takes a number from the user
+   - Counts down to 0 using a while loop
+   - Prints "Done!" at the end
+
+---
+
+##### Task 3: Command-Line Arguments
+1. Create `greet.sh` that:
+   - Accepts a name as `$1`
+   - Prints `Hello, <name>!`
+   - If no argument is passed, prints "Usage: ./greet.sh <name>"
+
+2. Create `args_demo.sh` that:
+   - Prints total number of arguments (`$#`)
+   - Prints all arguments (`$@`)
+   - Prints the script name (`$0`)
+
+---
+
+##### Task 4: Install Packages via Script
+1. Create `install_packages.sh` that:
+   - Defines a list of packages: `nginx`, `curl`, `wget`
+   - Loops through the list
+   - Checks if each package is installed (use `dpkg -s` or `rpm -q`)
+   - Installs it if missing, skips if already present
+   - Prints status for each package
+
+> Run as root: `sudo -i` or `sudo su`
+
+---
+
+##### Task 5: Error Handling
+1. Create `safe_script.sh` that:
+   - Uses `set -e` at the top (exit on error)
+   - Tries to create a directory `/tmp/devops-test`
+   - Tries to navigate into it
+   - Creates a file inside
+   - Uses `||` operator to print an error if any step fails
+
+Example:
+```bash
+mkdir /tmp/devops-test || echo "Directory already exists"
+```
+
+2. Modify your `install_packages.sh` to check if the script is being run as root — exit with a message if not.
+
+---
+
+#### Hints
+- For loop: `for item in list; do ... done`
+- While loop: `while [ condition ]; do ... done`
+- Arguments: `$1` first arg, `$#` count, `$@` all args
+- Check root: `if [ "$EUID" -ne 0 ]; then echo "Run as root"; exit 1; fi`
+- Check package: `dpkg -s <pkg> &> /dev/null && echo "installed"`
+
+---
+
+#### Documentation
+
+Create `day-17-scripting.md` with:
+- Each script's code and output
+- What you learned (3 key points)
+
+---
+
+#### Submission
+1. Add your scripts and `day-17-scripting.md` to `2026/day-17/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+
+Share your scripting progress on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+##### Notes: day-17-scripting
+
+#!/bin/bash
+
+
+fruits=("apple" "banana" "orange" "mango" "litchi")
+
+
+for fruit in ${fruits[@]}
+do
+        echo "$fruit"
+done
+
+
+
+for num in {1..10}
+do
+        echo $num
+done
+
+
+
+#!/bin/bash
+
+
+if [ $# -eq 0 ];
+then
+        echo "./greet.sh <name>"
+else
+        echo "Hello , $1"
+fi
+
+
+
+#!/bin/bash
+
+num=0
+read -p "Enter number: " number
+while [ $num -le $number ]
+do
+        echo " number -" $num
+        ((num++))
+done
+
+
+
+#!/bin/bash
+
+set -e
+
+### Create directory
+mkdir /tmp/devops-test || echo "Directory already exists"
+
+### Move into directory
+cd /tmp/devops-test || {
+    echo "Failed to enter directory"
+    exit 1
+}
+
+### Create file
+touch devops.txt || {
+    echo "Failed to create file"
+    exit 1
+}
+
+echo "File created successfully."
+
+
+#!/bin/bash
+
+### List of packages
+packages=("nginx" "curl" "wget")
+
+### Loop through packages
+for package in "${packages[@]}"
+do
+
+    echo "Checking package: $package"
+
+    # Check package installed or not
+    if dpkg -s "$package" &>/dev/null
+    then
+        echo "$package is already installed."
+    
+    else
+        echo "$package is NOT installed."
+        echo "Installing $package..."
+
+        sudo apt update -y
+        sudo apt install -y "$package"
+
+        # Verify installation
+        if dpkg -s "$package" &>/dev/null
+        then
+            echo "$package installed successfully."
+        else
+            echo "Failed to install $package."
+        fi
+    fi
+
+    echo "--------------------------------"
+
+done
+
+### Files
+
+- [image.png](files/cohort-2026/image.png)
+
+## 21. Hands-on Project — Day 17: EC2 + User Data + SSM (No SSH Keys)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### 📖 Overview
+Today’s focus: **Provision EC2 with Terraform**, bootstrap with **cloud-init user data**, and manage the instance using **AWS Systems Manager (SSM) Session Manager** — no inbound SSH required.
+
+This module plugs into **Day 14** (VPC/Subnets/IGW/NAT) and **Day 16** (SGs). You will:
+- Launch an EC2 instance in a chosen subnet (public *or* private).
+- Attach an **IAM role** with `AmazonSSMManagedInstanceCore` for SSM.
+- Use **user data** to install and run NGINX and push a demo page.
+- (Optional) Route SSM traffic via **Interface Endpoints** from Day 15 for private subnets.
+
+---
+
+#### 🎯 Learning Goals
+- Data-source the latest **Amazon Linux** AMI.
+- Use `user_data` to install packages and write files at boot.
+- Attach an **instance profile** with least-privilege policy.
+- Use **SSM Session Manager** to access the instance without SSH keys.
+
+---
+
+#### 🛠️ Lab Setup & Tasks
+
+```text
+1) Initialize
+   terraform -chdir=terraform init
+
+2) Plan (replace with your values from Day 14/16)
+   terraform -chdir=terraform plan      -var='vpc_id=vpc-012345'      -var='subnet_id=subnet-abc'      -var='security_group_ids=["sg-xyz"]'
+
+3) Apply
+   terraform -chdir=terraform apply -auto-approve      -var='vpc_id=vpc-012345'      -var='subnet_id=subnet-abc'      -var='security_group_ids=["sg-xyz"]'
+
+4) Connect (no SSH needed)
+   - Open AWS Console → Systems Manager → Session Manager → Start session → choose instance
+   - Or CLI: aws ssm start-session --target <instance-id>
+
+5) Verify user data
+   - From the session: curl -s localhost | head -n3
+   - Check systemd service status: sudo systemctl status nginx
+```
+
+**Notes**
+- If you place the instance in a **private** subnet, ensure **Day 15 SSM interface endpoints** exist, or the instance needs a NAT path for SSM.
+- Amazon Linux 2023 & 2 come with SSM agent by default (the module still handles the IAM role).
+
+---
+
+#### 💡 Challenge
+- Add a **CloudWatch agent** to ship NGINX access logs (via extra user data).  
+- Switch to a **Launch Template + Auto Scaling Group** pattern.  
+- Parameterize **user data** from a local file and pass variables (e.g., app name, env).
+
+---
+
+#### ✅ Checklist
+- [ ] Instance reachable via **SSM Session Manager**  
+- [ ] NGINX is **running** and serving a custom index page  
+- [ ] No inbound SSH required  
+- [ ] (Optional) Private subnet + VPC interface endpoints for SSM
+
+---
+
+#### 📌 Commit
+```bash
+git add day17-ec2-userdata-ssm
+git commit -m "day17: EC2 with user data + SSM Session Manager (no SSH)"
+git push
+```
+
+### Files
+
+- [terraform/main.tf](files/hands-on-projects/terraform/main.tf)
+- [terraform/outputs.tf](files/hands-on-projects/terraform/outputs.tf)
+- [terraform/variables.tf](files/hands-on-projects/terraform/variables.tf)
 
 
 ---

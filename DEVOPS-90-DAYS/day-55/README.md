@@ -487,6 +487,243 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 55: Logging with CloudWatch for Lambda
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 55** of the DevOps 90-Day Challenge!
+Today, we focus on **logging** in serverless applications using **AWS CloudWatch**. Logs are essential to debug, troubleshoot, and analyze the behavior of your Lambda functions and serverless workflows.
+
+[![](https://img.youtube.com/vi/cnw4UgiRM2w/0.jpg)](https://www.youtube.com/watch?v=cnw4UgiRM2w)
+
+
+[Watch the video](https://www.youtube.com/watch?v=cnw4UgiRM2w)
+
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand why logging is critical in serverless architectures.
+* Learn how Lambda integrates natively with CloudWatch Logs.
+* Write custom log statements in Python/Node.js for Lambda.
+* View, filter, and analyze logs in the CloudWatch Console.
+* Set up **Log Retention Policies** to manage costs.
+
+---
+
+#### Tools Used
+
+* **AWS Lambda** (Function execution)
+* **Amazon CloudWatch Logs** (Log storage and analysis)
+* **AWS IAM** (Permissions for logging)
+* **Python/Boto3** (Runtime)
+
+---
+
+#### Key Concepts
+
+##### 1. The Need for Logging
+In a traditional server, you might SSH in and check `/var/log/syslog`. In Lambda, there is no persistent server. All output (`stdout`/`stderr`) is automatically captured by the execution environment and sent to CloudWatch Logs.
+
+##### 2. Log Groups and Streams
+*   **Log Group**: A collection of log streams that share the same retention, monitoring, and access control settings. Lambda creates a group named `/aws/lambda/<function-name>`.
+*   **Log Stream**: A sequence of log events that share the same source (a specific Lambda container instance).
+
+##### 3. Writing Logs
+Simply printing to standard output works!
+
+**Python:**
+```python
+import json
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+def lambda_handler(event, context):
+    logger.info("Function started execution")
+    print("This also goes to CloudWatch")
+    return "Done"
+```
+
+---
+
+#### Key Concepts Applied
+
+| Concept | Description |
+| :--- | :--- |
+| **Structured Logging** | Writing logs in JSON format for easier parsing and querying. |
+| **Log Retention** | Configuring logs to expire after X days (e.g., 7 days) to save storage costs. |
+| **CloudWatch Insights** | Using query syntax to search through millions of log lines instantly. |
+
+---
+
+#### Bonus (Extra Learning)
+
+*   Explore **CloudWatch Log Insights** to run SQL-like queries on your logs.
+*   Create a **Metric Filter** to count occurrences of the word "ERROR" in your logs.
+
+---
+
+#### Congratulations!
+
+You now have visibility into your Serverless functions! Without logs, a Lambda function is a black box. Now it's a transparent, debuggable unit of work.
+
+---
+
+#### Try These Next
+
+*   Intentionally raise an error in your Lambda and find the **Stack Trace** in CloudWatch.
+*   Export your logs to **Amazon S3** for long-term archiving.
+
+## 19. Cohort Practice — Day 55: Persistent Volumes (PV) and Persistent Volume Claims (PVC)
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Containers are ephemeral — when a Pod dies, everything inside it disappears. That is a serious problem for databases and anything that needs to survive a restart. Today you fix this with Persistent Volumes and Persistent Volume Claims.
+
+---
+
+#### Expected Output
+- Data loss demonstrated with an ephemeral Pod
+- A PV and PVC created, bound, and data persisting across Pod deletions
+- A markdown file: `day-55-persistent-volumes.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: See the Problem — Data Lost on Pod Deletion
+1. Write a Pod manifest that uses an `emptyDir` volume and writes a timestamped message to `/data/message.txt`
+2. Apply it, verify the data exists with `kubectl exec`
+3. Delete the Pod, recreate it, check the file again — the old message is gone
+
+**Verify:** Is the timestamp the same or different after recreation?
+
+---
+
+##### Task 2: Create a PersistentVolume (Static Provisioning)
+1. Write a PV manifest with `capacity: 1Gi`, `accessModes: ReadWriteOnce`, `persistentVolumeReclaimPolicy: Retain`, and `hostPath` pointing to `/tmp/k8s-pv-data`
+2. Apply it and check `kubectl get pv` — status should be `Available`
+
+Access modes to know:
+- `ReadWriteOnce (RWO)` — read-write by a single node
+- `ReadOnlyMany (ROX)` — read-only by many nodes
+- `ReadWriteMany (RWX)` — read-write by many nodes
+
+`hostPath` is fine for learning, not for production.
+
+**Verify:** What is the STATUS of the PV?
+
+---
+
+##### Task 3: Create a PersistentVolumeClaim
+1. Write a PVC manifest requesting `500Mi` of storage with `ReadWriteOnce` access
+2. Apply it and check both `kubectl get pvc` and `kubectl get pv`
+3. Both should show `Bound` — Kubernetes matched them by capacity and access mode
+
+**Verify:** What does the VOLUME column in `kubectl get pvc` show?
+
+---
+
+##### Task 4: Use the PVC in a Pod — Data That Survives
+1. Write a Pod manifest that mounts the PVC at `/data` using `persistentVolumeClaim.claimName`
+2. Write data to `/data/message.txt`, then delete and recreate the Pod
+3. Check the file — it should contain data from both Pods
+
+**Verify:** Does the file contain data from both the first and second Pod?
+
+---
+
+##### Task 5: StorageClasses and Dynamic Provisioning
+1. Run `kubectl get storageclass` and `kubectl describe storageclass`
+2. Note the provisioner, reclaim policy, and volume binding mode
+3. With dynamic provisioning, developers only create PVCs — the StorageClass handles PV creation automatically
+
+**Verify:** What is the default StorageClass in your cluster?
+
+---
+
+##### Task 6: Dynamic Provisioning
+1. Write a PVC manifest that includes `storageClassName: standard` (or your cluster's default)
+2. Apply it — a PV should appear automatically in `kubectl get pv`
+3. Use this PVC in a Pod, write data, verify it works
+
+**Verify:** How many PVs exist now? Which was manual, which was dynamic?
+
+---
+
+##### Task 7: Clean Up
+1. Delete all pods first
+2. Delete PVCs — check `kubectl get pv` to see what happened
+3. The dynamic PV is gone (Delete reclaim policy). The manual PV shows `Released` (Retain policy).
+4. Delete the remaining PV manually
+
+**Verify:** Which PV was auto-deleted and which was retained? Why?
+
+---
+
+#### Hints
+- PVs are cluster-wide (not namespaced), PVCs are namespaced
+- PV status: `Available` -> `Bound` -> `Released`
+- If a PVC stays `Pending`, check for matching capacity and access modes
+- `hostPath` data is lost if the Pod moves to a different node
+- `storageClassName: ""` disables dynamic provisioning
+- Reclaim policies: `Retain` (keep data) vs `Delete` (remove data)
+
+---
+
+#### Documentation
+Create `day-55-persistent-volumes.md` with:
+- Why containers need persistent storage
+- What PVs and PVCs are and how they relate
+- Static vs dynamic provisioning
+- Access modes and reclaim policies
+
+---
+
+#### Submission
+1. Add `day-55-persistent-volumes.md` to `2026/day-55/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share on LinkedIn: "Learned Kubernetes Persistent Volumes and PVCs today. Proved container data is ephemeral, then fixed it with PVs. Also explored dynamic provisioning with StorageClasses."
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 55: Helm Chart for Worker Service (Queue/Cron)
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+Helm chart supporting Deployment (consumer) and CronJob modes with env-specific values and Jenkinsfile.
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [charts/demo-worker/.helmignore](files/hands-on-projects/charts/demo-worker/.helmignore)
+- [charts/demo-worker/Chart.yaml](files/hands-on-projects/charts/demo-worker/Chart.yaml)
+- [charts/demo-worker/templates/_helpers.tpl](files/hands-on-projects/charts/demo-worker/templates/_helpers.tpl)
+- [charts/demo-worker/templates/cronjob.yaml](files/hands-on-projects/charts/demo-worker/templates/cronjob.yaml)
+- [charts/demo-worker/templates/deployment.yaml](files/hands-on-projects/charts/demo-worker/templates/deployment.yaml)
+- [charts/demo-worker/templates/hpa.yaml](files/hands-on-projects/charts/demo-worker/templates/hpa.yaml)
+- [charts/demo-worker/templates/serviceaccount.yaml](files/hands-on-projects/charts/demo-worker/templates/serviceaccount.yaml)
+- [charts/demo-worker/values-prod.yaml](files/hands-on-projects/charts/demo-worker/values-prod.yaml)
+- [charts/demo-worker/values-staging.yaml](files/hands-on-projects/charts/demo-worker/values-staging.yaml)
+- [charts/demo-worker/values.yaml](files/hands-on-projects/charts/demo-worker/values.yaml)
+- [scripts/helm_deploy.sh](files/hands-on-projects/scripts/helm_deploy.sh)
+- [scripts/helm_lint.sh](files/hands-on-projects/scripts/helm_lint.sh)
+- [scripts/helm_rollback.sh](files/hands-on-projects/scripts/helm_rollback.sh)
+- [scripts/helm_template.sh](files/hands-on-projects/scripts/helm_template.sh)
+
+
 ---
 
 [← Day 54](../day-54/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 56 →](../day-56/README.md)

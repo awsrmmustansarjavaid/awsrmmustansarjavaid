@@ -427,6 +427,274 @@ gh pr create --fill   # review your own PR, then merge
 
 **One thing I will automate or improve tomorrow:**
 
+## 18. Challenge Notes — Day 43: Terraform + Jenkins CICD Integration
+
+> Notes for this day from the *90 Days DevOps Challenge* repository (AWS-focused daily guide).
+
+Welcome to **Day 43** of the DevOps 90-Day Challenge!
+Yesterday, you learned **advanced Terraform concepts**.
+Today, we’ll integrate Terraform with **Jenkins** to automate infrastructure provisioning using **CI/CD pipelines**.
+
+[![](https://img.youtube.com/vi/738afAnLrO0/0.jpg)](https://www.youtube.com/watch?v=738afAnLrO0)
+[Watch the video](https://www.youtube.com/watch?v=738afAnLrO0)
+---
+
+#### Objective
+
+By the end of this session, you will:
+
+* Understand how to **automate Terraform** using Jenkins pipelines.
+* Learn to run **plan, apply, and destroy** Terraform tasks via Jenkins.
+* Implement **safe, repeatable infrastructure deployment**.
+
+---
+
+#### Tools Used
+
+* **Terraform CLI**
+* **Jenkins** (installed on EC2 or local)
+* **AWS Account**
+* **GitHub Repo** (for Terraform code)
+
+---
+
+#### Step-by-Step Guide
+
+##### 1. Jenkins Pipeline Setup
+
+* Create a **Jenkins Pipeline Job**
+* Connect to your **GitHub repository** containing Terraform code
+
+---
+
+##### 2. Sample Declarative Jenkinsfile
+
+```groovy
+pipeline {
+    agent any
+
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/username/terraform-demo.git'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan -out=tfplan'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                input message: 'Approve Apply?'
+                sh 'terraform apply tfplan'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline Completed'
+        }
+    }
+}
+```
+
+---
+
+##### 3. Configure Jenkins Credentials
+
+* Go to **Jenkins → Credentials → Global**
+* Add AWS keys as **“aws-access-key”** and **“aws-secret-key”**
+
+---
+
+##### 4. Run the Pipeline
+
+* Trigger **Build Now**
+* Jenkins will:
+
+  1. Checkout code
+  2. Initialize Terraform
+  3. Generate plan
+  4. Wait for manual approval
+  5. Apply changes
+
+---
+
+##### 5. Verification
+
+* Check **AWS Console** → resources created (EC2, S3, IAM)
+* Review **Jenkins console logs** for errors
+* Terraform state saved remotely (if configured)
+
+---
+
+#### Key Concepts Applied
+
+| Concept              | Example Used                          |
+| -------------------- | ------------------------------------- |
+| CI/CD Integration    | Jenkins Pipeline runs Terraform tasks |
+| Terraform Automation | init, plan, apply stages              |
+| Secrets Management   | Jenkins credentials for AWS           |
+| Manual Approval      | `input` step before apply             |
+
+---
+
+#### Bonus (Extra Learning)
+
+* Add **destroy stage** to clean up infrastructure
+* Integrate **Slack notifications** for pipeline success/failure
+* Parameterize pipeline for **different environments**
+
+---
+
+#### Congratulations!
+
+You’ve successfully integrated **Terraform with Jenkins**!
+Now your infrastructure can be deployed automatically, safely, and repeatably.
+
+---
+
+#### Try These Next
+
+* Add **staging and production pipelines**
+* Use **multi-branch pipeline** to deploy feature-specific environments
+* Automate remote state setup using **S3 backend**
+
+## 19. Cohort Practice — Day 43: Jobs, Steps, Env Vars & Conditionals
+
+> From the *90DaysOfDevops* cohort repository (task brief and practice notes).
+
+#### Task
+Today you learn how to **control the flow** of your pipeline — multi-job workflows, passing data between jobs, environment variables, and running steps only when certain conditions are met.
+
+---
+
+
+#### Expected Output
+- New workflow files in your `github-actions-practice` repo
+  
+- A markdown file: `day-43-jobs-steps.md`
+
+---
+
+#### Challenge Tasks
+
+##### Task 1: Multi-Job Workflow
+Create `.github/workflows/multi-job.yml` with 3 jobs:
+- `build` — prints "Building the app"
+- `test` — prints "Running tests"
+- `deploy` — prints "Deploying"
+
+Make `test` run only **after** `build` succeeds.
+Make `deploy` run only **after** `test` succeeds.
+
+**Verify:** Check the workflow graph in the Actions tab — does it show the dependency chain?
+
+---
+
+##### Task 2: Environment Variables
+In a new workflow, use environment variables at 3 levels:
+1. **Workflow level** — `APP_NAME: myapp`
+2. **Job level** — `ENVIRONMENT: staging`
+3. **Step level** — `VERSION: 1.0.0`
+
+Print all three in a single step and verify each is accessible.
+
+Then use a **GitHub context variable** — print the commit SHA and the actor (who triggered the run).
+
+---
+
+##### Task 3: Job Outputs
+1. Create a job that **sets an output** — e.g., today's date as a string
+2. Create a second job that **reads that output** and prints it
+3. Pass the value using `outputs:` and `needs.<job>.outputs.<name>`
+
+Write in your notes: Why would you pass outputs between jobs?
+
+---
+
+##### Task 4: Conditionals
+In a workflow, add:
+1. A step that only runs when the branch is `main`
+2. A step that only runs when the previous step **failed**
+3. A job that only runs on **push** events, not on pull requests
+4. A step with `continue-on-error: true` — what does this do?
+
+---
+
+##### Task 5: Putting It Together
+Create `.github/workflows/smart-pipeline.yml` that:
+1. Triggers on push to any branch
+2. Has a `lint` job and a `test` job running in parallel
+3. Has a `summary` job that runs after both, prints whether it's a `main` branch push or a feature branch push, and prints the commit message
+
+---
+
+#### Hints
+- Job dependency: `needs: [job-name]`
+- Set output: `echo "date=$(date)" >> $GITHUB_OUTPUT`
+- Read output: `${{ needs.job-name.outputs.date }}`
+- Conditionals: `if: github.ref == 'refs/heads/main'`
+- Commit message: `${{ github.event.commits[0].message }}`
+
+---
+
+#### Documentation
+Create `day-43-jobs-steps.md` with:
+- Key workflow snippets
+- What `needs:` and `outputs:` do in your own words
+
+---
+
+#### Submission
+1. Add `day-43-jobs-steps.md` to `2026/day-43/`
+2. Commit and push to your fork
+
+---
+
+#### Learn in Public
+Share the dependency chain diagram from your multi-job workflow on LinkedIn.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
+
+## 20. Hands-on Project — Day 43: Nightly Synthetic Tests
+
+> From the *90daysofdevops* hands-on repository (scripts, Terraform, Kubernetes and pipeline code are in the `files/hands-on-projects` folder of this day).
+
+#### Overview
+Nightly synthetic monitoring pipeline: hit a live URL, measure health & latency, alert on failure, store JSON report.
+
+#### Goals
+- Jenkins scheduled job (cron nightly)
+- SLA-style availability check
+- Optional Slack alert + S3 archival
+
+### Files
+
+- [Jenkinsfile](files/hands-on-projects/Jenkinsfile)
+- [scripts/notify_slack.sh](files/hands-on-projects/scripts/notify_slack.sh)
+- [scripts/report_to_s3.sh](files/hands-on-projects/scripts/report_to_s3.sh)
+- [scripts/synthetic_check.sh](files/hands-on-projects/scripts/synthetic_check.sh)
+
+
 ---
 
 [← Day 42](../day-42/README.md) | [Roadmap](../90-DAY-ROADMAP.md) | [Day 44 →](../day-44/README.md)
