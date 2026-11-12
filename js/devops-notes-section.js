@@ -166,7 +166,10 @@
       }
 
       const markdownFiles = entries
-        .filter(item => item.type === "file" && /\.markdown?$/i.test(item.name))
+        // Keep .md and .markdown files only; skip the folder's README.md index file.
+        .filter(item => item.type === "file" &&
+                        /\.(md|markdown)$/i.test(item.name) &&
+                        item.name.toLowerCase() !== "readme.md")
         .sort((a, b) => a.name.localeCompare(b.name, undefined, {
           numeric: true,
           sensitivity: "base"
