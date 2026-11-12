@@ -1,0 +1,75 @@
+
+/* Article search and filter toolbar */
+
+.articles-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.articles-toolbar input,
+.articles-toolbar select {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 15px;
+    color: #E7ECF6;
+    background: #0A1530;
+    border: 1px solid #1A2B57;
+    border-radius: 10px;
+    outline: none;
+}
+
+.articles-toolbar input:focus,
+.articles-toolbar select:focus {
+    border-color: #38BDF8;
+}
+
+.articles-toolbar button {
+    padding: 11px 18px;
+    color: #04101F;
+    background: linear-gradient(90deg, #22D3EE, #7C5CFF);
+    border: 0;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#articles-status {
+    color: #9AA7C7;
+    font-size: 0.85rem;
+    margin: 15px 0;
+}
+
+.article-source-badge {
+    display: inline-block;
+    width: fit-content;
+    padding: 5px 11px;
+    color: #38BDF8;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.article-card .dn-card-title a {
+    color: #E7ECF6;
+    text-decoration: none;
+}
+
+.article-card .dn-card-title a:hover {
+    color: #38BDF8;
+}
+
+@media (max-width: 600px) {
+    .articles-toolbar {
+        flex-direction: column;
+    }
+
+    .articles-toolbar input,
+    .articles-toolbar select,
+    .articles-toolbar button {
+        width: 100%;
+    }
+}

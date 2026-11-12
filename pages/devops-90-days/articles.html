@@ -11,6 +11,7 @@
 
   <!-- Shared portal stylesheet (css/devops-90-days.css) -->
   <link rel="stylesheet" href="../../css/devops-90-days.css">
+  <link rel="stylesheet" href="../../css/articles.css">
 </head>
 
 <!-- data-page="articles" runs pageArticles() in devops-90-days.js -->
@@ -54,6 +55,46 @@
     </div>
   </main>
 
+
+  <!-- Article search and filters -->
+  <section class="articles-toolbar">
+
+      <input
+          type="search"
+          id="article-search"
+          placeholder="Search DevOps articles..."
+          aria-label="Search articles"
+      >
+
+      <select id="article-source-filter" aria-label="Filter articles">
+          <option value="all">All Sources</option>
+          <option value="medium">Medium</option>
+          <option value="linkedin">LinkedIn</option>
+      </select>
+
+      <button id="articles-refresh" type="button">
+          ↻ Refresh Articles
+      </button>
+
+  </section>
+
+  <!-- Article loading and status -->
+  <p id="articles-status" aria-live="polite">
+      Loading articles...
+  </p>
+
+  <!-- Article cards are inserted here -->
+  <section
+      id="articles-grid"
+      class="dn-grid"
+      aria-label="DevOps articles"
+  >
+  </section>
+
+  <!-- Load the external JavaScript file -->
+  <script src="./articles.js" defer></script>
+
+
   <!-- Footer is injected by devops-90-days.js -->
   <footer id="site-footer"></footer>
 
@@ -62,5 +103,6 @@
   <!-- Local scripts: curriculum data first, then application logic. -->
   <script src="../../js/devops-90-days-data.js"></script>
   <script src="../../js/devops-90-days.js"></script>
+  <script src="../../js/articles.js"></script>
 </body>
 </html>
