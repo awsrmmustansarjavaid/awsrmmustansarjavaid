@@ -21,6 +21,9 @@
   const GITHUB_BRANCH = "main";
   const NOTES_DIRECTORY = "DEVOPS-90-DAYS/devops-notes";
 
+  // Standalone page that shows one note on its own URL (relative to pages/challenges.html).
+  const NOTE_PAGE = "devops-90-days/devops-note.html";
+
   const API_URL =
     `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${NOTES_DIRECTORY}?ref=${GITHUB_BRANCH}`;
 
@@ -123,8 +126,16 @@
       const readButton = document.createElement("button");
       readButton.type = "button";
       readButton.className = "devops-note-read";
-      readButton.textContent = "Read note";
+      readButton.textContent = "Details";
+      readButton.setAttribute("aria-label", `Read details of ${note.title} in a popup`);
       readButton.addEventListener("click", () => openNote(note));
+
+      // "Open" goes to the note's own page, e.g. devops-note.html?note=01-Charlie-DevOps.md
+      const openLink = document.createElement("a");
+      openLink.className = "devops-note-source-link devops-note-open";
+      openLink.href = `${NOTE_PAGE}?note=${encodeURIComponent(note.name)}`;
+      openLink.setAttribute("aria-label", `Open ${note.title} on its own page`);
+      openLink.textContent = "Open";
 
       const sourceLink = document.createElement("a");
       sourceLink.className = "devops-note-source-link";
@@ -133,7 +144,7 @@
       sourceLink.rel = "noopener noreferrer";
       sourceLink.textContent = "GitHub ↗";
 
-      actions.append(readButton, sourceLink);
+      actions.append(readButton, openLink, sourceLink);
       card.append(top, heading, summary, actions);
       fragment.appendChild(card);
     });
