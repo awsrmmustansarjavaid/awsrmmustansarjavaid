@@ -1,224 +1,1665 @@
+
 /**
- * DevOps Notes styles
- * Shared by pages/devops-notes.html and pages/devops-note.html
+ * ================================================================
+ * CHARLIE MJ — DEVOPS NOTES
+ * ================================================================
+ *
+ * File: devops-notes.css
+ *
+ * Purpose:
+ * Provides a complete, responsive design for the DevOps Notes
+ * index page and individual Markdown note reader.
+ *
+ * DESIGN:
+ * - Matches the main portfolio homepage.
+ * - Deep navy background with blue/violet glow effects.
+ * - Dotted circuit-style background texture.
+ * - Cyan-to-violet gradient accents.
+ * - Modern glass-style navigation.
+ * - Matching portfolio cards and borders.
+ * - Consistent typography and spacing.
+ *
+ * FEATURES:
+ * - Responsive notes grid.
+ * - Sticky navigation.
+ * - Sticky desktop table of contents.
+ * - Mobile sidebar drawer.
+ * - Markdown content styling.
+ * - Code blocks and tables.
+ * - Print-friendly layout.
+ * - Reduced-motion accessibility.
+ *
+ * IMPORTANT:
+ * This stylesheet is self-contained.
+ * It does not require background.css or effects.css.
+ *
+ * ================================================================
  */
 
-/* ==========================================
-   1. Design tokens (dark by default, light follows the system)
-   ========================================== */
+
+/* ================================================================
+   1. DESIGN TOKENS — MATCH HOMEPAGE
+   ================================================================ */
+
 :root {
-  --bg: #0b1120;
-  --surface: #111c30;
-  --border: #263650;
-  --text: #e5edf8;
-  --muted: #94a3b8;
-  --accent: #38bdf8;
-  --accent-soft: rgba(56, 189, 248, 0.12);
-  --code-bg: #0a1527;
-  --nav-height: 56px;
-  color-scheme: dark;
+    /* Main background colors */
+    --bg: #050B1E;
+    --surface: #0A1530;
+    --surface-alt: #08112A;
+    --surface-hover: #101D3A;
+
+    /* Borders */
+    --border: #1A2B57;
+    --border-hover: rgba(56, 189, 248, 0.65);
+
+    /* Text colors */
+    --text: #E7ECF6;
+    --muted: #9AA7C7;
+
+    /* Main accent colors */
+    --accent: #38BDF8;
+    --accent-secondary: #7C5CFF;
+
+    /* Accent gradient */
+    --accent-gradient: linear-gradient(
+        90deg,
+        #22D3EE,
+        #7C5CFF
+    );
+
+    /* Soft accent backgrounds */
+    --accent-soft: rgba(56, 189, 248, 0.10);
+    --accent-glow: rgba(56, 189, 248, 0.25);
+    --violet-glow: rgba(124, 92, 255, 0.20);
+
+    /* Code backgrounds */
+    --code-bg: #08112A;
+
+    /* Status colors */
+    --success: #34D399;
+    --warning: #FBBF24;
+    --danger: #F87171;
+
+    /* Layout */
+    --nav-height: 72px;
+    --content-width: 1200px;
+    --reader-width: 900px;
+    --sidebar-width: 290px;
+
+    /* Rounded corners */
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-lg: 18px;
+
+    /* Shadows */
+    --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.18);
+    --shadow-hover: 0 12px 36px rgba(37, 99, 235, 0.28);
+
+    /* Transitions */
+    --transition: 0.25s ease;
+
+    /* Browser color scheme */
+    color-scheme: dark;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #f6f8fb;
-    --surface: #ffffff;
-    --border: #d9e1ec;
-    --text: #172033;
-    --muted: #5b6b82;
-    --accent: #0369a1;
-    --accent-soft: rgba(3, 105, 161, 0.1);
-    --code-bg: #eef2f7;
-    color-scheme: light;
-  }
+
+/* ================================================================
+   2. GLOBAL RESET AND BASE STYLES
+   ================================================================ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
-/* ==========================================
-   2. Base
-   ========================================== */
-* { box-sizing: border-box; }
-
-html { scroll-padding-top: calc(var(--nav-height) + 16px); }
-@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-height) + 20px);
+}
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  line-height: 1.6;
+    margin: 0;
+    min-height: 100vh;
+
+    background: var(--bg);
+    color: var(--text);
+
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    overflow-x: hidden;
 }
 
-a { color: var(--accent); }
+/* Consistent heading typography */
 
-/* ==========================================
-   3. Top navigation
-   ========================================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+/* Links */
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+a:hover {
+    color: var(--accent-secondary);
+}
+
+/* Images */
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Buttons and inputs inherit the site typography */
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+
+/* ================================================================
+   3. HOMEPAGE-STYLE BACKGROUND
+   ================================================================ */
+
+/*
+ * Reproduces the shared background.css design:
+ *
+ * - Deep navy base.
+ * - Blue radial glow in the top-left.
+ * - Violet radial glow in the top-right.
+ * - Dotted circuit texture.
+ * - Subtle bottom blue glow.
+ */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    z-index: -2;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            rgba(56, 189, 248, 0.20) 1px,
+            transparent 1.6px
+        ) 0 0 / 30px 30px,
+
+        radial-gradient(
+            1100px 620px at -8% -6%,
+            rgba(37, 99, 235, 0.42),
+            transparent 62%
+        ),
+
+        radial-gradient(
+            950px 620px at 108% 6%,
+            rgba(99, 72, 255, 0.34),
+            transparent 62%
+        ),
+
+        radial-gradient(
+            1000px 520px at 50% 108%,
+            rgba(37, 99, 235, 0.16),
+            transparent 65%
+        );
+
+    -webkit-mask-image: linear-gradient(
+        #000 0,
+        #000 55%,
+        rgba(0, 0, 0, 0.55) 100%
+    );
+
+    mask-image: linear-gradient(
+        #000 0,
+        #000 55%,
+        rgba(0, 0, 0, 0.55) 100%
+    );
+}
+
+/* Floating violet glow */
+
+body::after {
+    content: "";
+
+    position: fixed;
+    z-index: -1;
+
+    width: 420px;
+    height: 420px;
+
+    top: 40%;
+    left: 52%;
+
+    border-radius: 50%;
+    pointer-events: none;
+
+    background: radial-gradient(
+        circle,
+        rgba(99, 72, 255, 0.16),
+        transparent 70%
+    );
+
+    animation: dn-orb-float 18s ease-in-out infinite alternate;
+}
+
+@keyframes dn-orb-float {
+    to {
+        transform: translate(-170px, 90px);
+    }
+}
+
+
+/* ================================================================
+   4. TOP NAVIGATION — HOMEPAGE STYLE
+   ================================================================ */
+
 .dn-nav {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  height: var(--nav-height);
-  padding: 0 1.25rem;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1.5rem;
+
+    min-height: var(--nav-height);
+    padding: 0.9rem 1.5rem;
+
+    background: rgba(10, 21, 48, 0.92);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border-bottom: 1px solid var(--border);
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+
+    transition:
+        background var(--transition),
+        box-shadow var(--transition);
 }
 
-.dn-brand { color: var(--text); font-weight: 700; text-decoration: none; white-space: nowrap; }
-.dn-nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+/* Navigation brand */
+
+.dn-brand {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 0.65rem;
+
+    color: var(--text);
+
+    font-size: 1.05rem;
+    font-weight: 700;
+
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.dn-brand:hover {
+    color: var(--accent);
+}
+
+/* Navigation links container */
+
+.dn-nav-links {
+    display: flex;
+    align-items: center;
+
+    gap: 0.5rem;
+
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.dn-nav-links::-webkit-scrollbar {
+    display: none;
+}
+
+/* Individual navigation links */
 
 .dn-nav-links a {
-  padding: 0.4rem 0.75rem;
-  border-radius: 6px;
-  color: var(--muted);
-  font-size: 0.9rem;
-  text-decoration: none;
-  white-space: nowrap;
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+
+    padding: 0.55rem 0.85rem;
+
+    border-radius: 8px;
+
+    color: var(--muted);
+
+    font-size: 0.88rem;
+    font-weight: 500;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition:
+        color var(--transition),
+        background var(--transition);
 }
+
+/* Navigation hover and active state */
 
 .dn-nav-links a:hover,
-.dn-nav-links a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); }
+.dn-nav-links a[aria-current="page"] {
+    color: var(--accent);
 
-/* ==========================================
-   4. Notes index: heading and cards
-   ========================================== */
-.dn-container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    background: var(--accent-soft);
+}
 
-.dn-hero h1 { margin: 0 0 0.5rem; font-size: clamp(2rem, 5vw, 2.75rem); }
-.dn-hero p { max-width: 60ch; margin: 0 0 2rem; color: var(--muted); }
+/* Gradient underline */
 
-.dn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+.dn-nav-links a::after {
+    content: "";
+
+    position: absolute;
+
+    left: 12px;
+    right: 12px;
+    bottom: 3px;
+
+    height: 2px;
+
+    border-radius: 2px;
+
+    background: var(--accent-gradient);
+
+    transform: scaleX(0);
+    transform-origin: left;
+
+    transition: transform 0.3s ease;
+}
+
+.dn-nav-links a:hover::after,
+.dn-nav-links a[aria-current="page"]::after {
+    transform: scaleX(1);
+}
+
+
+/* ================================================================
+   5. MAIN CONTENT CONTAINER
+   ================================================================ */
+
+.dn-container {
+    width: 100%;
+    max-width: var(--content-width);
+
+    margin: 0 auto;
+
+    padding: 3rem 1.5rem 5rem;
+}
+
+/* Hero section */
+
+.dn-hero {
+    margin-bottom: 2.5rem;
+}
+
+.dn-hero h1 {
+    margin: 0 0 0.75rem;
+
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+}
+
+/* Gradient text utility */
+
+.dn-hero h1 span {
+    background: var(--accent-gradient);
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+.dn-hero p {
+    max-width: 65ch;
+
+    margin: 0;
+
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+
+/* ================================================================
+   6. NOTES INDEX — RESPONSIVE CARD GRID
+   ================================================================ */
+
+.dn-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(280px, 1fr));
+
+    gap: 1.4rem;
+}
+
+/* Individual note cards */
 
 .dn-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  padding: 1.25rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.8rem;
+
+    min-width: 0;
+
+    padding: 1.5rem;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-card);
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease;
 }
 
-.dn-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+/* Card hover */
 
-.dn-card-top { display: flex; align-items: center; justify-content: space-between; }
-.dn-icon { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; background: var(--accent-soft); border-radius: 10px; font-size: 1.25rem; }
-.dn-number { color: var(--accent); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; }
+.dn-card:hover {
+    transform: translateY(-4px);
 
-.dn-card-title { margin: 0; font-size: 1.15rem; }
-.dn-card-text { flex: 1; margin: 0; color: var(--muted); font-size: 0.92rem; }
-.dn-card-meta { margin: 0; color: var(--muted); font-size: 0.8rem; }
-.dn-card-actions { display: flex; gap: 0.5rem; margin-top: 0.25rem; }
+    border-color: var(--border-hover);
+
+    box-shadow: var(--shadow-hover);
+}
+
+/* Card top row */
+
+.dn-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+}
+
+/* Icon container */
+
+.dn-icon {
+    display: grid;
+    place-items: center;
+
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    background: var(--accent-soft);
+
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    border-radius: 12px;
+
+    color: var(--accent);
+
+    font-size: 1.35rem;
+
+    transition: transform var(--transition);
+}
+
+.dn-card:hover .dn-icon {
+    transform: translateY(-3px) scale(1.05);
+}
+
+/* Card number */
+
+.dn-number {
+    color: var(--accent);
+
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    letter-spacing: 0.13em;
+}
+
+/* Card title */
+
+.dn-card-title {
+    margin: 0;
+
+    font-size: 1.12rem;
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+/* Card description */
+
+.dn-card-text {
+    flex: 1;
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+/* Card metadata */
+
+.dn-card-meta {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 0.78rem;
+}
+
+/* Card action buttons */
+
+.dn-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 0.6rem;
+
+    margin-top: 0.5rem;
+}
+
+
+/* ================================================================
+   7. BUTTONS — MATCH HOMEPAGE
+   ================================================================ */
 
 .dn-btn {
-  padding: 0.45rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-size: 0.88rem;
-  text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.4rem;
+
+    padding: 0.55rem 1rem;
+
+    background: transparent;
+
+    border: 1px solid var(--border);
+    border-radius: 999px;
+
+    color: var(--text);
+
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        background var(--transition),
+        color var(--transition),
+        box-shadow var(--transition);
 }
 
-.dn-btn:hover { border-color: var(--accent); }
-.dn-btn-primary { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+.dn-btn:hover {
+    transform: translateY(-2px);
 
-.dn-state { grid-column: 1 / -1; padding: 1rem 0; color: var(--muted); }
+    border-color: var(--accent);
 
-/* ==========================================
-   5. Note reader: sidebar and content
-   ========================================== */
-.dn-reader { display: grid; grid-template-columns: 280px minmax(0, 1fr); }
+    color: var(--accent);
+
+    box-shadow: 0 6px 18px rgba(56, 189, 248, 0.15);
+}
+
+/* Primary gradient button */
+
+.dn-btn-primary {
+    background: var(--accent-gradient);
+
+    border-color: transparent;
+
+    color: #04101F;
+
+    font-weight: 700;
+}
+
+.dn-btn-primary:hover {
+    color: #04101F;
+
+    filter: brightness(1.12);
+
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+}
+
+/* Button active feedback */
+
+.dn-btn:active {
+    transform: scale(0.97);
+}
+
+/* Empty and loading states */
+
+.dn-state {
+    grid-column: 1 / -1;
+
+    padding: 2rem 1.5rem;
+
+    color: var(--muted);
+
+    background: rgba(10, 21, 48, 0.55);
+
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+
+    text-align: center;
+}
+
+
+/* ================================================================
+   8. NOTE READER — MAIN LAYOUT
+   ================================================================ */
+
+.dn-reader {
+    display: grid;
+
+    grid-template-columns:
+        var(--sidebar-width)
+        minmax(0, 1fr);
+
+    min-height: calc(100vh - var(--nav-height));
+    align-items: start;
+}
+
+
+/* ================================================================
+   9. DESKTOP SIDEBAR — TABLE OF CONTENTS
+   ================================================================ */
 
 .dn-sidebar {
-  position: sticky;
-  top: var(--nav-height);
-  align-self: start;
-  height: calc(100vh - var(--nav-height));
-  padding: 1.25rem 1rem;
-  overflow-y: auto;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
+    position: sticky;
+
+    top: var(--nav-height);
+
+    align-self: start;
+
+    height: calc(100vh - var(--nav-height));
+
+    padding: 1.5rem 1.1rem;
+
+    overflow-y: auto;
+
+    background: rgba(10, 21, 48, 0.86);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-right: 1px solid var(--border);
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
 }
 
-.dn-sidebar-title { margin: 0 0 0.75rem; color: var(--muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+/* Sidebar scrollbar */
+
+.dn-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.dn-sidebar::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+}
+
+/* Sidebar heading */
+
+.dn-sidebar-title {
+    margin: 0 0 1rem;
+
+    color: var(--muted);
+
+    font-size: 0.73rem;
+    font-weight: 700;
+
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+/* Table of contents links */
 
 .dn-toc-link {
-  display: block;
-  padding: 0.3rem 0.75rem;
-  border-left: 2px solid transparent;
-  color: var(--muted);
-  font-size: 0.88rem;
-  line-height: 1.4;
-  text-decoration: none;
+    display: block;
+
+    padding: 0.45rem 0.8rem;
+
+    margin-bottom: 0.2rem;
+
+    border-left: 2px solid transparent;
+    border-radius: 0 7px 7px 0;
+
+    color: var(--muted);
+
+    font-size: 0.85rem;
+    line-height: 1.5;
+
+    text-decoration: none;
+
+    transition:
+        color var(--transition),
+        background var(--transition),
+        border-color var(--transition);
 }
 
-.dn-toc-link.is-sub { padding-left: 1.5rem; font-size: 0.82rem; }
-.dn-toc-link:hover { color: var(--text); }
-.dn-toc-link.active { border-left-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+/* Nested TOC links */
 
-.dn-main { max-width: 860px; width: 100%; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
-.dn-back { display: inline-block; margin-bottom: 1rem; color: var(--muted); font-size: 0.9rem; text-decoration: none; }
-.dn-back:hover { color: var(--accent); }
+.dn-toc-link.is-sub {
+    padding-left: 1.6rem;
+
+    font-size: 0.8rem;
+}
+
+/* Sidebar hover */
+
+.dn-toc-link:hover {
+    color: var(--text);
+
+    background: rgba(56, 189, 248, 0.06);
+}
+
+/* Active sidebar link */
+
+.dn-toc-link.active {
+    color: var(--accent);
+
+    background: var(--accent-soft);
+
+    border-left-color: var(--accent);
+
+    font-weight: 600;
+}
+
+
+/* ================================================================
+   10. NOTE READER — MAIN ARTICLE
+   ================================================================ */
+
+.dn-main {
+    width: 100%;
+    max-width: var(--reader-width);
+
+    margin: 0 auto;
+
+    padding: 2rem 2rem 5rem;
+}
+
+/* Back navigation */
+
+.dn-back {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 0.5rem;
+
+    margin-bottom: 1.5rem;
+
+    color: var(--muted);
+
+    font-size: 0.88rem;
+    font-weight: 500;
+
+    text-decoration: none;
+
+    transition:
+        color var(--transition),
+        transform var(--transition);
+}
+
+.dn-back:hover {
+    color: var(--accent);
+
+    transform: translateX(-3px);
+}
+
+/* Mobile TOC toggle */
 
 .dn-toc-toggle {
-  display: none;
-  margin-bottom: 1rem;
-  padding: 0.45rem 0.9rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font: inherit;
-  cursor: pointer;
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.5rem;
+
+    margin-bottom: 1.2rem;
+    padding: 0.65rem 1rem;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+
+    color: var(--text);
+
+    font-size: 0.88rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        border-color var(--transition),
+        background var(--transition);
 }
 
-.dn-source { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.9rem; }
+.dn-toc-toggle:hover {
+    border-color: var(--accent);
 
-/* ==========================================
-   6. Rendered Markdown
-   ========================================== */
-.dn-prose h1, .dn-prose h2, .dn-prose h3, .dn-prose h4 { margin: 2rem 0 0.75rem; line-height: 1.3; }
-.dn-prose h1 { font-size: 2rem; }
-.dn-prose h2 { padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); font-size: 1.5rem; }
-.dn-prose h3 { font-size: 1.2rem; }
-.dn-prose img { max-width: 100%; height: auto; }
-.dn-prose blockquote { margin: 1rem 0; padding: 0.25rem 1rem; border-left: 3px solid var(--accent); color: var(--muted); }
-.dn-prose :not(pre) > code { padding: 0.15em 0.4em; background: var(--code-bg); border-radius: 4px; font-size: 0.9em; }
-.dn-prose pre { padding: 1rem; overflow-x: auto; background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; font-size: 0.88rem; }
-.dn-prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
-.dn-prose th, .dn-prose td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); text-align: left; }
-.dn-prose th { background: var(--surface); }
+    background: var(--surface-hover);
+}
 
-/* ==========================================
-   7. Small screens: sidebar becomes a drawer
-   ========================================== */
-@media (max-width: 900px) {
-  .dn-reader { display: block; }
-  .dn-toc-toggle { display: inline-block; }
+/* Article source information */
 
-  .dn-sidebar {
-    position: fixed;
-    inset: var(--nav-height) auto 0 0;
-    z-index: 15;
-    width: min(300px, 85vw);
+.dn-source {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+
+    border-top: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 0.85rem;
+}
+
+
+/* ================================================================
+   11. MARKDOWN CONTENT — TYPOGRAPHY
+   ================================================================ */
+
+.dn-prose {
+    min-width: 0;
+
+    color: var(--text);
+
+    font-size: 0.96rem;
+    line-height: 1.85;
+
+    overflow-wrap: break-word;
+}
+
+/* Markdown headings */
+
+.dn-prose h1,
+.dn-prose h2,
+.dn-prose h3,
+.dn-prose h4,
+.dn-prose h5,
+.dn-prose h6 {
+    color: var(--text);
+
+    font-weight: 700;
+    line-height: 1.35;
+
+    scroll-margin-top: calc(var(--nav-height) + 20px);
+}
+
+.dn-prose h1 {
+    margin: 0 0 1.5rem;
+
+    font-size: 2.15rem;
+
+    letter-spacing: -0.03em;
+}
+
+.dn-prose h2 {
+    margin: 2.8rem 0 1rem;
+
+    padding-bottom: 0.65rem;
+
+    border-bottom: 1px solid var(--border);
+
+    font-size: 1.55rem;
+}
+
+.dn-prose h3 {
+    margin: 2rem 0 0.8rem;
+
+    font-size: 1.2rem;
+}
+
+.dn-prose h4 {
+    margin: 1.6rem 0 0.7rem;
+
+    color: var(--accent);
+
+    font-size: 1.02rem;
+}
+
+.dn-prose h5,
+.dn-prose h6 {
+    margin: 1.4rem 0 0.6rem;
+
+    font-size: 0.95rem;
+}
+
+/* Paragraphs */
+
+.dn-prose p {
+    margin: 0 0 1.15rem;
+}
+
+/* Strong text */
+
+.dn-prose strong {
+    color: var(--text);
+    font-weight: 700;
+}
+
+/* Italic text */
+
+.dn-prose em {
+    color: var(--muted);
+}
+
+/* Links */
+
+.dn-prose a {
+    color: var(--accent);
+
+    text-decoration: none;
+
+    border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.dn-prose a:hover {
+    color: var(--accent-secondary);
+
+    border-bottom-color: var(--accent-secondary);
+}
+
+/* Horizontal separators */
+
+.dn-prose hr {
+    height: 1px;
+
+    margin: 2rem 0;
+
+    border: 0;
+
+    background: linear-gradient(
+        90deg,
+        var(--accent),
+        var(--accent-secondary),
+        transparent
+    );
+
+    opacity: 0.45;
+}
+
+
+/* ================================================================
+   12. MARKDOWN LISTS
+   ================================================================ */
+
+.dn-prose ul,
+.dn-prose ol {
+    margin: 0 0 1.3rem;
+
+    padding-left: 1.7rem;
+}
+
+.dn-prose ul {
+    list-style: disc;
+}
+
+.dn-prose ol {
+    list-style: decimal;
+}
+
+.dn-prose li {
+    padding-left: 0.2rem;
+
+    margin-bottom: 0.45rem;
+}
+
+.dn-prose li::marker {
+    color: var(--accent);
+}
+
+.dn-prose li > ul,
+.dn-prose li > ol {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Task list support */
+
+.dn-prose input[type="checkbox"] {
+    accent-color: var(--accent);
+
+    margin-right: 0.45rem;
+}
+
+
+/* ================================================================
+   13. MARKDOWN BLOCKQUOTES
+   ================================================================ */
+
+.dn-prose blockquote {
+    margin: 1.5rem 0;
+
+    padding: 1rem 1.3rem;
+
+    background: rgba(56, 189, 248, 0.06);
+
+    border-left: 3px solid var(--accent);
+
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+
+    color: var(--muted);
+}
+
+.dn-prose blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ================================================================
+   14. INLINE CODE AND CODE BLOCKS
+   ================================================================ */
+
+/* Inline code */
+
+.dn-prose :not(pre) > code {
+    padding: 0.18em 0.45em;
+
+    background: var(--code-bg);
+
+    border: 1px solid rgba(56, 189, 248, 0.12);
+
+    border-radius: 5px;
+
+    color: #7DD3FC;
+
+    font-family: Consolas, "Courier New", monospace;
+
+    font-size: 0.88em;
+}
+
+/* Code block */
+
+.dn-prose pre {
+    max-width: 100%;
+
+    margin: 1.4rem 0;
+
+    padding: 1.25rem;
+
+    overflow-x: auto;
+
+    background: #060D1C;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.15);
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.dn-prose pre code {
+    padding: 0;
+
+    background: transparent;
+
+    border: none;
+    border-radius: 0;
+
+    color: #C7D8F3;
+
+    font-family: Consolas, "Courier New", monospace;
+
+    font-size: 0.86rem;
+    line-height: 1.75;
+
+    white-space: pre;
+}
+
+/* Prevent nested code styling from changing code blocks */
+
+.dn-prose pre :not(pre) > code {
+    background: transparent;
+}
+
+
+/* ================================================================
+   15. MARKDOWN TABLES
+   ================================================================ */
+
+.dn-prose table {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+
+    margin: 1.5rem 0;
+
+    overflow-x: auto;
+
+    border-collapse: collapse;
+
+    background: rgba(10, 21, 48, 0.65);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.dn-prose th,
+.dn-prose td {
+    padding: 0.75rem 1rem;
+
+    border: 1px solid var(--border);
+
+    text-align: left;
+    vertical-align: top;
+
+    font-size: 0.88rem;
+}
+
+.dn-prose th {
+    background: var(--surface);
+
+    color: var(--accent);
+
+    font-weight: 700;
+}
+
+.dn-prose td {
+    color: var(--text);
+}
+
+.dn-prose tr:hover td {
+    background: rgba(56, 189, 248, 0.035);
+}
+
+
+/* ================================================================
+   16. MARKDOWN IMAGES AND MEDIA
+   ================================================================ */
+
+.dn-prose img {
+    display: block;
+
+    max-width: 100%;
     height: auto;
-    transform: translateX(-100%);
-    transition: transform 0.25s ease;
-  }
 
-  body.toc-open .dn-sidebar { transform: translateX(0); }
-  body.toc-open::before { content: ""; position: fixed; inset: var(--nav-height) 0 0 0; z-index: 14; background: rgba(0, 0, 0, 0.5); }
+    margin: 1.5rem auto;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-card);
 }
 
-/* ==========================================
-   8. Print
-   ========================================== */
+/* Image captions, if generated */
+
+.dn-prose figcaption {
+    margin-top: -0.8rem;
+
+    color: var(--muted);
+
+    font-size: 0.8rem;
+
+    text-align: center;
+}
+
+
+/* ================================================================
+   17. SELECTION AND SCROLLBARS
+   ================================================================ */
+
+/* Text selection */
+
+::selection {
+    color: #04101F;
+
+    background: var(--accent);
+}
+
+/* Firefox scrollbar */
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+/* Chromium scrollbar */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-secondary);
+}
+
+
+/* ================================================================
+   18. RESPONSIVE DESIGN — TABLET AND MOBILE
+   ================================================================ */
+
+@media (max-width: 900px) {
+
+    /* Reader becomes a single-column layout */
+
+    .dn-reader {
+        display: block;
+    }
+
+    /* Show mobile TOC button */
+
+    .dn-toc-toggle {
+        display: inline-flex;
+    }
+
+    /* Sidebar becomes an off-canvas drawer */
+
+    .dn-sidebar {
+        position: fixed;
+
+        top: var(--nav-height);
+        bottom: 0;
+        left: 0;
+
+        z-index: 90;
+
+        width: min(320px, 85vw);
+        height: auto;
+
+        padding: 1.5rem 1.1rem;
+
+        background: rgba(10, 21, 48, 0.98);
+
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+
+        border-right: 1px solid var(--border);
+
+        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.3);
+
+        transform: translateX(-105%);
+
+        transition: transform 0.3s ease;
+    }
+
+    /* Open drawer */
+
+    body.toc-open .dn-sidebar {
+        transform: translateX(0);
+    }
+
+    /* Dark overlay behind drawer */
+
+    body.toc-open::before {
+        content: "";
+
+        position: fixed;
+
+        inset: var(--nav-height) 0 0;
+
+        z-index: 80;
+
+        background: rgba(0, 0, 0, 0.55);
+
+        pointer-events: auto;
+    }
+
+    .dn-main {
+        max-width: 100%;
+
+        padding: 1.5rem 1.5rem 4rem;
+    }
+
+}
+
+
+/* ================================================================
+   19. SMALL MOBILE SCREENS
+   ================================================================ */
+
+@media (max-width: 600px) {
+
+    /* Navigation */
+
+    .dn-nav {
+        gap: 0.6rem;
+
+        padding: 0.8rem 1rem;
+    }
+
+    .dn-brand {
+        font-size: 0.9rem;
+    }
+
+    .dn-nav-links {
+        gap: 0.15rem;
+    }
+
+    .dn-nav-links a {
+        padding: 0.4rem 0.55rem;
+
+        font-size: 0.78rem;
+    }
+
+    /* Main container */
+
+    .dn-container {
+        padding: 2rem 1rem 3rem;
+    }
+
+    /* Hero */
+
+    .dn-hero h1 {
+        font-size: 2rem;
+    }
+
+    .dn-hero p {
+        font-size: 0.9rem;
+    }
+
+    /* Cards */
+
+    .dn-grid {
+        grid-template-columns: 1fr;
+
+        gap: 1rem;
+    }
+
+    .dn-card {
+        padding: 1.2rem;
+    }
+
+    /* Article */
+
+    .dn-main {
+        padding: 1.2rem 1rem 3rem;
+    }
+
+    .dn-prose {
+        font-size: 0.9rem;
+    }
+
+    .dn-prose h1 {
+        font-size: 1.75rem;
+    }
+
+    .dn-prose h2 {
+        font-size: 1.35rem;
+    }
+
+    .dn-prose h3 {
+        font-size: 1.1rem;
+    }
+
+    /* Code blocks */
+
+    .dn-prose pre {
+        padding: 0.9rem;
+
+        font-size: 0.8rem;
+    }
+
+    /* Tables */
+
+    .dn-prose th,
+    .dn-prose td {
+        padding: 0.55rem 0.7rem;
+
+        font-size: 0.8rem;
+    }
+
+    /* Background glow */
+
+    body::after {
+        width: 280px;
+        height: 280px;
+
+        left: 30%;
+    }
+
+}
+
+
+/* ================================================================
+   20. EXTRA SMALL SCREENS
+   ================================================================ */
+
+@media (max-width: 380px) {
+
+    .dn-brand {
+        font-size: 0.82rem;
+    }
+
+    .dn-nav {
+        padding-inline: 0.7rem;
+    }
+
+    .dn-nav-links a {
+        font-size: 0.72rem;
+
+        padding-inline: 0.4rem;
+    }
+
+    .dn-card-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dn-btn {
+        width: 100%;
+    }
+
+}
+
+
+/* ================================================================
+   21. PRINT STYLES
+   ================================================================ */
+
 @media print {
-  .dn-nav, .dn-sidebar, .dn-toc-toggle, .dn-back, .dn-source { display: none; }
-  .dn-reader { display: block; }
+
+    /* Remove navigation and interactive elements */
+
+    .dn-nav,
+    .dn-sidebar,
+    .dn-toc-toggle,
+    .dn-back,
+    .dn-source {
+        display: none !important;
+    }
+
+    /* Remove decorative backgrounds */
+
+    body::before,
+    body::after {
+        display: none !important;
+    }
+
+    /* Reset page layout */
+
+    body {
+        background: #fff !important;
+
+        color: #000 !important;
+
+        font-family: Arial, sans-serif;
+
+        overflow: visible;
+    }
+
+    .dn-reader {
+        display: block;
+    }
+
+    .dn-main {
+        width: 100%;
+        max-width: none;
+
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Article text */
+
+    .dn-prose,
+    .dn-prose p,
+    .dn-prose li,
+    .dn-prose td {
+        color: #000 !important;
+    }
+
+    .dn-prose h1,
+    .dn-prose h2,
+    .dn-prose h3,
+    .dn-prose h4 {
+        color: #000 !important;
+
+        break-after: avoid;
+    }
+
+    /* Code blocks */
+
+    .dn-prose pre {
+        background: #f1f1f1 !important;
+
+        color: #000 !important;
+
+        border: 1px solid #ccc;
+
+        white-space: pre-wrap;
+
+        overflow-wrap: anywhere;
+    }
+
+    .dn-prose pre code {
+        color: #000 !important;
+    }
+
+    /* Tables */
+
+    .dn-prose table {
+        display: table;
+
+        width: 100%;
+
+        overflow: visible;
+
+        background: #fff;
+    }
+
+    .dn-prose th,
+    .dn-prose td {
+        color: #000 !important;
+
+        border: 1px solid #aaa;
+    }
+
+    /* Avoid splitting important elements */
+
+    .dn-card,
+    .dn-prose pre,
+    .dn-prose blockquote,
+    .dn-prose img,
+    .dn-prose tr {
+        break-inside: avoid;
+    }
+
+    /* Hide decorative effects */
+
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a {
+        color: #000 !important;
+
+        text-decoration: underline;
+    }
+
 }
+
+
+/* ================================================================
+   22. ACCESSIBILITY — REDUCED MOTION
+   ================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+    }
+
+    body::after {
+        animation: none !important;
+    }
+
+}
+
+
+/* ================================================================
+   END OF DEVOPS NOTES STYLESHEET
+   ================================================================ */
