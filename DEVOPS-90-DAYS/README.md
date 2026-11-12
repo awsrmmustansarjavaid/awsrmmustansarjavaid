@@ -15,6 +15,7 @@ A unified, day-by-day DevOps learning program: 90 daily lessons, each in a singl
 4. Track progress in [Learning Tracker](LEARNING-TRACKER.md).
 5. Complete the [Projects and Capstones](PROJECTS-AND-CAPSTONES.md).
 6. Finish with [Assessment and Certification](ASSESSMENT-AND-CERTIFICATION.md) and [Career and Interview Preparation](CAREER-AND-INTERVIEW-PREPARATION.md).
+7. [DevOps Notes](devops-notes/)
 
 ## Daily structure
 
@@ -46,6 +47,8 @@ Every day has exactly one file, `day-XX/README.md`, containing the full lesson: 
 - `ASSESSMENT-AND-CERTIFICATION.md` — final assessment
 - `CAREER-AND-INTERVIEW-PREPARATION.md` — interview and career preparation
 - `reference-materials/` — original practice files (scripts, configs, project artifacts) for optional reuse
+- [DevOps Notes](devops-notes/)
+
 
 ## Personal Journal (Days 1–31)
 
