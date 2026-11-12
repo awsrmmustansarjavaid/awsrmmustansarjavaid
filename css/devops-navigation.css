@@ -1,0 +1,85 @@
+
+/*
+ * DevOps Learning Navigation
+ * Shared navigation styling for DevOps pages.
+ */
+
+.devops-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+
+    padding: 16px 6%;
+    background: #101b2d;
+    border-bottom: 1px solid #263650;
+}
+
+/* Brand styling */
+.devops-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: #e5edf8;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.brand-icon {
+    font-size: 23px;
+}
+
+/* Navigation links */
+.devops-nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 10px 15px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    color: #cbd5e1;
+    font-size: 13px;
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
+
+/* Hover and active states */
+.nav-link:hover,
+.nav-link.active {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.10);
+    border-color: #263650;
+}
+
+/* Mobile responsive navigation */
+@media (max-width: 650px) {
+
+    .devops-navbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 16px 20px;
+    }
+
+    .devops-nav-links {
+        width: 100%;
+        gap: 7px;
+    }
+
+    .nav-link {
+        padding: 9px 11px;
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags for document charset and responsive scaling -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps Note</title>
+
+  <!-- Dedicated stylesheet for the DevOps Notes pages -->
+  <link rel="stylesheet" href="../css/devops-notes.css">
+</head>
+<body data-page="reader">
+
+  <!-- Top navigation -->
+  <header class="dn-nav">
+    <a class="dn-brand" href="../index.html">⚙️ DevOps Learning</a>
+    <nav class="dn-nav-links" aria-label="Main navigation">
+      <a href="../index.html">⌂ Home</a>
+      <a href="90-days-devops.html">📚 Index</a>
+      <a href="challenges.html">🚀 Challenge</a>
+      <a href="devops-notes.html" aria-current="page">📝 Notes</a>
+    </nav>
+  </header>
+
+  <div class="dn-reader">
+
+    <!-- Section sidebar: filled from the headings of the note -->
+    <aside class="dn-sidebar" id="toc" aria-label="Sections of this note">
+      <p class="dn-sidebar-title">Sections</p>
+      <nav id="toc-list"></nav>
+    </aside>
+
+    <main class="dn-main">
+      <!-- Opens the sidebar on small screens -->
+      <button class="dn-toc-toggle" id="toc-toggle" type="button" aria-controls="toc" aria-expanded="false">☰ Sections</button>
+      <a class="dn-back" href="devops-notes.html">← All notes</a>
+
+      <!-- Rendered Markdown -->
+      <article class="dn-prose" id="note-content">Loading note…</article>
+
+      <p class="dn-source"><a id="source-link" href="#" target="_blank" rel="noopener noreferrer">View source on GitHub</a></p>
+    </main>
+  </div>
+
+  <!-- Markdown parser and HTML sanitiser (pinned versions), then the page controller -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" defer></script>
+  <script src="../js/devops-notes.js" defer></script>
+</body>
+</html>

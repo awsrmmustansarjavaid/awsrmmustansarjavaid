@@ -152,14 +152,36 @@
 
   /* ------------------------------------------------------------------------
      Shared header and footer — all links are local pages or external profiles.
+     The navbar is injected into <header id="site-header"></header>; to add or
+     remove a tab, edit the `links` array in buildChrome() below.
      ------------------------------------------------------------------------ */
   function buildChrome() {
+    // The active tab is chosen by <body data-nav="...">. Each page sets one of the
+    // keys below (home, portal, roadmap, tracker, articles, challenge, notes).
     var current = document.body.dataset.nav || '';
+
+    // Navigation tabs. Each entry is [key, label, url, icon].
+    //  - key   : matched against <body data-nav="..."> to mark the active tab
+    //  - label : text shown in the navbar
+    //  - url   : built from ROOT / PORTAL / SUB so it works from any page folder
+    //  - icon  : emoji shown before the label (use '' for no icon)
     var links = [
-      ['portal', 'Overview', PORTAL],
-      ['roadmap', 'Roadmap', docUrl(docFor('roadmap'))],
-      ['tracker', 'Progress tracker', docUrl(docFor('tracker'))],
-      ['articles', 'Articles', SUB + 'articles.html']
+      // Main portfolio homepage (NEW)
+      ['home', 'Home', ROOT + (C.homePage || 'index.html'), '⌂'],
+
+      // DevOps learning index / portal page, 90-days-devops.html (NEW label: was "Overview")
+      ['portal', 'Index', PORTAL, '📚'],
+
+      // Existing tabs, unchanged apart from the added icons
+      ['roadmap', 'Roadmap', docUrl(docFor('roadmap')), '🗺️'],
+      ['tracker', 'Progress tracker', docUrl(docFor('tracker')), '✅'],
+      ['articles', 'Articles', SUB + 'articles.html', '✍️'],
+
+      // DevOps challenge page (NEW) - reuses the same config value as the footer link
+      ['challenge', 'Challenge', ROOT + (C.challengesPage || 'pages/challenges.html'), '🚀'],
+
+      // DevOps notes page (NEW) - set C.notesPage in the data file to change the path
+      ['notes', 'Notes', ROOT + (C.notesPage || 'pages/devops-notes.html'), '📝']
     ];
 
     var header = $('#site-header');
@@ -172,7 +194,9 @@
           '</a>' +
           '<nav class="nav" id="nav" aria-label="Main navigation">' +
             links.map(function (link) {
-              return '<a href="' + link[2] + '"' + (link[0] === current ? ' aria-current="page"' : '') + '>' + link[1] + '</a>';
+              // Optional icon (link[3]) + label; the active tab gets aria-current="page"
+              var icon = link[3] ? '<span class="nav-icon" aria-hidden="true">' + link[3] + '</span> ' : '';
+              return '<a href="' + link[2] + '"' + (link[0] === current ? ' aria-current="page"' : '') + '>' + icon + link[1] + '</a>';
             }).join('') +
           '</nav>' +
           '<button class="icon-btn" id="theme-btn" type="button" aria-label="Toggle colour theme" title="Toggle theme">◐</button>' +

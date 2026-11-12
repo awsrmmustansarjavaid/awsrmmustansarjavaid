@@ -26,9 +26,11 @@
   <link rel="stylesheet" href="../css/pages.css">
   <link rel="stylesheet" href="../css/effects.css">
   <link rel="stylesheet" href="../css/challenges.css">
+  <link rel="stylesheet" href="../css/devops-notes-section.css">
 
   <!-- marked.js: Markdown → HTML (used by js/markdown-parser.js) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.6/purify.min.js" defer></script>
 </head>
 <body>
   <!-- (navbar is injected here by Layout.mount) -->
@@ -53,6 +55,71 @@
       <!-- Pagination: shown by listing.js only when more items exist -->
       <button id="load-more" class="btn btn-outline load-more" hidden>Load more</button>
     </div></section>
+
+
+    <!-- ============================================================
+         DEVOPS NOTES LIBRARY
+         Notes are discovered dynamically from the public GitHub
+         repository. Add a .md file to the notes folder and it will
+         be listed automatically after the next page load.
+         ============================================================ -->
+    <section class="devops-notes-section" id="devops-notes">
+      <div class="section-inner">
+        <div class="devops-notes-heading">
+          <div>
+            <span class="devops-notes-eyebrow">Knowledge Library</span>
+            <h2><span class="text-gradient">DevOps Notes</span></h2>
+            <p>Browse practical notes, commands, tools, concepts and learning resources.</p>
+          </div>
+          <a class="devops-notes-github-link"
+             href="https://github.com/awsrmmustansarjavaid/awsrmmustansarjavaid/tree/main/DEVOPS-90-DAYS/devops-notes"
+             target="_blank" rel="noopener noreferrer">
+            View notes on GitHub <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <!-- Search input is connected to the dynamically loaded note list. -->
+        <div class="devops-notes-toolbar">
+          <label class="devops-notes-search">
+            <span aria-hidden="true">⌕</span>
+            <input id="devops-notes-search" type="search"
+                   placeholder="Search DevOps notes..." autocomplete="off"
+                   aria-label="Search DevOps notes">
+          </label>
+          <span id="devops-notes-count" class="devops-notes-count" aria-live="polite">
+            Loading notes…
+          </span>
+        </div>
+
+        <!-- JavaScript creates one card for every discovered Markdown file. -->
+        <div id="devops-notes-grid" class="devops-notes-grid" aria-live="polite">
+          <p class="devops-notes-status">Loading your DevOps notes…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Accessible modal used to read each Markdown note. -->
+    <div class="devops-note-modal" id="devops-note-modal"
+         role="dialog" aria-modal="true" aria-labelledby="devops-note-title" hidden>
+      <div class="devops-note-backdrop" data-close-note></div>
+      <div class="devops-note-dialog">
+        <div class="devops-note-modal-header">
+          <div>
+            <span class="devops-notes-eyebrow">DevOps Knowledge Library</span>
+            <h2 id="devops-note-title">Note</h2>
+          </div>
+          <button class="devops-note-close" type="button"
+                  data-close-note aria-label="Close note">×</button>
+        </div>
+        <article id="devops-note-content" class="devops-note-content">
+          <p>Loading note…</p>
+        </article>
+        <div class="devops-note-modal-footer">
+          <a id="devops-note-source" href="#" target="_blank"
+             rel="noopener noreferrer">Open source on GitHub ↗</a>
+        </div>
+      </div>
+    </div>
 
   </main>
 
@@ -179,5 +246,7 @@
   <script src="../js/challenges.js"></script>
   <!-- Shared UI effects: scroll progress, reveal-on-scroll, back-to-top -->
   <script src="../js/effects.js"></script>
+  <script src="../js/devops-notes-section.js" defer></script>
+
 </body>
 </html>

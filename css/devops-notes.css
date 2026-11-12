@@ -1,0 +1,224 @@
+/**
+ * DevOps Notes styles
+ * Shared by pages/devops-notes.html and pages/devops-note.html
+ */
+
+/* ==========================================
+   1. Design tokens (dark by default, light follows the system)
+   ========================================== */
+:root {
+  --bg: #0b1120;
+  --surface: #111c30;
+  --border: #263650;
+  --text: #e5edf8;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.12);
+  --code-bg: #0a1527;
+  --nav-height: 56px;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f6f8fb;
+    --surface: #ffffff;
+    --border: #d9e1ec;
+    --text: #172033;
+    --muted: #5b6b82;
+    --accent: #0369a1;
+    --accent-soft: rgba(3, 105, 161, 0.1);
+    --code-bg: #eef2f7;
+    color-scheme: light;
+  }
+}
+
+/* ==========================================
+   2. Base
+   ========================================== */
+* { box-sizing: border-box; }
+
+html { scroll-padding-top: calc(var(--nav-height) + 16px); }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.6;
+}
+
+a { color: var(--accent); }
+
+/* ==========================================
+   3. Top navigation
+   ========================================== */
+.dn-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: var(--nav-height);
+  padding: 0 1.25rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.dn-brand { color: var(--text); font-weight: 700; text-decoration: none; white-space: nowrap; }
+.dn-nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+
+.dn-nav-links a {
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dn-nav-links a:hover,
+.dn-nav-links a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); }
+
+/* ==========================================
+   4. Notes index: heading and cards
+   ========================================== */
+.dn-container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+.dn-hero h1 { margin: 0 0 0.5rem; font-size: clamp(2rem, 5vw, 2.75rem); }
+.dn-hero p { max-width: 60ch; margin: 0 0 2rem; color: var(--muted); }
+
+.dn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+
+.dn-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.dn-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+.dn-card-top { display: flex; align-items: center; justify-content: space-between; }
+.dn-icon { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; background: var(--accent-soft); border-radius: 10px; font-size: 1.25rem; }
+.dn-number { color: var(--accent); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; }
+
+.dn-card-title { margin: 0; font-size: 1.15rem; }
+.dn-card-text { flex: 1; margin: 0; color: var(--muted); font-size: 0.92rem; }
+.dn-card-meta { margin: 0; color: var(--muted); font-size: 0.8rem; }
+.dn-card-actions { display: flex; gap: 0.5rem; margin-top: 0.25rem; }
+
+.dn-btn {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.dn-btn:hover { border-color: var(--accent); }
+.dn-btn-primary { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+
+.dn-state { grid-column: 1 / -1; padding: 1rem 0; color: var(--muted); }
+
+/* ==========================================
+   5. Note reader: sidebar and content
+   ========================================== */
+.dn-reader { display: grid; grid-template-columns: 280px minmax(0, 1fr); }
+
+.dn-sidebar {
+  position: sticky;
+  top: var(--nav-height);
+  align-self: start;
+  height: calc(100vh - var(--nav-height));
+  padding: 1.25rem 1rem;
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+.dn-sidebar-title { margin: 0 0 0.75rem; color: var(--muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+
+.dn-toc-link {
+  display: block;
+  padding: 0.3rem 0.75rem;
+  border-left: 2px solid transparent;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.dn-toc-link.is-sub { padding-left: 1.5rem; font-size: 0.82rem; }
+.dn-toc-link:hover { color: var(--text); }
+.dn-toc-link.active { border-left-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+
+.dn-main { max-width: 860px; width: 100%; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+.dn-back { display: inline-block; margin-bottom: 1rem; color: var(--muted); font-size: 0.9rem; text-decoration: none; }
+.dn-back:hover { color: var(--accent); }
+
+.dn-toc-toggle {
+  display: none;
+  margin-bottom: 1rem;
+  padding: 0.45rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.dn-source { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.9rem; }
+
+/* ==========================================
+   6. Rendered Markdown
+   ========================================== */
+.dn-prose h1, .dn-prose h2, .dn-prose h3, .dn-prose h4 { margin: 2rem 0 0.75rem; line-height: 1.3; }
+.dn-prose h1 { font-size: 2rem; }
+.dn-prose h2 { padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); font-size: 1.5rem; }
+.dn-prose h3 { font-size: 1.2rem; }
+.dn-prose img { max-width: 100%; height: auto; }
+.dn-prose blockquote { margin: 1rem 0; padding: 0.25rem 1rem; border-left: 3px solid var(--accent); color: var(--muted); }
+.dn-prose :not(pre) > code { padding: 0.15em 0.4em; background: var(--code-bg); border-radius: 4px; font-size: 0.9em; }
+.dn-prose pre { padding: 1rem; overflow-x: auto; background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; font-size: 0.88rem; }
+.dn-prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.dn-prose th, .dn-prose td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); text-align: left; }
+.dn-prose th { background: var(--surface); }
+
+/* ==========================================
+   7. Small screens: sidebar becomes a drawer
+   ========================================== */
+@media (max-width: 900px) {
+  .dn-reader { display: block; }
+  .dn-toc-toggle { display: inline-block; }
+
+  .dn-sidebar {
+    position: fixed;
+    inset: var(--nav-height) auto 0 0;
+    z-index: 15;
+    width: min(300px, 85vw);
+    height: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  body.toc-open .dn-sidebar { transform: translateX(0); }
+  body.toc-open::before { content: ""; position: fixed; inset: var(--nav-height) 0 0 0; z-index: 14; background: rgba(0, 0, 0, 0.5); }
+}
+
+/* ==========================================
+   8. Print
+   ========================================== */
+@media print {
+  .dn-nav, .dn-sidebar, .dn-toc-toggle, .dn-back, .dn-source { display: none; }
+  .dn-reader { display: block; }
+}
