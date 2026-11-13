@@ -1,75 +1,406 @@
+/*
+ * Charlie MJ — 90 Days of DevOps Articles
+ * Page-specific styles for the supplied articles.html.
+ *
+ * Load this file AFTER ../../css/devops-90-days.css.
+ * The shared portal stylesheet remains responsible for the site's global
+ * background, typography, navigation, buttons and theme variables.
+ */
 
-/* Article search and filter toolbar */
-
-.articles-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 25px 0;
+/* Keep the page visually integrated with the existing DevOps portal. */
+body[data-page="articles"] {
+  min-height: 100vh;
 }
 
-.articles-toolbar input,
-.articles-toolbar select {
-    flex: 1;
-    min-width: 180px;
-    padding: 12px 15px;
-    color: #E7ECF6;
-    background: #0A1530;
-    border: 1px solid #1A2B57;
-    border-radius: 10px;
-    outline: none;
+body[data-page="articles"] main {
+  padding-bottom: clamp(2rem, 5vw, 4rem);
 }
 
-.articles-toolbar input:focus,
-.articles-toolbar select:focus {
-    border-color: #38BDF8;
+body[data-page="articles"] main > .container {
+  width: min(100% - 2rem, 1180px);
+  margin-inline: auto;
 }
 
-.articles-toolbar button {
-    padding: 11px 18px;
-    color: #04101F;
-    background: linear-gradient(90deg, #22D3EE, #7C5CFF);
-    border: 0;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
+/* Page introduction */
+body[data-page="articles"] .page-hero {
+  position: relative;
+  overflow: hidden;
+  margin: clamp(1.25rem, 3vw, 2.5rem) 0 1.5rem;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  border: 1px solid var(--line, rgba(148, 163, 184, .18));
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 90% 0%, rgba(56, 189, 248, .13), transparent 42%),
+    linear-gradient(135deg, rgba(15, 23, 42, .96), rgba(17, 31, 54, .92));
+  box-shadow: 0 18px 50px rgba(2, 8, 23, .22);
 }
 
-#articles-status {
-    color: #9AA7C7;
-    font-size: 0.85rem;
-    margin: 15px 0;
+body[data-page="articles"] .page-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .16;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, .14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, .14) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(115deg, transparent 8%, #000 100%);
 }
 
-.article-source-badge {
-    display: inline-block;
-    width: fit-content;
-    padding: 5px 11px;
-    color: #38BDF8;
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.2);
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
+body[data-page="articles"] .page-hero > * {
+  position: relative;
+  z-index: 1;
 }
 
-.article-card .dn-card-title a {
-    color: #E7ECF6;
-    text-decoration: none;
+body[data-page="articles"] .page-hero .crumbs {
+  margin-bottom: .9rem;
+  color: var(--muted, #94a3b8);
+  font-size: .88rem;
 }
 
-.article-card .dn-card-title a:hover {
-    color: #38BDF8;
+body[data-page="articles"] .page-hero h1 {
+  max-width: 850px;
+  margin: 0 0 .8rem;
+  color: var(--text, #f8fafc);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -.045em;
+}
+
+body[data-page="articles"] .page-hero > p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted, #b6c4d6);
+  font-size: clamp(.98rem, 1.6vw, 1.1rem);
+  line-height: 1.75;
+}
+
+body[data-page="articles"] .page-hero .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .7rem;
+  margin-top: 1.35rem;
+}
+
+/* Existing portal search and filter-chip toolbar */
+body[data-page="articles"] .toolbar,
+body[data-page="articles"] .articles-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem;
+  margin: 1.1rem 0 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--line, rgba(148, 163, 184, .16));
+  border-radius: 16px;
+  background: rgba(15, 23, 42, .72);
+  box-shadow: 0 10px 28px rgba(2, 8, 23, .12);
+  backdrop-filter: blur(12px);
+}
+
+body[data-page="articles"] .toolbar {
+  display: block;
+}
+
+body[data-page="articles"] .toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .55rem;
+}
+
+body[data-page="articles"] #a-q,
+body[data-page="articles"] #article-search,
+body[data-page="articles"] #article-source-filter {
+  min-height: 44px;
+  color: var(--text, #e5edf8);
+  border: 1px solid var(--line, rgba(148, 163, 184, .24));
+  border-radius: 11px;
+  background: rgba(2, 8, 23, .58);
+  outline: none;
+}
+
+body[data-page="articles"] #a-q,
+body[data-page="articles"] #article-search {
+  width: min(100%, 520px);
+  padding: .72rem .9rem;
+}
+
+body[data-page="articles"] #article-source-filter {
+  padding: .65rem 2.2rem .65rem .85rem;
+}
+
+body[data-page="articles"] #a-q:focus,
+body[data-page="articles"] #article-search:focus,
+body[data-page="articles"] #article-source-filter:focus {
+  border-color: var(--accent, #38bdf8);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, .15);
+}
+
+body[data-page="articles"] .toolbar input::placeholder,
+body[data-page="articles"] .articles-toolbar input::placeholder {
+  color: #8293aa;
+}
+
+body[data-page="articles"] .articles-toolbar button {
+  min-height: 42px;
+  padding: .65rem 1rem;
+  border: 1px solid rgba(56, 189, 248, .38);
+  border-radius: 10px;
+  color: #e0f2fe;
+  background: rgba(14, 116, 144, .2);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+body[data-page="articles"] .articles-toolbar button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, .7);
+  background: rgba(14, 116, 144, .34);
+}
+
+body[data-page="articles"] .toolbar button,
+body[data-page="articles"] .toolbar .chip,
+body[data-page="articles"] .toolbar [role="button"] {
+  cursor: pointer;
+}
+
+body[data-page="articles"] #plat-chips,
+body[data-page="articles"] #tag-chips {
+  gap: .5rem;
+}
+
+body[data-page="articles"] #plat-chips button,
+body[data-page="articles"] #tag-chips button,
+body[data-page="articles"] #plat-chips .chip,
+body[data-page="articles"] #tag-chips .chip {
+  min-height: 32px;
+  padding: .38rem .75rem;
+  border: 1px solid var(--line, rgba(148, 163, 184, .2));
+  border-radius: 999px;
+  color: var(--muted, #cbd5e1);
+  background: rgba(30, 41, 59, .7);
+  font-size: .82rem;
+  transition: .18s ease;
+}
+
+body[data-page="articles"] #plat-chips button:hover,
+body[data-page="articles"] #tag-chips button:hover,
+body[data-page="articles"] #plat-chips .chip:hover,
+body[data-page="articles"] #tag-chips .chip:hover {
+  color: #e0f2fe;
+  border-color: rgba(56, 189, 248, .55);
+  background: rgba(14, 116, 144, .22);
+}
+
+/* Article grid — supports both the original #articles area and #articles-grid. */
+body[data-page="articles"] #articles,
+body[data-page="articles"] #articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+  width: min(100% - 2rem, 1180px);
+  margin: 1.25rem auto 2.5rem;
+  align-items: stretch;
+}
+
+body[data-page="articles"] #articles .loading {
+  grid-column: 1 / -1;
+  color: var(--muted, #94a3b8);
+}
+
+/* Classes emitted by articles.js */
+body[data-page="articles"] .article-card,
+body[data-page="articles"] .dn-card.article-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.2rem;
+  overflow: hidden;
+  border: 1px solid var(--line, rgba(148, 163, 184, .18));
+  border-radius: 17px;
+  color: var(--text, #e5edf8);
+  background:
+    linear-gradient(145deg, rgba(30, 41, 59, .96), rgba(15, 23, 42, .96));
+  box-shadow: 0 12px 30px rgba(2, 8, 23, .17);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+body[data-page="articles"] .article-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, .48);
+  box-shadow: 0 18px 38px rgba(2, 8, 23, .28);
+}
+
+body[data-page="articles"] .article-card-featured {
+  border-color: rgba(56, 189, 248, .42);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(14, 165, 233, .12), transparent 48%),
+    linear-gradient(145deg, rgba(30, 41, 59, .98), rgba(15, 23, 42, .98));
+}
+
+body[data-page="articles"] .article-card-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-bottom: .85rem;
+}
+
+body[data-page="articles"] .article-source-badge,
+body[data-page="articles"] .article-featured-label {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: .32rem .62rem;
+  border: 1px solid rgba(148, 163, 184, .2);
+  border-radius: 999px;
+  color: #cbd5e1;
+  background: rgba(51, 65, 85, .62);
+  font-size: .73rem;
+  font-weight: 750;
+  letter-spacing: .035em;
+}
+
+body[data-page="articles"] .article-source-linkedin {
+  color: #bfdbfe;
+  border-color: rgba(59, 130, 246, .35);
+  background: rgba(37, 99, 235, .15);
+}
+
+body[data-page="articles"] .article-source-medium {
+  color: #d1fae5;
+  border-color: rgba(16, 185, 129, .32);
+  background: rgba(5, 150, 105, .14);
+}
+
+body[data-page="articles"] .article-featured-label {
+  color: #fde68a;
+  border-color: rgba(245, 158, 11, .32);
+  background: rgba(180, 83, 9, .16);
+}
+
+body[data-page="articles"] .article-card h2,
+body[data-page="articles"] .article-card h3 {
+  margin: 0 0 .65rem;
+  color: var(--text, #f1f5f9);
+  font-size: 1.12rem;
+  line-height: 1.4;
+  letter-spacing: -.015em;
+}
+
+body[data-page="articles"] .article-card p {
+  color: var(--muted, #aebdd0);
+  line-height: 1.68;
+}
+
+body[data-page="articles"] .article-card a {
+  color: #7dd3fc;
+  text-decoration: none;
+}
+
+body[data-page="articles"] .article-card a:hover {
+  color: #bae6fd;
+  text-decoration: underline;
+}
+
+body[data-page="articles"] .article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: auto;
+  padding-top: .9rem;
+}
+
+body[data-page="articles"] .article-tag {
+  display: inline-flex;
+  padding: .28rem .55rem;
+  border: 1px solid rgba(56, 189, 248, .18);
+  border-radius: 7px;
+  color: #bae6fd;
+  background: rgba(8, 145, 178, .1);
+  font-size: .72rem;
+}
+
+/* Loading, status and empty-state messages */
+body[data-page="articles"] #articles-status {
+  width: min(100% - 2rem, 1180px);
+  margin: 1rem auto;
+  color: var(--muted, #94a3b8);
+  line-height: 1.6;
+}
+
+body[data-page="articles"] #articles-status:empty {
+  display: none;
+}
+
+/* Keyboard accessibility */
+body[data-page="articles"] a:focus-visible,
+body[data-page="articles"] button:focus-visible,
+body[data-page="articles"] input:focus-visible,
+body[data-page="articles"] select:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 3px;
+}
+
+/* Responsive layouts */
+@media (max-width: 900px) {
+  body[data-page="articles"] #articles,
+  body[data-page="articles"] #articles-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 600px) {
-    .articles-toolbar {
-        flex-direction: column;
-    }
+  body[data-page="articles"] main > .container,
+  body[data-page="articles"] #articles,
+  body[data-page="articles"] #articles-grid,
+  body[data-page="articles"] #articles-status {
+    width: min(100% - 1.1rem, 1180px);
+  }
 
-    .articles-toolbar input,
-    .articles-toolbar select,
-    .articles-toolbar button {
-        width: 100%;
-    }
+  body[data-page="articles"] .page-hero {
+    margin-top: .8rem;
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  body[data-page="articles"] .toolbar,
+  body[data-page="articles"] .articles-toolbar {
+    padding: .8rem;
+    border-radius: 13px;
+  }
+
+  body[data-page="articles"] #a-q,
+  body[data-page="articles"] #article-search,
+  body[data-page="articles"] #article-source-filter,
+  body[data-page="articles"] .articles-toolbar button {
+    width: 100%;
+  }
+
+  body[data-page="articles"] #articles,
+  body[data-page="articles"] #articles-grid {
+    grid-template-columns: 1fr;
+    gap: .8rem;
+  }
+
+  body[data-page="articles"] .article-card {
+    padding: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-page="articles"] *,
+  body[data-page="articles"] *::before,
+  body[data-page="articles"] *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

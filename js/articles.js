@@ -1,21 +1,24 @@
-
 /**
  * ==========================================================
  * CHARLIE MJ — DEVOPS ARTICLES AGGREGATOR
  * File: articles.js
+ * Version: 2.0.0
+ * Hosting: GitHub Pages / static hosting
+ *
+ * Sources:
+ *   1. LinkedIn articles from ./data/articles.md
+ *   2. Medium RSS using three fallback methods:
+ *        A. Direct browser RSS fetch
+ *        B. RSS2JSON
+ *        C. AllOrigins CORS proxy
+ *
+ * No backend, database, build process, or GitHub Actions required.
+ *
+ * IMPORTANT:
+ * Public RSS conversion/CORS services are third-party dependencies.
+ * Their availability, limits, and terms can change. Configure or
+ * replace providers in CONFIG.medium.providers when necessary.
  * ==========================================================
- *
- * Features:
- * 1. Fetch Medium RSS feeds.
- * 2. Display manually registered LinkedIn articles.
- * 3. Merge and remove duplicate articles.
- * 4. Sort by publication date.
- * 5. Search and filter articles.
- * 6. Cache results in localStorage.
- * 7. Safely render external content.
- *
- * Hosting: GitHub Pages
- * Backend: Not required
  */
 
 (() => {
@@ -26,92 +29,143 @@
        ====================================================== */
 
     const CONFIG = {
+        medium: {
+            feedUrl: "https://medium.com/feed/@itcharlie.mj2",
 
-        // Replace with your actual Medium username.
-        mediumFeeds: [
-            {
-                name: "Medium",
-                url: "https://medium.com/feed/@YOUR_MEDIUM_USERNAME"
-            }
-        ],
+            // The providers are attempted in this exact order.
+            // If one method fails, the next method is tried.
+            providers: [
+                {
+                    id: "direct",
+                    name: "Direct Medium RSS",
+                    enabled: true
+                },
+                {
+                    id: "rss2json",
+                    name: "RSS2JSON",
+                    enabled: true,
+                    endpoint: "https://api.rss2json.com/v1/api.json"
+                },
+                {
+                    id: "allorigins",
+                    name: "AllOrigins CORS Proxy",
+                    enabled: true,
+                    endpoint: "https://api.allorigins.win/raw?url="
+                }
+            ]
+        },
 
-        // LinkedIn articles are manually registered.
-        // This does not scrape LinkedIn.
-        linkedInArticles: [
+        linkedin: {
+            markdownUrl: "./data/articles.md"
+        },
 
-            /*
-            {
-                title: "My DevOps Article",
-                url: "https://www.linkedin.com/pulse/your-article/",
-                date: "2026-11-01",
-                summary: "An introduction to DevOps."
-            }
-            */
-
-        ],
-
-        // Public CORS proxy for Medium RSS.
-        // You can replace it with another trusted proxy.
-        corsProxy: "https://proxy.cors.dev/",
-
-        maxArticles: 30,
-        cacheDuration: 15 * 60 * 1000,
-        cacheKey: "charlie_devops_articles_v1"
+        requestTimeoutMs: 15000,
+        maxArticles: 100,
+        cacheDurationMs: 15 * 60 * 1000,
+        cacheKey: "charlie_mj_devops_articles_v2",
+        fetchLinkedInMarkdown: true
     };
 
 
     /* ======================================================
-       2. HTML ELEMENTS
+       2. DOM ELEMENTS
        ====================================================== */
 
     const grid = document.getElementById("articles-grid");
     const status = document.getElementById("articles-status");
-    const search = document.getElementById("article-search");
-    const filter = document.getElementById("article-source-filter");
-    const refresh = document.getElementById("articles-refresh");
+    const searchInput = document.getElementById("article-search");
+    const sourceFilter = document.getElementById("article-source-filter");
+    const refreshButton = document.getElementById("articles-refresh");
 
     if (!grid) {
-        console.error("Articles grid not found.");
+        console.error(
+            '[Charlie MJ Articles] Missing required element: #articles-grid'
+        );
         return;
     }
 
     let allArticles = [];
+    let isLoading = false;
 
 
     /* ======================================================
        3. GENERAL HELPERS
        ====================================================== */
 
+    function setStatus(message) {
+        if (status) status.textContent = message;
+    }
+
+    function cleanText(value = "") {
+        return String(value)
+            .replace(/[\u00a0]/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
     function safeUrl(value) {
         try {
-            const url = new URL(value);
+            const url = new URL(String(value).trim());
 
-            return ["https:", "http:"].includes(url.protocol)
-                ? url.href
-                : "";
+            if (!["https:", "http:"].includes(url.protocol)) {
+                return "";
+            }
 
+            return url.href;
         } catch {
             return "";
         }
     }
 
-    function cleanText(value = "") {
-        return String(value).replace(/\s+/g, " ").trim();
+    function normalizeArticleUrl(value) {
+        const safe = safeUrl(value);
+        if (!safe) return "";
+
+        try {
+            const url = new URL(safe);
+            url.hash = "";
+
+            [
+                "source",
+                "utm_source",
+                "utm_medium",
+                "utm_campaign",
+                "utm_content",
+                "utm_term",
+                "ref"
+            ].forEach(parameter => url.searchParams.delete(parameter));
+
+            return url.href.replace(/\/+$/, "");
+        } catch {
+            return safe.replace(/\/+$/, "");
+        }
     }
 
     function stripHtml(value = "") {
-        const doc = new DOMParser().parseFromString(
-            value,
+        const parser = new DOMParser();
+        const documentNode = parser.parseFromString(
+            String(value),
             "text/html"
         );
 
-        return cleanText(doc.body.textContent || "");
+        // Remove non-content elements before reading text.
+        documentNode
+            .querySelectorAll("script, style, noscript")
+            .forEach(node => node.remove());
+
+        return cleanText(documentNode.body.textContent || "");
+    }
+
+    function parseDate(value) {
+        if (!value) return "";
+
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? "" : date.toISOString();
     }
 
     function formatDate(value) {
         const date = new Date(value);
-
-        if (Number.isNaN(date.getTime())) return "";
+        if (!value || Number.isNaN(date.getTime())) return "";
 
         return date.toLocaleDateString(undefined, {
             year: "numeric",
@@ -120,41 +174,233 @@
         });
     }
 
-    function setStatus(message) {
-        if (status) status.textContent = message;
-    }
-
-    function element(tag, className, text) {
+    function createElement(tag, className, text) {
         const node = document.createElement(tag);
 
         if (className) node.className = className;
-        if (text !== undefined) node.textContent = text;
+        if (text !== undefined && text !== null) {
+            node.textContent = String(text);
+        }
 
         return node;
     }
 
+    function withTimeout(url, options = {}) {
+        const controller = new AbortController();
+        const timeout = setTimeout(
+            () => controller.abort(),
+            CONFIG.requestTimeoutMs
+        );
+
+        return fetch(url, {
+            ...options,
+            signal: controller.signal
+        }).finally(() => clearTimeout(timeout));
+    }
+
 
     /* ======================================================
-       4. MEDIUM RSS FETCHER
+       4. LINKEDIN MARKDOWN FETCHER
        ====================================================== */
 
-    async function fetchMediumFeed(feed) {
+    async function fetchLinkedInArticles() {
+        if (!CONFIG.fetchLinkedInMarkdown) return [];
 
-        const feedUrl = safeUrl(feed.url);
+        const markdownUrl = safeUrl(
+            new URL(CONFIG.linkedin.markdownUrl, document.baseURI).href
+        );
 
-        if (!feedUrl) {
-            throw new Error("Invalid Medium feed URL");
+        if (!markdownUrl) {
+            throw new Error("Invalid LinkedIn Markdown URL.");
         }
 
-        const requestUrl = CONFIG.corsProxy
-            ? CONFIG.corsProxy + feedUrl
-            : feedUrl;
+        const response = await withTimeout(markdownUrl, {
+            method: "GET",
+            cache: "no-store",
+            credentials: "same-origin"
+        });
 
-        const response = await fetch(requestUrl, {
+        if (!response.ok) {
+            throw new Error(
+                `LinkedIn Markdown request failed: HTTP ${response.status}`
+            );
+        }
+
+        const markdown = await response.text();
+        return parseLinkedInMarkdown(markdown);
+    }
+
+    /**
+     * Supported Markdown record format:
+     *
+     * ## Articles
+     *
+     * ### Article title
+     * - url: https://...
+     * - date: 2026-11-13
+     * - category: Kubernetes
+     * - tags: Kubernetes, Helm, DevOps
+     * - summary: Short article description.
+     * - featured: true
+     *
+     * A record starts with a level-three heading (###).
+     */
+    function parseLinkedInMarkdown(markdown) {
+        const lines = String(markdown || "").split(/\r?\n/);
+        const records = [];
+        let current = null;
+
+        function finishRecord() {
+            if (!current) return;
+
+            const title = cleanText(current.title);
+            const url = safeUrl(current.url);
+
+            if (title && url) {
+                records.push(normalizeArticle({
+                    title,
+                    url,
+                    date: current.date || "",
+                    summary: current.summary || "",
+                    author: current.author || "",
+                    source: "LinkedIn",
+                    category: current.category || "General",
+                    tags: current.tags || [],
+                    featured: current.featured === true ||
+                        String(current.featured).toLowerCase() === "true"
+                }));
+            }
+
+            current = null;
+        }
+
+        for (const rawLine of lines) {
+            const line = rawLine.trim();
+
+            const heading = line.match(/^###\s+(.+)$/);
+            if (heading) {
+                finishRecord();
+                current = {
+                    title: heading[1].replace(/^["']|["']$/g, ""),
+                    tags: []
+                };
+                continue;
+            }
+
+            if (!current) continue;
+
+            const field = line.match(
+                /^[-*]\s*(title|url|date|summary|author|category|tags|featured)\s*:\s*(.*)$/i
+            );
+
+            if (!field) continue;
+
+            const key = field[1].toLowerCase();
+            const value = field[2].trim();
+
+            if (key === "tags") {
+                current.tags = value
+                    .split(",")
+                    .map(tag => cleanText(tag))
+                    .filter(Boolean);
+            } else if (key === "featured") {
+                current.featured = value;
+            } else {
+                current[key] = value;
+            }
+        }
+
+        finishRecord();
+        return records;
+    }
+
+
+    /* ======================================================
+       5. MEDIUM RSS — THREE FALLBACK PROVIDERS
+       ====================================================== */
+
+    async function fetchMediumArticles() {
+        const feedUrl = safeUrl(CONFIG.medium.feedUrl);
+
+        if (!feedUrl) {
+            throw new Error("Invalid Medium RSS feed URL.");
+        }
+
+        const enabledProviders = CONFIG.medium.providers.filter(
+            provider => provider.enabled
+        );
+
+        const failures = [];
+
+        for (const provider of enabledProviders) {
+            try {
+                console.info(
+                    `[Charlie MJ Articles] Trying Medium provider: ${provider.name}`
+                );
+
+                const articles = await fetchWithProvider(
+                    provider,
+                    feedUrl
+                );
+
+                if (!articles.length) {
+                    throw new Error("The provider returned no articles.");
+                }
+
+                console.info(
+                    `[Charlie MJ Articles] Medium loaded using ${provider.name}: ${articles.length} articles`
+                );
+
+                return {
+                    articles,
+                    provider: provider.name,
+                    failures
+                };
+            } catch (error) {
+                console.warn(
+                    `[Charlie MJ Articles] ${provider.name} failed:`,
+                    error.message || error
+                );
+
+                failures.push({
+                    provider: provider.name,
+                    message: error.message || "Unknown error"
+                });
+            }
+        }
+
+        throw new Error(
+            failures.map(item => `${item.provider}: ${item.message}`).join(" | ") ||
+            "No Medium RSS providers are enabled."
+        );
+    }
+
+    async function fetchWithProvider(provider, feedUrl) {
+        switch (provider.id) {
+            case "direct":
+                return fetchXmlFeed(feedUrl);
+
+            case "rss2json":
+                return fetchRss2Json(provider, feedUrl);
+
+            case "allorigins":
+                return fetchAllOrigins(provider, feedUrl);
+
+            default:
+                throw new Error(`Unknown provider: ${provider.id}`);
+        }
+    }
+
+    // Method A: Fetch the Medium RSS XML directly.
+    // This may fail because Medium does not guarantee browser CORS access.
+    async function fetchXmlFeed(feedUrl) {
+        const response = await withTimeout(feedUrl, {
             method: "GET",
             mode: "cors",
             credentials: "omit",
-            signal: AbortSignal.timeout(12000)
+            headers: {
+                "Accept": "application/rss+xml, application/xml, text/xml"
+            }
         });
 
         if (!response.ok) {
@@ -162,269 +408,466 @@
         }
 
         const xmlText = await response.text();
+        return parseRssXml(xmlText);
+    }
 
+    // Method B: Convert Medium RSS to JSON using RSS2JSON.
+    async function fetchRss2Json(provider, feedUrl) {
+        const endpoint = new URL(provider.endpoint);
+        endpoint.searchParams.set("rss_url", feedUrl);
+
+        const response = await withTimeout(endpoint.href, {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status && data.status.toLowerCase() !== "ok") {
+            throw new Error(data.message || "RSS2JSON reported an error.");
+        }
+
+        if (!Array.isArray(data.items)) {
+            throw new Error("RSS2JSON response did not contain an items array.");
+        }
+
+        return data.items.map(item => normalizeArticle({
+            title: item.title,
+            url: item.link,
+            date: item.pubDate || item.isoDate,
+            summary: item.content || item.description || "",
+            author: item.author || item.creator || "",
+            source: "Medium",
+            category: "General",
+            tags: Array.isArray(item.categories) ? item.categories : []
+        })).filter(article => article.title && article.url);
+    }
+
+    // Method C: Retrieve the original XML through AllOrigins.
+    async function fetchAllOrigins(provider, feedUrl) {
+        const requestUrl =
+            provider.endpoint + encodeURIComponent(feedUrl);
+
+        const response = await withTimeout(requestUrl, {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit"
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const xmlText = await response.text();
+        return parseRssXml(xmlText);
+    }
+
+
+    /* ======================================================
+       6. RSS / ATOM XML PARSER
+       ====================================================== */
+
+    function parseRssXml(xmlText) {
         const xml = new DOMParser().parseFromString(
-            xmlText,
+            String(xmlText || ""),
             "application/xml"
         );
 
-        if (xml.querySelector("parsererror")) {
-            throw new Error("Invalid RSS XML");
+        if (
+            xml.querySelector("parsererror") ||
+            xml.documentElement?.localName === "parsererror"
+        ) {
+            throw new Error("The RSS provider returned invalid XML.");
         }
 
-        return [...xml.querySelectorAll("item, entry")]
-            .map(item => {
-
-                const getText = selector =>
-                    item.querySelector(selector)?.textContent?.trim() || "";
-
-                const linkElement =
-                    item.querySelector('link[rel="alternate"]') ||
-                    item.querySelector("link");
-
-                const link = safeUrl(
-                    linkElement?.getAttribute("href") ||
-                    linkElement?.textContent?.trim() ||
-                    ""
-                );
-
-                if (!link) return null;
-
-                const summary =
-                    getText("description") ||
-                    getText("summary");
-
-                const encoded = item.getElementsByTagNameNS(
-                    "*",
-                    "encoded"
-                )[0]?.textContent || "";
-
-                return {
-                    title: cleanText(getText("title")) || "Untitled",
-                    url: link,
-                    date:
-                        getText("pubDate") ||
-                        getText("published") ||
-                        getText("updated"),
-                    summary: stripHtml(encoded || summary).slice(0, 280),
-                    source: "Medium",
-                    author:
-                        getText("creator") ||
-                        getText("author")
-                };
-            })
-            .filter(Boolean);
-    }
-
-
-    /* ======================================================
-       5. LINKEDIN ARTICLE COLLECTION
-       ====================================================== */
-
-    function getLinkedInArticles() {
-
-        return CONFIG.linkedInArticles
-            .map(article => {
-
-                const url = safeUrl(article.url);
-
-                if (!url) return null;
-
-                return {
-                    title: cleanText(article.title),
-                    url,
-                    date: article.date || "",
-                    summary: cleanText(article.summary || ""),
-                    author: article.author || "",
-                    source: "LinkedIn"
-                };
-
-            })
-            .filter(article => article && article.title);
-    }
-
-
-    /* ======================================================
-       6. LOAD ALL SOURCES
-       ====================================================== */
-
-    async function loadArticles() {
-
-        setStatus("Loading articles...");
-
-        const feeds = CONFIG.mediumFeeds.filter(feed =>
-            feed.url &&
-            !feed.url.includes("YOUR_MEDIUM_USERNAME")
-        );
-
-        const results = await Promise.allSettled(
-            feeds.map(fetchMediumFeed)
-        );
-
-        const mediumArticles = [];
-        const errors = [];
-
-        results.forEach((result, index) => {
-
-            if (result.status === "fulfilled") {
-                mediumArticles.push(...result.value);
-            } else {
-                errors.push({
-                    feed: feeds[index].name,
-                    error: result.reason
-                });
-            }
-
-        });
-
-        const linkedInArticles = getLinkedInArticles();
-
-        const combined = [
-            ...mediumArticles,
-            ...linkedInArticles
+        const items = [
+            ...xml.getElementsByTagName("item"),
+            ...xml.getElementsByTagName("entry")
         ];
 
-        // Remove duplicate URLs.
+        if (!items.length) {
+            throw new Error("No RSS or Atom entries were found.");
+        }
+
+        return items.map(item => {
+            const getText = names => {
+                for (const name of names) {
+                    const element = item.getElementsByTagNameNS("*", name)[0] ||
+                        item.getElementsByTagName(name)[0];
+
+                    if (element?.textContent) {
+                        return element.textContent.trim();
+                    }
+                }
+                return "";
+            };
+
+            const linkNode =
+                item.querySelector('link[rel="alternate"]') ||
+                item.querySelector("link");
+
+            const link = safeUrl(
+                linkNode?.getAttribute("href") ||
+                linkNode?.textContent ||
+                getText(["guid"])
+            );
+
+            const content = getText(["encoded", "content"]);
+            const description = getText(["description", "summary"]);
+
+            return normalizeArticle({
+                title: getText(["title"]) || "Untitled",
+                url: link,
+                date: getText([
+                    "pubDate",
+                    "published",
+                    "updated",
+                    "date"
+                ]),
+                summary: content || description,
+                author: getText(["creator", "author"]),
+                source: "Medium",
+                category: "General",
+                tags: []
+            });
+        }).filter(article => article.title && article.url);
+    }
+
+
+    /* ======================================================
+       7. ARTICLE NORMALIZATION AND DEDUPLICATION
+       ====================================================== */
+
+    function normalizeArticle(article) {
+        const url = safeUrl(article.url);
+
+        return {
+            title: cleanText(article.title || "Untitled"),
+            url,
+            normalizedUrl: normalizeArticleUrl(url),
+            date: parseDate(article.date),
+            summary: stripHtml(article.summary || "").slice(0, 320),
+            author: cleanText(article.author || ""),
+            source: article.source === "LinkedIn" ? "LinkedIn" : "Medium",
+            category: cleanText(article.category || "General"),
+            tags: Array.isArray(article.tags)
+                ? article.tags.map(cleanText).filter(Boolean)
+                : [],
+            featured: Boolean(article.featured)
+        };
+    }
+
+    function deduplicateArticles(articles) {
         const unique = new Map();
 
-        combined.forEach(article => {
-            const key = article.url.replace(/\/$/, "");
+        for (const article of articles) {
+            if (!article.url || !article.normalizedUrl) continue;
+
+            const key = article.normalizedUrl;
 
             if (!unique.has(key)) {
                 unique.set(key, article);
+            } else {
+                // Prefer the record with the most useful metadata.
+                const existing = unique.get(key);
+                const existingScore =
+                    (existing.summary ? 1 : 0) +
+                    (existing.date ? 1 : 0) +
+                    (existing.tags.length ? 1 : 0);
+
+                const newScore =
+                    (article.summary ? 1 : 0) +
+                    (article.date ? 1 : 0) +
+                    (article.tags.length ? 1 : 0);
+
+                if (newScore > existingScore) {
+                    unique.set(key, article);
+                }
             }
-        });
-
-        allArticles = [...unique.values()]
-            .sort((a, b) => {
-                return (
-                    new Date(b.date || 0).getTime() -
-                    new Date(a.date || 0).getTime()
-                );
-            })
-            .slice(0, CONFIG.maxArticles);
-
-        saveCache(allArticles);
-
-        renderArticles();
-
-        if (errors.length) {
-            console.warn("Some article feeds failed:", errors);
         }
 
-        if (errors.length && !allArticles.length) {
-            setStatus("Unable to fetch articles. Check your feed settings.");
-        } else {
-            setStatus(`Loaded ${allArticles.length} articles.`);
+        return [...unique.values()].sort((a, b) => {
+            const dateA = a.date ? new Date(a.date).getTime() : 0;
+            const dateB = b.date ? new Date(b.date).getTime() : 0;
+            return dateB - dateA;
+        });
+    }
+
+
+    /* ======================================================
+       8. LOCAL STORAGE CACHE
+       ====================================================== */
+
+    function saveCache(articles) {
+        try {
+            localStorage.setItem(
+                CONFIG.cacheKey,
+                JSON.stringify({
+                    savedAt: Date.now(),
+                    articles
+                })
+            );
+        } catch (error) {
+            console.warn(
+                "[Charlie MJ Articles] Could not save cache:",
+                error
+            );
+        }
+    }
+
+    function readCache() {
+        try {
+            const raw = localStorage.getItem(CONFIG.cacheKey);
+            if (!raw) return null;
+
+            const cache = JSON.parse(raw);
+
+            if (!Array.isArray(cache.articles)) return null;
+
+            const age = Date.now() - Number(cache.savedAt || 0);
+
+            return {
+                articles: cache.articles,
+                fresh: age >= 0 && age < CONFIG.cacheDurationMs,
+                savedAt: cache.savedAt
+            };
+        } catch {
+            return null;
         }
     }
 
 
     /* ======================================================
-       7. ARTICLE CARD CREATION
+       9. LOAD AND MERGE ARTICLE SOURCES
        ====================================================== */
 
-    function createCard(article) {
+    async function loadArticles(options = {}) {
+        if (isLoading) return;
 
-        const card = element(
+        isLoading = true;
+        if (refreshButton) refreshButton.disabled = true;
+
+        const forceRefresh = Boolean(options.forceRefresh);
+
+        setStatus(
+            forceRefresh
+                ? "Refreshing articles..."
+                : "Checking for new articles..."
+        );
+
+        const sourceResults = await Promise.allSettled([
+            fetchLinkedInArticles(),
+            fetchMediumArticles()
+        ]);
+
+        const linkedInResult = sourceResults[0];
+        const mediumResult = sourceResults[1];
+
+        const merged = [];
+        const errors = [];
+        let mediumProvider = "";
+
+        if (linkedInResult.status === "fulfilled") {
+            merged.push(...linkedInResult.value);
+        } else {
+            errors.push(
+                `LinkedIn: ${linkedInResult.reason?.message || "Could not load Markdown."}`
+            );
+        }
+
+        if (mediumResult.status === "fulfilled") {
+            merged.push(...mediumResult.value.articles);
+            mediumProvider = mediumResult.value.provider;
+        } else {
+            errors.push(
+                `Medium: ${mediumResult.reason?.message || "All RSS methods failed."}`
+            );
+        }
+
+        const freshArticles = deduplicateArticles(merged)
+            .slice(0, CONFIG.maxArticles);
+
+        if (freshArticles.length) {
+            allArticles = freshArticles;
+            saveCache(allArticles);
+            renderArticles();
+
+            const sourceMessage = mediumProvider
+                ? ` Medium: ${mediumProvider}.`
+                : "";
+
+            if (errors.length) {
+                setStatus(
+                    `Loaded ${allArticles.length} articles with some source errors. ${errors.join(" ")}`
+                );
+            } else {
+                setStatus(
+                    `Loaded ${allArticles.length} articles.${sourceMessage}`
+                );
+            }
+        } else if (!allArticles.length) {
+            const cache = readCache();
+
+            if (cache?.articles?.length) {
+                allArticles = cache.articles;
+                renderArticles();
+                setStatus(
+                    `Showing ${allArticles.length} cached articles. Live sources are unavailable.`
+                );
+            } else {
+                renderArticles();
+                setStatus(
+                    errors.length
+                        ? errors.join(" ")
+                        : "No articles were found."
+                );
+            }
+        } else {
+            // Keep previously visible content if a refresh returns no data.
+            setStatus(
+                `Could not refresh sources. Keeping ${allArticles.length} previously loaded articles. ${errors.join(" ")}`
+            );
+        }
+
+        isLoading = false;
+        if (refreshButton) refreshButton.disabled = false;
+    }
+
+
+    /* ======================================================
+       10. ARTICLE CARD RENDERING
+       ====================================================== */
+
+    function createArticleCard(article) {
+        const card = createElement(
             "article",
             "dn-card article-card"
         );
 
-        const source = element(
+        if (article.featured) {
+            card.classList.add("article-card-featured");
+        }
+
+        const topLine = createElement("div", "article-card-top");
+
+        const sourceBadge = createElement(
             "span",
-            "article-source-badge",
+            `article-source-badge article-source-${article.source.toLowerCase()}`,
             article.source
         );
 
-        const title = element("h2", "dn-card-title");
+        topLine.append(sourceBadge);
 
-        const titleLink = element("a", "", article.title);
+        if (article.featured) {
+            topLine.append(
+                createElement("span", "article-featured-label", "Featured")
+            );
+        }
+
+        const title = createElement("h2", "dn-card-title");
+        const titleLink = createElement("a", "", article.title);
 
         titleLink.href = article.url;
         titleLink.target = "_blank";
         titleLink.rel = "noopener noreferrer";
-
         title.append(titleLink);
 
-        const description = element(
+        const description = createElement(
             "p",
             "dn-card-text",
-            article.summary || "Read the original article."
+            article.summary || "Read the original article for the full content."
         );
 
-        const dateText = [
-            article.author,
-            formatDate(article.date)
-        ].filter(Boolean).join(" · ");
+        const metadataParts = [];
 
-        const meta = element(
+        if (article.author) metadataParts.push(article.author);
+        if (article.date) metadataParts.push(formatDate(article.date));
+        if (article.category) metadataParts.push(article.category);
+
+        const metadata = createElement(
             "p",
             "dn-card-meta",
-            dateText
+            metadataParts.join(" · ")
         );
 
-        const actions = element("div", "dn-card-actions");
+        const tags = createElement("div", "article-tags");
 
-        const readButton = element(
+        article.tags.slice(0, 5).forEach(tag => {
+            tags.append(createElement("span", "article-tag", tag));
+        });
+
+        const actions = createElement("div", "dn-card-actions");
+
+        const readLink = createElement(
             "a",
             "dn-btn dn-btn-primary",
-            "Read article ↗"
+            "Read original article ↗"
         );
 
-        readButton.href = article.url;
-        readButton.target = "_blank";
-        readButton.rel = "noopener noreferrer";
+        readLink.href = article.url;
+        readLink.target = "_blank";
+        readLink.rel = "noopener noreferrer";
 
-        actions.append(readButton);
+        actions.append(readLink);
 
-        card.append(
-            source,
-            title,
-            description,
-            meta,
-            actions
-        );
+        card.append(topLine, title, description);
+
+        if (tags.childElementCount) card.append(tags);
+        if (metadataParts.length) card.append(metadata);
+
+        card.append(actions);
 
         return card;
     }
 
 
     /* ======================================================
-       8. SEARCH AND FILTER
+       11. SEARCH, SOURCE FILTER AND CATEGORY FILTER
        ====================================================== */
 
     function renderArticles() {
-
-        const query = cleanText(search?.value || "").toLowerCase();
-
-        const selectedSource = filter?.value || "all";
+        const query = cleanText(searchInput?.value || "").toLowerCase();
+        const selectedSource = sourceFilter?.value || "all";
 
         const filtered = allArticles.filter(article => {
-
-            const matchesSource =
+            const sourceMatches =
                 selectedSource === "all" ||
-                article.source.toLowerCase() === selectedSource;
+                article.source.toLowerCase() === selectedSource.toLowerCase();
 
-            const searchable = [
+            const searchableText = [
                 article.title,
                 article.summary,
                 article.author,
-                article.source
+                article.source,
+                article.category,
+                ...(article.tags || [])
             ].join(" ").toLowerCase();
 
-            return matchesSource && searchable.includes(query);
+            return sourceMatches && searchableText.includes(query);
         });
 
         if (!filtered.length) {
-
             grid.replaceChildren(
-                element(
+                createElement(
                     "p",
                     "dn-state",
-                    "No articles found."
+                    allArticles.length
+                        ? "No articles match your search or selected filter."
+                        : "No articles are available yet."
                 )
             );
+
+            if (allArticles.length) {
+                setStatus(`Showing 0 of ${allArticles.length} articles.`);
+            }
 
             return;
         }
@@ -432,7 +875,7 @@
         const fragment = document.createDocumentFragment();
 
         filtered.forEach(article => {
-            fragment.append(createCard(article));
+            fragment.append(createArticleCard(article));
         });
 
         grid.replaceChildren(fragment);
@@ -444,97 +887,44 @@
 
 
     /* ======================================================
-       9. LOCAL STORAGE CACHE
+       12. EVENT LISTENERS AND INITIALIZATION
        ====================================================== */
 
-    function saveCache(articles) {
+    searchInput?.addEventListener("input", renderArticles);
+    sourceFilter?.addEventListener("change", renderArticles);
 
-        try {
-            localStorage.setItem(
-                CONFIG.cacheKey,
-                JSON.stringify({
-                    time: Date.now(),
-                    articles
-                })
-            );
-        } catch (error) {
-            console.warn("Article cache unavailable:", error);
-        }
-    }
-
-    function getCache() {
-
-        try {
-
-            const raw = localStorage.getItem(CONFIG.cacheKey);
-
-            if (!raw) return null;
-
-            const cache = JSON.parse(raw);
-
-            if (
-                !Array.isArray(cache.articles) ||
-                Date.now() - cache.time > CONFIG.cacheDuration
-            ) {
-                return null;
-            }
-
-            return cache.articles;
-
-        } catch {
-            return null;
-        }
-    }
-
-
-    /* ======================================================
-       10. EVENT LISTENERS
-       ====================================================== */
-
-    search?.addEventListener("input", renderArticles);
-
-    filter?.addEventListener("change", renderArticles);
-
-    refresh?.addEventListener("click", loadArticles);
-
-
-    /* ======================================================
-       11. INITIALIZATION
-       ====================================================== */
+    refreshButton?.addEventListener("click", () => {
+        loadArticles({ forceRefresh: true });
+    });
 
     async function initialize() {
+        // Render cached data immediately, even if it is stale.
+        const cache = readCache();
 
-        const cached = getCache();
-
-        if (cached) {
-
-            allArticles = cached;
-
+        if (cache?.articles?.length) {
+            allArticles = cache.articles;
             renderArticles();
 
-            setStatus("Showing cached articles. Refresh for updates.");
-
-            return;
-        }
-
-        try {
-            await loadArticles();
-        } catch (error) {
-
-            console.error("Articles initialization failed:", error);
-
-            setStatus("Could not load articles.");
-
-            grid.replaceChildren(
-                element(
-                    "p",
-                    "dn-state",
-                    "Please try refreshing the articles."
-                )
+            setStatus(
+                cache.fresh
+                    ? "Showing recently cached articles. Checking for updates..."
+                    : "Showing saved articles. Checking for fresh updates..."
             );
+        } else {
+            setStatus("Loading articles...");
         }
+
+        // Always refresh in the background so visitors can see new posts.
+        await loadArticles();
     }
 
-    initialize();
+    initialize().catch(error => {
+        console.error(
+            "[Charlie MJ Articles] Initialization failed:",
+            error
+        );
+
+        setStatus("Unable to initialize articles. Please refresh the page.");
+    });
 
 })();
