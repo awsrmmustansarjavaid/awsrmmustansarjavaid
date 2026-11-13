@@ -69,7 +69,7 @@
         },
 
         linkedin: {
-            markdownUrl: "../../data/articles.md"            
+            markdownUrl: "../../data/articles.md"
         },
 
         requestTimeoutMs: 15000,
