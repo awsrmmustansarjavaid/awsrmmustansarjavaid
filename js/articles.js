@@ -2,7 +2,7 @@
  * ==========================================================
  * CHARLIE MJ — DEVOPS ARTICLES AGGREGATOR
  * File: articles.js
- * Version: 2.0.0
+ * Version: 2.1.0
  * Hosting: GitHub Pages / static hosting
  *
  * Sources:
@@ -18,6 +18,13 @@
  * Public RSS conversion/CORS services are third-party dependencies.
  * Their availability, limits, and terms can change. Configure or
  * replace providers in CONFIG.medium.providers when necessary.
+ *
+ * Changes in 2.1.0:
+ *   - Works with a single search bar (#article-search).
+ *   - HTML entities (e.g. &amp;) are decoded in titles and summaries.
+ *   - Block-level HTML in summaries is separated by spaces, so words
+ *     no longer run together.
+ *   - Sets the Medium (and optional LinkedIn) profile buttons.
  * ==========================================================
  */
 
@@ -29,11 +36,17 @@
        ====================================================== */
 
     const CONFIG = {
+        profiles: {
+            medium: "https://medium.com/@itcharlie.mj2",
+            // Add your LinkedIn profile URL here, e.g.
+            // "https://www.linkedin.com/in/your-name/"
+            linkedin: ""
+        },
+
         medium: {
             feedUrl: "https://medium.com/feed/@itcharlie.mj2",
 
             // The providers are attempted in this exact order.
-            // If one method fails, the next method is tried.
             providers: [
                 {
                     id: "direct",
@@ -76,10 +89,12 @@
     const searchInput = document.getElementById("article-search");
     const sourceFilter = document.getElementById("article-source-filter");
     const refreshButton = document.getElementById("articles-refresh");
+    const mediumProfile = document.getElementById("p-medium");
+    const linkedinProfile = document.getElementById("p-linkedin");
 
     if (!grid) {
         console.error(
-            '[Charlie MJ Articles] Missing required element: #articles-grid'
+            "[Charlie MJ Articles] Missing required element: #articles-grid"
         );
         return;
     }
@@ -141,19 +156,36 @@
         }
     }
 
+    // Converts HTML (or text containing HTML entities) to clean plain text.
+    // Block-level tags become spaces so words do not run together, and
+    // entities such as &amp; are decoded.
     function stripHtml(value = "") {
-        const parser = new DOMParser();
-        const documentNode = parser.parseFromString(
-            String(value),
+        const spaced = String(value).replace(
+            /<\/?(p|div|br|li|ul|ol|h[1-6]|blockquote|figure|figcaption|pre|tr|td)\b[^>]*>/gi,
+            " "
+        );
+
+        const documentNode = new DOMParser().parseFromString(
+            spaced,
             "text/html"
         );
 
-        // Remove non-content elements before reading text.
         documentNode
             .querySelectorAll("script, style, noscript")
             .forEach(node => node.remove());
 
-        return cleanText(documentNode.body.textContent || "");
+        let text = cleanText(documentNode.body.textContent || "");
+
+        // Some feeds double-encode entities (e.g. "&amp;amp;"). Decode once more.
+        if (/&(?:amp|lt|gt|quot|#\d+|#x[0-9a-f]+);/i.test(text)) {
+            const second = new DOMParser().parseFromString(
+                text,
+                "text/html"
+            );
+            text = cleanText(second.documentElement.textContent || text);
+        }
+
+        return text;
     }
 
     function parseDate(value) {
@@ -196,6 +228,23 @@
             ...options,
             signal: controller.signal
         }).finally(() => clearTimeout(timeout));
+    }
+
+    function setupProfileLinks() {
+        const medium = safeUrl(CONFIG.profiles.medium);
+        const linkedin = safeUrl(CONFIG.profiles.linkedin);
+
+        if (mediumProfile && medium) {
+            mediumProfile.href = medium;
+            mediumProfile.target = "_blank";
+            mediumProfile.rel = "noopener noreferrer";
+        }
+
+        if (linkedinProfile && linkedin) {
+            linkedinProfile.href = linkedin;
+            linkedinProfile.target = "_blank";
+            linkedinProfile.rel = "noopener noreferrer";
+        }
     }
 
 
@@ -338,10 +387,7 @@
                     `[Charlie MJ Articles] Trying Medium provider: ${provider.name}`
                 );
 
-                const articles = await fetchWithProvider(
-                    provider,
-                    feedUrl
-                );
+                const articles = await fetchWithProvider(provider, feedUrl);
 
                 if (!articles.length) {
                     throw new Error("The provider returned no articles.");
@@ -453,8 +499,7 @@
 
     // Method C: Retrieve the original XML through AllOrigins.
     async function fetchAllOrigins(provider, feedUrl) {
-        const requestUrl =
-            provider.endpoint + encodeURIComponent(feedUrl);
+        const requestUrl = provider.endpoint + encodeURIComponent(feedUrl);
 
         const response = await withTimeout(requestUrl, {
             method: "GET",
@@ -523,6 +568,11 @@
             const content = getText(["encoded", "content"]);
             const description = getText(["description", "summary"]);
 
+            // Medium puts topics in <category> elements.
+            const categories = [...item.getElementsByTagName("category")]
+                .map(node => cleanText(node.textContent || ""))
+                .filter(Boolean);
+
             return normalizeArticle({
                 title: getText(["title"]) || "Untitled",
                 url: link,
@@ -536,7 +586,7 @@
                 author: getText(["creator", "author"]),
                 source: "Medium",
                 category: "General",
-                tags: []
+                tags: categories
             });
         }).filter(article => article.title && article.url);
     }
@@ -550,7 +600,7 @@
         const url = safeUrl(article.url);
 
         return {
-            title: cleanText(article.title || "Untitled"),
+            title: stripHtml(article.title || "Untitled") || "Untitled",
             url,
             normalizedUrl: normalizeArticleUrl(url),
             date: parseDate(article.date),
@@ -559,7 +609,7 @@
             source: article.source === "LinkedIn" ? "LinkedIn" : "Medium",
             category: cleanText(article.category || "General"),
             tags: Array.isArray(article.tags)
-                ? article.tags.map(cleanText).filter(Boolean)
+                ? article.tags.map(tag => stripHtml(tag)).filter(Boolean)
                 : [],
             featured: Boolean(article.featured)
         };
@@ -678,6 +728,8 @@
         if (linkedInResult.status === "fulfilled") {
             merged.push(...linkedInResult.value);
         } else {
+            // A missing LinkedIn Markdown file is not a problem when
+            // Medium works, so this is only reported if nothing loads.
             errors.push(
                 `LinkedIn: ${linkedInResult.reason?.message || "Could not load Markdown."}`
             );
@@ -700,18 +752,17 @@
             saveCache(allArticles);
             renderArticles();
 
-            const sourceMessage = mediumProvider
-                ? ` Medium: ${mediumProvider}.`
-                : "";
-
             if (errors.length) {
-                setStatus(
-                    `Loaded ${allArticles.length} articles with some source errors. ${errors.join(" ")}`
-                );
-            } else {
-                setStatus(
-                    `Loaded ${allArticles.length} articles.${sourceMessage}`
-                );
+                console.warn("[Charlie MJ Articles] Source errors:", errors);
+            }
+
+            // renderArticles() sets the "Showing X of Y" status line.
+            // Append where the Medium data came from for transparency.
+            if (mediumProvider && status) {
+                status.textContent += ` Medium via ${mediumProvider}.`;
+            }
+            if (errors.length && status) {
+                status.textContent += " Some sources could not be loaded.";
             }
         } else if (!allArticles.length) {
             const cache = readCache();
@@ -747,10 +798,7 @@
        ====================================================== */
 
     function createArticleCard(article) {
-        const card = createElement(
-            "article",
-            "dn-card article-card"
-        );
+        const card = createElement("article", "dn-card article-card");
 
         if (article.featured) {
             card.classList.add("article-card-featured");
@@ -758,13 +806,13 @@
 
         const topLine = createElement("div", "article-card-top");
 
-        const sourceBadge = createElement(
-            "span",
-            `article-source-badge article-source-${article.source.toLowerCase()}`,
-            article.source
+        topLine.append(
+            createElement(
+                "span",
+                `article-source-badge article-source-${article.source.toLowerCase()}`,
+                article.source
+            )
         );
-
-        topLine.append(sourceBadge);
 
         if (article.featured) {
             topLine.append(
@@ -830,7 +878,7 @@
 
 
     /* ======================================================
-       11. SEARCH, SOURCE FILTER AND CATEGORY FILTER
+       11. SEARCH AND SOURCE FILTER
        ====================================================== */
 
     function renderArticles() {
@@ -880,9 +928,7 @@
 
         grid.replaceChildren(fragment);
 
-        setStatus(
-            `Showing ${filtered.length} of ${allArticles.length} articles.`
-        );
+        setStatus(`Showing ${filtered.length} of ${allArticles.length} articles.`);
     }
 
 
@@ -898,6 +944,8 @@
     });
 
     async function initialize() {
+        setupProfileLinks();
+
         // Render cached data immediately, even if it is stale.
         const cache = readCache();
 
@@ -919,11 +967,7 @@
     }
 
     initialize().catch(error => {
-        console.error(
-            "[Charlie MJ Articles] Initialization failed:",
-            error
-        );
-
+        console.error("[Charlie MJ Articles] Initialization failed:", error);
         setStatus("Unable to initialize articles. Please refresh the page.");
     });
 

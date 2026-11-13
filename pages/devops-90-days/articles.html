@@ -7,14 +7,11 @@
   <meta name="description" content="LinkedIn and Medium articles connected to the 90 Days of DevOps curriculum.">
   <meta name="color-scheme" content="dark light">
 
-  <!-- Inter font (same as the rest of the site) -->
-
-  <!-- Shared portal stylesheet (css/devops-90-days.css) -->
+  <!-- Shared portal stylesheet, then the page-specific stylesheet -->
   <link rel="stylesheet" href="../../css/devops-90-days.css">
   <link rel="stylesheet" href="../../css/articles.css">
 </head>
 
-<!-- data-page="articles" runs pageArticles() in devops-90-days.js -->
 <body data-page="articles" data-nav="articles">
   <a class="skip-link" href="#main">Skip to content</a>
 
@@ -28,79 +25,62 @@
   <main id="main">
     <div class="container">
 
-      <!-- Page title block with links to the author's article profiles -->
+      <!-- Page title block -->
       <div class="page-hero">
         <div class="crumbs"><a href="../90-days-devops.html">90 Days</a> › Articles</div>
         <h1>DevOps Knowledge &amp; Articles</h1>
         <p>Technical tutorials, engineering experiences and lessons learned from the 90 days, published on LinkedIn and Medium.</p>
         <div class="actions">
-          <a class="btn primary small" id="p-linkedin" href="#">LinkedIn profile ↗</a>
-          <a class="btn small" id="p-medium" href="#">Medium profile ↗</a>
+          <a class="btn primary small" id="p-linkedin" href="#" target="_blank" rel="noopener noreferrer">LinkedIn profile ↗</a>
+          <a class="btn small" id="p-medium" href="#" target="_blank" rel="noopener noreferrer">Medium profile ↗</a>
         </div>
       </div>
 
-      <!-- Search box plus platform and topic filter chips -->
-      <div class="toolbar">
-        <div class="toolbar-row">
-          <input id="a-q" class="field search" type="search" placeholder="Search articles" aria-label="Search articles">
-        </div>
-        <div class="toolbar-row" style="margin-top:10px" id="plat-chips" aria-label="Filter by platform"></div>
-        <div class="toolbar-row" style="margin-top:8px" id="tag-chips" aria-label="Filter by topic"></div>
-      </div>
-
-      <!-- Article cards (rendered by JavaScript) -->
-      <div class="grid cols-3" id="articles">
-        <p class="loading">Loading articles…</p>
-      </div>
-    </div>
-  </main>
-
-
-  <!-- Article search and filters -->
-  <section class="articles-toolbar">
-
-      <input
+      <!-- The ONLY search bar: search + source filter + refresh -->
+      <section class="articles-toolbar" aria-label="Search and filter articles">
+        <input
           type="search"
           id="article-search"
           placeholder="Search DevOps articles..."
           aria-label="Search articles"
-      >
+          autocomplete="off"
+        >
 
-      <select id="article-source-filter" aria-label="Filter articles">
+        <select id="article-source-filter" aria-label="Filter articles by source">
           <option value="all">All Sources</option>
           <option value="medium">Medium</option>
           <option value="linkedin">LinkedIn</option>
-      </select>
+        </select>
 
-      <button id="articles-refresh" type="button">
-          ↻ Refresh Articles
-      </button>
+        <button id="articles-refresh" type="button">↻ Refresh Articles</button>
+      </section>
 
-  </section>
+      <!-- Loading / result status -->
+      <p id="articles-status" aria-live="polite">Loading articles...</p>
 
-  <!-- Article loading and status -->
-  <p id="articles-status" aria-live="polite">
-      Loading articles...
-  </p>
+      <!-- Article cards are inserted here by articles.js -->
+      <section id="articles-grid" class="dn-grid" aria-label="DevOps articles"></section>
 
-  <!-- Article cards are inserted here -->
-  <section
-      id="articles-grid"
-      class="dn-grid"
-      aria-label="DevOps articles"
-  >
-  </section>
+    </div>
+  </main>
 
-  <!-- Load the external JavaScript file -->
-  <script src="./articles.js" defer></script>
-
+  <!--
+    Legacy placeholders.
+    devops-90-days.js (pageArticles) still looks for these elements and used to
+    render the second search bar and the "No published articles yet" message.
+    They are kept hidden so that script never fails or shows anything.
+  -->
+  <div hidden aria-hidden="true">
+    <input id="a-q" type="search" tabindex="-1">
+    <div id="plat-chips"></div>
+    <div id="tag-chips"></div>
+    <div id="articles"></div>
+  </div>
 
   <!-- Footer is injected by devops-90-days.js -->
   <footer id="site-footer"></footer>
 
-  <!-- No remote Markdown libraries are required. -->
-
-  <!-- Local scripts: curriculum data first, then application logic. -->
+  <!-- Local scripts: curriculum data, site logic, then the articles aggregator (loaded once). -->
   <script src="../../js/devops-90-days-data.js"></script>
   <script src="../../js/devops-90-days.js"></script>
   <script src="../../js/articles.js"></script>
